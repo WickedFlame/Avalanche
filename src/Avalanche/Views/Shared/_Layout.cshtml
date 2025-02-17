@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avalanche @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.min.css" />
+    <link rel="stylesheet" href="~/css/bulma.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item title" asp-area="" asp-controller="Home" asp-action="Index">Avalanche</a>
+            </div>
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item"><a class="button is-text" asp-area="" asp-controller="Home" asp-action="Index">Home</a></div>
+                    <div class="navbar-item"><a class="button is-text" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></div>
+
+                    <div class="navbar-item">
+                        <input type="checkbox" value="dark" class="toggle theme-controller" checked />
+                    </div>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">Parent</a>
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item">Link 1</a>
+                            <a class="navbar-item">Link 2</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="pt-body">
+        @RenderBody()
+    </div>
+
+    <footer class="">
+        <div class="container">
+            &copy; 2025 - PerformanceTest - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

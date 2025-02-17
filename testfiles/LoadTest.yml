@@ -1,0 +1,10 @@
+Tests:
+  - Urls:
+      - "https://eshop.was.local/"
+    Name: eshop.was.local load tests
+    Threads: 2
+    Duration: 1
+    Interval: 50
+#    UseCookies: false
+    Init:
+      Url: "https://eshop.was.local/"
