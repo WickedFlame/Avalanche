@@ -6,27 +6,36 @@ namespace Avalanche.Domain
     {
         public void Start(string name, string path)
         {
-            System.Threading.Tasks.Task.Factory.StartNew(() =>
-            {
+            Task.Factory.StartNew(() =>
+                {
 
-                var data = TestResultsCollection.Instance.StartNew(name);
+                    var data = TestResultsCollection.Instance.StartNew(name);
 
-                data.Status = TestRunStatus.Running;
+                    data.Status = TestRunStatus.Running;
 
-                var settings = GetTestSettings(path);
-                data.Settings = settings;
+                    var settings = GetTestSettings(path);
+                    data.Settings = settings;
 
 
 
-                var loadtest = new LoadTest(data.LogEntries);
-                data.Results = loadtest.Run(settings);
+                    var loadtest = new LoadTest(data.LogEntries);
+                    data.Results = loadtest.Run(settings);
 
-                data.Status = TestRunStatus.Done;
-                data.LogEntries.End();
+                    data.Status = TestRunStatus.Done;
 
-                //
-                // write result to file
-            });
+
+                    //
+                    // Give the collector some time to finish the work
+                    Task.Delay(10000).Wait();
+
+                    data.LogEntries.End();
+
+                    //
+                    // write result to file
+                },
+                CancellationToken.None,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default);
         }
 
         public TestSettings GetTestSettings(string path)

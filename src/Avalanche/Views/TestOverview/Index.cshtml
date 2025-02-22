@@ -14,10 +14,20 @@
         <h1 class="title is-1">@Model.Name</h1>
         <div>
             <div class="pt-padding-side">
-                <div class="buttons">
-                    <a id="StartTests" data-name="@Model.Name" class="button">Start</a>
-                    <a id="StopTests" data-name="@Model.Name" class="button">Stop</a>
-                </div>
+                @if (Model.Status == Avalanche.Domain.TestRunStatus.Running)
+                {
+                    <div class="buttons has-addons">
+                        <a id="StartTests" data-name="@Model.Name" class="button" disabled>Start</a>
+                        <a id="StopTests" data-name="@Model.Name" class="button">Stop</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="buttons has-addons">
+                        <a id="StartTests" data-name="@Model.Name" class="button">Start</a>
+                        <a id="StopTests" data-name="@Model.Name" class="button" disabled>Stop</a>
+                    </div>
+                }
             </div>
             <div class="pt-padding-side">
                 <div class="pt-content-panel">
