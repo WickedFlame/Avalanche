@@ -2,202 +2,200 @@
 @model TestOverviewModel
 
 
-<div class="pt-padding pt-padding-side">
-    <div class="pt-main-content">
-        <aside class="menu pt-padding-side">
-            <p class="menu-label">Menu</p>
-            <ul class="menu-list">
-                <li>Menu item</li>
-            </ul>
-        </aside>
+<div class="pt-main-content">
+    <aside class="menu px-4 py-4">
+        <p class="menu-label">Menu</p>
+        <ul class="menu-list">
+            <li>Menu item</li>
+        </ul>
+    </aside>
 
-        <div class="content pt-padding-side">
-            <h1 class="title is-1">@Model.Name</h1>
-            <div>
-                <div class="pt-padding-side">
-                    <div class="buttons">
-                        <a id="StartTests" data-name="@Model.Name" class="button">Start</a>
-                        <a id="StopTests" data-name="@Model.Name" class="button">Stop</a>
-                    </div>
-                </div>
-                <div class="pt-padding-side">
-                    <div class="pt-content-panel">
-                        <div class="pt-stats">
-
-                            @if(Model.StartTime != null)
-                            {
-                                <div class="pt-stat-item">
-                                    <header class="pt-stat-header">
-                                        Date
-                                    </header>
-                                    <div class="pt-stat-content">
-                                        <div class="content">
-                                            @Model.StartTime.Value.ToString("dd.MM.yyyy")
-                                        </div>
-                                    </div>
-                                    <div class="pt-stat-footer">Startdate of the Test</div>
-                                </div>
-                                <div class="pt-stat-item">
-                                    <header class="pt-stat-header">
-                                        Start
-                                    </header>
-                                    <div class="pt-stat-content">
-                                        <div class="content">
-                                            @Model.StartTime.Value.ToString("HH:mm:ss")
-                                        </div>
-                                    </div>
-                                    <div class="pt-stat-footer">Starttime</div>
-                                </div>
-                                <div class="pt-stat-item">
-                                    <header class="pt-stat-header">
-                                        Status
-                                    </header>
-                                    <div class="pt-stat-content">
-                                        <div class="content">
-                                            @Model.Status.Name
-                                        </div>
-                                    </div>
-                                    <div class="pt-stat-footer">Status of the Scenario</div>
-                                </div>
-                            }
-                        </div>
-                    </div>
+    <div class="content px-6 py-4">
+        <h1 class="title is-1">@Model.Name</h1>
+        <div>
+            <div class="pt-padding-side">
+                <div class="buttons">
+                    <a id="StartTests" data-name="@Model.Name" class="button">Start</a>
+                    <a id="StopTests" data-name="@Model.Name" class="button">Stop</a>
                 </div>
             </div>
-
-            @if (Model.Settings != null)
-            {
-                <div >
-                    <div class="pt-content-panel">
-                        <h2>Settings</h2>
-                        <div class="overflow-x-auto">
-                            <table class="table is-fullwidth">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Threads</th>
-                                        <th>Rampup</th>
-                                        <th>URL</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach(var test in Model.Settings.Tests)
-                                    {
-                                        <tr>
-                                            <td>@test.Name</td>
-                                            <td>@test.Threads</td>
-                                            <td>@test.RampupTime</td>
-                                            <td>
-                                                <ul>
-                                                    @foreach(var url in test.Urls)
-                                                    {
-                                                        <li>@url</li>
-                                                    }
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            }
-
-
-            <partial name="./Partials/Chart"/>
-
-
-            <div>
+            <div class="pt-padding-side">
                 <div class="pt-content-panel">
-                    <h2>Thread Start</h2>
-                    <div class="overflow-x-auto">
-                        <table class="table is-fullwidth">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Testname</th>
-                                    <th>Duration</th>
-                                    <th>Message</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var row in Model.StartupEntries.Where(r => r.Module == "Init"))
-                                {
-                                    <tr>
-                                        <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
-                                        <td>@row.Name</td>
-                                        <td>@row.ElapsedMilliseconds</td>
-                                        <td>@row.Message</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                    <div class="pt-stats">
+
+                        @if(Model.StartTime != null)
+                        {
+                            <div class="pt-stat-item">
+                                <header class="pt-stat-header">
+                                    Date
+                                </header>
+                                <div class="pt-stat-content">
+                                    <div class="content">
+                                        @Model.StartTime.Value.ToString("dd.MM.yyyy")
+                                    </div>
+                                </div>
+                                <div class="pt-stat-footer">Startdate of the Test</div>
+                            </div>
+                            <div class="pt-stat-item">
+                                <header class="pt-stat-header">
+                                    Start
+                                </header>
+                                <div class="pt-stat-content">
+                                    <div class="content">
+                                        @Model.StartTime.Value.ToString("HH:mm:ss")
+                                    </div>
+                                </div>
+                                <div class="pt-stat-footer">Starttime</div>
+                            </div>
+                            <div class="pt-stat-item">
+                                <header class="pt-stat-header">
+                                    Status
+                                </header>
+                                <div class="pt-stat-content">
+                                    <div class="content">
+                                        @Model.Status.Name
+                                    </div>
+                                </div>
+                                <div class="pt-stat-footer">Status of the Scenario</div>
+                            </div>
+                        }
                     </div>
                 </div>
-
-                <div class="pt-content-panel">
-                    <h2>Thread End</h2>
-                    <div class="overflow-x-auto">
-                        <table class="table is-fullwidth">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Testname</th>
-                                    <th>Thread</th>
-                                    <th>Message</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var row in Model.EndLogEntries.Where(r => r.Module == "End"))
-                                {
-                                    <tr>
-                                        <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
-                                        <td>@row.Name</td>
-                                        <td>@row.Thread</td>
-                                        <td>@row.Message</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="pt-content-panel">
-                    <h2>Iterations</h2>
-                    <div class="overflow-x-auto">
-                        <table class="table is-fullwidth">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Testname</th>
-                                    <th>Thread</th>
-                                    <th>Number</th>
-                                    <th>Duration</th>
-                                    <th>Message</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var row in Model.LogEntries.Where(r => r.Module == "Measure"))
-                                {
-                                    <tr>
-                                        <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
-                                        <td>@row.Name</td>
-                                        <td>@row.Thread</td>
-                                        <td>@row.RunNumber</td>
-                                        <td>@row.TotalMilliseconds</td>
-                                        <td>@row.Message</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
             </div>
         </div>
 
+        @if (Model.Settings != null)
+        {
+            <div >
+                <div class="pt-content-panel">
+                    <h2>Settings</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Threads</th>
+                                    <th>Rampup</th>
+                                    <th>URL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var test in Model.Settings.Tests)
+                                {
+                                    <tr>
+                                        <td>@test.Name</td>
+                                        <td>@test.Threads</td>
+                                        <td>@test.RampupTime</td>
+                                        <td>
+                                            <ul>
+                                                @foreach(var url in test.Urls)
+                                                {
+                                                    <li>@url</li>
+                                                }
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        <partial name="./Partials/Chart"/>
+
+
+        <div>
+            <div class="pt-content-panel">
+                <h2>Thread Start</h2>
+                <div class="overflow-x-auto">
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Testname</th>
+                                <th>Duration</th>
+                                <th>Message</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.StartupEntries.Where(r => r.Module == "Init"))
+                            {
+                                <tr>
+                                    <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
+                                    <td>@row.Name</td>
+                                    <td>@row.ElapsedMilliseconds</td>
+                                    <td>@row.Message</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pt-content-panel">
+                <h2>Thread End</h2>
+                <div class="overflow-x-auto">
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Testname</th>
+                                <th>Thread</th>
+                                <th>Message</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.EndLogEntries.Where(r => r.Module == "End"))
+                            {
+                                <tr>
+                                    <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
+                                    <td>@row.Name</td>
+                                    <td>@row.Thread</td>
+                                    <td>@row.Message</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pt-content-panel">
+                <h2>Iterations</h2>
+                <div class="overflow-x-auto">
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Testname</th>
+                                <th>Thread</th>
+                                <th>Number</th>
+                                <th>Duration</th>
+                                <th>Message</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.LogEntries.Where(r => r.Module == "Measure"))
+                            {
+                                <tr>
+                                    <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
+                                    <td>@row.Name</td>
+                                    <td>@row.Thread</td>
+                                    <td>@row.RunNumber</td>
+                                    <td>@row.TotalMilliseconds</td>
+                                    <td>@row.Message</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
     </div>
+
 </div>
 
 @section scripts {

@@ -1,4 +1,6 @@
-/*! @import */
+
+
+
 
 html {
   font-size: 14px;
@@ -8,15 +10,42 @@ html {
 
 body {
     color-scheme: light dark;
+    min-height: 100%;
     margin-bottom: 60px;
 }
 
+.pt-grid {
+    width: 100%;
+
+    .pt-row {
+        display: grid;
+        margin-top: 1px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--bulma-border);
+        margin-bottom: 1px;
+    }
+
+    .pt-row-header {
+        font-weight: 700;
+        background: var(--panel-background-color);
+    }
+
+    .pt-test-overview-row {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+
 .pt-body {
-    margin-top: 20px;
+    height: calc(100vh - 88px);
+    padding-top: 20px;
 
     .pt-main-content {
         display: grid;
         grid-template-columns: 24em 1fr;
+        height: 100%;
 
         .pt-content-panel {
             padding-top: 5em;
