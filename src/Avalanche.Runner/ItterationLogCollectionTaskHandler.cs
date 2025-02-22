@@ -14,7 +14,7 @@ namespace Avalanche.Runner
 
         public override IIterationResult Run(IExecutionContext context)
         {
-            var log = context.Get<LogCollection>(nameof(LogCollection));
+            var log = context.Get<ITestResultCollector>(nameof(ITestResultCollector));
 
             var result = base.Run(context);
 

@@ -41,7 +41,7 @@ namespace Avalanche.Runner
                         ctx.Set("httpclient", client);
 
                         var log = _logger.StartNew($"{Guid.NewGuid()}");
-                        ctx.Set(nameof(LogCollection), log);
+                        ctx.Set(nameof(ITestResultCollector), log);
 
                         if (test.Init != null && !string.IsNullOrEmpty(test.Init.Url))
                         {
@@ -70,7 +70,7 @@ namespace Avalanche.Runner
                     .OnEndPipeline(e =>
                     {
                         e.Get<HttpClient>("httpclient").Dispose();
-                        var log = e.Get<LogCollection>(nameof(LogCollection));
+                        var log = e.Get<ITestResultCollector>(nameof(ITestResultCollector));
 
                         var metric = new EndLogEvent
                         {

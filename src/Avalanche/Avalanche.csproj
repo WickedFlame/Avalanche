@@ -6,6 +6,7 @@
         <UserSecretsId>5bc05071-e805-4077-97b3-87e09c7e7d66</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileRunArguments>-p 32773:8081</DockerfileRunArguments>
+        <DockerfileContext>..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>

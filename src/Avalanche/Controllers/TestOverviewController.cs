@@ -10,7 +10,7 @@ namespace Avalanche.Controllers
     {
         public IActionResult Index(string name)
         {
-            var results = TestResultsCollection.Instance.GetResults(name.ToLower());
+            var results = Domain.TestResultsCollection.Instance.GetResults(name.ToLower());
             var settings = results?.Settings;
 
             if (settings == null)

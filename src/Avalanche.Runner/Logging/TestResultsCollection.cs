@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Avalanche.Runner.Logging
+﻿namespace Avalanche.Runner.Logging
 {
-    public class LogCollection
+    public class TestResultsCollection
     {
         private readonly List<LogEvent> _events = new List<LogEvent>();
 
-        public LogCollection(string name)
+        public TestResultsCollection(string name)
         {
             Name = name;
         }

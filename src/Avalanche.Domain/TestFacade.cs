@@ -22,6 +22,7 @@ namespace Avalanche.Domain
                 data.Results = loadtest.Run(settings);
 
                 data.Status = TestRunStatus.Done;
+                data.LogEntries.End();
 
                 //
                 // write result to file

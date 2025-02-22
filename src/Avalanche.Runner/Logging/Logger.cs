@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Avalanche.Runner.Logging
+﻿namespace Avalanche.Runner.Logging
 {
     //
     // Logger is per Testrun
@@ -11,27 +7,41 @@ namespace Avalanche.Runner.Logging
 
     public class Logger
     {
-        private readonly List<LogCollection> _collections = new List<LogCollection>();
-        private readonly object _locker = new ();
+        private readonly List<TestResultsCollection> _collections = [];
+        private readonly List<ITestResultCollector> _resultsCollectors = [];
+
+        private bool _isRunning = true;
 
         public DateTime StartTime { get; set; }
 
-        public LogCollection StartNew(string name)
+        public ITestResultCollector StartNew(string name)
         {
-            lock (_locker)
+            if (!_isRunning)
             {
-                var collection = new LogCollection(name);
-                _collections.Add(collection);
-
-                return collection;
+                return null;
             }
+
+            var collection = new TestResultsCollection(name);
+            _collections.Add(collection);
+
+            var collector = new TestResultCollector(collection);
+            _resultsCollectors.Add(collector);
+
+            return collector;
         }
 
-        public IEnumerable<LogCollection> GetCollections()
+        public IEnumerable<TestResultsCollection> GetCollections()
         {
-            lock (_locker)
+            return _collections.ToList();
+        }
+
+        public void End()
+        {
+            _isRunning = false;
+
+            foreach (var collector in _resultsCollectors)
             {
-                return _collections.ToList();
+                collector.End();
             }
         }
     }
