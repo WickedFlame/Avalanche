@@ -13,6 +13,8 @@
 
         public string ThreadId { get; set; }
 
+        public bool IsWarmup { get; set; }
+
         public void Add(LogEvent metric)
         {
             _events.Add(metric);

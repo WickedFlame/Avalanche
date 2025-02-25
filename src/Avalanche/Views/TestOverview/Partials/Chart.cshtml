@@ -5,11 +5,10 @@
     var id = $"chart-{chart.Name.Replace(" ", "_")}";
 
     <div class="pt-content-panel">
-        <h3 class="title is-6">
+        <h2>
             Requests - @chart.Name
-        </h3>
+        </h2>
         <div>
-            @* <canvas id="myChart" style="width:100%;max-width:700px"></canvas> *@
             <canvas id="@id" style="width:100%;max-width:100%;height:400px;"></canvas>
         </div>
     </div>

@@ -1,6 +1,4 @@
-﻿using Avalanche;
-using Avalanche.Controllers;
-using Avalanche.Domain;
+﻿using Avalanche.Domain;
 using Avalanche.Runner;
 using Avalanche.Runner.Logging;
 
@@ -12,13 +10,9 @@ namespace Avalanche.Models
 
         public IEnumerable<IterationLogEvent> LogEntries { get; set; }
 
-        //public IEnumerable<Avalanche.TestResult> Results { get; set; }
-
         public DateTime? StartTime { get; set; }
 
         public TestSettings Settings { get; set; }
-
-        //public Dictionary<string, IEnumerable<ChartData>> ChartData { get; internal set; }
 
         public TestRunStatus Status { get; set; }
 

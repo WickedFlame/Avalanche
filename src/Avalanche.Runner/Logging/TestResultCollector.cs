@@ -37,6 +37,7 @@
                             if(string.IsNullOrEmpty(collection.ThreadId) && entry is IterationLogEvent ie)
                             {
                                 collection.ThreadId = ie.Thread.ToString();
+                                collection.IsWarmup = ie.IsWarmup;
                             }
 
                             entry = _queue.Any() ? _queue.Dequeue() : null;

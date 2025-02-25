@@ -30,7 +30,7 @@ body {
   padding-top: 20px; }
   .pt-body .pt-main-content {
     display: grid;
-    grid-template-columns: 10em 1fr;
+    grid-template-columns: 20em 1fr;
     height: 100%; }
     .pt-body .pt-main-content .pt-content-panel {
       padding-top: 5em;

@@ -29,12 +29,11 @@
 
             const json = await response.json();
 
-            json.tests.forEach(t => {
-                setTimeout(function () {
-                    this.loadChartData(scenario, testname);
-                    this.getRampupData(scenario, testname);
-                }, 3000);
-            });
+            //json.tests.forEach(t => {
+            //    let testname = t.name.replace(/ /g, '_');
+            //    this.initChart(t, testname);
+            //});
+            location.reload();
         } catch (error) {
             console.error(error.message);
         }
@@ -56,18 +55,33 @@
         }
     }
 
+    initChart(testsetting, testname) {
+        let datasets = [];
+        for (let i = 0; i < testsetting.threads; i++) {
+            datasets.push({
+                data: [],
+                fill: false,
+                label: i,
+                lineTension: 0.1,
+                radius: 0
+            });
+        }
+
+        this.showChart(testname, datasets);
+    }
+
     // gets called to start polling for chart data
     displayChart(scenario, testname) {
-        this.loadChartData(scenario, testname);
-        this.getRampupData(scenario, testname);
+        this.showChartData(scenario, testname);
+        this.showRampupData(scenario, testname);
 
         this.poller = setInterval(() => {
-            this.loadChartData(scenario, testname);
-            this.getRampupData(scenario, testname);
+            this.showChartData(scenario, testname);
+            this.showRampupData(scenario, testname);
         }, 10000);
     }
 
-    async getRampupData(scenario, testname) {
+    async showRampupData(scenario, testname) {
         const url = `api/testdata/${scenario}/${testname}/rampupdata`;
         try {
             const response = await fetch(url);
@@ -104,7 +118,7 @@
         }
     }
 
-    async loadChartData(scenario, testname) {
+    async showChartData(scenario, testname) {
         const url = `api/testdata/${scenario}/${testname}/chartdata`;
         try {
             const response = await fetch(url);
@@ -178,7 +192,7 @@
         } else {
             let chart = this.charts[id];
             for (let i = 0; i < chart.data.datasets.length; i++) {
-                chart.data.datasets[i] = data[i];
+                chart.data.datasets[i] = data.length > i ? data[i] : [];
             }
             chart.update();
         }

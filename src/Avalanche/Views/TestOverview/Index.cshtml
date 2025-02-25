@@ -1,4 +1,5 @@
 ﻿@using System.Linq
+@using System.Text.Json
 @model TestOverviewModel
 
 
@@ -32,43 +33,53 @@
             <div class="pt-padding-side">
                 <div class="pt-content-panel">
                     <div class="pt-stats">
-
-                        @if(Model.StartTime != null)
-                        {
-                            <div class="pt-stat-item">
-                                <header class="pt-stat-header">
-                                    Date
-                                </header>
-                                <div class="pt-stat-content">
-                                    <div class="content">
-                                        @Model.StartTime.Value.ToString("dd.MM.yyyy")
-                                    </div>
+                        <div class="pt-stat-item">
+                            <header class="pt-stat-header">
+                                Date
+                            </header>
+                            <div class="pt-stat-content">
+                                <div class="content">
+                                    @if (Model.StartTime != null)
+                                    {
+                                        <span>@Model.StartTime.Value.ToString("dd.MM.yyyy")</span>
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
                                 </div>
-                                <div class="pt-stat-footer">Startdate of the Test</div>
                             </div>
-                            <div class="pt-stat-item">
-                                <header class="pt-stat-header">
-                                    Start
-                                </header>
-                                <div class="pt-stat-content">
-                                    <div class="content">
-                                        @Model.StartTime.Value.ToString("HH:mm:ss")
-                                    </div>
+                            <div class="pt-stat-footer">Startdate of the Test</div>
+                        </div>
+                        <div class="pt-stat-item">
+                            <header class="pt-stat-header">
+                                Start
+                            </header>
+                            <div class="pt-stat-content">
+                                <div class="content">
+                                    @if (Model.StartTime != null)
+                                    {
+                                        <span>@Model.StartTime.Value.ToString("HH:mm:ss")</span>
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
                                 </div>
-                                <div class="pt-stat-footer">Starttime</div>
                             </div>
-                            <div class="pt-stat-item">
-                                <header class="pt-stat-header">
-                                    Status
-                                </header>
-                                <div class="pt-stat-content">
-                                    <div class="content">
-                                        @Model.Status.Name
-                                    </div>
+                            <div class="pt-stat-footer">Starttime</div>
+                        </div>
+                        <div class="pt-stat-item">
+                            <header class="pt-stat-header">
+                                Status
+                            </header>
+                            <div class="pt-stat-content">
+                                <div class="content">
+                                    @(Model.Status?.Name ?? "New")
                                 </div>
-                                <div class="pt-stat-footer">Status of the Scenario</div>
                             </div>
-                        }
+                            <div class="pt-stat-footer">Status of the Scenario</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -183,6 +194,7 @@
                             <tr>
                                 <th>Time</th>
                                 <th>Testname</th>
+                                <th>IsWarmup</th>
                                 <th>Thread</th>
                                 <th>Number</th>
                                 <th>Duration</th>
@@ -195,6 +207,7 @@
                                 <tr>
                                     <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
                                     <td>@row.Name</td>
+                                    <td>@row.IsWarmup</td>
                                     <td>@row.Thread</td>
                                     <td>@row.RunNumber</td>
                                     <td>@row.TotalMilliseconds</td>
@@ -220,6 +233,7 @@
             @foreach (var test in Model.Settings.Tests)
             {
                 <text>
+                sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');
                 sites.displayChart('@Model.Name', '@test.Name');
                 </text>
             }

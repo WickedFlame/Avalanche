@@ -17,17 +17,19 @@ namespace Avalanche
                 return Enumerable.Empty<ChartData>();
             }
 
-            return logger.GetCollections().Select(g => new ChartData
-            {
-                Name = g.ThreadId,
-                Data = g.Events.OfType<IterationLogEvent>()
-                    .Where(d => !d.IsWarmup)
-                    .Select(e => new ChartDataRow
-                    {
-                        Time = e.Time.ToString("o"),
-                        Value = e.TotalMilliseconds.ToString()
-                    })
-            });
+            return logger.GetCollections()
+                .Where(c=> !c.IsWarmup)
+                .Select(g => new ChartData
+                {
+                    Name = g.ThreadId,
+                    Data = g.Events.OfType<IterationLogEvent>()
+                        .Where(d => !d.IsWarmup)
+                        .Select(e => new ChartDataRow
+                        {
+                            Time = e.Time.ToString("o"),
+                            Value = e.TotalMilliseconds.ToString()
+                        })
+                });
         }
 
         public static IEnumerable<ChartDataRow> GetRampupData(this Logger logger)
