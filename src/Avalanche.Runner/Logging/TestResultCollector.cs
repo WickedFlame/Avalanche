@@ -34,6 +34,10 @@
                         {
                             collection.Add(entry);
 
+                            if(string.IsNullOrEmpty(collection.ThreadId) && entry is IterationLogEvent ie)
+                            {
+                                collection.ThreadId = ie.Thread.ToString();
+                            }
 
                             entry = _queue.Any() ? _queue.Dequeue() : null;
 

@@ -14,6 +14,8 @@
 
         public DateTime StartTime { get; set; }
 
+        public bool IsRunning => _isRunning;
+
         public ITestResultCollector StartNew(string name)
         {
             if (!_isRunning)

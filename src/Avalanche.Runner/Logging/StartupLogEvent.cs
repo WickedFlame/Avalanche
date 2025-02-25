@@ -12,5 +12,7 @@ namespace Avalanche.Runner.Logging
         public HttpStatusCode StatusCode { get; set; }
 
         public long ElapsedMilliseconds { get; set; }
+
+        public bool IsWarmup { get; set; }
     }
 }

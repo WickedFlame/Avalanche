@@ -2,11 +2,11 @@
 
 @foreach (var chart in Model.Settings.Tests)
 {
-    var id = $"chart-{chart.Name.Replace(" ", "_")}";
+    var id = $"chart-{chart.Name.Replace(" ", "_")}-rampup";
 
     <div class="pt-content-panel">
         <h3 class="title is-6">
-            Requests - @chart.Name
+            Rampup - @chart.Name
         </h3>
         <div>
             @* <canvas id="myChart" style="width:100%;max-width:700px"></canvas> *@

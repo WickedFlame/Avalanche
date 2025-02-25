@@ -24,7 +24,7 @@ namespace Avalanche.Controllers
             var events = results.LogEntries?.GetCollections()?
                 .SelectMany(c => c.Events) ?? Enumerable.Empty<LogEvent>();
 
-            var logEntries = events.OfType<IterationLogEvent>().OrderBy(c=>c.Time);
+            var logEntries = events.OfType<IterationLogEvent>().OrderBy(c => c.Time);
 
             var model = new TestOverviewModel
             {

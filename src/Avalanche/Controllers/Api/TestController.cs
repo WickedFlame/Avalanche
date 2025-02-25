@@ -36,12 +36,13 @@ namespace Avalanche.Controllers.Api
             var path = $"./testfiles/{name}.yml";
 
             var facade = new TestFacade();
-            facade.Start(name, path);
+            var settings = facade.Start(name, path);
 
             return Ok(new
             {
                 Name = name,
-                State = "started"
+                State = "started",
+                Tests = settings.Tests
             });
         }
 

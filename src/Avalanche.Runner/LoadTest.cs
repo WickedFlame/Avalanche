@@ -58,7 +58,8 @@ namespace Avalanche.Runner
                                 Name = test.Name,
                                 Message = $"Init {test.Init.Url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms",
                                 StatusCode = result.StatusCode,
-                                ElapsedMilliseconds = time.ElapsedMilliseconds
+                                ElapsedMilliseconds = time.ElapsedMilliseconds,
+                                IsWarmup = s.IsWarmup
                             };
 
                             log.Add(metric);

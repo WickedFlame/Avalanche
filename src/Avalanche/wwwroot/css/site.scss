@@ -39,13 +39,12 @@ body {
 }
 
 .pt-body {
-    /*height: calc(100vh - 88px);*/
     height: 100%;
     padding-top: 20px;
 
     .pt-main-content {
         display: grid;
-        grid-template-columns: 24em 1fr;
+        grid-template-columns: 10em 1fr;
         height: 100%;
 
         .pt-content-panel {

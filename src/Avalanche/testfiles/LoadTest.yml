@@ -3,7 +3,8 @@ Tests:
       # - "https://eshop.was.local/"
       - "https://opacc.ch"
     Name: load test 1
-    Threads: 2
+    Threads: 4
+    RampupTime: 45
     Duration: 1
     Interval: 90
 #    UseCookies: false

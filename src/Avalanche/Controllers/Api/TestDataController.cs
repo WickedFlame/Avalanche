@@ -55,5 +55,26 @@ namespace Avalanche.Controllers.Api
                 ChartData = results.LogEntries.GetChartData()
             });
         }
+
+        [HttpGet]
+        [Route("{scenario}/{testname}/rampupdata")]
+        public IActionResult GetRampupData(string scenario, string testname)
+        {
+            var results = Domain.TestResultsCollection.Instance.GetResults(scenario.ToLower());
+            if (results == null)
+            {
+                return Ok();
+            }
+
+            testname = testname.ToLower();
+
+            return Ok(new
+            {
+                Scenario = scenario,
+                Testname = testname,
+                Status = results.Status?.Name ?? "Open",
+                Data = results.LogEntries.GetRampupData()
+            });
+        }
     }
 }

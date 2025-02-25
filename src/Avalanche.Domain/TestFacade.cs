@@ -4,8 +4,10 @@ namespace Avalanche.Domain
 {
     public class TestFacade
     {
-        public void Start(string name, string path)
+        public TestSettings Start(string name, string path)
         {
+            var settings = GetTestSettings(path);
+
             Task.Factory.StartNew(() =>
                 {
 
@@ -13,7 +15,6 @@ namespace Avalanche.Domain
 
                     data.Status = TestRunStatus.Running;
 
-                    var settings = GetTestSettings(path);
                     data.Settings = settings;
 
 
@@ -36,6 +37,8 @@ namespace Avalanche.Domain
                 CancellationToken.None,
                 TaskCreationOptions.LongRunning,
                 TaskScheduler.Default);
+
+            return settings;
         }
 
         public TestSettings GetTestSettings(string path)
