@@ -20,38 +20,39 @@
     <div class="content px-6 py-4">
         <h1 class="title is-1">Avalanche</h1>
         <p>Loadtesting platform</p>
-        <div>
-            <div class="py-6">
-                <table class="table is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th>Testscenario</th>
-                            <th>State</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var test in Model.Tests)
-                        {
-                            var stateCls = test.State.Name switch
-                            {
-                                "New" => "is-white",
-                                "Running" => "is-link",
-                                "Done" => "is-success",
-                                _ => "is-white"
-                            };
+        <div class="py-6">
+            <div class="pt-element-container">
+                <div class="pt-content-panel">
+                    <table class="table is-fullwidth">
+                        <thead>
                             <tr>
-                                <td><a asp-controller="TestOverview" asp-action="Index" asp-route-name="@test.Name">@test.Name</a></td>
-                                <td><div class="tag @stateCls">@test.State</div></td>
-                                <td></td>
-                                <td></td>
+                                <th>Testscenario</th>
+                                <th>State</th>
+                                <th></th>
+                                <th></th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var test in Model.Tests)
+                            {
+                                var stateCls = test.State.Name switch
+                                {
+                                    "New" => "is-white",
+                                    "Running" => "is-link",
+                                    "Done" => "is-success",
+                                    _ => "is-white"
+                                };
+                                <tr>
+                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-name="@test.Name">@test.Name</a></td>
+                                    <td><div class="tag @stateCls">@test.State</div></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-        
+    </div>        
 </div>

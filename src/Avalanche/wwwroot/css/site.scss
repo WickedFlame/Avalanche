@@ -47,6 +47,21 @@ body {
         grid-template-columns: 20em 1fr;
         height: 100%;
 
+        .pt-element-container {
+            padding-bottom: 20px;
+
+            table {
+                background: transparent;
+            }
+
+            .pt-content-panel {
+                background: var(--panel-background-color);
+                border: 1px solid var(--bulma-border);
+                border-radius: 10px;
+                padding: 2em;
+            }
+        }
+
         .pt-content-panel {
             padding-top: 5em;
             padding-bottom: 2em;

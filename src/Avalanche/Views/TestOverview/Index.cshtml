@@ -14,7 +14,7 @@
     <div class="content px-6 py-4">
         <h1 class="title is-1">@Model.Name</h1>
         <div>
-            <div class="pt-padding-side">
+            <div class="pt-padding-side py-5">
                 @if (Model.Status == Avalanche.Domain.TestRunStatus.Running)
                 {
                     <div class="buttons has-addons">
@@ -30,7 +30,8 @@
                     </div>
                 }
             </div>
-            <div class="pt-padding-side">
+
+            <div class="pt-element-container">
                 <div class="pt-content-panel">
                     <div class="pt-stats">
                         <div class="pt-stat-item">
@@ -87,7 +88,7 @@
 
         @if (Model.Settings != null)
         {
-            <div >
+            <div class="pt-element-container">
                 <div class="pt-content-panel">
                     <h2>Settings</h2>
                     <div class="overflow-x-auto">
@@ -124,12 +125,13 @@
             </div>
         }
 
+        <div class="pt-element-container">
+            <partial name="./Partials/Chart"/>
+        </div>
 
-        <partial name="./Partials/Chart"/>
-
-
-        <partial name="./Partials/RampupChart" />
-
+        <div class="pt-element-container">
+            <partial name="./Partials/RampupChart" />
+        </div>
 
         <div>
             <div class="pt-content-panel">
