@@ -46,6 +46,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="testfiles\PerformanceTest.yml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="testfiles\LoadTest.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
