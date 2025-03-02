@@ -1,4 +1,5 @@
 ﻿
+using Avalanche.Runner;
 using MeasureMap;
 
 namespace Avalanche.Domain
@@ -9,24 +10,24 @@ namespace Avalanche.Domain
         private static TestResultsCollection _instance;
         public static TestResultsCollection Instance => (_instance ??= new TestResultsCollection());
 
-        private readonly Dictionary<string, TestResult> _results = [];
+        private readonly Dictionary<string, TestRunData> _results = [];
 
 
         //
         // StartNew Testrun
 
-        public TestResult StartNew(string key)
+        public TestRunData StartNew(string id, string name)
         {
             lock (_lock)
             {
-                var result = new TestResult
+                var result = new TestRunData
                 {
-                    Name = key,
-                    Status = TestRunStatus.New,
-                    LogEntries = new Runner.Logging.Logger()
+                    Id = id,
+                    Name = name,
+                    Status = TestRunStatus.New
                 };
 
-                _results[key.ToLower()] = result;
+                _results[name.ToLower()] = result;
 
                 return result;
             }
@@ -36,13 +37,13 @@ namespace Avalanche.Domain
 
 
 
-        public TestResult GetResults(string key)
+        public TestRunData GetResults(string key)
         {
             lock (_lock)
             {
                 if (!_results.ContainsKey(key.ToLower()))
                 {
-                    return new TestResult { Name = key };
+                    return new TestRunData { Name = key };
                 }
 
                 return _results[key.ToLower()];

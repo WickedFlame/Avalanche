@@ -1,4 +1,6 @@
-﻿using Avalanche.Runner.Logging;
+﻿using Avalanche.CommandModel;
+using Avalanche.CommandModel.Commands;
+using Avalanche.Runner.Logging;
 using MeasureMap;
 
 namespace Avalanche.Runner
@@ -14,11 +16,11 @@ namespace Avalanche.Runner
 
         public override IIterationResult Run(IExecutionContext context)
         {
-            var log = context.Get<ITestResultCollector>(nameof(ITestResultCollector));
+            var log = context.Get<ICommandDispatcher>(nameof(ICommandDispatcher));
 
             var result = base.Run(context);
 
-            var metric = new IterationLogEvent
+            var metric = new IterationCommand
             {
                 Category = "console",
                 Module = "Measure",

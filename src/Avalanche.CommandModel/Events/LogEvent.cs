@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Avalanche.Runner.Logging
+namespace Avalanche.CommandModel.Events
 {
     public class LogEvent
     {

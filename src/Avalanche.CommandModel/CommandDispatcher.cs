@@ -1,24 +1,41 @@
-﻿namespace Avalanche.Runner.Logging
+﻿using Avalanche.CommandModel;
+using Avalanche.CommandModel.CommandHandlers;
+using Avalanche.CommandModel.Commands;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Avalanche.Runner.Logging
 {
-    public class TestResultCollector : ITestResultCollector
+    public class CommandDispatcher : ICommandDispatcher
     {
-        private readonly Queue<LogEvent> _queue = new();
+        private readonly Queue<ICommand> _queue = new();
 
         private readonly ManualResetEvent _waitHandle = new(false);
         private bool _isRunning;
+        private readonly Dictionary<Type, ICommandHandler> _commandHandlers;
 
-        public TestResultCollector(TestResultsCollection collection)
+        public CommandDispatcher(string id, TestResultsCollection collection, IEventStore store)
         {
-            StartCollector(collection);
+            _commandHandlers = new Dictionary<Type, ICommandHandler>
+            {
+                { typeof(StartupCommand), new StartupCommandHandler(store, collection) },
+                { typeof(EndCommand), new EndCommandHandler(store, collection) },
+                { typeof(IterationCommand), new IterationCommandHandler(store, collection) }
+            };
+
+            StartDispatcher(id, collection);
         }
 
-        public void Add(LogEvent metric)
+        public void Add(ICommand metric)
         {
             _queue.Enqueue(metric);
             _waitHandle.Reset();
         }
 
-        public void StartCollector(TestResultsCollection collection)
+        public void StartDispatcher(string id, TestResultsCollection collection)
         {
 
             _isRunning = true;
@@ -32,13 +49,13 @@
                         var entry = _queue.Any() ? _queue.Dequeue() : null;
                         while (entry != null)
                         {
-                            collection.Add(entry);
-
-                            if(string.IsNullOrEmpty(collection.ThreadId) && entry is IterationLogEvent ie)
+                            if(string.IsNullOrEmpty(collection.ThreadId) && entry is IterationCommand ie)
                             {
                                 collection.ThreadId = ie.Thread.ToString();
                                 collection.IsWarmup = ie.IsWarmup;
                             }
+
+                            _commandHandlers[entry.GetType()].Execute(id, entry);
 
                             entry = _queue.Any() ? _queue.Dequeue() : null;
 

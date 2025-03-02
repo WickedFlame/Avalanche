@@ -1,25 +1,32 @@
-﻿using Avalanche.Runner;
+﻿using Avalanche.CommandModel;
+using Avalanche.Runner;
 
 namespace Avalanche.Domain
 {
     public class TestFacade
     {
+        private readonly IEventStore _store;
+
+        public TestFacade(IEventStore store)
+        {
+            _store = store;
+        }
+
         public TestSettings Start(string name, string path)
         {
             var settings = GetTestSettings(path);
 
             Task.Factory.StartNew(() =>
                 {
-
-                    var data = TestResultsCollection.Instance.StartNew(name);
+                    //TODO: nicht via singleton lösen
+                    var data = TestResultsCollection.Instance.StartNew(Guid.NewGuid().ToString(), name);
 
                     data.Status = TestRunStatus.Running;
 
                     data.Settings = settings;
 
-
-
-                    var loadtest = new LoadTest(data.LogEntries);
+                    var loadtest = new LoadTest(new Runner.Logging.TestResultsFacory(data), data.Id, _store);
+                    data.StartTime = DateTime.Now;
                     data.Results = loadtest.Run(settings);
 
                     data.Status = TestRunStatus.Done;
@@ -29,7 +36,8 @@ namespace Avalanche.Domain
                     // Give the collector some time to finish the work
                     Task.Delay(10000).Wait();
 
-                    data.LogEntries.End();
+
+                    loadtest.End();
 
                     //
                     // write result to file

@@ -3,11 +3,20 @@ using Avalanche.Domain;
 using Avalanche.Models;
 using Avalanche.Domain.Models;
 using Avalanche.Runner.Logging;
+using Avalanche.CommandModel;
+using Avalanche.CommandModel.Events;
 
 namespace Avalanche.Controllers
 {
     public class TestOverviewController : Controller
     {
+        private readonly IEventStore _store;
+
+        public TestOverviewController(IEventStore store)
+        {
+            _store = store;
+        }
+
         public IActionResult Index(string name)
         {
             var results = Domain.TestResultsCollection.Instance.GetResults(name.ToLower());
@@ -17,11 +26,11 @@ namespace Avalanche.Controllers
             {
                 var path = $"./testfiles/{name}.yml";
 
-                var facace = new TestFacade();
+                var facace = new TestFacade(_store);
                 settings = facace.GetTestSettings(path);
             }
 
-            var events = results.LogEntries?.GetCollections()?
+            var events = results.GetCollections()?
                 .SelectMany(c => c.Events) ?? Enumerable.Empty<LogEvent>();
 
             var logEntries = events.OfType<IterationLogEvent>().OrderBy(c => c.Time);
@@ -29,14 +38,12 @@ namespace Avalanche.Controllers
             var model = new TestOverviewModel
             {
                 Name = name,
-                StartTime = results.LogEntries?.StartTime,
+                StartTime = results.StartTime,
                 Settings = settings,
                 Results = results.Results,
                 LogEntries = logEntries,
                 StartupEntries = events.OfType<StartupLogEvent>().OrderBy(c => c.Time),
                 EndLogEntries = events.OfType<EndLogEvent>().OrderBy(c => c.Time),
-
-
                 Status = results.Status
             };
 

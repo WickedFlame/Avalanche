@@ -1,4 +1,7 @@
-﻿namespace Avalanche.Runner.Logging
+﻿using Avalanche.CommandModel.Events;
+using System.Collections.Generic;
+
+namespace Avalanche.CommandModel
 {
     public class TestResultsCollection
     {

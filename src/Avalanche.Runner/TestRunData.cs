@@ -1,20 +1,25 @@
 ﻿using Avalanche;
+using Avalanche.CommandModel;
 using Avalanche.Runner;
 using Avalanche.Runner.Logging;
 using MeasureMap;
 
-namespace Avalanche.Domain
+namespace Avalanche.Runner
 {
-    public class TestResult
+    public class TestRunData
     {
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         public IEnumerable<Avalanche.Runner.TestResult> Results { get; set; }
 
-        public Logger LogEntries { get; set; }
+        public List<TestResultsCollection> Collections { get; } = [];
 
         public TestSettings Settings { get; set; }
 
         public TestRunStatus Status { get; set; }
+
+        public DateTime StartTime { get; set; }
     }
 }

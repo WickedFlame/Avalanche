@@ -1,4 +1,5 @@
-﻿using Avalanche.Domain;
+﻿using Avalanche.CommandModel.Events;
+using Avalanche.Domain;
 using Avalanche.Runner;
 using Avalanche.Runner.Logging;
 

@@ -1,25 +1,32 @@
-﻿using Avalanche.Runner.Logging;
+﻿using Avalanche.CommandModel;
+using Avalanche.CommandModel.Commands;
+using Avalanche.Runner.Logging;
 using MeasureMap;
-//using MeasureMap.Diagnostics;
 using System.Diagnostics;
 using System.Net;
+using System.Security.Cryptography;
 
 namespace Avalanche.Runner
 {
     public class LoadTest
     {
-        private readonly Logger _logger;
+        private readonly TestResultsFacory _logCollector;
 
-        public LoadTest(Logger logger)
+        private readonly List<ICommandDispatcher> _dispatchers = [];
+
+        private readonly string _id;
+        private readonly IEventStore _store;
+
+        public LoadTest(TestResultsFacory logger, string id, IEventStore store)
         {
-            _logger = logger;
+            _logCollector = logger;
+            _id = id;
+            _store = store;
         }
 
         public IEnumerable<TestResult> Run(TestSettings settings)
         {
             var results = new List<TestResult>();
-
-            _logger.StartTime = DateTime.Now;
 
             foreach (var test in settings.Tests)
             {
@@ -40,8 +47,11 @@ namespace Avalanche.Runner
 
                         ctx.Set("httpclient", client);
 
-                        var log = _logger.StartNew($"{Guid.NewGuid()}");
-                        ctx.Set(nameof(ITestResultCollector), log);
+                        var collection = _logCollector.StartNew($"{Guid.NewGuid()}");
+                        var dispatcher = new CommandDispatcher(_id, collection, _store);
+                        _dispatchers.Add(dispatcher);
+
+                        ctx.Set(nameof(ICommandDispatcher), dispatcher);
 
                         if (test.Init != null && !string.IsNullOrEmpty(test.Init.Url))
                         {
@@ -51,7 +61,7 @@ namespace Avalanche.Runner
 
                             time.Stop();
 
-                            var metric = new StartupLogEvent
+                            var command = new StartupCommand
                             {
                                 Category = "console",
                                 Module = "Init",
@@ -62,7 +72,7 @@ namespace Avalanche.Runner
                                 IsWarmup = s.IsWarmup
                             };
 
-                            log.Add(metric);
+                            dispatcher.Add(command);
                         }
 
 
@@ -71,9 +81,9 @@ namespace Avalanche.Runner
                     .OnEndPipeline(e =>
                     {
                         e.Get<HttpClient>("httpclient").Dispose();
-                        var log = e.Get<ITestResultCollector>(nameof(ITestResultCollector));
+                        var dispatcher = e.Get<ICommandDispatcher>(nameof(ICommandDispatcher));
 
-                        var metric = new EndLogEvent
+                        var metric = new EndCommand
                         {
                             Category = "console",
                             Module = "End",
@@ -83,7 +93,7 @@ namespace Avalanche.Runner
                             IsWarmup = e.Settings.IsWarmup
                         };
 
-                        log.Add(metric);
+                        dispatcher.Add(metric);
                     })
                     .Task(ctx =>
                     {
@@ -136,6 +146,16 @@ namespace Avalanche.Runner
             }
 
             return results;
+        }
+
+        public void End()
+        {
+            _logCollector.End();
+
+            foreach (var collector in _dispatchers)
+            {
+                collector.End();
+            }
         }
     }
 }

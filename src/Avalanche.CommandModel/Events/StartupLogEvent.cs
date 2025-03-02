@@ -1,7 +1,7 @@
 ﻿
 using System.Net;
 
-namespace Avalanche.Runner.Logging
+namespace Avalanche.CommandModel.Events
 {
     public class StartupLogEvent : LogEvent
     {

@@ -1,4 +1,9 @@
+using Avalanche.CommandModel;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddSingleton<IEventStore, EventStore>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
