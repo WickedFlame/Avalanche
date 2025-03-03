@@ -14,13 +14,13 @@ namespace Avalanche.Runner
 
         private readonly List<ICommandDispatcher> _dispatchers = [];
 
-        private readonly string _id;
+        private readonly string _testId;
         private readonly IEventStore _store;
 
-        public LoadTest(TestResultsFacory logger, string id, IEventStore store)
+        public LoadTest(TestResultsFacory logger, string testId, IEventStore store)
         {
             _logCollector = logger;
-            _id = id;
+            _testId = testId;
             _store = store;
         }
 
@@ -48,7 +48,7 @@ namespace Avalanche.Runner
                         ctx.Set("httpclient", client);
 
                         var collection = _logCollector.StartNew($"{Guid.NewGuid()}");
-                        var dispatcher = new CommandDispatcher(_id, collection, _store);
+                        var dispatcher = new CommandDispatcher(_testId, collection, _store);
                         _dispatchers.Add(dispatcher);
 
                         ctx.Set(nameof(ICommandDispatcher), dispatcher);

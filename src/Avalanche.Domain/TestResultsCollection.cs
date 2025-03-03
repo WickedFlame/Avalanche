@@ -16,13 +16,13 @@ namespace Avalanche.Domain
         //
         // StartNew Testrun
 
-        public TestRunData StartNew(string id, string name)
+        public TestRunData StartNew(string testId, string name)
         {
             lock (_lock)
             {
                 var result = new TestRunData
                 {
-                    Id = id,
+                    TestId = testId,
                     Name = name,
                     Status = TestRunStatus.New
                 };

@@ -25,7 +25,7 @@ namespace Avalanche.Domain
 
                     data.Settings = settings;
 
-                    var loadtest = new LoadTest(new Runner.Logging.TestResultsFacory(data), data.Id, _store);
+                    var loadtest = new LoadTest(new Runner.Logging.TestResultsFacory(data), data.TestId, _store);
                     data.StartTime = DateTime.Now;
                     data.Results = loadtest.Run(settings);
 

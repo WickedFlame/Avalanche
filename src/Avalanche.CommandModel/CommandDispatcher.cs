@@ -17,7 +17,7 @@ namespace Avalanche.Runner.Logging
         private bool _isRunning;
         private readonly Dictionary<Type, ICommandHandler> _commandHandlers;
 
-        public CommandDispatcher(string id, TestResultsCollection collection, IEventStore store)
+        public CommandDispatcher(string testId, TestResultsCollection collection, IEventStore store)
         {
             _commandHandlers = new Dictionary<Type, ICommandHandler>
             {
@@ -26,7 +26,7 @@ namespace Avalanche.Runner.Logging
                 { typeof(IterationCommand), new IterationCommandHandler(store, collection) }
             };
 
-            StartDispatcher(id, collection);
+            StartDispatcher(testId, collection);
         }
 
         public void Add(ICommand metric)
@@ -35,7 +35,7 @@ namespace Avalanche.Runner.Logging
             _waitHandle.Reset();
         }
 
-        public void StartDispatcher(string id, TestResultsCollection collection)
+        public void StartDispatcher(string testId, TestResultsCollection collection)
         {
 
             _isRunning = true;
@@ -55,7 +55,7 @@ namespace Avalanche.Runner.Logging
                                 collection.IsWarmup = ie.IsWarmup;
                             }
 
-                            _commandHandlers[entry.GetType()].Execute(id, entry);
+                            _commandHandlers[entry.GetType()].Execute(testId, entry);
 
                             entry = _queue.Any() ? _queue.Dequeue() : null;
 

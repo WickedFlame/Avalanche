@@ -9,5 +9,10 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DocumentationFile>bin\Release\netstandard2.0\Avalanche.CommandModel.xml</DocumentationFile>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+      <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    </ItemGroup>
     
 </Project>

@@ -1,7 +1,7 @@
 ﻿
 namespace Avalanche.CommandModel.Events
 {
-    public class IterationLogEvent : LogEvent
+    public class IterationLogEvent : LogEvent, IEvent
     {
         public string Name { get; set; }
 

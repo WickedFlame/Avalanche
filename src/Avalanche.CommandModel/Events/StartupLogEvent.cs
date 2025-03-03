@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Avalanche.CommandModel.Events
 {
-    public class StartupLogEvent : LogEvent
+    public class StartupLogEvent : LogEvent, IEvent
     {
         public string Name { get; set; }
 

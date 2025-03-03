@@ -1,14 +1,39 @@
-﻿using System;
+﻿using Avalanche.CommandModel.Events;
+using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Text;
+using System.Text.Json;
 
 namespace Avalanche.CommandModel
 {
     public class EventStore : IEventStore
     {
-        public void Add<T>(string id, string type, T model) where T : ICommand
-        {
+        private readonly SQLiteConnection _connection;
 
+        public EventStore()
+        {
+            _connection = new SQLiteConnection("Data Source=eventstore.db");
+            _connection.Open();
+        }
+
+        public string Add<T>(string testId, string type, DateTime time, T model) where T : IEvent
+        {
+            using (var cmd = _connection.CreateCommand())
+            {
+                var id = Guid.NewGuid().ToString();
+
+                cmd.CommandText = "INSERT INTO Events (Id, TestId, Time, EventType, Value) Values (@id, @testId, @time, @eventType, @value)";
+                cmd.Parameters.Add(new SQLiteParameter("@id", id));
+                cmd.Parameters.Add(new SQLiteParameter("@testId", testId));
+                cmd.Parameters.Add(new SQLiteParameter("@time", time));
+                cmd.Parameters.Add(new SQLiteParameter("@eventType", type));
+                cmd.Parameters.Add(new SQLiteParameter("@value", JsonSerializer.Serialize(model)));
+
+                cmd.ExecuteNonQuery();
+
+                return id;
+            }
         }
     }
 }

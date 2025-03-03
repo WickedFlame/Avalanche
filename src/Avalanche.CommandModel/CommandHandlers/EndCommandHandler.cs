@@ -21,7 +21,7 @@ namespace Avalanche.CommandModel.CommandHandlers
             _collection = collection;
         }
 
-        public void Execute<T>(string id, T command) where T : class, ICommand
+        public void Execute<T>(string testId, T command) where T : class, ICommand
         {
             var cmd = command as EndCommand;
             if (cmd == null)
@@ -29,10 +29,8 @@ namespace Avalanche.CommandModel.CommandHandlers
                 return;
             }
 
-            _store.Add(id, typeof(T).AssemblyQualifiedName, cmd);
-
             //TODO: create the readmodel
-            var entry = new Events.EndLogEvent
+            var @event = new Events.EndLogEvent
             {
                 Category = cmd.Category,
                 Module = cmd.Module,
@@ -42,8 +40,11 @@ namespace Avalanche.CommandModel.CommandHandlers
                 IsWarmup = cmd.IsWarmup
             };
 
+            _store.Add(testId, typeof(T).AssemblyQualifiedName, cmd.Time, @event);
+                       
+
             //TODO: remove this to the readmodel
-            _collection.Add(entry);
+            _collection.Add(@event);
         }
     }
 }

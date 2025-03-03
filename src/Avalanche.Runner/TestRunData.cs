@@ -8,7 +8,7 @@ namespace Avalanche.Runner
 {
     public class TestRunData
     {
-        public string Id { get; set; }
+        public string TestId { get; set; }
 
         public string Name { get; set; }
 
