@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Broadcast;
 
 namespace Avalanche.CommandModel
 {
-    public interface ICommandHandler
+    public interface ICommandHandler : IDispatcherHandler<ICommand> 
     {
-        void Execute<T>(string testId, T command) where T : class, ICommand;
     }
 }

@@ -1,28 +1,19 @@
 ﻿using Avalanche.CommandModel.Commands;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Avalanche.CommandModel.CommandHandlers
 {
     public class StartTestCommandHandler : ICommandHandler
     {
         private readonly IEventStore _store;
-        private readonly TestResultsCollection _collection;
 
-        public StartTestCommandHandler(IEventStore store, TestResultsCollection collection)
+        public StartTestCommandHandler(IEventStore store)
         {
             _store = store;
-            _collection = collection;
         }
 
-        public void Execute<T>(string testId, T command) where T : class, ICommand
+        public void Handle(ICommand command)
         {
             var cmd = command as StartTestCommand;
-            if (cmd == null)
-            {
-                return;
-            }
 
             //TODO: create the readmodel
             var @event = new Events.StartTestEvent
@@ -33,10 +24,24 @@ namespace Avalanche.CommandModel.CommandHandlers
                 Status = cmd.Status
             };
 
-            _store.Add(testId, typeof(T).AssemblyQualifiedName, cmd.StartTime, @event);
+            _store.Add(cmd.TestId, typeof(Events.StartTestEvent).AssemblyQualifiedName, cmd.StartTime, @event);
 
             //TODO: remove this to the readmodel
             //_collection.Add(@event);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // do stuf here
+            }
         }
     }
 }

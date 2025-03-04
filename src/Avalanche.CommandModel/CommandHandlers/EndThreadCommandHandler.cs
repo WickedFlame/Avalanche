@@ -1,12 +1,4 @@
-﻿using Avalanche.CommandModel;
-using Avalanche.CommandModel.Commands;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+﻿using Avalanche.CommandModel.Commands;
 
 namespace Avalanche.CommandModel.CommandHandlers
 {
@@ -21,13 +13,9 @@ namespace Avalanche.CommandModel.CommandHandlers
             _collection = collection;
         }
 
-        public void Execute<T>(string testId, T command) where T : class, ICommand
+        public void Handle(ICommand command)
         {
             var cmd = command as EndThreadCommand;
-            if (cmd == null)
-            {
-                return;
-            }
 
             //TODO: create the readmodel
             var @event = new Events.EndLogEvent
@@ -40,11 +28,25 @@ namespace Avalanche.CommandModel.CommandHandlers
                 IsWarmup = cmd.IsWarmup
             };
 
-            _store.Add(testId, typeof(T).AssemblyQualifiedName, cmd.Time, @event);
-                       
+            _store.Add(cmd.TestId, typeof(Events.EndLogEvent).AssemblyQualifiedName, cmd.Time, @event);
+
 
             //TODO: remove this to the readmodel
             _collection.Add(@event);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // do stuf here
+            }
         }
     }
 }

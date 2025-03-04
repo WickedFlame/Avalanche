@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Avalanche.CommandModel\Avalanche.CommandModel.csproj" />
+      <ProjectReference Include="..\Broadcast\Broadcast.csproj" />
     </ItemGroup>
 
 </Project>

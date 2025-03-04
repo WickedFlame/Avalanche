@@ -1,7 +1,10 @@
 ﻿using Avalanche.CommandModel;
+using Avalanche.CommandModel.CommandHandlers;
 using Avalanche.CommandModel.Commands;
 using Avalanche.Runner.Logging;
+using Broadcast;
 using MeasureMap;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net;
 using System.Security.Cryptography;
@@ -12,7 +15,7 @@ namespace Avalanche.Runner
     {
         private readonly TestResultsFacory _logCollector;
 
-        private readonly List<ICommandDispatcher> _dispatchers = [];
+        private readonly List<IDispatcher<ICommand>> _dispatchers = [];
 
         private readonly string _testId;
         private readonly IEventStore _store;
@@ -48,10 +51,17 @@ namespace Avalanche.Runner
                         ctx.Set("httpclient", client);
 
                         var collection = _logCollector.StartNew($"{Guid.NewGuid()}");
-                        var dispatcher = new CommandDispatcher(collection, _store);
+
+
+                        var dispatcher = new Dispatcher<ICommand>();
+                        dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(_store, collection));
+                        dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(_store, collection));
+                        dispatcher.Register<IterationCommand>(new IterationCommandHandler(_store, collection));
+
+
                         _dispatchers.Add(dispatcher);
 
-                        ctx.Set(nameof(ICommandDispatcher), dispatcher);
+                        ctx.Set(nameof(IDispatcher<ICommand>), dispatcher);
 
                         if (test.Init != null && !string.IsNullOrEmpty(test.Init.Url))
                         {
@@ -73,7 +83,7 @@ namespace Avalanche.Runner
                                 IsWarmup = s.IsWarmup
                             };
 
-                            dispatcher.Add(command);
+                            dispatcher.Send(command);
                         }
 
 
@@ -82,7 +92,7 @@ namespace Avalanche.Runner
                     .OnEndPipeline(e =>
                     {
                         e.Get<HttpClient>("httpclient").Dispose();
-                        var dispatcher = e.Get<ICommandDispatcher>(nameof(ICommandDispatcher));
+                        var dispatcher = e.Get<IDispatcher<ICommand>>(nameof(IDispatcher<ICommand>));
 
                         var metric = new EndThreadCommand
                         {
@@ -95,7 +105,7 @@ namespace Avalanche.Runner
                             IsWarmup = e.Settings.IsWarmup
                         };
 
-                        dispatcher.Add(metric);
+                        dispatcher.Send(metric);
                     })
                     .Task(ctx =>
                     {
@@ -156,7 +166,7 @@ namespace Avalanche.Runner
 
             foreach (var collector in _dispatchers)
             {
-                collector.End();
+                collector.Close();
             }
         }
     }

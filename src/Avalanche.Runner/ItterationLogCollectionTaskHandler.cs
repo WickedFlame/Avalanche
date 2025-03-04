@@ -1,6 +1,7 @@
 ﻿using Avalanche.CommandModel;
 using Avalanche.CommandModel.Commands;
 using Avalanche.Runner.Logging;
+using Broadcast;
 using MeasureMap;
 
 namespace Avalanche.Runner
@@ -18,7 +19,7 @@ namespace Avalanche.Runner
 
         public override IIterationResult Run(IExecutionContext context)
         {
-            var log = context.Get<ICommandDispatcher>(nameof(ICommandDispatcher));
+            var log = context.Get<IDispatcher<ICommand>>(nameof(IDispatcher<ICommand>));
 
             var result = base.Run(context);
 
@@ -36,7 +37,7 @@ namespace Avalanche.Runner
                 Time = result.TimeStamp
             };
 
-            log.Add(metric);
+            log.Send(metric);
 
             return result;
         }

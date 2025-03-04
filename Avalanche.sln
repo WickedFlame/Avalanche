@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.Tool", "src\Avala
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.CommandModel", "src\Avalanche.CommandModel\Avalanche.CommandModel.csproj", "{FB78458E-1A79-430D-A2A5-3BB5993BD614}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Broadcast", "src\Broadcast\Broadcast.csproj", "{F22A0899-5F55-4861-B077-5CF57C353A42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{FB78458E-1A79-430D-A2A5-3BB5993BD614}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB78458E-1A79-430D-A2A5-3BB5993BD614}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB78458E-1A79-430D-A2A5-3BB5993BD614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F22A0899-5F55-4861-B077-5CF57C353A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F22A0899-5F55-4861-B077-5CF57C353A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F22A0899-5F55-4861-B077-5CF57C353A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F22A0899-5F55-4861-B077-5CF57C353A42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

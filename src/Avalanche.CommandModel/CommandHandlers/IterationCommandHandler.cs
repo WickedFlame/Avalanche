@@ -22,13 +22,9 @@ namespace Avalanche.CommandModel.CommandHandlers
             _collection = collection;
         }
 
-        public void Execute<T>(string testId, T command) where T : class, ICommand
+        public void Handle(ICommand command)
         {
             var cmd = command as IterationCommand;
-            if (cmd == null)
-            {
-                return;
-            }
 
             //TODO: create the readmodel
             var @event = new Events.IterationLogEvent
@@ -44,7 +40,7 @@ namespace Avalanche.CommandModel.CommandHandlers
                 Time = cmd.Time
             };
 
-            _store.Add(testId, typeof(T).AssemblyQualifiedName, cmd.Time, @event);
+            _store.Add(cmd.TestId, typeof(Events.IterationLogEvent).AssemblyQualifiedName, cmd.Time, @event);
 
             //TODO: remove this to the readmodel
             if (string.IsNullOrEmpty(_collection.ThreadId))
@@ -54,6 +50,20 @@ namespace Avalanche.CommandModel.CommandHandlers
             }
 
             _collection.Add(@event);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // do stuf here
+            }
         }
     }
 }

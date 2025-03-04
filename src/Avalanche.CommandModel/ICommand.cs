@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Avalanche.CommandModel
+﻿namespace Avalanche.CommandModel
 {
     public interface ICommand
     {

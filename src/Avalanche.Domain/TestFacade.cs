@@ -1,7 +1,9 @@
 ﻿using Avalanche.CommandModel;
+using Avalanche.CommandModel.CommandHandlers;
 using Avalanche.CommandModel.Commands;
 using Avalanche.Runner;
 using Avalanche.Runner.Logging;
+using Broadcast;
 
 namespace Avalanche.Domain
 {
@@ -32,8 +34,13 @@ namespace Avalanche.Domain
 
 
 
-                    using var dispatcher = new CommandDispatcher(null, _store);
-                    dispatcher.Add(new StartTestCommand
+                    using var dispatcher = new Dispatcher<ICommand>();
+                    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(_store));
+                    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store));
+
+
+
+                    dispatcher.Send(new StartTestCommand
                     {
                         TestId = data.TestId,
                         TestName = name,
@@ -47,7 +54,7 @@ namespace Avalanche.Domain
                     data.Status = TestRunStatus.Done;
 
 
-                    dispatcher.Add(new EndTestCommand
+                    dispatcher.Send(new EndTestCommand
                     {
                         TestId = data.TestId,
                         TestName = name,
