@@ -47,6 +47,12 @@ namespace Avalanche.CommandModel.CommandHandlers
             _store.Add(testId, typeof(T).AssemblyQualifiedName, cmd.Time, @event);
 
             //TODO: remove this to the readmodel
+            if (string.IsNullOrEmpty(_collection.ThreadId))
+            {
+                _collection.ThreadId = @event.Thread.ToString();
+                _collection.IsWarmup = @event.IsWarmup;
+            }
+
             _collection.Add(@event);
         }
     }

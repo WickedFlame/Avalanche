@@ -10,12 +10,12 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Avalanche.CommandModel.CommandHandlers
 {
-    public class EndCommandHandler : ICommandHandler
+    public class StartupThreadCommandHandler : ICommandHandler
     {
         private readonly IEventStore _store;
         private readonly TestResultsCollection _collection;
 
-        public EndCommandHandler(IEventStore store, TestResultsCollection collection)
+        public StartupThreadCommandHandler(IEventStore store, TestResultsCollection collection)
         {
             _store = store;
             _collection = collection;
@@ -23,25 +23,25 @@ namespace Avalanche.CommandModel.CommandHandlers
 
         public void Execute<T>(string testId, T command) where T : class, ICommand
         {
-            var cmd = command as EndCommand;
+            var cmd = command as StartupThreadCommand;
             if (cmd == null)
             {
                 return;
             }
 
             //TODO: create the readmodel
-            var @event = new Events.EndLogEvent
+            var @event = new Events.StartupLogEvent
             {
                 Category = cmd.Category,
                 Module = cmd.Module,
                 Name = cmd.Name,
                 Message = cmd.Message,
-                Thread = cmd.Thread,
+                StatusCode = cmd.StatusCode,
+                ElapsedMilliseconds = cmd.ElapsedMilliseconds,
                 IsWarmup = cmd.IsWarmup
             };
 
             _store.Add(testId, typeof(T).AssemblyQualifiedName, cmd.Time, @event);
-                       
 
             //TODO: remove this to the readmodel
             _collection.Add(@event);

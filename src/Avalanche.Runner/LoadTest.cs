@@ -31,7 +31,7 @@ namespace Avalanche.Runner
             foreach (var test in settings.Tests)
             {
                 var session = ProfilerSession.StartSession()
-                    .AddMiddleware(new ItterationLogCollectionTaskHandler(test.Name))
+                    .AddMiddleware(new ItterationLogCollectionTaskHandler(test.Name, _testId))
                     .OnStartPipeline(s =>
                     {
                         var ctx = new MeasureMap.ExecutionContext(s);
@@ -48,7 +48,7 @@ namespace Avalanche.Runner
                         ctx.Set("httpclient", client);
 
                         var collection = _logCollector.StartNew($"{Guid.NewGuid()}");
-                        var dispatcher = new CommandDispatcher(_testId, collection, _store);
+                        var dispatcher = new CommandDispatcher(collection, _store);
                         _dispatchers.Add(dispatcher);
 
                         ctx.Set(nameof(ICommandDispatcher), dispatcher);
@@ -61,8 +61,9 @@ namespace Avalanche.Runner
 
                             time.Stop();
 
-                            var command = new StartupCommand
+                            var command = new StartupThreadCommand
                             {
+                                TestId = _testId,
                                 Category = "console",
                                 Module = "Init",
                                 Name = test.Name,
@@ -83,8 +84,9 @@ namespace Avalanche.Runner
                         e.Get<HttpClient>("httpclient").Dispose();
                         var dispatcher = e.Get<ICommandDispatcher>(nameof(ICommandDispatcher));
 
-                        var metric = new EndCommand
+                        var metric = new EndThreadCommand
                         {
+                            TestId = _testId,
                             Category = "console",
                             Module = "End",
                             Name = test.Name,

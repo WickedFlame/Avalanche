@@ -8,10 +8,12 @@ namespace Avalanche.Runner
     public class ItterationLogCollectionTaskHandler : TaskHandler
     {
         private readonly string _name;
+        private readonly string _testId;
 
-        public ItterationLogCollectionTaskHandler(string name)
+        public ItterationLogCollectionTaskHandler(string name, string testId)
         {
             _name = name;
+            _testId = testId;
         }
 
         public override IIterationResult Run(IExecutionContext context)
@@ -22,6 +24,7 @@ namespace Avalanche.Runner
 
             var metric = new IterationCommand
             {
+                TestId = _testId,
                 Category = "console",
                 Module = "Measure",
                 Name = _name,

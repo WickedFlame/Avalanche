@@ -1,12 +1,14 @@
 ﻿
 namespace Avalanche.CommandModel.Commands
 {
-    public class EndCommand : ICommand
+    public class EndThreadCommand : ICommand
     {
-        public EndCommand()
+        public EndThreadCommand()
         {
             Time = DateTime.Now;
         }
+
+        public string TestId { get; set; }
 
         public DateTime Time { get; set; }
 

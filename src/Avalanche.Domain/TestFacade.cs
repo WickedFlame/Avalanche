@@ -1,5 +1,7 @@
 ﻿using Avalanche.CommandModel;
+using Avalanche.CommandModel.Commands;
 using Avalanche.Runner;
+using Avalanche.Runner.Logging;
 
 namespace Avalanche.Domain
 {
@@ -27,9 +29,31 @@ namespace Avalanche.Domain
 
                     var loadtest = new LoadTest(new Runner.Logging.TestResultsFacory(data), data.TestId, _store);
                     data.StartTime = DateTime.Now;
+
+
+
+                    using var dispatcher = new CommandDispatcher(null, _store);
+                    dispatcher.Add(new StartTestCommand
+                    {
+                        TestId = data.TestId,
+                        TestName = name,
+                        StartTime = data.StartTime,
+                        Status = data.Status
+                    });
+
+
                     data.Results = loadtest.Run(settings);
 
                     data.Status = TestRunStatus.Done;
+
+
+                    dispatcher.Add(new EndTestCommand
+                    {
+                        TestId = data.TestId,
+                        TestName = name,
+                        StartTime = data.StartTime,
+                        Status = data.Status
+                    });
 
 
                     //

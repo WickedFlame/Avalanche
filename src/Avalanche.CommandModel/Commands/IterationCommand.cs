@@ -8,6 +8,8 @@ namespace Avalanche.CommandModel.Commands
             Time = DateTime.Now;
         }
 
+        public string TestId { get; set; }
+
         public DateTime Time { get; set; }
 
         public string Category { get; set; }

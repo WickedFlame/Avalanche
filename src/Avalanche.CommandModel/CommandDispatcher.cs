@@ -17,16 +17,16 @@ namespace Avalanche.Runner.Logging
         private bool _isRunning;
         private readonly Dictionary<Type, ICommandHandler> _commandHandlers;
 
-        public CommandDispatcher(string testId, TestResultsCollection collection, IEventStore store)
+        public CommandDispatcher(TestResultsCollection collection, IEventStore store)
         {
             _commandHandlers = new Dictionary<Type, ICommandHandler>
             {
-                { typeof(StartupCommand), new StartupCommandHandler(store, collection) },
-                { typeof(EndCommand), new EndCommandHandler(store, collection) },
+                { typeof(StartupThreadCommand), new StartupThreadCommandHandler(store, collection) },
+                { typeof(EndThreadCommand), new EndThreadCommandHandler(store, collection) },
                 { typeof(IterationCommand), new IterationCommandHandler(store, collection) }
             };
 
-            StartDispatcher(testId, collection);
+            StartDispatcher();
         }
 
         public void Add(ICommand metric)
@@ -35,7 +35,7 @@ namespace Avalanche.Runner.Logging
             _waitHandle.Reset();
         }
 
-        public void StartDispatcher(string testId, TestResultsCollection collection)
+        public void StartDispatcher()
         {
 
             _isRunning = true;
@@ -49,13 +49,7 @@ namespace Avalanche.Runner.Logging
                         var entry = _queue.Any() ? _queue.Dequeue() : null;
                         while (entry != null)
                         {
-                            if(string.IsNullOrEmpty(collection.ThreadId) && entry is IterationCommand ie)
-                            {
-                                collection.ThreadId = ie.Thread.ToString();
-                                collection.IsWarmup = ie.IsWarmup;
-                            }
-
-                            _commandHandlers[entry.GetType()].Execute(testId, entry);
+                            _commandHandlers[entry.GetType()].Execute(entry.TestId, entry);
 
                             entry = _queue.Any() ? _queue.Dequeue() : null;
 
@@ -77,6 +71,22 @@ namespace Avalanche.Runner.Logging
         {
             _isRunning = false;
             _waitHandle.Reset();
+        }
+
+        public void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                End();
+            }
         }
     }
 }

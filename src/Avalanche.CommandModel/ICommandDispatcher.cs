@@ -1,7 +1,7 @@
 ﻿
 namespace Avalanche.CommandModel
 {
-    public interface ICommandDispatcher
+    public interface ICommandDispatcher : IDisposable
     {
         void Add(ICommand metric);
 

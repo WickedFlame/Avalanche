@@ -5,12 +5,14 @@ using System.Text;
 
 namespace Avalanche.CommandModel.Commands
 {
-    public class StartupCommand : ICommand
+    public class StartupThreadCommand : ICommand
     {
-        public StartupCommand()
+        public StartupThreadCommand()
         {
             Time = DateTime.Now;
         }
+
+        public string TestId { get; set; }
 
         public DateTime Time { get; set; }
 
