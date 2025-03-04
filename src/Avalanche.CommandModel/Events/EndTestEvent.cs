@@ -1,6 +1,6 @@
-﻿namespace Avalanche.CommandModel.Commands
+﻿namespace Avalanche.CommandModel.Events
 {
-    public class EndTestCommand : ICommand
+    public class EndTestEvent : IEvent
     {
         public string TestId { get; set; }
 

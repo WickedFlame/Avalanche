@@ -5,10 +5,12 @@ namespace Avalanche.CommandModel.CommandHandlers
     public class StartTestCommandHandler : ICommandHandler
     {
         private readonly IEventStore _store;
+        private readonly IEventDispatcher _eventDispatcher;
 
-        public StartTestCommandHandler(IEventStore store)
+        public StartTestCommandHandler(IEventStore store, IEventDispatcher eventDispatcher)
         {
             _store = store;
+            _eventDispatcher = eventDispatcher;
         }
 
         public void Handle(ICommand command)
@@ -27,7 +29,7 @@ namespace Avalanche.CommandModel.CommandHandlers
             _store.Add(cmd.TestId, typeof(Events.StartTestEvent).AssemblyQualifiedName, cmd.StartTime, @event);
 
             //TODO: remove this to the readmodel
-            //_collection.Add(@event);
+            _eventDispatcher.Send(@event);
         }
 
         public void Dispose()

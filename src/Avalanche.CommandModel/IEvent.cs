@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Avalanche.CommandModel.Events
+namespace Avalanche.CommandModel
 {
     public interface IEvent
     {

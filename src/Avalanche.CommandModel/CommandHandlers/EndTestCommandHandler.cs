@@ -5,28 +5,29 @@ namespace Avalanche.CommandModel.CommandHandlers
     public class EndTestCommandHandler : ICommandHandler
     {
         private readonly IEventStore _store;
+        private readonly IEventDispatcher _eventDispatcher;
 
-        public EndTestCommandHandler(IEventStore store)
+        public EndTestCommandHandler(IEventStore store, IEventDispatcher eventDispatcher)
         {
             _store = store;
+            _eventDispatcher = eventDispatcher;
         }
 
         public void Handle(ICommand command)
         {
             var cmd = command as EndTestCommand;
             //TODO: create the readmodel
-            //var @event = new Events.EndTestEvent
-            //{
-            //    TestId = cmd.TestId,
-            //    TestName = cmd.TestName,
-            //    StartTime = cmd.StartTime,
-            //    Status = cmd.Status
-            //};
+            var @event = new Events.EndTestEvent
+            {
+                TestId = cmd.TestId,
+                EndTime = cmd.EndTime,
+                Status = cmd.Status
+            };
 
-            //_store.Add(testId, typeof(T).AssemblyQualifiedName, cmd.StartTime, @event);
+            _store.Add(cmd.TestId, typeof(Events.EndTestEvent).AssemblyQualifiedName, cmd.EndTime, @event);
 
             //TODO: remove this to the readmodel
-            //_collection.Add(@event);
+            _eventDispatcher.Send(@event);
         }
 
         public void Dispose()

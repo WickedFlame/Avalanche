@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Avalanche.CommandModel;
+using Avalanche.CommandModel.Events;
 using Avalanche.Domain;
 using Avalanche.Models;
-using Avalanche.Domain.Models;
-using Avalanche.Runner.Logging;
-using Avalanche.CommandModel;
-using Avalanche.CommandModel.Events;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers
 {
@@ -14,7 +12,7 @@ namespace Avalanche.Controllers
 
         public TestOverviewController(IEventStore store)
         {
-            _store = store;
+            _store = store;;
         }
 
         public IActionResult Index(string name)

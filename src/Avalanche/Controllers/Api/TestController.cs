@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Avalanche.CommandModel;
 using Avalanche.Domain;
-using System.Diagnostics;
-using Avalanche.CommandModel;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers.Api
 {

@@ -1,6 +1,8 @@
 ﻿using Avalanche.CommandModel;
 using Avalanche.CommandModel.CommandHandlers;
 using Avalanche.CommandModel.Commands;
+using Avalanche.CommandModel.EventHandlers;
+using Avalanche.CommandModel.Events;
 using Avalanche.Runner;
 using Avalanche.Runner.Logging;
 using Broadcast;
@@ -32,11 +34,14 @@ namespace Avalanche.Domain
                     var loadtest = new LoadTest(new Runner.Logging.TestResultsFacory(data), data.TestId, _store);
                     data.StartTime = DateTime.Now;
 
+                    using var eventDispatcher = new EventDispatcher();
+                    eventDispatcher.Register<StartTestEvent>(new StartTestEventHandler());
+
 
 
                     using var dispatcher = new Dispatcher<ICommand>();
-                    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(_store));
-                    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store));
+                    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(_store, eventDispatcher));
+                    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store, eventDispatcher));
 
 
 
@@ -57,8 +62,7 @@ namespace Avalanche.Domain
                     dispatcher.Send(new EndTestCommand
                     {
                         TestId = data.TestId,
-                        TestName = name,
-                        StartTime = data.StartTime,
+                        EndTime = DateTime.Now,
                         Status = data.Status
                     });
 

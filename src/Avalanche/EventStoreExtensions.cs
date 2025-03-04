@@ -36,7 +36,9 @@ CREATE TABLE IF NOT EXISTS Events (
 CREATE TABLE IF NOT EXISTS TestRun (
   TestId VARCHAR(255),
   TestName VARCHAR(255),
-  StartTime DATETIME
+  StartTime DATETIME,
+  EndTime DATETIME,
+  Status VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS StartEvents (
@@ -59,4 +61,71 @@ CREATE TABLE IF NOT EXISTS StartEvents (
             }
         }
     }
-}
+
+    //protected void CreateTables()
+    //    {
+    //        const string sqlTextCreateTables = @"
+    //    CREATE TABLE IF NOT EXISTS Addresses
+    //    (
+    //        Id INTEGER PRIMARY KEY NOT NULL,
+    //        Street TEXT NOT NULL,
+    //        Number INTEGER NOT NULL,
+    //        Ext TEXT,
+    //        ExtraLine TEXT,
+    //        PostalCode TEXT NOT NULL,
+    //        City TEXT NOT NULL,
+    //        Country TEXT NOT NULL
+    //    );
+    //    CREATE INDEX IF NOT EXISTS indexAddresses ON Addresses (PostalCode, Number, Ext);
+
+    //    CREATE TABLE IF NOT EXISTS Schools
+    //    (
+    //       Id INTEGER PRIMARY KEY NOT NULL,
+    //       Name TEXT NOT NULL
+    //    );
+
+    //    CREATE TABLE IF NOT EXISTS Students
+    //    (
+    //        Id INTEGER PRIMARY KEY NOT NULL,
+    //        Name TEXT NOT NULL,
+    //        AddressId INTEGER NOT NULL,
+    //        SchoolId INTEGER NOT NULL,
+
+    //        FOREIGN KEY(AddressId) REFERENCES Addresses(Id)  ON DELETE NO ACTION,
+    //        FOREIGN KEY(SchoolId) REFERENCES Schools(Id) ON DELETE CASCADE
+    //    );
+
+    //    CREATE TABLE IF NOT EXISTS Teachers
+    //    (
+    //        Id INTEGER PRIMARY KEY NOT NULL,
+    //        Name TEXT NOT NULL,
+
+    //        AddressId INTEGER NOT NULL,
+    //        SchoolId INTEGER NOT NULL,
+
+    //        FOREIGN KEY(AddressId) REFERENCES Addresses(Id)  ON DELETE NO ACTION,
+    //        FOREIGN KEY(SchoolId) REFERENCES Schools(Id) ON DELETE CASCADE
+    //    );
+
+    //    CREATE TABLE IF NOT EXISTS TeachersStudents
+    //    (
+    //        TeacherId INTEGER NOT NULL,
+    //        StudentId INTEGER NOT NULL,
+
+    //        PRIMARY KEY (TeacherId, StudentId)
+    //        FOREIGN KEY(TeacherId) REFERENCES Teachers(Id) ON DELETE NO ACTION,
+    //        FOREIGN KEY(StudentId) REFERENCES Students(Id) ON DELETE NO ACTION
+    //    )";
+
+    //        var connectionString = this.Database.Connection.ConnectionString;
+    //        using (var dbConnection = new System.Data.SQLite.SQLiteConnection(connectionString))
+    //        {
+    //            dbConnection.Open();
+    //            using (var dbCommand = dbConnection.CreateCommand())
+    //            {
+    //                dbCommand.CommandText = sqlTextCreateTables;
+    //                dbCommand.ExecuteNonQuery();
+    //            }
+    //        }
+    //    }
+    }

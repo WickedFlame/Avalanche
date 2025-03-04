@@ -1,5 +1,4 @@
-﻿
-namespace Avalanche.CommandModel.Events
+﻿namespace Avalanche.CommandModel.Events
 {
     public class EndLogEvent : LogEvent, IEvent
     {
