@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Avalanche.QueryModel
+namespace Avalanche.ReadModel
 {
     public interface IQueryHandler<T, Tq> where Tq : IQuery
     {

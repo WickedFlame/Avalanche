@@ -1,8 +1,8 @@
-﻿using Avalanche.QueryModel.Data;
+﻿using Avalanche.ReadModel.Data;
 using System.Data;
 using System.Data.SQLite;
 
-namespace Avalanche.QueryModel
+namespace Avalanche.ReadModel
 {
     internal static class SQLiteCommandExtensions
     {

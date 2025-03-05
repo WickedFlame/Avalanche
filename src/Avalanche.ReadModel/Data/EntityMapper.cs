@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 
-namespace Avalanche.QueryModel.Data
+namespace Avalanche.ReadModel.Data
 {
     // https://www.exceptionnotfound.net/mapping-datatables-and-datarows-to-objects-in-csharp-and-net-using-reflection/
     // https://github.com/exceptionnotfound/DataNamesMappingDemo

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Avalanche.QueryModel.Models
+namespace Avalanche.ReadModel.Models
 {
     public class TestRun
     {

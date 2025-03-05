@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Avalanche.QueryModel
+namespace Avalanche.ReadModel
 {
     public class IQuery
     {

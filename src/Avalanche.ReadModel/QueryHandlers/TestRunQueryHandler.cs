@@ -1,8 +1,8 @@
-﻿using Avalanche.QueryModel.Models;
-using Avalanche.QueryModel.Queries;
+﻿using Avalanche.ReadModel.Models;
+using Avalanche.ReadModel.Queries;
 using System.Data.SQLite;
 
-namespace Avalanche.QueryModel.QueryHandlers
+namespace Avalanche.ReadModel.QueryHandlers
 {
     public class TestRunQueryHandler : IQueryHandler<IEnumerable<TestRun>, GetTestsQuery>
     {

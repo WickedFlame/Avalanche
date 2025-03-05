@@ -1,5 +1,5 @@
 ﻿
-namespace Avalanche.QueryModel.Queries
+namespace Avalanche.ReadModel.Queries
 {
     public class GetTestsQuery : IQuery
     {

@@ -2,7 +2,7 @@
 using Avalanche.WriteModel.Events;
 using Avalanche.Domain;
 using Avalanche.Models;
-using Avalanche.QueryModel.QueryHandlers;
+using Avalanche.ReadModel.QueryHandlers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers

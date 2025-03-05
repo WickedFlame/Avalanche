@@ -1,6 +1,6 @@
 ﻿using Avalanche.WriteModel.Events;
 using Avalanche.Domain;
-using Avalanche.QueryModel.Models;
+using Avalanche.ReadModel.Models;
 using Avalanche.Runner;
 using Avalanche.Runner.Logging;
 
