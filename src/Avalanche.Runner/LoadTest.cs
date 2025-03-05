@@ -55,9 +55,9 @@ namespace Avalanche.Runner
                         var collection = _logCollector.StartNew($"{Guid.NewGuid()}");
 
                         var messageBus = new MessageBus();
-                        messageBus.Register<StartupLogEvent>(new StartupThreadEventHandler(collection));
+                        messageBus.Register<StartupLogEvent>(new StartupThreadEventHandler());
                         messageBus.Register<IterationLogEvent>(new IterationEventHandler(collection));
-                        messageBus.Register<EndLogEvent>(new EndThreadEventHandler(collection));
+                        messageBus.Register<EndLogEvent>(new EndThreadEventHandler());
 
                         var dispatcher = new Dispatcher<ICommand>();
                         dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(_store, messageBus));

@@ -1,4 +1,6 @@
-﻿using Avalanche.Runner;
+﻿using Avalanche.ReadModel.Queries;
+using Avalanche.ReadModel.QueryHandlers;
+using Avalanche.Runner;
 using System.Xml.Linq;
 
 namespace Avalanche.Domain
@@ -21,11 +23,11 @@ namespace Avalanche.Domain
                 State = TestRunStatus.New
             };
 
-            var result = Domain.TestResultsCollection.Instance.GetResults(definition.Name.ToLower());
-
-            if (result != null)
+            var handler = new TestRunQueryHandler();
+            var test = handler.Get(new GetLastTestQuery { Scenario = definition.Name});
+            if (test != null)
             {
-                definition.State = result.Status ?? TestRunStatus.New;
+                definition.State = new TestRunStatus(test?.Status ?? "New");
             }
 
             return definition;

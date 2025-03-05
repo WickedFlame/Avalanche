@@ -41,12 +41,12 @@ CREATE TABLE IF NOT EXISTS TestRun (
   Status VARCHAR(100)
 );
 
-CREATE TABLE IF NOT EXISTS StartEvents (
+CREATE TABLE IF NOT EXISTS RampupEvents (
   Id VARCHAR(255),
   TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
   Time DATETIME,
-  EventType VARCHAR(500),
-  Value VARCHAR (2000)
+  ThreadId VARCHAR(255),
+  Value int
 );
 ";
             using (var connection = new SQLiteConnection("Data Source=readmodel.db"))

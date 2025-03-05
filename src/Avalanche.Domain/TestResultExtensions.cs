@@ -39,43 +39,5 @@ namespace Avalanche
                         })
                 });
         }
-
-        public static IEnumerable<ChartDataRow> GetRampupData(this TestRunData logger)
-        {
-            if (logger == null)
-            {
-                return Enumerable.Empty<ChartDataRow>();
-            }
-
-            var startData = logger.GetCollections()
-                .SelectMany(g => g.Events.OfType<StartupLogEvent>())
-                .Where(g => !g.IsWarmup)
-                .ToList();
-            var endData = logger.GetCollections()
-                .SelectMany(g=>g.Events.OfType<EndLogEvent>())
-                .Where(g => !g.IsWarmup)
-                .ToList();
-
-            var data = new List<ChartDataRow>();
-            var cnt = 0;
-            foreach(var item in  startData.OrderBy(d => d.Time))
-            {
-                cnt++;
-                data.Add(new ChartDataRow { Time = item.Time.ToString("o"), Value = cnt.ToString() });
-            }
-
-            foreach (var item in endData.OrderBy(d => d.Time))
-            {
-                data.Add(new ChartDataRow { Time = item.Time.ToString("o"), Value = cnt.ToString() });
-                cnt--;
-            }
-
-            if(!endData.Any() && logger.Status != TestRunStatus.Done)
-            {
-                data.Add(new ChartDataRow { Time = DateTime.Now.ToString("o"), Value = cnt.ToString() });
-            }
-
-            return data;
-        }
     }
 }

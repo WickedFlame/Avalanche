@@ -19,6 +19,8 @@ namespace Avalanche.WriteModel.CommandHandlers
             //TODO: create the readmodel
             var @event = new Events.StartupLogEvent
             {
+                TestId = cmd.TestId,
+                //ThreadId = cmd.Thread,
                 Category = cmd.Category,
                 Module = cmd.Module,
                 Name = cmd.Name,

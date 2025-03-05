@@ -6,7 +6,9 @@ namespace Avalanche.ReadModel.QueryHandlers
 {
     public class TestRunQueryHandler :
         IQueryHandler<IEnumerable<TestRun>, GetTestsQuery>,
-        IQueryHandler<TestRun, GetLastTestQuery>
+        IQueryHandler<TestRun, GetLastTestQuery>,
+        IQueryHandler<TestRun, GetTestRun>,
+        IQueryHandler<IEnumerable<RampupData>, GetRampupData>
     {
         private readonly SQLiteConnection _connection;
 
@@ -37,6 +39,30 @@ namespace Avalanche.ReadModel.QueryHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
 
                 return cmd.Execute<TestRun>().FirstOrDefault();
+            }
+        }
+
+        public TestRun Get(GetTestRun query)
+        {
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT * FROM TestRun WHERE TestId = @testId ORDER BY StartTime DESC";
+
+                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+
+                return cmd.Execute<TestRun>().FirstOrDefault();
+            }
+        }
+
+        public IEnumerable<RampupData> Get(GetRampupData query)
+        {
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT * FROM RampupEvents WHERE TestId = @testId ORDER BY Time DESC";
+
+                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+
+                return cmd.Execute<RampupData>();
             }
         }
     }

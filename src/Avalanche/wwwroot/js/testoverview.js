@@ -101,8 +101,8 @@
                 data: tmp,
                 fill: false,
                 label: 'Rampup',
-                lineTension: 0.1,
-                radius: 0
+                //lineTension: 0.1,
+                //radius: 0
             });
 
             if (tmp.length > 0) {
@@ -174,9 +174,13 @@
                         x: {
                             type: 'time',
                             distribution: 'linear',
+                            beginAtZero: true
                             //time: {
                             //    unit: 'second'
                             //}
+                        },
+                        y: {
+                            stacked: true
                         }
                     },
                     //plugins: {

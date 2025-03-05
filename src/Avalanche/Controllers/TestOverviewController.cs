@@ -44,14 +44,14 @@ namespace Avalanche.Controllers
             var model = new TestOverviewModel
             {
                 Name = name,
-                StartTime = lastRun.StartTime,
+                StartTime = lastRun?.StartTime,
                 Settings = settings,
                 Runs = runs,
                 Results = results.Results,
                 LogEntries = logEntries,
                 StartupEntries = events.OfType<StartupLogEvent>().OrderBy(c => c.Time),
                 EndLogEntries = events.OfType<EndLogEvent>().OrderBy(c => c.Time),
-                Status = new Runner.TestRunStatus(lastRun.Status)
+                Status = lastRun?.Status == null ? Runner.TestRunStatus.New : new Runner.TestRunStatus(lastRun.Status)
             };
 
             return View(model);

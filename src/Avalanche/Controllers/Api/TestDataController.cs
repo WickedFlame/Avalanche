@@ -78,11 +78,13 @@ namespace Avalanche.Controllers.Api
             var trh = new TestRunQueryHandler();
             var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = scenario });
 
-            var results = Domain.TestResultsCollection.Instance.GetResults(scenario.ToLower());
-            if (results == null)
+            if(lastRun == null)
             {
                 return Ok();
             }
+
+            var facade = new TestDataFacade();
+            var data = facade.GetRampupData(lastRun.TestId);
 
             testname = testname.ToLower();
 
@@ -90,8 +92,8 @@ namespace Avalanche.Controllers.Api
             {
                 Scenario = scenario,
                 Testname = testname,
-                Status = lastRun?.Status ?? "Open",
-                Data = results.GetRampupData()
+                Status = lastRun?.Status ?? "New",
+                Data = data
             });
         }
     }

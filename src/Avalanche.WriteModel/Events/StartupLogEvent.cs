@@ -4,6 +4,8 @@ namespace Avalanche.WriteModel.Events
 {
     public class StartupLogEvent : LogEvent, IEvent
     {
+        public string TestId { get; set; }
+
         public string Name { get; set; }
 
         public string Message { get; set; }
