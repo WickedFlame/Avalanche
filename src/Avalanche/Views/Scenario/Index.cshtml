@@ -1,13 +1,13 @@
 ﻿@using System.Linq
 @using System.Text.Json
-@model TestOverviewModel
+@model ScenarioModel
 
 
 <div class="pt-main-content">
     <aside class="menu px-4 py-4">
         <p class="menu-label">Menu</p>
         <ul class="menu-list">
-            <li>Menu item</li>
+            <li>Menu Item</li>
         </ul>
     </aside>
 
@@ -86,6 +86,42 @@
             </div>
         </div>
 
+
+
+
+        <div class="pt-element-container">
+            <div class="pt-content-panel">
+                <h2>Testruns</h2>
+                <div class="overflow-x-auto">
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>TestName</th>
+                                <th>TestId</th>
+                                <th>StartTime</th>
+                                <th>EndTime</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var test in Model.Runs)
+                            {
+                                <tr>
+                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-name="@test.Scenario">@test.Scenario</a></td>
+                                    <td>@test.TestId</td>
+                                    <td>@test.StartTime</td>
+                                    <td>@test.EndTime</td>
+                                    <td>@test.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
         @if (Model.Settings != null)
         {
             <div class="pt-element-container">
@@ -125,101 +161,6 @@
             </div>
         }
 
-        <div class="pt-element-container">
-            <partial name="./Partials/Chart"/>
-        </div>
-
-        <div class="pt-element-container">
-            <partial name="./Partials/RampupChart" />
-        </div>
-
-        <div>
-            <div class="pt-content-panel">
-                <h2>Thread Start</h2>
-                <div class="overflow-x-auto">
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Testname</th>
-                                <th>Duration</th>
-                                <th>Message</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var row in Model.StartupEntries.Where(r => r.Module == "Init"))
-                            {
-                                <tr>
-                                    <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
-                                    <td>@row.Name</td>
-                                    <td>@row.ElapsedMilliseconds</td>
-                                    <td>@row.Message</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="pt-content-panel">
-                <h2>Thread End</h2>
-                <div class="overflow-x-auto">
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Testname</th>
-                                <th>Thread</th>
-                                <th>Message</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var row in Model.EndLogEntries.Where(r => r.Module == "End"))
-                            {
-                                <tr>
-                                    <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
-                                    <td>@row.Name</td>
-                                    <td>@row.Thread</td>
-                                    <td>@row.Message</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="pt-content-panel">
-                <h2>Iterations</h2>
-                <div class="overflow-x-auto">
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Testname</th>
-                                <th>IsWarmup</th>
-                                <th>Thread</th>
-                                <th>Number</th>
-                                <th>Duration</th>
-                                <th>Message</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var row in Model.LogEntries.Where(r => r.Module == "Measure"))
-                            {
-                                <tr>
-                                    <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
-                                    <td>@row.Name</td>
-                                    <td>@row.IsWarmup</td>
-                                    <td>@row.Thread</td>
-                                    <td>@row.RunNumber</td>
-                                    <td>@row.TotalMilliseconds</td>
-                                    <td>@row.Message</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
         </div>
     </div>

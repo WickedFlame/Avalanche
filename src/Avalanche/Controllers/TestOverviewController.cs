@@ -31,8 +31,6 @@ namespace Avalanche.Controllers
 
 
             var trh = new TestRunQueryHandler();
-            var runs = trh.Get(new ReadModel.Queries.GetTestsQuery { Scenario = name });
-
             var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = name });
 
 
@@ -46,7 +44,6 @@ namespace Avalanche.Controllers
                 Name = name,
                 StartTime = lastRun?.StartTime,
                 Settings = settings,
-                Runs = runs,
                 Results = results.Results,
                 LogEntries = logEntries,
                 StartupEntries = events.OfType<StartupLogEvent>().OrderBy(c => c.Time),

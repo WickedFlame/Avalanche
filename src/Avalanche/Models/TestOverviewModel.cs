@@ -23,7 +23,5 @@ namespace Avalanche.Models
         public IEnumerable<StartupLogEvent> StartupEntries { get; set; }
 
         public IEnumerable<EndLogEvent> EndLogEntries { get; set; }
-
-        public IEnumerable<TestRun> Runs { get; set; }
     }
 }
