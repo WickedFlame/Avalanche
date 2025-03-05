@@ -1,4 +1,4 @@
-﻿using Avalanche.CommandModel;
+﻿using Avalanche.WriteModel;
 using Avalanche.Domain;
 using Microsoft.AspNetCore.Mvc;
 

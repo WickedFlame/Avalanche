@@ -1,5 +1,5 @@
 using Avalanche;
-using Avalanche.CommandModel;
+using Avalanche.WriteModel;
 
 var builder = WebApplication.CreateBuilder(args);
 

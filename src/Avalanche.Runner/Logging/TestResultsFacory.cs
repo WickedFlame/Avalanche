@@ -1,4 +1,4 @@
-﻿using Avalanche.CommandModel;
+﻿using Avalanche.WriteModel;
 
 namespace Avalanche.Runner.Logging
 {

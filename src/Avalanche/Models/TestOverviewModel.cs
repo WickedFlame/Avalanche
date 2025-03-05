@@ -1,4 +1,4 @@
-﻿using Avalanche.CommandModel.Events;
+﻿using Avalanche.WriteModel.Events;
 using Avalanche.Domain;
 using Avalanche.QueryModel.Models;
 using Avalanche.Runner;

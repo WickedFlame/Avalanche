@@ -1,5 +1,5 @@
 ﻿using Avalanche;
-using Avalanche.CommandModel;
+using Avalanche.WriteModel;
 using Avalanche.Runner;
 using Avalanche.Runner.Logging;
 using MeasureMap;

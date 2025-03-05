@@ -1,5 +1,5 @@
-﻿using Avalanche.CommandModel;
-using Avalanche.CommandModel.Commands;
+﻿using Avalanche.WriteModel;
+using Avalanche.WriteModel.Commands;
 using Broadcast;
 using MeasureMap;
 

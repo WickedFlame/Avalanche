@@ -1,5 +1,5 @@
-﻿using Avalanche.CommandModel;
-using Avalanche.CommandModel.Events;
+﻿using Avalanche.WriteModel;
+using Avalanche.WriteModel.Events;
 using Avalanche.Domain;
 using Avalanche.Models;
 using Avalanche.QueryModel.QueryHandlers;

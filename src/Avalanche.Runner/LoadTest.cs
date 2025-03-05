@@ -1,8 +1,8 @@
-﻿using Avalanche.CommandModel;
-using Avalanche.CommandModel.CommandHandlers;
-using Avalanche.CommandModel.Commands;
-using Avalanche.CommandModel.EventHandlers;
-using Avalanche.CommandModel.Events;
+﻿using Avalanche.WriteModel;
+using Avalanche.WriteModel.CommandHandlers;
+using Avalanche.WriteModel.Commands;
+using Avalanche.WriteModel.EventHandlers;
+using Avalanche.WriteModel.Events;
 using Avalanche.Runner.Logging;
 using Broadcast;
 using MeasureMap;
