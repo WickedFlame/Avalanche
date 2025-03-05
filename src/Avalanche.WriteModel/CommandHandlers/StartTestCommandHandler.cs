@@ -19,7 +19,7 @@ namespace Avalanche.WriteModel.CommandHandlers
             var @event = new Events.StartTestEvent
             {
                 TestId = cmd.TestId,
-                TestName = cmd.TestName,
+                Scenario = cmd.Scenario,
                 StartTime = cmd.StartTime,
                 Status = cmd.Status
             };

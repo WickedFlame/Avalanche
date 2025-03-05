@@ -4,7 +4,9 @@ using System.Data.SQLite;
 
 namespace Avalanche.ReadModel.QueryHandlers
 {
-    public class TestRunQueryHandler : IQueryHandler<IEnumerable<TestRun>, GetTestsQuery>
+    public class TestRunQueryHandler :
+        IQueryHandler<IEnumerable<TestRun>, GetTestsQuery>,
+        IQueryHandler<TestRun, GetLastTestQuery>
     {
         private readonly SQLiteConnection _connection;
 
@@ -18,11 +20,23 @@ namespace Avalanche.ReadModel.QueryHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT * FROM TestRun WHERE TestName = @testName";
+                cmd.CommandText = "SELECT * FROM TestRun WHERE Scenario = @scenario ORDER BY StartTime DESC";
 
-                cmd.Parameters.Add(new SQLiteParameter("@testName", query.TestName));
+                cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
 
                 return cmd.Execute<TestRun>();
+            }
+        }
+
+        public TestRun Get(GetLastTestQuery query)
+        {
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT * FROM TestRun WHERE Scenario = @scenario ORDER BY StartTime DESC";
+
+                cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
+
+                return cmd.Execute<TestRun>().FirstOrDefault();
             }
         }
     }

@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS Events (
             const string _query = @"
 CREATE TABLE IF NOT EXISTS TestRun (
   TestId VARCHAR(255),
-  TestName VARCHAR(255),
+  Scenario VARCHAR(255),
   StartTime DATETIME,
   EndTime DATETIME,
   Status VARCHAR(100)

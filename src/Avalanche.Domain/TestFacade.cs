@@ -27,8 +27,6 @@ namespace Avalanche.Domain
                     //TODO: nicht via singleton lösen
                     var data = TestResultsCollection.Instance.StartNew(Guid.NewGuid().ToString(), name);
 
-                    data.Status = TestRunStatus.Running;
-
                     data.Settings = settings;
 
                     var loadtest = new LoadTest(new Runner.Logging.TestResultsFacory(data), data.TestId, _store);
@@ -49,22 +47,19 @@ namespace Avalanche.Domain
                     dispatcher.Send(new StartTestCommand
                     {
                         TestId = data.TestId,
-                        TestName = name,
+                        Scenario = name,
                         StartTime = data.StartTime,
-                        Status = data.Status
+                        Status = TestRunStatus.Running
                     });
 
 
                     data.Results = loadtest.Run(settings);
 
-                    data.Status = TestRunStatus.Done;
-
-
                     dispatcher.Send(new EndTestCommand
                     {
                         TestId = data.TestId,
                         EndTime = DateTime.Now,
-                        Status = data.Status
+                        Status = TestRunStatus.Done
                     });
 
 

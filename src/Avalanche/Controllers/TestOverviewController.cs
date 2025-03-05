@@ -31,8 +31,9 @@ namespace Avalanche.Controllers
 
 
             var trh = new TestRunQueryHandler();
-            var runs = trh.Get(new ReadModel.Queries.GetTestsQuery { TestName = name });
+            var runs = trh.Get(new ReadModel.Queries.GetTestsQuery { Scenario = name });
 
+            var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = name });
 
 
             var events = results.GetCollections()?
@@ -43,14 +44,14 @@ namespace Avalanche.Controllers
             var model = new TestOverviewModel
             {
                 Name = name,
-                StartTime = results.StartTime,
+                StartTime = lastRun.StartTime,
                 Settings = settings,
                 Runs = runs,
                 Results = results.Results,
                 LogEntries = logEntries,
                 StartupEntries = events.OfType<StartupLogEvent>().OrderBy(c => c.Time),
                 EndLogEntries = events.OfType<EndLogEvent>().OrderBy(c => c.Time),
-                Status = results.Status
+                Status = new Runner.TestRunStatus(lastRun.Status)
             };
 
             return View(model);

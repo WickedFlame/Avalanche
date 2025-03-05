@@ -89,6 +89,42 @@
             </div>
         </div>
 
+
+
+
+        <div class="pt-element-container">
+            <div class="pt-content-panel">
+                <h2>Testruns</h2>
+                <div class="overflow-x-auto">
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>TestId</th>
+                                <th>TestName</th>
+                                <th>StartTime</th>
+                                <th>EndTime</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var test in Model.Runs)
+                            {
+                                <tr>
+                                    <td>@test.TestId</td>
+                                    <td>@test.Scenario</td>
+                                    <td>@test.StartTime</td>
+                                    <td>@test.EndTime</td>
+                                    <td>@test.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
         @if (Model.Settings != null)
         {
             <div class="pt-element-container">

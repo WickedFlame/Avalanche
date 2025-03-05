@@ -17,10 +17,10 @@ namespace Avalanche.WriteModel.EventHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "INSERT INTO TestRun (TestId, TestName, StartTime, Status) Values (@testId, @testName, @startTime, @status)";
+                cmd.CommandText = "INSERT INTO TestRun (TestId, Scenario, StartTime, Status) Values (@testId, @scenario, @startTime, @status)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@testId", evnt.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@testName", evnt.TestName));
+                cmd.Parameters.Add(new SQLiteParameter("@scenario", evnt.Scenario));
                 cmd.Parameters.Add(new SQLiteParameter("@startTime", evnt.StartTime));
                 cmd.Parameters.Add(new SQLiteParameter("@status", evnt.Status));
 

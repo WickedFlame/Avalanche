@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using Avalanche.Runner.Logging;
 using Avalanche.Domain.Models;
 using Avalanche.Runner;
+using Avalanche.ReadModel.QueryHandlers;
 
 namespace Avalanche.Controllers.Api
 {
@@ -16,6 +17,16 @@ namespace Avalanche.Controllers.Api
         [Route("{scenario}/{testname}/testresult")]
         public IActionResult GetTestResult(string scenario, string testname)
         {
+            //TODO: diese methode wird nicht gebraucht???
+
+
+
+            var trh = new TestRunQueryHandler();
+            var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = testname });
+
+
+
+
             var results = Domain.TestResultsCollection.Instance.GetResults(scenario.ToLower());
             if (results == null || results.Status != TestRunStatus.Done)
             {
@@ -23,7 +34,7 @@ namespace Avalanche.Controllers.Api
                 {
                     Scenario = scenario,
                     Testname = testname,
-                    Status = results?.Status?.Name ?? TestRunStatus.New.Name,
+                    Status = lastRun?.Status ?? TestRunStatus.New.Name,
                 });
             }
 
@@ -31,7 +42,7 @@ namespace Avalanche.Controllers.Api
             {
                 Scenario = scenario,
                 Testname = testname,
-                Status = results.Status.Name,
+                Status = lastRun.Status,
                 Result = results.Results.FirstOrDefault(r => r.Name == testname)
             });
         }
@@ -40,6 +51,9 @@ namespace Avalanche.Controllers.Api
         [Route("{scenario}/{testname}/chartdata")]
         public IActionResult GetChartData(string scenario, string testname)
         {
+            var trh = new TestRunQueryHandler();
+            var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = scenario });
+
             var results = Domain.TestResultsCollection.Instance.GetResults(scenario.ToLower());
             if(results == null)
             {
@@ -52,7 +66,7 @@ namespace Avalanche.Controllers.Api
             {
                 Scenario = scenario,
                 Testname = testname,
-                Status = results.Status?.Name ?? "Open",
+                Status = lastRun?.Status ?? "Open",
                 ChartData = results.GetChartData()
             });
         }
@@ -61,6 +75,9 @@ namespace Avalanche.Controllers.Api
         [Route("{scenario}/{testname}/rampupdata")]
         public IActionResult GetRampupData(string scenario, string testname)
         {
+            var trh = new TestRunQueryHandler();
+            var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = scenario });
+
             var results = Domain.TestResultsCollection.Instance.GetResults(scenario.ToLower());
             if (results == null)
             {
@@ -73,7 +90,7 @@ namespace Avalanche.Controllers.Api
             {
                 Scenario = scenario,
                 Testname = testname,
-                Status = results.Status?.Name ?? "Open",
+                Status = lastRun?.Status ?? "Open",
                 Data = results.GetRampupData()
             });
         }

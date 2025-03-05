@@ -6,7 +6,7 @@ namespace Avalanche.ReadModel.Models
     {
         public string TestId { get; set; }
 
-        public string TestName { get; set; }
+        public string Scenario { get; set; }
 
         public DateTime StartTime { get; set; }
 
