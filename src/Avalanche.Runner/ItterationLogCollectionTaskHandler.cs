@@ -1,6 +1,5 @@
 ﻿using Avalanche.CommandModel;
 using Avalanche.CommandModel.Commands;
-using Avalanche.Runner.Logging;
 using Broadcast;
 using MeasureMap;
 
@@ -37,7 +36,7 @@ namespace Avalanche.Runner
                 Time = result.TimeStamp
             };
 
-            log.Send(metric);
+            log.SendAsync(metric);
 
             return result;
         }

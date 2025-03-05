@@ -7,7 +7,10 @@
     <aside class="menu px-4 py-4">
         <p class="menu-label">Menu</p>
         <ul class="menu-list">
-            <li>Menu item</li>
+            @foreach(var run in Model.Runs)
+            {
+                <li>@run.StartTime.ToString("O")</li>
+            }
         </ul>
     </aside>
 

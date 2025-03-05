@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.CommandModel", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Broadcast", "src\Broadcast\Broadcast.csproj", "{F22A0899-5F55-4861-B077-5CF57C353A42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.QueryModel", "src\Avalanche.QueryModel\Avalanche.QueryModel.csproj", "{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{F22A0899-5F55-4861-B077-5CF57C353A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F22A0899-5F55-4861-B077-5CF57C353A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F22A0899-5F55-4861-B077-5CF57C353A42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,7 +2,7 @@
 
 namespace Avalanche.CommandModel
 {
-    public interface IEventHandler : IDispatcherHandler<IEvent>
+    public interface IEventHandler : IMessageHandler<IEvent>
     {
     }
 }

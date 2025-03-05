@@ -34,14 +34,14 @@ namespace Avalanche.Domain
                     var loadtest = new LoadTest(new Runner.Logging.TestResultsFacory(data), data.TestId, _store);
                     data.StartTime = DateTime.Now;
 
-                    using var eventDispatcher = new EventDispatcher();
-                    eventDispatcher.Register<StartTestEvent>(new StartTestEventHandler());
+                    using var messageBus = new MessageBus();
+                    messageBus.Register<StartTestEvent>(new StartTestEventHandler());
 
 
 
                     using var dispatcher = new Dispatcher<ICommand>();
-                    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(_store, eventDispatcher));
-                    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store, eventDispatcher));
+                    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(_store, messageBus));
+                    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store, messageBus));
 
 
 

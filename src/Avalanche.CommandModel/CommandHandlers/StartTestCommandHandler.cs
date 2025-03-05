@@ -1,23 +1,23 @@
 ﻿using Avalanche.CommandModel.Commands;
+using Broadcast;
 
 namespace Avalanche.CommandModel.CommandHandlers
 {
     public class StartTestCommandHandler : ICommandHandler
     {
         private readonly IEventStore _store;
-        private readonly IEventDispatcher _eventDispatcher;
+        private readonly IMessageBus _messageBus;
 
-        public StartTestCommandHandler(IEventStore store, IEventDispatcher eventDispatcher)
+        public StartTestCommandHandler(IEventStore store, IMessageBus messageBus)
         {
             _store = store;
-            _eventDispatcher = eventDispatcher;
+            _messageBus = messageBus;
         }
 
         public void Handle(ICommand command)
         {
             var cmd = command as StartTestCommand;
 
-            //TODO: create the readmodel
             var @event = new Events.StartTestEvent
             {
                 TestId = cmd.TestId,
@@ -28,8 +28,7 @@ namespace Avalanche.CommandModel.CommandHandlers
 
             _store.Add(cmd.TestId, typeof(Events.StartTestEvent).AssemblyQualifiedName, cmd.StartTime, @event);
 
-            //TODO: remove this to the readmodel
-            _eventDispatcher.Send(@event);
+            _messageBus.Send(@event);
         }
 
         public void Dispose()

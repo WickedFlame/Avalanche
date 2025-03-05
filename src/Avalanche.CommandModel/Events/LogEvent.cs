@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Avalanche.CommandModel.Events
 {
-    public class LogEvent
+    public class LogEvent : IEvent
     {
         public LogEvent()
         {

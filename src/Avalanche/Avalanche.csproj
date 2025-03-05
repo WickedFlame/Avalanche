@@ -33,6 +33,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Avalanche.Domain\Avalanche.Domain.csproj" />
+        <ProjectReference Include="..\Avalanche.QueryModel\Avalanche.QueryModel.csproj" />
     </ItemGroup>
 
     <ItemGroup>

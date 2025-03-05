@@ -1,9 +1,12 @@
 ﻿namespace Broadcast
 {
-    public class Dispatcher<T> : IDispatcher<T>
-    {
-        private readonly Dictionary<Type, IDispatcherHandler> _handlers = [];
+    //
+    // Dispatcher uses a Queue to process data async
+    // This allows the dispatcher to process big amounts of data
+    //
 
+    public class Dispatcher<T> : MessageBus, IDispatcher<T>
+    {
         private readonly Queue<T> _queue = new();
 
         private readonly ManualResetEvent _waitHandle = new(false);
@@ -14,12 +17,12 @@
             StartDispatcher();
         }
 
-        public void Register<Tc>(IDispatcherHandler<T> handler) where Tc : class, T
+        public void Register<Tc>(IMessageHandler<T> handler) where Tc : class, T
         {
-            _handlers[typeof(Tc)] = handler;
+            base.Register<Tc>(handler);
         }
 
-        public void Send(T @event)
+        public void SendAsync<Tc>(Tc @event) where Tc : class, T
         {
             _queue.Enqueue(@event);
             _waitHandle.Reset();
@@ -39,13 +42,14 @@
                         var entry = _queue.Any() ? _queue.Dequeue() : default;
                         while (entry != null)
                         {
-                            var handler = _handlers[entry.GetType()] as IDispatcherHandler<T>;
-                            if(handler == null)
-                            {
-                                continue;
-                            }
+                            //var handler = _handlers[entry.GetType()] as IMessageHandler<T>;
+                            //if(handler == null)
+                            //{
+                            //    continue;
+                            //}
 
-                            handler.Handle(entry);
+                            //handler.Handle(entry);
+                            base.Send(entry);
 
                             entry = _queue.Any() ? _queue.Dequeue() : default;
 
@@ -69,13 +73,7 @@
             _waitHandle.Reset();
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {

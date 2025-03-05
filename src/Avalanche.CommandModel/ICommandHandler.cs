@@ -2,7 +2,7 @@
 
 namespace Avalanche.CommandModel
 {
-    public interface ICommandHandler : IDispatcherHandler<ICommand> 
+    public interface ICommandHandler : IMessageHandler<ICommand> 
     {
     }
 }

@@ -2,6 +2,7 @@
 using Avalanche.CommandModel.Events;
 using Avalanche.Domain;
 using Avalanche.Models;
+using Avalanche.QueryModel.QueryHandlers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers
@@ -28,6 +29,12 @@ namespace Avalanche.Controllers
                 settings = facace.GetTestSettings(path);
             }
 
+
+            var trh = new TestRunQueryHandler();
+            var runs = trh.Get(new QueryModel.Queries.GetTestsQuery { TestName = name });
+
+
+
             var events = results.GetCollections()?
                 .SelectMany(c => c.Events) ?? Enumerable.Empty<LogEvent>();
 
@@ -38,6 +45,7 @@ namespace Avalanche.Controllers
                 Name = name,
                 StartTime = results.StartTime,
                 Settings = settings,
+                Runs = runs,
                 Results = results.Results,
                 LogEntries = logEntries,
                 StartupEntries = events.OfType<StartupLogEvent>().OrderBy(c => c.Time),

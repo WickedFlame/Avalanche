@@ -1,6 +1,8 @@
 ﻿using Avalanche.CommandModel;
 using Avalanche.CommandModel.CommandHandlers;
 using Avalanche.CommandModel.Commands;
+using Avalanche.CommandModel.EventHandlers;
+using Avalanche.CommandModel.Events;
 using Avalanche.Runner.Logging;
 using Broadcast;
 using MeasureMap;
@@ -52,9 +54,11 @@ namespace Avalanche.Runner
 
                         var collection = _logCollector.StartNew($"{Guid.NewGuid()}");
 
+                        var messageBus = new MessageBus();
+                        messageBus.Register<StartupLogEvent>(new StartupThreadEventHandler(collection));
 
                         var dispatcher = new Dispatcher<ICommand>();
-                        dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(_store, collection));
+                        dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(_store, messageBus));
                         dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(_store, collection));
                         dispatcher.Register<IterationCommand>(new IterationCommandHandler(_store, collection));
 
@@ -83,7 +87,7 @@ namespace Avalanche.Runner
                                 IsWarmup = s.IsWarmup
                             };
 
-                            dispatcher.Send(command);
+                            dispatcher.SendAsync(command);
                         }
 
 
@@ -105,7 +109,7 @@ namespace Avalanche.Runner
                             IsWarmup = e.Settings.IsWarmup
                         };
 
-                        dispatcher.Send(metric);
+                        dispatcher.SendAsync(metric);
                     })
                     .Task(ctx =>
                     {

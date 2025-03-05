@@ -1,16 +1,17 @@
 ﻿using Avalanche.CommandModel.Commands;
+using Broadcast;
 
 namespace Avalanche.CommandModel.CommandHandlers
 {
     public class StartupThreadCommandHandler : ICommandHandler
     {
         private readonly IEventStore _store;
-        private readonly TestResultsCollection _collection;
+        private readonly IMessageBus _messageBus;
 
-        public StartupThreadCommandHandler(IEventStore store, TestResultsCollection collection)
+        public StartupThreadCommandHandler(IEventStore store, IMessageBus messageBus)
         {
             _store = store;
-            _collection = collection;
+            _messageBus = messageBus;
         }
 
         public void Handle(ICommand command)
@@ -32,7 +33,7 @@ namespace Avalanche.CommandModel.CommandHandlers
             _store.Add(cmd.TestId, typeof(Events.StartupLogEvent).AssemblyQualifiedName, cmd.Time, @event);
 
             //TODO: remove this to the readmodel
-            _collection.Add(@event);
+            _messageBus.Send(@event);
         }
 
         public void Dispose()

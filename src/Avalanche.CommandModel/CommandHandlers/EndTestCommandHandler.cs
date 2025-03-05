@@ -1,22 +1,23 @@
 ﻿using Avalanche.CommandModel.Commands;
+using Broadcast;
 
 namespace Avalanche.CommandModel.CommandHandlers
 {
     public class EndTestCommandHandler : ICommandHandler
     {
         private readonly IEventStore _store;
-        private readonly IEventDispatcher _eventDispatcher;
+        private readonly IMessageBus _messageBus;
 
-        public EndTestCommandHandler(IEventStore store, IEventDispatcher eventDispatcher)
+        public EndTestCommandHandler(IEventStore store, IMessageBus messageBus)
         {
             _store = store;
-            _eventDispatcher = eventDispatcher;
+            _messageBus = messageBus;
         }
 
         public void Handle(ICommand command)
         {
             var cmd = command as EndTestCommand;
-            //TODO: create the readmodel
+            
             var @event = new Events.EndTestEvent
             {
                 TestId = cmd.TestId,
@@ -26,8 +27,7 @@ namespace Avalanche.CommandModel.CommandHandlers
 
             _store.Add(cmd.TestId, typeof(Events.EndTestEvent).AssemblyQualifiedName, cmd.EndTime, @event);
 
-            //TODO: remove this to the readmodel
-            _eventDispatcher.Send(@event);
+            _messageBus.Send(@event);
         }
 
         public void Dispose()
