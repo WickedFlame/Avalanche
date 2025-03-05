@@ -36,6 +36,7 @@ namespace Avalanche.Domain
 
                     using var messageBus = new MessageBus();
                     messageBus.Register<StartTestEvent>(new StartTestEventHandler());
+                    messageBus.Register<EndTestEvent>(new EndTestEventHandler());
 
 
 

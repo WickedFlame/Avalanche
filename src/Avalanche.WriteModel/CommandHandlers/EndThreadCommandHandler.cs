@@ -1,22 +1,21 @@
 ﻿using Avalanche.WriteModel.Commands;
+using Broadcast;
 
 namespace Avalanche.WriteModel.CommandHandlers
 {
-    public class EndThreadCommandHandler : ICommandHandler
+    public class EndThreadCommandHandler : CommandHandler<EndThreadCommand>
     {
         private readonly IEventStore _store;
-        private readonly TestResultsCollection _collection;
+        private readonly IMessageBus _messageBus;
 
-        public EndThreadCommandHandler(IEventStore store, TestResultsCollection collection)
+        public EndThreadCommandHandler(IEventStore store, IMessageBus messageBus)
         {
             _store = store;
-            _collection = collection;
+            _messageBus = messageBus;
         }
 
-        public void Handle(ICommand command)
+        public override void Handle(EndThreadCommand cmd)
         {
-            var cmd = command as EndThreadCommand;
-
             //TODO: create the readmodel
             var @event = new Events.EndLogEvent
             {
@@ -32,21 +31,7 @@ namespace Avalanche.WriteModel.CommandHandlers
 
 
             //TODO: remove this to the readmodel
-            _collection.Add(@event);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // do stuf here
-            }
+            _messageBus.Send(@event);
         }
     }
 }

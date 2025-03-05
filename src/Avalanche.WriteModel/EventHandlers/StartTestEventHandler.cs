@@ -3,7 +3,7 @@ using System.Data.SQLite;
 
 namespace Avalanche.WriteModel.EventHandlers
 {
-    public class StartTestEventHandler : IEventHandler
+    public class StartTestEventHandler : IEventHandler<StartTestEvent>
     {
         private readonly SQLiteConnection _connection;
 
@@ -13,10 +13,8 @@ namespace Avalanche.WriteModel.EventHandlers
             _connection.Open();
         }
 
-        public void Handle(IEvent @event)
+        public void Handle(StartTestEvent evnt)
         {
-            var evnt = @event as StartTestEvent;
-
             using (var cmd = _connection.CreateCommand())
             {
                 cmd.CommandText = "INSERT INTO TestRun (TestId, TestName, StartTime, Status) Values (@testId, @testName, @startTime, @status)";

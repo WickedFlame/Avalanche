@@ -2,7 +2,7 @@
 
 namespace Avalanche.WriteModel
 {
-    public interface IEventHandler : IMessageHandler<IEvent>
+    public interface IEventHandler<in T> : IMessageHandler<T> where T : IEvent
     {
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Avalanche.WriteModel;
 using Avalanche.WriteModel.Commands;
+using Broadcast;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,21 +12,19 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Avalanche.WriteModel.CommandHandlers
 {
-    public class IterationCommandHandler : ICommandHandler
+    public class IterationCommandHandler : CommandHandler<IterationCommand>
     {
         private readonly IEventStore _store;
-        private readonly TestResultsCollection _collection;
+        private readonly IMessageBus _messageBus;
 
-        public IterationCommandHandler(IEventStore store, TestResultsCollection collection)
+        public IterationCommandHandler(IEventStore store, IMessageBus messageBus)
         {
             _store = store;
-            _collection = collection;
+            _messageBus = messageBus;
         }
 
-        public void Handle(ICommand command)
+        public override void Handle(IterationCommand cmd)
         {
-            var cmd = command as IterationCommand;
-
             //TODO: create the readmodel
             var @event = new Events.IterationLogEvent
             {
@@ -43,27 +42,13 @@ namespace Avalanche.WriteModel.CommandHandlers
             _store.Add(cmd.TestId, typeof(Events.IterationLogEvent).AssemblyQualifiedName, cmd.Time, @event);
 
             //TODO: remove this to the readmodel
-            if (string.IsNullOrEmpty(_collection.ThreadId))
-            {
-                _collection.ThreadId = @event.Thread.ToString();
-                _collection.IsWarmup = @event.IsWarmup;
-            }
+            //if (string.IsNullOrEmpty(_collection.ThreadId))
+            //{
+            //    _collection.ThreadId = @event.Thread.ToString();
+            //    _collection.IsWarmup = @event.IsWarmup;
+            //}
 
-            _collection.Add(@event);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // do stuf here
-            }
+            _messageBus.Send(@event);
         }
     }
 }

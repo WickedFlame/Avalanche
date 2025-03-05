@@ -56,11 +56,13 @@ namespace Avalanche.Runner
 
                         var messageBus = new MessageBus();
                         messageBus.Register<StartupLogEvent>(new StartupThreadEventHandler(collection));
+                        messageBus.Register<IterationLogEvent>(new IterationEventHandler(collection));
+                        messageBus.Register<EndLogEvent>(new EndThreadEventHandler(collection));
 
                         var dispatcher = new Dispatcher<ICommand>();
                         dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(_store, messageBus));
-                        dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(_store, collection));
-                        dispatcher.Register<IterationCommand>(new IterationCommandHandler(_store, collection));
+                        dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(_store, messageBus));
+                        dispatcher.Register<IterationCommand>(new IterationCommandHandler(_store, messageBus));
 
 
                         _dispatchers.Add(dispatcher);

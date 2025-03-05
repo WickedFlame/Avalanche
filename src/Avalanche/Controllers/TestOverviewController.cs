@@ -31,7 +31,7 @@ namespace Avalanche.Controllers
 
 
             var trh = new TestRunQueryHandler();
-            var runs = trh.Get(new QueryModel.Queries.GetTestsQuery { TestName = name });
+            var runs = trh.Get(new ReadModel.Queries.GetTestsQuery { TestName = name });
 
 
 

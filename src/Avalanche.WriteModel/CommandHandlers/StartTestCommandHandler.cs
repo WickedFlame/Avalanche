@@ -3,7 +3,7 @@ using Broadcast;
 
 namespace Avalanche.WriteModel.CommandHandlers
 {
-    public class StartTestCommandHandler : ICommandHandler
+    public class StartTestCommandHandler : CommandHandler<StartTestCommand>
     {
         private readonly IEventStore _store;
         private readonly IMessageBus _messageBus;
@@ -14,10 +14,8 @@ namespace Avalanche.WriteModel.CommandHandlers
             _messageBus = messageBus;
         }
 
-        public void Handle(ICommand command)
+        public override void Handle(StartTestCommand cmd)
         {
-            var cmd = command as StartTestCommand;
-
             var @event = new Events.StartTestEvent
             {
                 TestId = cmd.TestId,
@@ -29,20 +27,6 @@ namespace Avalanche.WriteModel.CommandHandlers
             _store.Add(cmd.TestId, typeof(Events.StartTestEvent).AssemblyQualifiedName, cmd.StartTime, @event);
 
             _messageBus.Send(@event);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // do stuf here
-            }
         }
     }
 }

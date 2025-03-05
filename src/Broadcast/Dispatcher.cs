@@ -42,13 +42,6 @@
                         var entry = _queue.Any() ? _queue.Dequeue() : default;
                         while (entry != null)
                         {
-                            //var handler = _handlers[entry.GetType()] as IMessageHandler<T>;
-                            //if(handler == null)
-                            //{
-                            //    continue;
-                            //}
-
-                            //handler.Handle(entry);
                             base.Send(entry);
 
                             entry = _queue.Any() ? _queue.Dequeue() : default;

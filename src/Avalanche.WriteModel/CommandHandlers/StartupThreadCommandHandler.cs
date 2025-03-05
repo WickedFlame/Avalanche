@@ -3,7 +3,7 @@ using Broadcast;
 
 namespace Avalanche.WriteModel.CommandHandlers
 {
-    public class StartupThreadCommandHandler : ICommandHandler
+    public class StartupThreadCommandHandler : CommandHandler<StartupThreadCommand>
     {
         private readonly IEventStore _store;
         private readonly IMessageBus _messageBus;
@@ -14,10 +14,8 @@ namespace Avalanche.WriteModel.CommandHandlers
             _messageBus = messageBus;
         }
 
-        public void Handle(ICommand command)
+        public override void Handle(StartupThreadCommand cmd)
         {
-            var cmd = command as StartupThreadCommand;
-
             //TODO: create the readmodel
             var @event = new Events.StartupLogEvent
             {
@@ -34,20 +32,6 @@ namespace Avalanche.WriteModel.CommandHandlers
 
             //TODO: remove this to the readmodel
             _messageBus.Send(@event);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // do stuf here
-            }
         }
     }
 }

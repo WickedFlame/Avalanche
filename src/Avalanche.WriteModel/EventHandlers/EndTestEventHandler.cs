@@ -3,7 +3,7 @@ using System.Data.SQLite;
 
 namespace Avalanche.WriteModel.EventHandlers
 {
-    public class EndTestEventHandler : IEventHandler
+    public class EndTestEventHandler : IEventHandler<EndTestEvent>
     {
         private readonly SQLiteConnection _connection;
 
@@ -13,13 +13,11 @@ namespace Avalanche.WriteModel.EventHandlers
             _connection.Open();
         }
 
-        public void Handle(IEvent @event)
+        public void Handle(EndTestEvent evnt)
         {
-            var evnt = @event as EndTestEvent;
-
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "UPDATE INTO TestRun SET EndTime = @endTime, Status = @status WHERE TestId = @testI";
+                cmd.CommandText = "UPDATE TestRun SET EndTime = @endTime, Status = @status WHERE TestId = @testId";
 
                 cmd.Parameters.Add(new SQLiteParameter("@testId", evnt.TestId));
                 cmd.Parameters.Add(new SQLiteParameter("@endTime", evnt.EndTime));

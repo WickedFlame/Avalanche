@@ -2,16 +2,16 @@
 
 namespace Avalanche.WriteModel.EventHandlers
 {
-    public class StartupThreadEventHandler : IEventHandler<StartupLogEvent>
+    public class EndThreadEventHandler : IEventHandler<EndLogEvent>
     {
         private readonly TestResultsCollection _collection;
 
-        public StartupThreadEventHandler(TestResultsCollection collection)
+        public EndThreadEventHandler(TestResultsCollection collection)
         {
             _collection = collection;
         }
 
-        public void Handle(StartupLogEvent @event)
+        public void Handle(EndLogEvent @event)
         {
             _collection.Add(@event);
         }
