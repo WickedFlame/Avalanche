@@ -33,6 +33,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Avalanche.Domain\Avalanche.Domain.csproj" />
+        <ProjectReference Include="..\Avalanche.ReadModel\Avalanche.ReadModel.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,9 +1,8 @@
-﻿
-using System.Net;
+﻿using System.Net;
 
-namespace Avalanche.Runner.Logging
+namespace Avalanche.WriteModel.Events
 {
-    public class StartupLogEvent : LogEvent
+    public class StartupLogEvent : LogEvent, IEvent
     {
         public string Name { get; set; }
 

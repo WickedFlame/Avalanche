@@ -1,4 +1,6 @@
-﻿using Avalanche.Domain;
+﻿using Avalanche.WriteModel.Events;
+using Avalanche.Domain;
+using Avalanche.ReadModel.Models;
 using Avalanche.Runner;
 using Avalanche.Runner.Logging;
 
@@ -21,5 +23,7 @@ namespace Avalanche.Models
         public IEnumerable<StartupLogEvent> StartupEntries { get; set; }
 
         public IEnumerable<EndLogEvent> EndLogEntries { get; set; }
+
+        public IEnumerable<TestRun> Runs { get; set; }
     }
 }

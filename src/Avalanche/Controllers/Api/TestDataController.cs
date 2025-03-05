@@ -4,6 +4,7 @@ using Avalanche.Models;
 using System.Xml.Linq;
 using Avalanche.Runner.Logging;
 using Avalanche.Domain.Models;
+using Avalanche.Runner;
 
 namespace Avalanche.Controllers.Api
 {
@@ -52,7 +53,7 @@ namespace Avalanche.Controllers.Api
                 Scenario = scenario,
                 Testname = testname,
                 Status = results.Status?.Name ?? "Open",
-                ChartData = results.LogEntries.GetChartData()
+                ChartData = results.GetChartData()
             });
         }
 
@@ -73,7 +74,7 @@ namespace Avalanche.Controllers.Api
                 Scenario = scenario,
                 Testname = testname,
                 Status = results.Status?.Name ?? "Open",
-                Data = results.LogEntries.GetRampupData()
+                Data = results.GetRampupData()
             });
         }
     }

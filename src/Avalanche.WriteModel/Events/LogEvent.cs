@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Avalanche.Runner.Logging
+namespace Avalanche.WriteModel.Events
 {
-    public class LogEvent
+    public class LogEvent : IEvent
     {
         public LogEvent()
         {

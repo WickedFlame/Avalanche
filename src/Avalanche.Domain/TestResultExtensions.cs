@@ -1,23 +1,31 @@
-﻿using Avalanche.Domain.Models;
+﻿using Avalanche.WriteModel;
+using Avalanche.WriteModel.Events;
+using Avalanche.Domain.Models;
+using Avalanche.Runner;
 using Avalanche.Runner.Logging;
 
 namespace Avalanche
 {
     public static class TestResultExtensions
     {
-        public static IEnumerable<IterationLogEvent> GetItterationEvents(this Logger logger)
+        public static IEnumerable<TestResultsCollection> GetCollections(this TestRunData data)
         {
-            return logger.GetCollections().SelectMany(x => x.Events.OfType<IterationLogEvent>());
+            return data.Collections;
         }
 
-        public static IEnumerable<ChartData> GetChartData(this Logger logger)
+        public static IEnumerable<IterationLogEvent> GetItterationEvents(this TestRunData data)
         {
-            if(logger== null)
+            return data.GetCollections().SelectMany(x => x.Events.OfType<IterationLogEvent>());
+        }
+
+        public static IEnumerable<ChartData> GetChartData(this TestRunData data)
+        {
+            if(data== null)
             {
                 return Enumerable.Empty<ChartData>();
             }
 
-            return logger.GetCollections()
+            return data.GetCollections()
                 .Where(c=> !c.IsWarmup)
                 .Select(g => new ChartData
                 {
@@ -32,7 +40,7 @@ namespace Avalanche
                 });
         }
 
-        public static IEnumerable<ChartDataRow> GetRampupData(this Logger logger)
+        public static IEnumerable<ChartDataRow> GetRampupData(this TestRunData logger)
         {
             if (logger == null)
             {
@@ -62,7 +70,7 @@ namespace Avalanche
                 cnt--;
             }
 
-            if(!endData.Any() && logger.IsRunning)
+            if(!endData.Any() && logger.Status != TestRunStatus.Done)
             {
                 data.Add(new ChartDataRow { Time = DateTime.Now.ToString("o"), Value = cnt.ToString() });
             }

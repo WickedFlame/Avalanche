@@ -1,35 +1,78 @@
-﻿using Avalanche.Runner;
+﻿using Avalanche.WriteModel;
+using Avalanche.WriteModel.CommandHandlers;
+using Avalanche.WriteModel.Commands;
+using Avalanche.WriteModel.EventHandlers;
+using Avalanche.WriteModel.Events;
+using Avalanche.Runner;
+using Avalanche.Runner.Logging;
+using Broadcast;
 
 namespace Avalanche.Domain
 {
     public class TestFacade
     {
+        private readonly IEventStore _store;
+
+        public TestFacade(IEventStore store)
+        {
+            _store = store;
+        }
+
         public TestSettings Start(string name, string path)
         {
             var settings = GetTestSettings(path);
 
             Task.Factory.StartNew(() =>
                 {
-
-                    var data = TestResultsCollection.Instance.StartNew(name);
+                    //TODO: nicht via singleton lösen
+                    var data = TestResultsCollection.Instance.StartNew(Guid.NewGuid().ToString(), name);
 
                     data.Status = TestRunStatus.Running;
 
                     data.Settings = settings;
 
+                    var loadtest = new LoadTest(new Runner.Logging.TestResultsFacory(data), data.TestId, _store);
+                    data.StartTime = DateTime.Now;
+
+                    using var messageBus = new MessageBus();
+                    messageBus.Register<StartTestEvent>(new StartTestEventHandler());
 
 
-                    var loadtest = new LoadTest(data.LogEntries);
+
+                    using var dispatcher = new Dispatcher<ICommand>();
+                    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(_store, messageBus));
+                    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store, messageBus));
+
+
+
+                    dispatcher.Send(new StartTestCommand
+                    {
+                        TestId = data.TestId,
+                        TestName = name,
+                        StartTime = data.StartTime,
+                        Status = data.Status
+                    });
+
+
                     data.Results = loadtest.Run(settings);
 
                     data.Status = TestRunStatus.Done;
+
+
+                    dispatcher.Send(new EndTestCommand
+                    {
+                        TestId = data.TestId,
+                        EndTime = DateTime.Now,
+                        Status = data.Status
+                    });
 
 
                     //
                     // Give the collector some time to finish the work
                     Task.Delay(10000).Wait();
 
-                    data.LogEntries.End();
+
+                    loadtest.End();
 
                     //
                     // write result to file

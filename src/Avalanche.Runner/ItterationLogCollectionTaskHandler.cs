@@ -1,4 +1,6 @@
-﻿using Avalanche.Runner.Logging;
+﻿using Avalanche.WriteModel;
+using Avalanche.WriteModel.Commands;
+using Broadcast;
 using MeasureMap;
 
 namespace Avalanche.Runner
@@ -6,20 +8,23 @@ namespace Avalanche.Runner
     public class ItterationLogCollectionTaskHandler : TaskHandler
     {
         private readonly string _name;
+        private readonly string _testId;
 
-        public ItterationLogCollectionTaskHandler(string name)
+        public ItterationLogCollectionTaskHandler(string name, string testId)
         {
             _name = name;
+            _testId = testId;
         }
 
         public override IIterationResult Run(IExecutionContext context)
         {
-            var log = context.Get<ITestResultCollector>(nameof(ITestResultCollector));
+            var log = context.Get<IDispatcher<ICommand>>(nameof(IDispatcher<ICommand>));
 
             var result = base.Run(context);
 
-            var metric = new IterationLogEvent
+            var metric = new IterationCommand
             {
+                TestId = _testId,
                 Category = "console",
                 Module = "Measure",
                 Name = _name,
@@ -31,7 +36,7 @@ namespace Avalanche.Runner
                 Time = result.TimeStamp
             };
 
-            log.Add(metric);
+            log.SendAsync(metric);
 
             return result;
         }

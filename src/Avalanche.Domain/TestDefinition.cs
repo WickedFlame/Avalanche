@@ -1,4 +1,6 @@
-﻿namespace Avalanche.Domain
+﻿using Avalanche.Runner;
+
+namespace Avalanche.Domain
 {
     public class TestDefinition
     {

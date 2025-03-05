@@ -1,7 +1,6 @@
-﻿
-namespace Avalanche.Runner.Logging
+﻿namespace Avalanche.WriteModel.Events
 {
-    public class IterationLogEvent : LogEvent
+    public class EndLogEvent : LogEvent, IEvent
     {
         public string Name { get; set; }
 
@@ -12,7 +11,5 @@ namespace Avalanche.Runner.Logging
         public int Thread { get; set; }
 
         public bool IsWarmup { get; set; }
-
-        public double TotalMilliseconds { get; set; }
     }
 }

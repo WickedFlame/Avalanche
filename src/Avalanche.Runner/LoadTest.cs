@@ -1,30 +1,42 @@
-﻿using Avalanche.Runner.Logging;
+﻿using Avalanche.WriteModel;
+using Avalanche.WriteModel.CommandHandlers;
+using Avalanche.WriteModel.Commands;
+using Avalanche.WriteModel.EventHandlers;
+using Avalanche.WriteModel.Events;
+using Avalanche.Runner.Logging;
+using Broadcast;
 using MeasureMap;
-//using MeasureMap.Diagnostics;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net;
+using System.Security.Cryptography;
 
 namespace Avalanche.Runner
 {
     public class LoadTest
     {
-        private readonly Logger _logger;
+        private readonly TestResultsFacory _logCollector;
 
-        public LoadTest(Logger logger)
+        private readonly List<IDispatcher<ICommand>> _dispatchers = [];
+
+        private readonly string _testId;
+        private readonly IEventStore _store;
+
+        public LoadTest(TestResultsFacory logger, string testId, IEventStore store)
         {
-            _logger = logger;
+            _logCollector = logger;
+            _testId = testId;
+            _store = store;
         }
 
         public IEnumerable<TestResult> Run(TestSettings settings)
         {
             var results = new List<TestResult>();
 
-            _logger.StartTime = DateTime.Now;
-
             foreach (var test in settings.Tests)
             {
                 var session = ProfilerSession.StartSession()
-                    .AddMiddleware(new ItterationLogCollectionTaskHandler(test.Name))
+                    .AddMiddleware(new ItterationLogCollectionTaskHandler(test.Name, _testId))
                     .OnStartPipeline(s =>
                     {
                         var ctx = new MeasureMap.ExecutionContext(s);
@@ -40,8 +52,20 @@ namespace Avalanche.Runner
 
                         ctx.Set("httpclient", client);
 
-                        var log = _logger.StartNew($"{Guid.NewGuid()}");
-                        ctx.Set(nameof(ITestResultCollector), log);
+                        var collection = _logCollector.StartNew($"{Guid.NewGuid()}");
+
+                        var messageBus = new MessageBus();
+                        messageBus.Register<StartupLogEvent>(new StartupThreadEventHandler(collection));
+
+                        var dispatcher = new Dispatcher<ICommand>();
+                        dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(_store, messageBus));
+                        dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(_store, collection));
+                        dispatcher.Register<IterationCommand>(new IterationCommandHandler(_store, collection));
+
+
+                        _dispatchers.Add(dispatcher);
+
+                        ctx.Set(nameof(IDispatcher<ICommand>), dispatcher);
 
                         if (test.Init != null && !string.IsNullOrEmpty(test.Init.Url))
                         {
@@ -51,8 +75,9 @@ namespace Avalanche.Runner
 
                             time.Stop();
 
-                            var metric = new StartupLogEvent
+                            var command = new StartupThreadCommand
                             {
+                                TestId = _testId,
                                 Category = "console",
                                 Module = "Init",
                                 Name = test.Name,
@@ -62,7 +87,7 @@ namespace Avalanche.Runner
                                 IsWarmup = s.IsWarmup
                             };
 
-                            log.Add(metric);
+                            dispatcher.SendAsync(command);
                         }
 
 
@@ -71,10 +96,11 @@ namespace Avalanche.Runner
                     .OnEndPipeline(e =>
                     {
                         e.Get<HttpClient>("httpclient").Dispose();
-                        var log = e.Get<ITestResultCollector>(nameof(ITestResultCollector));
+                        var dispatcher = e.Get<IDispatcher<ICommand>>(nameof(IDispatcher<ICommand>));
 
-                        var metric = new EndLogEvent
+                        var metric = new EndThreadCommand
                         {
+                            TestId = _testId,
                             Category = "console",
                             Module = "End",
                             Name = test.Name,
@@ -83,7 +109,7 @@ namespace Avalanche.Runner
                             IsWarmup = e.Settings.IsWarmup
                         };
 
-                        log.Add(metric);
+                        dispatcher.SendAsync(metric);
                     })
                     .Task(ctx =>
                     {
@@ -136,6 +162,16 @@ namespace Avalanche.Runner
             }
 
             return results;
+        }
+
+        public void End()
+        {
+            _logCollector.End();
+
+            foreach (var collector in _dispatchers)
+            {
+                collector.Close();
+            }
         }
     }
 }

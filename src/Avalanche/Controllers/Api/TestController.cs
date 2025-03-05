@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Avalanche.WriteModel;
 using Avalanche.Domain;
-using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers.Api
 {
@@ -9,6 +8,13 @@ namespace Avalanche.Controllers.Api
     [ApiController]
     public class TestController : ControllerBase
     {
+        private readonly IEventStore _store;
+
+        public TestController(IEventStore store)
+        {
+            _store = store;
+        }
+
         [HttpGet]
         [Route("{name}")]
         public IActionResult Get(string name)
@@ -35,7 +41,7 @@ namespace Avalanche.Controllers.Api
             // LoadTest
             var path = $"./testfiles/{name}.yml";
 
-            var facade = new TestFacade();
+            var facade = new TestFacade(_store);
             var settings = facade.Start(name, path);
 
             return Ok(new

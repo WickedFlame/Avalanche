@@ -1,6 +1,6 @@
 ﻿using EnumerateIt;
 
-namespace Avalanche.Domain
+namespace Avalanche.Runner
 {
     public class TestRunStatus(string name) : Enumeration(name)
     {

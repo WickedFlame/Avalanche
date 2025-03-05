@@ -7,7 +7,10 @@
     <aside class="menu px-4 py-4">
         <p class="menu-label">Menu</p>
         <ul class="menu-list">
-            <li>Menu item</li>
+            @foreach(var run in Model.Runs)
+            {
+                <li>@run.StartTime.ToString("O")</li>
+            }
         </ul>
     </aside>
 
@@ -15,7 +18,7 @@
         <h1 class="title is-1">@Model.Name</h1>
         <div>
             <div class="pt-padding-side py-5">
-                @if (Model.Status == Avalanche.Domain.TestRunStatus.Running)
+                @if (Model.Status == Avalanche.Runner.TestRunStatus.Running)
                 {
                     <div class="buttons has-addons">
                         <a id="StartTests" data-name="@Model.Name" class="button" disabled>Start</a>
