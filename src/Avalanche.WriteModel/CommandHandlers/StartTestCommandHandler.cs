@@ -24,7 +24,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Status = cmd.Status
             };
 
-            _store.Add(cmd.TestId, typeof(Events.StartTestEvent).AssemblyQualifiedName, cmd.StartTime, @event);
+            _store.Add(cmd.TestId, cmd.StartTime, @event);
 
             _messageBus.Send(@event);
         }

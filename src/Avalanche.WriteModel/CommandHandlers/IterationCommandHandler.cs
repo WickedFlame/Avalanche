@@ -39,7 +39,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Time = cmd.Time
             };
 
-            _store.Add(cmd.TestId, typeof(Events.IterationLogEvent).AssemblyQualifiedName, cmd.Time, @event);
+            _store.Add(cmd.TestId, cmd.Time, @event);
 
             //TODO: remove this to the readmodel
             //if (string.IsNullOrEmpty(_collection.ThreadId))

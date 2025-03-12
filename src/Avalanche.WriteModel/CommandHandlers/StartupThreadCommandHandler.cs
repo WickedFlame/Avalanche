@@ -30,7 +30,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 IsWarmup = cmd.IsWarmup
             };
 
-            _store.Add(cmd.TestId, typeof(Events.StartupLogEvent).AssemblyQualifiedName, cmd.Time, @event);
+            _store.Add(cmd.TestId, cmd.Time, @event);
 
             //TODO: remove this to the readmodel
             _messageBus.Send(@event);

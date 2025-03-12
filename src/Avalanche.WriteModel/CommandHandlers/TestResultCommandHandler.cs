@@ -33,7 +33,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                     EndSize = result.EndSize,
                 };
 
-                _store.Add(cmd.TestId, @event.GetType().AssemblyQualifiedName, DateTime.Now, @event);
+                _store.Add(cmd.TestId, DateTime.Now, @event);
                 _messageBus.Send(@event);
             }
 
@@ -52,7 +52,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 EndSize = cmd.EndSize,
             };
 
-            _store.Add(cmd.TestId, sumary.GetType().AssemblyQualifiedName, DateTime.Now, sumary);
+            _store.Add(cmd.TestId, DateTime.Now, sumary);
             _messageBus.Send(sumary);
         }
     }

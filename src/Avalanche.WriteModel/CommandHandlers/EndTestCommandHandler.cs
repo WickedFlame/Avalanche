@@ -23,7 +23,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Status = cmd.Status
             };
 
-            _store.Add(cmd.TestId, typeof(Events.EndTestEvent).AssemblyQualifiedName, cmd.EndTime, @event);
+            _store.Add(cmd.TestId, cmd.EndTime, @event);
 
             _messageBus.Send(@event);
         }
