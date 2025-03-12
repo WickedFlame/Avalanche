@@ -46,6 +46,8 @@ namespace Avalanche.WriteModel.EventHandlers
             if (disposing)
             {
                 // do stuf here
+                _connection.Close();
+                _connection.Dispose();
             }
         }
     }

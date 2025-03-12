@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using System.Data.Common;
 
 namespace Avalanche.WriteModel.EventHandlers
 {
@@ -26,7 +27,7 @@ namespace Avalanche.WriteModel.EventHandlers
         {
             if (disposing)
             {
-                // do stuf here
+                // do stuf here;
             }
         }
     }

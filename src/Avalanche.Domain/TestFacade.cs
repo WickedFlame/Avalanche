@@ -6,6 +6,8 @@ using Avalanche.WriteModel.Events;
 using Avalanche.Runner;
 using Avalanche.Runner.Logging;
 using Broadcast;
+using MeasureMap;
+using Task = System.Threading.Tasks.Task;
 
 namespace Avalanche.Domain
 {
@@ -41,6 +43,7 @@ namespace Avalanche.Domain
                     using var dispatcher = new Dispatcher<ICommand>();
                     dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(_store, messageBus));
                     dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store, messageBus));
+                    dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(_store, messageBus));
 
 
 
@@ -54,6 +57,38 @@ namespace Avalanche.Domain
 
 
                     data.Results = loadtest.Run(settings);
+
+                    foreach (var testResult in data.Results)
+                    {
+                        dispatcher.Send(new TestResultCommand
+                        {
+                            TestId = data.TestId,
+                            ThreadNumber = testResult.ThreadNumber,
+                            Iterations = testResult.Iterations.Count(),
+                            AverageMilliseconds = testResult.AverageTicks.ToMilliseconds(),
+                            AverageTicks = testResult.AverageTicks,
+                            TotalTime = testResult.TotalTime.Ticks,
+                            Fastest = testResult.Fastest.Ticks,
+                            Slowest = testResult.Slowest.Ticks,
+                            Increase = testResult.Increase,
+                            InitialSize = testResult.InitialSize,
+                            EndSize = testResult.EndSize,
+                            Summary = testResult.Select(r => new ThreadSummary
+                            {
+                                ThreadNumber = r.ThreadNumber,
+                                Iterations = r.Iterations.Count(),
+                                AverageMilliseconds = r.AverageTicks.ToMilliseconds(),
+                                AverageTicks = r.AverageTicks,
+                                TotalTime = r.TotalTime.Ticks,
+                                Fastest = r.Fastest.Ticks,
+                                Slowest = r.Slowest.Ticks,
+                                Increase = r.Increase,
+                                InitialSize = r.InitialSize,
+                                EndSize = r.EndSize,
+                            })
+                        });
+                    }
+
 
                     dispatcher.Send(new EndTestCommand
                     {

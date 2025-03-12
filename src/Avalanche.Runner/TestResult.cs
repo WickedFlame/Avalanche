@@ -22,7 +22,7 @@ namespace Avalanche.Runner
 
         public IDictionary<string, object> ResultValues => _result.ResultValues;
 
-        public double AverageMilliseconds => _result.AverageMilliseconds;
+        public double AverageMilliseconds => _result.AverageTicks.ToMilliseconds();
 
         public long AverageTicks => _result.AverageTicks;
 
