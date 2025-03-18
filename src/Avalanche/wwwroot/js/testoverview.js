@@ -76,9 +76,15 @@
                 let summary = data.data.testSummary;
 
                 let ts = document.querySelector(`#testsummary-${testid}`);
-                ts.querySelector('.TotalTime').innerHTML = summary.totalTime;
-                ts.querySelector('.AverageTicks').innerHTML = summary.averageTicks;
-                ts.querySelector('.Iterations').innerHTML = summary.iterations;
+
+                summary.forEach(s => {
+                    let row = ts.querySelector(`#${s.testCase.replaceAll(' ', '_')}`);
+                    row.querySelector('.TestCase').innerHTML = s.testCase;
+                    row.querySelector('.TotalTime').innerHTML = s.totalTime;
+                    row.querySelector('.AverageTicks').innerHTML = s.averageTicks;
+                    row.querySelector('.Iterations').innerHTML = s.iterations;
+                });
+                
             }
 
             data.threadSummary.forEach(ts => {

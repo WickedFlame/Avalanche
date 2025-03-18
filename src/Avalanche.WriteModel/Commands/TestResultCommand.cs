@@ -4,6 +4,12 @@
     {
         public string TestId {  get; set; }
 
+        /// <summary>
+        /// Name of the TestCase
+        /// </summary>
+        public string TestCase { get; set; }
+
+
         public IEnumerable<ThreadSummary> Summary { get; set; }
     }
 

@@ -22,6 +22,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 var @event = new ThreadSummaryEvent
                 {
                     TestId = cmd.TestId,
+                    TestCase = cmd.TestCase,
                     ThreadNumber = result.ThreadNumber,
                     Iterations = result.Iterations,
                     AverageTicks = result.AverageTicks,
@@ -40,6 +41,7 @@ namespace Avalanche.WriteModel.CommandHandlers
             var sumary = new TestSummaryEvent
             {
                 TestId = cmd.TestId,
+                TestCase = cmd.TestCase,
                 Threads = cmd.Summary.Count(),
                 Iterations = cmd.Iterations,
                 AverageTicks = cmd.AverageTicks,

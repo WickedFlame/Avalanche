@@ -4,6 +4,8 @@
     {
         public string TestId { get; set; }
 
+        public string TestCase { get; set; }
+
         public string Type { get; set; }
 
         public int ThreadNumber { get; set; }

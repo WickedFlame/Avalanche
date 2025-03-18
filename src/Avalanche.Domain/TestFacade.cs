@@ -65,7 +65,9 @@ namespace Avalanche.Domain
                     {
                         dispatcher.Send(new TestResultCommand
                         {
+                            //TODO: The id per test/result has to be set. TestId is the overall Run ID
                             TestId = data.TestId,
+                            TestCase = testResult.TestCase,
                             ThreadNumber = testResult.ThreadNumber,
                             Iterations = testResult.Iterations.Count(),
                             AverageTicks = testResult.AverageTicks,

@@ -37,14 +37,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="Views\TestOverview\Partials\Summary.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Update="Views\TestOverview\Partials\RampupChart.cshtml">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
       <Content Update="wwwroot\css\bulma.scss">
         <Generator>npm run build-bulma</Generator>
       </Content>

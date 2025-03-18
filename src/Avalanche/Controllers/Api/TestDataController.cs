@@ -43,7 +43,7 @@ namespace Avalanche.Controllers.Api
                 Scenario = scenario,
                 Testname = testname,
                 Status = lastRun.Status,
-                Result = results.Results.FirstOrDefault(r => r.Name == testname)
+                Result = results.Results.FirstOrDefault(r => r.TestCase == testname)
             });
         }
 
@@ -118,10 +118,11 @@ namespace Avalanche.Controllers.Api
             {
                 Scenario = scenario,
                 Testname = testname,
+                TestId = testId,
                 Status = lastRun?.Status ?? "New",
                 Data = new
                 {
-                    TestSummary = data.FirstOrDefault(d => d.Type == "TestSummary"),
+                    TestSummary = data.Where(d => d.Type == "TestSummary"),
                     ThreadSummary = data.Where(d => d.Type == "ThreadSummary")
                 }
             });

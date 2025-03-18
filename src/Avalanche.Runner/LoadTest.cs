@@ -159,7 +159,7 @@ namespace Avalanche.Runner
 
                 results.Add(new TestResult(result)
                 {
-                    Name = test.Name,
+                    TestCase = test.Name,
                 });
             }
 

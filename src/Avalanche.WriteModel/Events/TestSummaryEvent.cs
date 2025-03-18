@@ -21,5 +21,6 @@
         public long InitialSize { get; set; }
 
         public long EndSize { get; set; }
+        public string TestCase { get; internal set; }
     }
 }

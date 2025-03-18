@@ -1,5 +1,12 @@
-﻿
-<div class="pt-content-panel">
+﻿@model Avalanche.Runner.TestConfig
+<tr id="@Model.Name.Replace(" ", "_")">
+    <td class="TestCase"></td>
+    <td class="TotalTime"></td>
+    <td class="AverageTicks"></td>
+    <td class="Iterations"></td>
+</tr>
+
+@* <div class="pt-content-panel">
     <div class="pt-stats">
         <div class="pt-stat-item">
             <header class="pt-stat-header">
@@ -36,6 +43,6 @@
             <div class="pt-stat-footer">Amount of iterations</div>
         </div>
     </div>
-</div>
+</div> *@
 
 

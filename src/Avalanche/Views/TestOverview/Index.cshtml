@@ -97,8 +97,8 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Threads</th>
-                                    <th>Rampup</th>
-                                    <th>URL</th>
+                                    <th>RampupTime</th>
+                                    <th>Url</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -125,13 +125,31 @@
             </div>
         }
 
-       @*  @foreach (var test in Model.TestId.Settings.Tests)
-        { *@
-            @* TODO: TestId pro Test. Model muss angepasst werden! *@
-            <div class="pt-element-container" id="testsummary-@Model.TestId">
-                <partial name="./Partials/Summary"/>
+        <div class="pt-element-container" id="testsummary-@Model.TestId">
+            <div class="pt-content-panel">
+                <h2>Summaries</h2>
+                <div class="overflow-x-auto">
+                    <div class="pt-element-container">
+                        <table class="table is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>TestCase</th>
+                                    <th>Total Time</th>
+                                    <th>Average Ticks</th>
+                                    <th>Amount of iterations</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var test in Model.Settings.Tests)
+                                {
+                                    <partial name="./Partials/SummaryRow" for="@test" />
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        @* } *@
+        </div>
 
         <div class="pt-element-container">
             <partial name="./Partials/Chart"/>

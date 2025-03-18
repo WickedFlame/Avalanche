@@ -12,7 +12,10 @@ namespace Avalanche.Runner
             _result = result;
         }
 
-        public string Name { get; set; }
+        /// <summary>
+        /// Name of the testcase
+        /// </summary>
+        public string TestCase { get; set; }
 
         public int ThreadId => _result.ThreadId;
 
