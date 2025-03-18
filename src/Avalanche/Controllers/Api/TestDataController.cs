@@ -96,5 +96,35 @@ namespace Avalanche.Controllers.Api
                 Data = data
             });
         }
+
+        [HttpGet]
+        [Route("{scenario}/{testname}/summary/{testId}")]
+        public IActionResult GetSummary(string scenario, string testname, string testId)
+        {
+            var trh = new TestRunQueryHandler();
+            var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
+
+            if (lastRun == null)
+            {
+                return Ok();
+            }
+
+            var facade = new TestDataFacade();
+            var data = facade.GetSummary(testId);
+
+            testname = testname.ToLower();
+
+            return Ok(new
+            {
+                Scenario = scenario,
+                Testname = testname,
+                Status = lastRun?.Status ?? "New",
+                Data = new
+                {
+                    TestSummary = data.FirstOrDefault(d => d.Type == "TestSummary"),
+                    ThreadSummary = data.Where(d => d.Type == "ThreadSummary")
+                }
+            });
+        }
     }
 }

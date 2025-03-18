@@ -19,14 +19,14 @@
                 {
                     <div class="buttons has-addons">
                         <a id="StartTests" data-name="@Model.Name" class="button" disabled>Start</a>
-                        <a id="StopTests" data-name="@Model.Name" class="button">Stop</a>
+                        <a id="StopTests" data-name="@Model.Name" data-testid="@Model.TestId" class="button">Stop</a>
                     </div>
                 }
                 else
                 {
                     <div class="buttons has-addons">
                         <a id="StartTests" data-name="@Model.Name" class="button">Start</a>
-                        <a id="StopTests" data-name="@Model.Name" class="button" disabled>Stop</a>
+                        <a id="StopTests" data-name="@Model.Name" data-testid="@Model.TestId" class="button" disabled>Stop</a>
                     </div>
                 }
             </div>
@@ -124,6 +124,14 @@
                 </div>
             </div>
         }
+
+       @*  @foreach (var test in Model.TestId.Settings.Tests)
+        { *@
+            @* TODO: TestId pro Test. Model muss angepasst werden! *@
+            <div class="pt-element-container" id="testsummary-@Model.TestId">
+                <partial name="./Partials/Summary"/>
+            </div>
+        @* } *@
 
         <div class="pt-element-container">
             <partial name="./Partials/Chart"/>
@@ -237,6 +245,7 @@
                 <text>
                 sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');
                 sites.displayChart('@Model.Name', '@test.Name');
+                sites.showSummaryData('@Model.Name', '@test.Name', '@Model.TestId');
                 </text>
             }
         </script>

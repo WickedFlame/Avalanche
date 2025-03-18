@@ -21,9 +21,9 @@ namespace Avalanche.WriteModel.CommandHandlers
             {
                 var @event = new ThreadSummaryEvent
                 {
+                    TestId = cmd.TestId,
                     ThreadNumber = result.ThreadNumber,
                     Iterations = result.Iterations,
-                    AverageMilliseconds = result.AverageMilliseconds,
                     AverageTicks = result.AverageTicks,
                     TotalTime = result.TotalTime,
                     Fastest = result.Fastest,
@@ -37,12 +37,11 @@ namespace Avalanche.WriteModel.CommandHandlers
                 _messageBus.Send(@event);
             }
 
-
             var sumary = new TestSummaryEvent
             {
+                TestId = cmd.TestId,
                 Threads = cmd.Summary.Count(),
                 Iterations = cmd.Iterations,
-                AverageMilliseconds = cmd.AverageMilliseconds,
                 AverageTicks = cmd.AverageTicks,
                 TotalTime = cmd.TotalTime,
                 Fastest = cmd.Fastest,

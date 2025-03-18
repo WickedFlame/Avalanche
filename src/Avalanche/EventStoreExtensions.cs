@@ -48,6 +48,21 @@ CREATE TABLE IF NOT EXISTS RampupEvents (
   ThreadId VARCHAR(255),
   Value int
 );
+
+CREATE TABLE IF NOT EXISTS SummaryEvents (
+  Id VARCHAR(255),
+  TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
+  Type VARCHAR(100),
+  ThreadNumber VARCHAR(255),
+  Iterations INT,
+  AverageTicks BIGINT,
+  TotalTime BIGINT,
+  Fastest BIGINT,
+  Slowest BIGINT,
+  Increase BIGINT,
+  InitialSize BIGINT,
+  EndSize BIGINT
+);
 ";
             using (var connection = new SQLiteConnection("Data Source=readmodel.db"))
             {

@@ -8,6 +8,7 @@ using Avalanche.Runner.Logging;
 using Broadcast;
 using MeasureMap;
 using Task = System.Threading.Tasks.Task;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Avalanche.Domain
 {
@@ -37,6 +38,8 @@ namespace Avalanche.Domain
                     using var messageBus = new MessageBus();
                     messageBus.Register<StartTestEvent>(new StartTestEventHandler());
                     messageBus.Register<EndTestEvent>(new EndTestEventHandler());
+                    messageBus.Register<ThreadSummaryEvent>(new SummaryEventHandler());
+                    messageBus.Register<TestSummaryEvent>(new SummaryEventHandler());
 
 
 
@@ -65,7 +68,6 @@ namespace Avalanche.Domain
                             TestId = data.TestId,
                             ThreadNumber = testResult.ThreadNumber,
                             Iterations = testResult.Iterations.Count(),
-                            AverageMilliseconds = testResult.AverageTicks.ToMilliseconds(),
                             AverageTicks = testResult.AverageTicks,
                             TotalTime = testResult.TotalTime.Ticks,
                             Fastest = testResult.Fastest.Ticks,
@@ -77,7 +79,6 @@ namespace Avalanche.Domain
                             {
                                 ThreadNumber = r.ThreadNumber,
                                 Iterations = r.Iterations.Count(),
-                                AverageMilliseconds = r.AverageTicks.ToMilliseconds(),
                                 AverageTicks = r.AverageTicks,
                                 TotalTime = r.TotalTime.Ticks,
                                 Fastest = r.Fastest.Ticks,
@@ -113,6 +114,23 @@ namespace Avalanche.Domain
                 TaskScheduler.Default);
 
             return settings;
+        }
+
+        public void Stop(string testId)
+        {
+            using var messageBus = new MessageBus();
+            messageBus.Register<EndTestEvent>(new EndTestEventHandler());
+
+            using var dispatcher = new Dispatcher<ICommand>();
+            dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store, messageBus));
+
+
+            dispatcher.Send(new EndTestCommand
+            {
+                TestId = testId,
+                EndTime = DateTime.Now,
+                Status = TestRunStatus.Done
+            });
         }
 
         public TestSettings GetTestSettings(string path)

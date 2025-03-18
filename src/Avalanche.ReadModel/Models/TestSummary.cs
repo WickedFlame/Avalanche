@@ -1,19 +1,16 @@
-﻿namespace Avalanche.WriteModel.Commands
+﻿namespace Avalanche.ReadModel.Models
 {
-    public class TestResultCommand : ThreadSummary, ICommand
+    public class TestSummary
     {
-        public string TestId {  get; set; }
+        public string TestId { get; set; }
 
-        public IEnumerable<ThreadSummary> Summary { get; set; }
-    }
+        public string Type { get; set; }
 
-    public class ThreadSummary
-    {
         public int ThreadNumber { get; set; }
 
         public int Iterations { get; set; }
 
-        public  long AverageTicks { get; set; }
+        public long AverageTicks { get; set; }
 
         public long TotalTime { get; set; }
 

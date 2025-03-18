@@ -2,11 +2,11 @@
 {
     public class ThreadSummaryEvent : IEvent
     {
+        public string TestId { get; set; }
+
         public int ThreadNumber { get; set; }
 
         public int Iterations { get; set; }
-
-        public double AverageMilliseconds { get; set; }
 
         public long AverageTicks { get; set; }
 

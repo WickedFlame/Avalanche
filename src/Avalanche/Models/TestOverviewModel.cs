@@ -1,14 +1,13 @@
-﻿using Avalanche.WriteModel.Events;
-using Avalanche.Domain;
-using Avalanche.ReadModel.Models;
-using Avalanche.Runner;
-using Avalanche.Runner.Logging;
+﻿using Avalanche.Runner;
+using Avalanche.WriteModel.Events;
 
 namespace Avalanche.Models
 {
     public class TestOverviewModel
     {
         public string Name { get; set; }
+
+        public string TestId { get; set; }
 
         public IEnumerable<IterationLogEvent> LogEntries { get; set; }
 

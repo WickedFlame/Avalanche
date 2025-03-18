@@ -42,6 +42,7 @@ namespace Avalanche.Controllers
             var model = new TestOverviewModel
             {
                 Name = name,
+                TestId = lastRun?.TestId,
                 StartTime = lastRun?.StartTime,
                 Settings = settings,
                 Results = results.Results,

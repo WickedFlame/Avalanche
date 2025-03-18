@@ -11,7 +11,9 @@
             e.preventDefault();
 
             let name = e.target.dataset.name;
-            this.stopTest(name);
+            let testId = e.target.dataset.testid;
+
+            this.stopTest(name, testId);
         });
 
         this.charts = new Map();
@@ -39,8 +41,8 @@
         }
     }
 
-    async stopTest(name) {
-        const url = `api/test/${name}/stop`;
+    async stopTest(name, testId) {
+        const url = `api/test/${name}/stop/${testId}`;
         try {
             const response = await fetch(url, {
                 method: "POST",
@@ -50,10 +52,46 @@
             }
 
             const json = await response.json();
+
+            location.reload();
         } catch (error) {
             console.error(error.message);
         }
     }
+
+
+
+
+    async showSummaryData(scenario, testname, testid) {
+        const url = `api/testdata/${scenario}/${testname}/summary/${testid}`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.data.testSummary !== null) {
+                let summary = data.data.testSummary;
+
+                let ts = document.querySelector(`#testsummary-${testid}`);
+                ts.querySelector('.TotalTime').innerHTML = summary.totalTime;
+                ts.querySelector('.AverageTicks').innerHTML = summary.averageTicks;
+                ts.querySelector('.Iterations').innerHTML = summary.iterations;
+            }
+
+            data.threadSummary.forEach(ts => {
+
+            });
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+
+
 
     initChart(testsetting, testname) {
         let datasets = [];

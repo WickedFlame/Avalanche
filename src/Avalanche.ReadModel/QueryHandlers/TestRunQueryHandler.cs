@@ -8,7 +8,8 @@ namespace Avalanche.ReadModel.QueryHandlers
         IQueryHandler<IEnumerable<TestRun>, GetTestsQuery>,
         IQueryHandler<TestRun, GetLastTestQuery>,
         IQueryHandler<TestRun, GetTestRun>,
-        IQueryHandler<IEnumerable<RampupData>, GetRampupData>
+        IQueryHandler<IEnumerable<RampupData>, GetRampupData>,
+        IQueryHandler<IEnumerable<TestSummary>, GetSummary>
     {
         private readonly SQLiteConnection _connection;
 
@@ -63,6 +64,18 @@ namespace Avalanche.ReadModel.QueryHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
 
                 return cmd.Execute<RampupData>();
+            }
+        }
+
+        public IEnumerable<TestSummary> Get(GetSummary query)
+        {
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT * FROM SummaryEvents WHERE TestId = @testId";
+
+                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+
+                return cmd.Execute<TestSummary>();
             }
         }
     }

@@ -53,9 +53,12 @@ namespace Avalanche.Controllers.Api
         }
 
         [HttpPost]
-        [Route("{name}/stop")]
-        public IActionResult Stop(string name)
+        [Route("{name}/stop/{testId}")]
+        public IActionResult Stop(string name, string testId)
         {
+            var facade = new TestFacade(_store);
+            facade.Stop(testId);
+
             return Ok(new
             {
                 Name = name,

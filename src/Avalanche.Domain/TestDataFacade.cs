@@ -1,4 +1,5 @@
 ﻿using Avalanche.Domain.Models;
+using Avalanche.ReadModel.Models;
 using Avalanche.ReadModel.Queries;
 using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.Runner;
@@ -49,6 +50,12 @@ namespace Avalanche.Domain
 
             return lst;
 
+        }
+
+        public IEnumerable<TestSummary> GetSummary(string testId)
+        {
+            var handler = new TestRunQueryHandler();
+            return handler.Get(new GetSummary { TestId = testId });
         }
     }
 }

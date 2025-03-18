@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using System.Data;
 using System.Data.SQLite;
 
 namespace Avalanche.WriteModel.EventHandlers
@@ -17,12 +18,48 @@ namespace Avalanche.WriteModel.EventHandlers
 
         public void Handle(ThreadSummaryEvent @event)
         {
-            throw new NotImplementedException();
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, Type, ThreadNumber, Iterations, AverageTicks, TotalTime, Fastest, Slowest, Increase, InitialSize, EndSize) Values (@id, @testId, @type, @threadNumber, @iterations, @avgTicks, @totalTime, @fastest, @slowest, @increase, @initialSize, @endSize)";
+
+                cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
+                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@type", "ThreadSummary"));
+                cmd.Parameters.Add(new SQLiteParameter("@threadNumber", @event.ThreadNumber));
+                cmd.Parameters.Add(new SQLiteParameter("@iterations", @event.Iterations));
+                cmd.Parameters.Add(new SQLiteParameter("@avgTicks", @event.AverageTicks));
+                cmd.Parameters.Add(new SQLiteParameter("@totalTime", @event.TotalTime));
+                cmd.Parameters.Add(new SQLiteParameter("@fastest", @event.Fastest));
+                cmd.Parameters.Add(new SQLiteParameter("@slowest", @event.Slowest));
+                cmd.Parameters.Add(new SQLiteParameter("@increase", @event.Increase));
+                cmd.Parameters.Add(new SQLiteParameter("@initialSize", @event.InitialSize));
+                cmd.Parameters.Add(new SQLiteParameter("@endSize", @event.EndSize));
+                
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public void Handle(TestSummaryEvent @event)
         {
-            throw new NotImplementedException();
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, Type, ThreadNumber, Iterations, AverageTicks, TotalTime, Fastest, Slowest, Increase, InitialSize, EndSize) Values (@id, @testId, @type, @threadNumber, @iterations, @avgTicks, @totalTime, @fastest, @slowest, @increase, @initialSize, @endSize)";
+
+                cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
+                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@type", "TestSummary"));
+                cmd.Parameters.Add(new SQLiteParameter("threadNumber", DBNull.Value));
+                cmd.Parameters.Add(new SQLiteParameter("@iterations", @event.Iterations));
+                cmd.Parameters.Add(new SQLiteParameter("@avgTicks", @event.AverageTicks));
+                cmd.Parameters.Add(new SQLiteParameter("@totalTime", @event.TotalTime));
+                cmd.Parameters.Add(new SQLiteParameter("@fastest", @event.Fastest));
+                cmd.Parameters.Add(new SQLiteParameter("@slowest", @event.Slowest));
+                cmd.Parameters.Add(new SQLiteParameter("@increase", @event.Increase));
+                cmd.Parameters.Add(new SQLiteParameter("@initialSize", @event.InitialSize));
+                cmd.Parameters.Add(new SQLiteParameter("@endSize", @event.EndSize));
+
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public void Dispose()
