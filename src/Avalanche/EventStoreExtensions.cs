@@ -46,8 +46,22 @@ CREATE TABLE IF NOT EXISTS RampupEvents (
   TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
   Time DATETIME,
   ThreadId VARCHAR(255),
-  Value int
+  Value INT
 );
+
+
+CREATE TABLE IF NOT EXISTS IterationEvents (
+  Id VARCHAR(255),
+  TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
+  Time DATETIME,
+  ThreadId INT,
+  Name VARCHAR(255),
+  Message VARCHAR(200),
+  RunNumber INT,
+  IsWarmup BOOL,
+  TotalMilliseconds REAL
+);
+
 
 CREATE TABLE IF NOT EXISTS SummaryEvents (
   Id VARCHAR(255),

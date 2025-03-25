@@ -123,6 +123,12 @@ namespace Avalanche.ReadModel.Data
             }
             else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
             {
+                if(value is DateTime dte)
+                {
+                    prop.SetValue(entity, dte, null);
+                    return;
+                }
+
                 var isValid = DateTime.TryParse(value.ToString(), out var date);
                 if (isValid)
                 {

@@ -11,6 +11,7 @@ namespace Avalanche.ReadModel
             // create data adapter
             var da = new SQLiteDataAdapter(command);
             var table = new DataTable();
+            
             da.Fill(table);
 
             return Map<T>(table);

@@ -1,14 +1,5 @@
-﻿using Avalanche.WriteModel;
-using Avalanche.WriteModel.Commands;
+﻿using Avalanche.WriteModel.Commands;
 using Broadcast;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Avalanche.WriteModel.CommandHandlers
 {
@@ -25,9 +16,9 @@ namespace Avalanche.WriteModel.CommandHandlers
 
         public override void Handle(IterationCommand cmd)
         {
-            //TODO: create the readmodel
             var @event = new Events.IterationLogEvent
             {
+                TestId = cmd.TestId,
                 Category = cmd.Category,
                 Module = cmd.Module,
                 Name = cmd.Name,
@@ -40,13 +31,6 @@ namespace Avalanche.WriteModel.CommandHandlers
             };
 
             _store.Add(cmd.TestId, cmd.Time, @event);
-
-            //TODO: remove this to the readmodel
-            //if (string.IsNullOrEmpty(_collection.ThreadId))
-            //{
-            //    _collection.ThreadId = @event.Thread.ToString();
-            //    _collection.IsWarmup = @event.IsWarmup;
-            //}
 
             _messageBus.Send(@event);
         }

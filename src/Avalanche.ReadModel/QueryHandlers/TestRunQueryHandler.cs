@@ -67,6 +67,18 @@ namespace Avalanche.ReadModel.QueryHandlers
             }
         }
 
+        public IEnumerable<IterationItem> Get(GetChartData query)
+        {
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT * FROM IterationEvents WHERE TestId = @testId ORDER BY Time DESC";
+
+                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+
+                return cmd.Execute<IterationItem>();
+            }
+        }
+
         public IEnumerable<TestSummary> Get(GetSummary query)
         {
             using (var cmd = _connection.CreateCommand())

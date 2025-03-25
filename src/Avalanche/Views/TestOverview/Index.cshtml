@@ -125,9 +125,9 @@
             </div>
         }
 
-        <div class="pt-element-container" id="testsummary-@Model.TestId">
+        <div class="pt-element-container" id="testsummary-@Model.TestId" style="display: none;">
             <div class="pt-content-panel">
-                <h2>Summaries</h2>
+                <h2>Summary</h2>
                 <div class="overflow-x-auto">
                     <div class="pt-element-container">
                         <table class="table is-fullwidth">
@@ -136,7 +136,7 @@
                                     <th>TestCase</th>
                                     <th>Total Time</th>
                                     <th>Average Ticks</th>
-                                    <th>Amount of iterations</th>
+                                    <th>Total iterations</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -262,7 +262,7 @@
             {
                 <text>
                 sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');
-                sites.displayChart('@Model.Name', '@test.Name');
+                sites.displayChart('@Model.Name', '@test.Name', '@Model.TestId');
                 sites.showSummaryData('@Model.Name', '@test.Name', '@Model.TestId');
                 </text>
             }

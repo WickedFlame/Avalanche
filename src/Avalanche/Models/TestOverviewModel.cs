@@ -9,15 +9,13 @@ namespace Avalanche.Models
 
         public string TestId { get; set; }
 
-        public IEnumerable<IterationLogEvent> LogEntries { get; set; }
-
         public DateTime? StartTime { get; set; }
 
         public TestSettings Settings { get; set; }
 
         public TestRunStatus Status { get; set; }
 
-        public IEnumerable<Runner.TestResult> Results { get; set; }
+        public IEnumerable<IterationLogEvent> LogEntries { get; set; }
 
         public IEnumerable<StartupLogEvent> StartupEntries { get; set; }
 

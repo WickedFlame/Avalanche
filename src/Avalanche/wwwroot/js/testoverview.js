@@ -76,6 +76,7 @@
                 let summary = data.data.testSummary;
 
                 let ts = document.querySelector(`#testsummary-${testid}`);
+                ts.style.display = 'block';
 
                 summary.forEach(s => {
                     let row = ts.querySelector(`#${s.testCase.replaceAll(' ', '_')}`);
@@ -115,18 +116,18 @@
     }
 
     // gets called to start polling for chart data
-    displayChart(scenario, testname) {
-        this.showChartData(scenario, testname);
-        this.showRampupData(scenario, testname);
+    displayChart(scenario, testname, testId) {
+        this.showChartData(scenario, testname, testId);
+        this.showRampupData(scenario, testname, testId);
 
         this.poller = setInterval(() => {
-            this.showChartData(scenario, testname);
-            this.showRampupData(scenario, testname);
+            this.showChartData(scenario, testname, testId);
+            this.showRampupData(scenario, testname, testId);
         }, 10000);
     }
 
-    async showRampupData(scenario, testname) {
-        const url = `api/testdata/${scenario}/${testname}/rampupdata`;
+    async showRampupData(scenario, testname, testId) {
+        const url = `api/testdata/${scenario}/${testname}/rampupdata/${testId}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -162,8 +163,8 @@
         }
     }
 
-    async showChartData(scenario, testname) {
-        const url = `api/testdata/${scenario}/${testname}/chartdata`;
+    async showChartData(scenario, testname, testId) {
+        const url = `api/testdata/${scenario}/${testname}/chartdata/${testId}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {

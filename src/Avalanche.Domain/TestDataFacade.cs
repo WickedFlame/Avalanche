@@ -3,11 +3,31 @@ using Avalanche.ReadModel.Models;
 using Avalanche.ReadModel.Queries;
 using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.Runner;
+using Avalanche.WriteModel.Events;
 
 namespace Avalanche.Domain
 {
     public class TestDataFacade
     {
+        public IEnumerable<ChartData> GetChartData(string testId)
+        {
+            var handler = new TestRunQueryHandler();
+            var data = handler.Get(new GetChartData { TestId = testId });
+
+            return data.Where(c => !c.IsWarmup)
+                .GroupBy(c => c.ThreadId)
+                .Select(g => new ChartData
+                {
+                    Name = g.Key.ToString(),
+                    Data = g.Select(e => new ChartDataRow
+                        {
+                            Time = e.Time.ToString("o"),
+                            Value = e.TotalMilliseconds.ToString()
+                        })
+                });
+            ;
+        }
+
         public IEnumerable<ChartDataRow> GetRampupData(string testId)
         {
             var handler = new TestRunQueryHandler();

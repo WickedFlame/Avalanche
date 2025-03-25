@@ -48,11 +48,11 @@ namespace Avalanche.Controllers.Api
         }
 
         [HttpGet]
-        [Route("{scenario}/{testname}/chartdata")]
-        public IActionResult GetChartData(string scenario, string testname)
+        [Route("{scenario}/{testname}/chartdata/{testId}")]
+        public IActionResult GetChartData(string scenario, string testname, string testId)
         {
             var trh = new TestRunQueryHandler();
-            var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = scenario });
+            var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
 
             var results = Domain.TestResultsCollection.Instance.GetResults(scenario.ToLower());
             if(results == null)
@@ -60,23 +60,24 @@ namespace Avalanche.Controllers.Api
                 return Ok();
             }
 
-            testname = testname.ToLower();
+            var facade = new TestDataFacade();
+            var data = facade.GetChartData(lastRun.TestId);
 
             return Ok(new
             {
                 Scenario = scenario,
                 Testname = testname,
                 Status = lastRun?.Status ?? "Open",
-                ChartData = results.GetChartData()
+                ChartData = data
             });
         }
 
         [HttpGet]
-        [Route("{scenario}/{testname}/rampupdata")]
-        public IActionResult GetRampupData(string scenario, string testname)
+        [Route("{scenario}/{testname}/rampupdata/{testId}")]
+        public IActionResult GetRampupData(string scenario, string testname, string testId)
         {
             var trh = new TestRunQueryHandler();
-            var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = scenario });
+            var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
 
             if(lastRun == null)
             {
@@ -85,8 +86,6 @@ namespace Avalanche.Controllers.Api
 
             var facade = new TestDataFacade();
             var data = facade.GetRampupData(lastRun.TestId);
-
-            testname = testname.ToLower();
 
             return Ok(new
             {
@@ -111,8 +110,6 @@ namespace Avalanche.Controllers.Api
 
             var facade = new TestDataFacade();
             var data = facade.GetSummary(testId);
-
-            testname = testname.ToLower();
 
             return Ok(new
             {

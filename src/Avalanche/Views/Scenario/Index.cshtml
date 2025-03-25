@@ -172,14 +172,6 @@
         <script type="module" async>
             import { TestOverview } from '/js/testoverview.js';
             var sites = new TestOverview();
-
-            @foreach (var test in Model.Settings.Tests)
-            {
-                <text>
-                sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');
-                sites.displayChart('@Model.Name', '@test.Name');
-                </text>
-            }
         </script>
     </text>
 }
