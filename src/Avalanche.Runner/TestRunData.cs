@@ -1,8 +1,4 @@
-﻿using Avalanche;
-using Avalanche.WriteModel;
-using Avalanche.Runner;
-using Avalanche.Runner.Logging;
-using MeasureMap;
+﻿using Avalanche.WriteModel;
 
 namespace Avalanche.Runner
 {

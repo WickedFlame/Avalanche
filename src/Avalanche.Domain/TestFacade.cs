@@ -1,14 +1,11 @@
-﻿using Avalanche.WriteModel;
+﻿using Avalanche.Runner;
+using Avalanche.WriteModel;
 using Avalanche.WriteModel.CommandHandlers;
 using Avalanche.WriteModel.Commands;
 using Avalanche.WriteModel.EventHandlers;
 using Avalanche.WriteModel.Events;
-using Avalanche.Runner;
-using Avalanche.Runner.Logging;
 using Broadcast;
-using MeasureMap;
 using Task = System.Threading.Tasks.Task;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Avalanche.Domain
 {
@@ -27,12 +24,15 @@ namespace Avalanche.Domain
 
             Task.Factory.StartNew(() =>
                 {
-                    //TODO: nicht via singleton lösen
-                    var data = TestResultsCollection.Instance.StartNew(Guid.NewGuid().ToString(), name);
+                    var data = new TestRunData
+                    {
+                        TestId = Guid.NewGuid().ToString(),
+                        Name = name,
+                        Status = TestRunStatus.New,
+                        Settings = settings
+                    };
 
-                    data.Settings = settings;
-
-                    var loadtest = new LoadTest(new Runner.Logging.TestResultsFacory(data), data.TestId, _store);
+                    var loadtest = new LoadTest(data.TestId, _store);
                     data.StartTime = DateTime.Now;
 
                     using var messageBus = new MessageBus();

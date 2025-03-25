@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Avalanche.Domain;
-using Avalanche.Models;
-using System.Xml.Linq;
-using Avalanche.Runner.Logging;
-using Avalanche.Domain.Models;
-using Avalanche.Runner;
+﻿using Avalanche.Domain;
 using Avalanche.ReadModel.QueryHandlers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers.Api
 {
@@ -14,51 +9,11 @@ namespace Avalanche.Controllers.Api
     public class TestDataController : ControllerBase
     {
         [HttpGet]
-        [Route("{scenario}/{testname}/testresult")]
-        public IActionResult GetTestResult(string scenario, string testname)
-        {
-            //TODO: diese methode wird nicht gebraucht???
-
-
-
-            var trh = new TestRunQueryHandler();
-            var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = testname });
-
-
-
-
-            var results = Domain.TestResultsCollection.Instance.GetResults(scenario.ToLower());
-            if (results == null || results.Status != TestRunStatus.Done)
-            {
-                return Ok(new
-                {
-                    Scenario = scenario,
-                    Testname = testname,
-                    Status = lastRun?.Status ?? TestRunStatus.New.Name,
-                });
-            }
-
-            return Ok(new
-            {
-                Scenario = scenario,
-                Testname = testname,
-                Status = lastRun.Status,
-                Result = results.Results.FirstOrDefault(r => r.TestCase == testname)
-            });
-        }
-
-        [HttpGet]
         [Route("{scenario}/{testname}/chartdata/{testId}")]
         public IActionResult GetChartData(string scenario, string testname, string testId)
         {
             var trh = new TestRunQueryHandler();
             var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
-
-            var results = Domain.TestResultsCollection.Instance.GetResults(scenario.ToLower());
-            if(results == null)
-            {
-                return Ok();
-            }
 
             var facade = new TestDataFacade();
             var data = facade.GetChartData(lastRun.TestId);

@@ -3,7 +3,6 @@ using Avalanche.WriteModel.CommandHandlers;
 using Avalanche.WriteModel.Commands;
 using Avalanche.WriteModel.EventHandlers;
 using Avalanche.WriteModel.Events;
-using Avalanche.Runner.Logging;
 using Broadcast;
 using MeasureMap;
 using System.Collections.ObjectModel;
@@ -15,16 +14,13 @@ namespace Avalanche.Runner
 {
     public class LoadTest
     {
-        private readonly TestResultsFacory _logCollector;
-
         private readonly List<IDispatcher<ICommand>> _dispatchers = [];
 
         private readonly string _testId;
         private readonly IEventStore _store;
 
-        public LoadTest(TestResultsFacory logger, string testId, IEventStore store)
+        public LoadTest(string testId, IEventStore store)
         {
-            _logCollector = logger;
             _testId = testId;
             _store = store;
         }
@@ -51,8 +47,6 @@ namespace Avalanche.Runner
                         var client = new HttpClient(clientHandler);
 
                         ctx.Set("httpclient", client);
-
-                        var collection = _logCollector.StartNew($"{Guid.NewGuid()}");
 
                         var messageBus = new MessageBus();
                         messageBus.Register<StartupLogEvent>(new StartupThreadEventHandler());
@@ -168,8 +162,6 @@ namespace Avalanche.Runner
 
         public void End()
         {
-            _logCollector.End();
-
             foreach (var collector in _dispatchers)
             {
                 collector.Close();
