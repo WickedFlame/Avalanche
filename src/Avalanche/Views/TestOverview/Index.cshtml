@@ -12,21 +12,21 @@
     </aside>
 
     <div class="content px-6 py-4">
-        <h1 class="title is-1">@Model.Name</h1>
+        <h1 class="title is-1">@Model.Scenario</h1>
         <div>
             <div class="pt-padding-side py-5">
                 @if (Model.Status == Avalanche.Runner.TestRunStatus.Running)
                 {
                     <div class="buttons has-addons">
-                        <a id="StartTests" data-name="@Model.Name" class="button" disabled>Start</a>
-                        <a id="StopTests" data-name="@Model.Name" data-testid="@Model.TestId" class="button">Stop</a>
+                        <a id="StartTests" data-name="@Model.Scenario" class="button" disabled>Start</a>
+                        <a id="StopTests" data-name="@Model.Scenario" data-testid="@Model.TestId" class="button">Stop</a>
                     </div>
                 }
                 else
                 {
                     <div class="buttons has-addons">
-                        <a id="StartTests" data-name="@Model.Name" class="button">Start</a>
-                        <a id="StopTests" data-name="@Model.Name" data-testid="@Model.TestId" class="button" disabled>Stop</a>
+                        <a id="StartTests" data-name="@Model.Scenario" class="button">Start</a>
+                        <a id="StopTests" data-name="@Model.Scenario" data-testid="@Model.TestId" class="button" disabled>Stop</a>
                     </div>
                 }
             </div>
@@ -159,96 +159,6 @@
                 <partial name="./Partials/RampupChart" for="@config" />
             </div>
         }
-        
-        <div>
-            <div class="pt-content-panel">
-                <h2>Thread Start</h2>
-                <div class="overflow-x-auto">
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Testname</th>
-                                <th>Duration</th>
-                                <th>Message</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var row in Model.StartupEntries.Where(r => r.Module == "Init"))
-                            {
-                                <tr>
-                                    <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
-                                    <td>@row.Name</td>
-                                    <td>@row.ElapsedMilliseconds</td>
-                                    <td>@row.Message</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="pt-content-panel">
-                <h2>Thread End</h2>
-                <div class="overflow-x-auto">
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Testname</th>
-                                <th>Thread</th>
-                                <th>Message</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var row in Model.EndLogEntries.Where(r => r.Module == "End"))
-                            {
-                                <tr>
-                                    <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
-                                    <td>@row.Name</td>
-                                    <td>@row.Thread</td>
-                                    <td>@row.Message</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="pt-content-panel">
-                <h2>Iterations</h2>
-                <div class="overflow-x-auto">
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Testname</th>
-                                <th>IsWarmup</th>
-                                <th>Thread</th>
-                                <th>Number</th>
-                                <th>Duration</th>
-                                <th>Message</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var row in Model.LogEntries.Where(r => r.Module == "Measure"))
-                            {
-                                <tr>
-                                    <td>@row.Time.ToString("dd.MM.yyyy HH:mm:ss.ffff")</td>
-                                    <td>@row.Name</td>
-                                    <td>@row.IsWarmup</td>
-                                    <td>@row.Thread</td>
-                                    <td>@row.RunNumber</td>
-                                    <td>@row.TotalMilliseconds</td>
-                                    <td>@row.Message</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
     </div>
 
 </div>
@@ -263,8 +173,8 @@
             {
                 <text>
                 sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');
-                sites.displayChart('@Model.Name', '@test.Name', '@Model.TestId');
-                sites.showSummaryData('@Model.Name', '@test.Name', '@Model.TestId');
+                sites.displayChart('@Model.Scenario', '@test.Name', '@Model.TestId');
+                sites.showSummaryData('@Model.Scenario', '@test.Name', '@Model.TestId');
                 </text>
             }
         </script>

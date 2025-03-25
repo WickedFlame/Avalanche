@@ -1,11 +1,10 @@
 ﻿using Avalanche.Runner;
-using Avalanche.WriteModel.Events;
 
 namespace Avalanche.Models
 {
     public class TestOverviewModel
     {
-        public string Name { get; set; }
+        public string Scenario { get; set; }
 
         public string TestId { get; set; }
 
@@ -14,11 +13,5 @@ namespace Avalanche.Models
         public TestSettings Settings { get; set; }
 
         public TestRunStatus Status { get; set; }
-
-        public IEnumerable<IterationLogEvent> LogEntries { get; set; }
-
-        public IEnumerable<StartupLogEvent> StartupEntries { get; set; }
-
-        public IEnumerable<EndLogEvent> EndLogEntries { get; set; }
     }
 }

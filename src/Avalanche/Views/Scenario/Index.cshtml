@@ -96,7 +96,7 @@
                     <table class="table is-fullwidth">
                         <thead>
                             <tr>
-                                <th>TestName</th>
+                                <th>Scenario</th>
                                 <th>TestId</th>
                                 <th>StartTime</th>
                                 <th>EndTime</th>
@@ -107,7 +107,7 @@
                             @foreach (var test in Model.Runs)
                             {
                                 <tr>
-                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-name="@test.Scenario">@test.Scenario</a></td>
+                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId" >@test.Scenario</a></td>
                                     <td>@test.TestId</td>
                                     <td>@test.StartTime</td>
                                     <td>@test.EndTime</td>

@@ -11,7 +11,7 @@
         <ul class="menu-list">
             @foreach (var test in Model.Tests)
             {
-                <li><a asp-controller="TestOverview" asp-action="Index" asp-route-name="@test.Name">@test.Name</a></li>
+                <li><a asp-controller="Scenario" asp-action="Index" asp-route-name="@test.Name">@test.Name</a></li>
             }
         </ul>
     </aside>
