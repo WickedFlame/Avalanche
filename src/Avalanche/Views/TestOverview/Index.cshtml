@@ -151,9 +151,14 @@
             </div>
         </div>
 
-        <partial name="./Partials/Chart" />
-
-        <partial name="./Partials/RampupChart" />
+        @foreach (var config in Model.Settings.Tests)
+        {
+            <div class="pt-element-container py-6">
+                <h2>@config.Name</h2>
+                <partial name="./Partials/Chart" for="@config" />
+                <partial name="./Partials/RampupChart" for="@config" />
+            </div>
+        }
         
         <div>
             <div class="pt-content-panel">

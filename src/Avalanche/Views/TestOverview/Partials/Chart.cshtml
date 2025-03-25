@@ -1,19 +1,18 @@
-﻿@model TestOverviewModel
+﻿@model Avalanche.Runner.TestConfig
 
-@foreach (var chart in Model.Settings.Tests)
-{
-    var id = $"chart-{chart.Name.Replace(" ", "_")}";
+@{
+    var id = $"chart-{Model.Name.Replace(" ", "_")}";
+}
 
-    <div class="pt-element-container">
-        <div class="pt-content-panel">
-            <h2>
-                Requests - @chart.Name
-            </h2>
-            <div>
-                <canvas id="@id" style="width:100%;max-width:100%;height:400px;"></canvas>
-            </div>
+<div class="pt-element-container">
+    <div class="pt-content-panel">
+        <h2>
+            Requests
+        </h2>
+        <div>
+            <canvas id="@id" style="width:100%;max-width:100%;height:400px;"></canvas>
         </div>
     </div>
-}
+</div>
 
 
