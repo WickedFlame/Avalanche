@@ -16,7 +16,7 @@ namespace Avalanche.Controllers.Api
             var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
 
             var facade = new TestDataFacade();
-            var data = facade.GetChartData(lastRun.TestId);
+            var data = facade.GetChartData(testId, testname);
 
             return Ok(new
             {
@@ -40,7 +40,7 @@ namespace Avalanche.Controllers.Api
             }
 
             var facade = new TestDataFacade();
-            var data = facade.GetRampupData(lastRun.TestId);
+            var data = facade.GetRampupData(lastRun.TestId, testname);
 
             return Ok(new
             {

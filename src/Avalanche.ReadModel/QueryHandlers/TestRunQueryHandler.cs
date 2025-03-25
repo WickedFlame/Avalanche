@@ -59,9 +59,10 @@ namespace Avalanche.ReadModel.QueryHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT * FROM RampupEvents WHERE TestId = @testId ORDER BY Time DESC";
+                cmd.CommandText = "SELECT * FROM RampupEvents WHERE TestId = @testId AND Name = @name ORDER BY Time DESC";
 
                 cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@name", query.TestName));
 
                 return cmd.Execute<RampupData>();
             }
@@ -71,9 +72,10 @@ namespace Avalanche.ReadModel.QueryHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT * FROM IterationEvents WHERE TestId = @testId ORDER BY Time DESC";
+                cmd.CommandText = "SELECT * FROM IterationEvents WHERE TestId = @testId AND Name = @name ORDER BY Time DESC";
 
                 cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@name", query.TestName));
 
                 return cmd.Execute<IterationItem>();
             }

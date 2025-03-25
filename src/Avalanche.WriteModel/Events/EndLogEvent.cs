@@ -1,7 +1,18 @@
 ﻿namespace Avalanche.WriteModel.Events
 {
-    public class EndLogEvent : LogEvent, IEvent
+    public class EndLogEvent : IEvent
     {
+        public EndLogEvent()
+        {
+            Time = DateTime.Now;
+        }
+
+        public DateTime Time { get; set; }
+
+        public string Category { get; set; }
+
+        public string Module { get; set; }
+
         public string TestId { get; set; }
 
         public string Name { get; set; }

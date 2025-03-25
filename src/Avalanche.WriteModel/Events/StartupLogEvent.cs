@@ -2,8 +2,19 @@
 
 namespace Avalanche.WriteModel.Events
 {
-    public class StartupLogEvent : LogEvent, IEvent
+    public class StartupLogEvent : IEvent
     {
+        public StartupLogEvent()
+        {
+            Time = DateTime.Now;
+        }
+
+        public DateTime Time { get; set; }
+
+        public string Category { get; set; }
+
+        public string Module { get; set; }
+
         public string TestId { get; set; }
 
         public string Name { get; set; }

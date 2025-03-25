@@ -22,9 +22,10 @@ namespace Avalanche.WriteModel.EventHandlers
 
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "INSERT INTO RampupEvents (Id, TestId, Time, ThreadId, Value) Values (@id, @testId, @time, @threadId, @value)";
+                cmd.CommandText = "INSERT INTO RampupEvents (Id, TestId, Name, Time, ThreadId, Value) Values (@id, @testId, @name, @time, @threadId, @value)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
+                cmd.Parameters.Add(new SQLiteParameter("@name", @event.Name));
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
                 cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
                 cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));

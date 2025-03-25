@@ -9,10 +9,10 @@ namespace Avalanche.Domain
 {
     public class TestDataFacade
     {
-        public IEnumerable<ChartData> GetChartData(string testId)
+        public IEnumerable<ChartData> GetChartData(string testId, string testName)
         {
             var handler = new TestRunQueryHandler();
-            var data = handler.Get(new GetChartData { TestId = testId });
+            var data = handler.Get(new GetChartData { TestId = testId, TestName = testName });
 
             return data.Where(c => !c.IsWarmup)
                 .GroupBy(c => c.ThreadId)
@@ -28,10 +28,10 @@ namespace Avalanche.Domain
             ;
         }
 
-        public IEnumerable<ChartDataRow> GetRampupData(string testId)
+        public IEnumerable<ChartDataRow> GetRampupData(string testId, string testName)
         {
             var handler = new TestRunQueryHandler();
-            var data = handler.Get(new GetRampupData { TestId = testId });
+            var data = handler.Get(new GetRampupData { TestId = testId, TestName = testName });
 
             var lst = new List<ChartDataRow>();
 

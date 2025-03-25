@@ -4,12 +4,14 @@
 {
     var id = $"chart-{chart.Name.Replace(" ", "_")}-rampup";
 
-    <div class="pt-content-panel">
-        <h2>
-            Rampup - @chart.Name
-        </h2>
-        <div>
-            <canvas id="@id" style="width:100%;max-width:100%;height:400px;"></canvas>
+    <div class="pt-element-container">
+        <div class="pt-content-panel">
+            <h2>
+                Rampup - @chart.Name
+            </h2>
+            <div>
+                <canvas id="@id" style="width:100%;max-width:100%;height:400px;"></canvas>
+            </div>
         </div>
     </div>
 }

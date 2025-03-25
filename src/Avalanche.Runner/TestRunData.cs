@@ -1,5 +1,4 @@
-﻿using Avalanche.WriteModel;
-
+﻿
 namespace Avalanche.Runner
 {
     public class TestRunData
@@ -9,8 +8,6 @@ namespace Avalanche.Runner
         public string Name { get; set; }
 
         public IEnumerable<Avalanche.Runner.TestResult> Results { get; set; }
-
-        public List<TestResultsCollection> Collections { get; } = [];
 
         public TestSettings Settings { get; set; }
 
