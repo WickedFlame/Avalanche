@@ -17,7 +17,7 @@ namespace Avalanche.WriteModel.CommandHandlers
         public override void Handle(StartupThreadCommand cmd)
         {
             //TODO: create the readmodel
-            var @event = new Events.StartupLogEvent
+            var @event = new Events.RampupEvent
             {
                 TestId = cmd.TestId,
                 //ThreadId = cmd.Thread,

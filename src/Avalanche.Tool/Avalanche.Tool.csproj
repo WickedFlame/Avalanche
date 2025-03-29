@@ -23,7 +23,7 @@
         <InformationalVersion>1.0.0</InformationalVersion>
         <Title>Avalanche</Title>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <!--<PackageReadmeFile>README.md</PackageReadmeFile>-->
         <AssemblyName>Avalanche.Tool</AssemblyName>
         
         <PackAsTool>true</PackAsTool>

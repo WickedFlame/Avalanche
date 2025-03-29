@@ -17,7 +17,7 @@ namespace Avalanche.WriteModel.CommandHandlers
         public override void Handle(EndThreadCommand cmd)
         {
             //TODO: create the readmodel
-            var @event = new Events.EndLogEvent
+            var @event = new Events.RampdownEvent
             {
                 TestId = cmd.TestId,
                 Category = cmd.Category,

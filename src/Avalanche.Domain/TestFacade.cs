@@ -36,8 +36,8 @@ namespace Avalanche.Domain
                     data.StartTime = DateTime.Now;
 
                     using var messageBus = new MessageBus();
-                    messageBus.Register<StartTestEvent>(new StartTestEventHandler());
-                    messageBus.Register<EndTestEvent>(new EndTestEventHandler());
+                    messageBus.Register<StartTestEvent>(new TestRunEventHandler());
+                    messageBus.Register<EndTestEvent>(new TestRunEventHandler());
                     messageBus.Register<ThreadSummaryEvent>(new SummaryEventHandler());
                     messageBus.Register<TestSummaryEvent>(new SummaryEventHandler());
 
@@ -121,7 +121,7 @@ namespace Avalanche.Domain
         public void Stop(string testId)
         {
             using var messageBus = new MessageBus();
-            messageBus.Register<EndTestEvent>(new EndTestEventHandler());
+            messageBus.Register<EndTestEvent>(new TestRunEventHandler());
 
             using var dispatcher = new Dispatcher<ICommand>();
             dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store, messageBus));

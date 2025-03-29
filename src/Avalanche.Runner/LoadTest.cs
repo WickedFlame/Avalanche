@@ -49,9 +49,9 @@ namespace Avalanche.Runner
                         ctx.Set("httpclient", client);
 
                         var messageBus = new MessageBus();
-                        messageBus.Register<StartupLogEvent>(new StartupThreadEventHandler());
+                        messageBus.Register<RampupEvent>(new RampupEventHandler());
+                        messageBus.Register<RampdownEvent>(new RampupEventHandler());
                         messageBus.Register<IterationLogEvent>(new IterationEventHandler());
-                        messageBus.Register<EndLogEvent>(new EndThreadEventHandler());
 
                         var dispatcher = new Dispatcher<ICommand>();
                         dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(_store, messageBus));

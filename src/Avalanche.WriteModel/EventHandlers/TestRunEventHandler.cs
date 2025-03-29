@@ -3,11 +3,13 @@ using System.Data.SQLite;
 
 namespace Avalanche.WriteModel.EventHandlers
 {
-    public class StartTestEventHandler : IEventHandler<StartTestEvent>
+    public class TestRunEventHandler :
+        IEventHandler<StartTestEvent>,
+        IEventHandler<EndTestEvent>
     {
         private readonly SQLiteConnection _connection;
 
-        public StartTestEventHandler()
+        public TestRunEventHandler()
         {
             _connection = new SQLiteConnection("Data Source=readmodel.db");
             _connection.Open();
@@ -22,6 +24,20 @@ namespace Avalanche.WriteModel.EventHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@testId", evnt.TestId));
                 cmd.Parameters.Add(new SQLiteParameter("@scenario", evnt.Scenario));
                 cmd.Parameters.Add(new SQLiteParameter("@startTime", evnt.StartTime));
+                cmd.Parameters.Add(new SQLiteParameter("@status", evnt.Status));
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void Handle(EndTestEvent evnt)
+        {
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "UPDATE TestRun SET EndTime = @endTime, Status = @status WHERE TestId = @testId";
+
+                cmd.Parameters.Add(new SQLiteParameter("@testId", evnt.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@endTime", evnt.EndTime));
                 cmd.Parameters.Add(new SQLiteParameter("@status", evnt.Status));
 
                 cmd.ExecuteNonQuery();

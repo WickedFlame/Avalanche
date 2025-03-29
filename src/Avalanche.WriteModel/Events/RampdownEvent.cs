@@ -1,10 +1,8 @@
-﻿using System.Net;
-
-namespace Avalanche.WriteModel.Events
+﻿namespace Avalanche.WriteModel.Events
 {
-    public class StartupLogEvent : IEvent
+    public class RampdownEvent : IEvent
     {
-        public StartupLogEvent()
+        public RampdownEvent()
         {
             Time = DateTime.Now;
         }
@@ -21,9 +19,9 @@ namespace Avalanche.WriteModel.Events
 
         public string Message { get; set; }
 
-        public HttpStatusCode StatusCode { get; set; }
+        public int RunNumber { get; set; }
 
-        public long ElapsedMilliseconds { get; set; }
+        public int Thread { get; set; }
 
         public bool IsWarmup { get; set; }
     }
