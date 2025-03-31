@@ -11,11 +11,28 @@ namespace Avalanche.Domain
 {
     public class TestFacade
     {
-        private readonly IEventStore _store;
+        private readonly Dispatcher<ICommand> _dispatcher;
 
         public TestFacade(IEventStore store)
         {
-            _store = store;
+            var eventBus = new EventBus(store);
+            eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
+            eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
+            eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
+            eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
+
+            eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
+            eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
+            eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
+
+            _dispatcher = new Dispatcher<ICommand>();
+            _dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(eventBus));
+            _dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(eventBus));
+            _dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(store, eventBus));
+
+            _dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(eventBus));
+            _dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(eventBus));
+            _dispatcher.Register<IterationCommand>(new IterationCommandHandler(eventBus));
         }
 
         public TestSettings Start(string name, string path)
@@ -32,25 +49,11 @@ namespace Avalanche.Domain
                         Settings = settings
                     };
 
-                    var loadtest = new LoadTest(data.TestId, _store);
+                    var loadtest = new LoadTest(data.TestId, _dispatcher);
                     data.StartTime = DateTime.Now;
 
-                    using var messageBus = new EventBus(_store);
-                    messageBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
-                    messageBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
-                    messageBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
-                    messageBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
 
-
-
-                    using var dispatcher = new Dispatcher<ICommand>();
-                    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(messageBus));
-                    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(messageBus));
-                    dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(_store, messageBus));
-
-
-
-                    dispatcher.Send(new StartTestCommand
+                    _dispatcher.Send(new StartTestCommand
                     {
                         TestId = data.TestId,
                         Scenario = name,
@@ -63,7 +66,7 @@ namespace Avalanche.Domain
 
                     foreach (var testResult in data.Results)
                     {
-                        dispatcher.Send(new TestResultCommand
+                        _dispatcher.Send(new TestResultCommand
                         {
                             //TODO: The id per test/result has to be set. TestId is the overall Run ID
                             TestId = data.TestId,
@@ -93,7 +96,7 @@ namespace Avalanche.Domain
                     }
 
 
-                    dispatcher.Send(new EndTestCommand
+                    _dispatcher.Send(new EndTestCommand
                     {
                         TestId = data.TestId,
                         EndTime = DateTime.Now,
@@ -104,12 +107,6 @@ namespace Avalanche.Domain
                     //
                     // Give the collector some time to finish the work
                     Task.Delay(10000).Wait();
-
-
-                    loadtest.End();
-
-                    //
-                    // write result to file
                 },
                 CancellationToken.None,
                 TaskCreationOptions.LongRunning,
@@ -120,14 +117,7 @@ namespace Avalanche.Domain
 
         public void Stop(string testId)
         {
-            using var messageBus = new EventBus(_store);
-            messageBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
-
-            using var dispatcher = new Dispatcher<ICommand>();
-            dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(messageBus));
-
-
-            dispatcher.Send(new EndTestCommand
+            _dispatcher.Send(new EndTestCommand
             {
                 TestId = testId,
                 EndTime = DateTime.Now,

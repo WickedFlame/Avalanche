@@ -1,28 +1,21 @@
 ﻿using Avalanche.WriteModel;
-using Avalanche.WriteModel.CommandHandlers;
 using Avalanche.WriteModel.Commands;
-using Avalanche.WriteModel.EventHandlers;
-using Avalanche.WriteModel.Events;
 using Broadcast;
 using MeasureMap;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net;
-using System.Security.Cryptography;
 
 namespace Avalanche.Runner
 {
     public class LoadTest
     {
-        private readonly List<IDispatcher<ICommand>> _dispatchers = [];
-
         private readonly string _testId;
-        private readonly IEventStore _store;
+        private readonly IDispatcher<ICommand> _dispatcher;
 
-        public LoadTest(string testId, IEventStore store)
+        public LoadTest(string testId, IDispatcher<ICommand> dispatcher)
         {
             _testId = testId;
-            _store = store;
+            _dispatcher = dispatcher;
         }
 
         public IEnumerable<TestResult> Run(TestSettings settings)
@@ -47,21 +40,7 @@ namespace Avalanche.Runner
                         var client = new HttpClient(clientHandler);
 
                         ctx.Set("httpclient", client);
-
-                        var eventBus = new EventBus(_store);
-                        eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
-                        eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
-                        eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
-
-                        var dispatcher = new Dispatcher<ICommand>();
-                        dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(eventBus));
-                        dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(eventBus));
-                        dispatcher.Register<IterationCommand>(new IterationCommandHandler(eventBus));
-
-
-                        _dispatchers.Add(dispatcher);
-
-                        ctx.Set(nameof(IDispatcher<ICommand>), dispatcher);
+                        ctx.Set(nameof(IDispatcher<ICommand>), _dispatcher);
 
                         if (test.Init != null && !string.IsNullOrEmpty(test.Init.Url))
                         {
@@ -83,16 +62,14 @@ namespace Avalanche.Runner
                                 IsWarmup = s.IsWarmup
                             };
 
-                            dispatcher.SendAsync(command);
+                            _dispatcher.SendAsync(command);
                         }
-
 
                         return ctx;
                     })
                     .OnEndPipeline(e =>
                     {
                         e.Get<HttpClient>("httpclient").Dispose();
-                        var dispatcher = e.Get<IDispatcher<ICommand>>(nameof(IDispatcher<ICommand>));
 
                         var metric = new EndThreadCommand
                         {
@@ -105,7 +82,7 @@ namespace Avalanche.Runner
                             IsWarmup = e.Settings.IsWarmup
                         };
 
-                        dispatcher.SendAsync(metric);
+                        _dispatcher.SendAsync(metric);
                     })
                     .Task(ctx =>
                     {
@@ -158,14 +135,6 @@ namespace Avalanche.Runner
             }
 
             return results;
-        }
-
-        public void End()
-        {
-            foreach (var collector in _dispatchers)
-            {
-                collector.Close();
-            }
         }
     }
 }
