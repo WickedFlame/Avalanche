@@ -5,13 +5,11 @@ namespace Avalanche.WriteModel.CommandHandlers
 {
     public class IterationCommandHandler : CommandHandler<IterationCommand>
     {
-        private readonly IEventStore _store;
-        private readonly IMessageBus _messageBus;
+        private readonly IEventBus _eventBus;
 
-        public IterationCommandHandler(IEventStore store, IMessageBus messageBus)
+        public IterationCommandHandler(IEventBus eventBus)
         {
-            _store = store;
-            _messageBus = messageBus;
+            _eventBus = eventBus;
         }
 
         public override void Handle(IterationCommand cmd)
@@ -30,9 +28,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Time = cmd.Time
             };
 
-            _store.Add(cmd.TestId, cmd.Time, @event);
-
-            _messageBus.Send(@event);
+            _eventBus.Publish(cmd.TestId, cmd.Time, @event);
         }
     }
 }

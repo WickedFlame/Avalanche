@@ -2,6 +2,7 @@
 using Avalanche.Models;
 using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.WriteModel;
+using Broadcast;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Avalanche.WriteModel
+﻿
+namespace Broadcast
 {
     public interface IEventStore
     {

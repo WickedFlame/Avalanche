@@ -1,10 +1,16 @@
 ﻿namespace Broadcast
 {
-    public class MessageBus : IMessageBus
+    public class EventBus : IEventBus
     {
         private readonly Dictionary<Type, IMessageHandler> _handlers = [];
+        private readonly IEventStore _eventStore;
 
-        public void Register<Tevent>(IMessageHandler<Tevent> handler)
+        public EventBus(IEventStore eventStore)
+        {
+            _eventStore = eventStore;
+        }
+
+        public void Subscribe<Tevent>(IMessageHandler<Tevent> handler)
         {
             _handlers[typeof(Tevent)] = handler;
         }
@@ -18,6 +24,17 @@
             }
 
             handler.Handle(@event);
+        }
+
+        public void Publish<Tevent>(string id, Tevent @event) where Tevent : IEvent
+        {
+            Publish(id, DateTime.Now, @event);
+        }
+
+        public void Publish<Tevent>(string id, DateTime time, Tevent @event) where Tevent : IEvent
+        {
+            _eventStore.Add(id, DateTime.Now, @event);
+            Send(@event);
         }
 
         public void Dispose()

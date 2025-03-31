@@ -5,13 +5,11 @@ namespace Avalanche.WriteModel.CommandHandlers
 {
     public class StartTestCommandHandler : CommandHandler<StartTestCommand>
     {
-        private readonly IEventStore _store;
-        private readonly IMessageBus _messageBus;
+        private readonly IEventBus _eventBus;
 
-        public StartTestCommandHandler(IEventStore store, IMessageBus messageBus)
+        public StartTestCommandHandler(IEventBus eventBus)
         {
-            _store = store;
-            _messageBus = messageBus;
+            _eventBus = eventBus;
         }
 
         public override void Handle(StartTestCommand cmd)
@@ -24,9 +22,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Status = cmd.Status
             };
 
-            _store.Add(cmd.TestId, cmd.StartTime, @event);
-
-            _messageBus.Send(@event);
+            _eventBus.Publish(cmd.TestId, cmd.StartTime, @event);
         }
     }
 }

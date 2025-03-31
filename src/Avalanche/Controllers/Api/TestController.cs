@@ -1,6 +1,7 @@
 ﻿using Avalanche.WriteModel;
 using Avalanche.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Broadcast;
 
 namespace Avalanche.Controllers.Api
 {

@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using Broadcast;
 
 namespace Avalanche.WriteModel.Events
 {
@@ -21,7 +21,7 @@ namespace Avalanche.WriteModel.Events
 
         public string Message { get; set; }
 
-        public HttpStatusCode StatusCode { get; set; }
+        public string StatusCode { get; set; }
 
         public long ElapsedMilliseconds { get; set; }
 

@@ -5,13 +5,11 @@ namespace Avalanche.WriteModel.CommandHandlers
 {
     public class EndTestCommandHandler : CommandHandler<EndTestCommand>
     {
-        private readonly IEventStore _store;
-        private readonly IMessageBus _messageBus;
+        private readonly IEventBus _eventBus;
 
-        public EndTestCommandHandler(IEventStore store, IMessageBus messageBus)
+        public EndTestCommandHandler(IEventBus eventBus)
         {
-            _store = store;
-            _messageBus = messageBus;
+            _eventBus = eventBus;
         }
 
         public override void Handle(EndTestCommand cmd)
@@ -23,9 +21,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Status = cmd.Status
             };
 
-            _store.Add(cmd.TestId, cmd.EndTime, @event);
-
-            _messageBus.Send(@event);
+            _eventBus.Publish(cmd.TestId, cmd.EndTime, @event);
         }
     }
 }

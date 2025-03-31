@@ -1,13 +1,14 @@
-﻿using System.Data.SQLite;
+﻿using Broadcast;
+using System.Data.SQLite;
 using System.Text.Json;
 
 namespace Avalanche.WriteModel
 {
-    public class EventStore : IEventStore
+    public class SqliteEventStore : IEventStore
     {
         private readonly SQLiteConnection _connection;
 
-        public EventStore()
+        public SqliteEventStore()
         {
             _connection = new SQLiteConnection("Data Source=eventstore.db");
             _connection.Open();

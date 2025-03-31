@@ -1,10 +1,11 @@
 using Avalanche;
 using Avalanche.WriteModel;
+using Broadcast;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddSingleton<IEventStore, EventStore>();
+builder.Services.AddSingleton<IEventStore, SqliteEventStore>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

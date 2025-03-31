@@ -4,6 +4,7 @@ using Avalanche.Domain;
 using Avalanche.Models;
 using Avalanche.ReadModel.QueryHandlers;
 using Microsoft.AspNetCore.Mvc;
+using Broadcast;
 
 namespace Avalanche.Controllers
 {
@@ -13,7 +14,7 @@ namespace Avalanche.Controllers
 
         public TestOverviewController(IEventStore store)
         {
-            _store = store;;
+            _store = store;
         }
 
         public IActionResult Index(string scenario, string testid)

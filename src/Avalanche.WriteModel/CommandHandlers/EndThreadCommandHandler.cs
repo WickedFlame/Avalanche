@@ -5,18 +5,15 @@ namespace Avalanche.WriteModel.CommandHandlers
 {
     public class EndThreadCommandHandler : CommandHandler<EndThreadCommand>
     {
-        private readonly IEventStore _store;
-        private readonly IMessageBus _messageBus;
+        private readonly IEventBus _eventBus;
 
-        public EndThreadCommandHandler(IEventStore store, IMessageBus messageBus)
+        public EndThreadCommandHandler(IEventBus eventBus)
         {
-            _store = store;
-            _messageBus = messageBus;
+            _eventBus = eventBus;
         }
 
         public override void Handle(EndThreadCommand cmd)
         {
-            //TODO: create the readmodel
             var @event = new Events.RampdownEvent
             {
                 TestId = cmd.TestId,
@@ -28,11 +25,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 IsWarmup = cmd.IsWarmup
             };
 
-            _store.Add(cmd.TestId, cmd.Time, @event);
-
-
-            //TODO: remove this to the readmodel
-            _messageBus.Send(@event);
+            _eventBus.Publish(cmd.TestId, cmd.Time, @event);
         }
     }
 }

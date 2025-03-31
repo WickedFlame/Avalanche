@@ -1,4 +1,6 @@
-﻿namespace Avalanche.WriteModel.Events
+﻿using Broadcast;
+
+namespace Avalanche.WriteModel.Events
 {
     public class StartTestEvent : IEvent
     {

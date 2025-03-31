@@ -35,17 +35,17 @@ namespace Avalanche.Domain
                     var loadtest = new LoadTest(data.TestId, _store);
                     data.StartTime = DateTime.Now;
 
-                    using var messageBus = new MessageBus();
-                    messageBus.Register<StartTestEvent>(new TestRunEventHandler());
-                    messageBus.Register<EndTestEvent>(new TestRunEventHandler());
-                    messageBus.Register<ThreadSummaryEvent>(new SummaryEventHandler());
-                    messageBus.Register<TestSummaryEvent>(new SummaryEventHandler());
+                    using var messageBus = new EventBus(_store);
+                    messageBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
+                    messageBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
+                    messageBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
+                    messageBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
 
 
 
                     using var dispatcher = new Dispatcher<ICommand>();
-                    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(_store, messageBus));
-                    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store, messageBus));
+                    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(messageBus));
+                    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(messageBus));
                     dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(_store, messageBus));
 
 
@@ -120,11 +120,11 @@ namespace Avalanche.Domain
 
         public void Stop(string testId)
         {
-            using var messageBus = new MessageBus();
-            messageBus.Register<EndTestEvent>(new TestRunEventHandler());
+            using var messageBus = new EventBus(_store);
+            messageBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
 
             using var dispatcher = new Dispatcher<ICommand>();
-            dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(_store, messageBus));
+            dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(messageBus));
 
 
             dispatcher.Send(new EndTestCommand
