@@ -74,8 +74,36 @@ namespace Avalanche.Controllers.Api
                 Status = lastRun?.Status ?? "New",
                 Data = new
                 {
-                    TestSummary = data.Where(d => d.Type == "TestSummary"),
-                    ThreadSummary = data.Where(d => d.Type == "ThreadSummary")
+                    TestSummary = data.Where(d => d.Type == "TestSummary").Select(s => new
+                    {
+                        s.TestId,
+                        s.TestCase,
+                        s.Type,
+                        s.ThreadNumber,
+                        s.Iterations,
+                        AverageTicks = TimeSpan.FromTicks(s.AverageTicks),
+                        TotalTime = TimeSpan.FromTicks(s.TotalTime),
+                        s.Fastest,
+                        s.Slowest,
+                        s.Increase,
+                        s.InitialSize,
+                        s.EndSize
+                    }),
+                    ThreadSummary = data.Where(d => d.Type == "ThreadSummary").Select(s => new
+                    {
+                        s.TestId,
+                        s.TestCase,
+                        s.Type,
+                        s.ThreadNumber,
+                        s.Iterations,
+                        AverageTicks = TimeSpan.FromTicks(s.AverageTicks),
+                        TotalTime = TimeSpan.FromTicks(s.TotalTime),
+                        s.Fastest,
+                        s.Slowest,
+                        s.Increase,
+                        s.InitialSize,
+                        s.EndSize
+                    })
                 }
             });
         }
