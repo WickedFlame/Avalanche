@@ -32,6 +32,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                     Increase = result.Increase,
                     InitialSize = result.InitialSize,
                     EndSize = result.EndSize,
+                    Throughput = result.Throughput
                 };
 
                 _store.Add(cmd.TestId, DateTime.Now, @event);
@@ -51,6 +52,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Increase = cmd.Increase,
                 InitialSize = cmd.InitialSize,
                 EndSize = cmd.EndSize,
+                Throughput = cmd.Throughput
             };
 
             _store.Add(cmd.TestId, DateTime.Now, sumary);

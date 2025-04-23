@@ -25,5 +25,7 @@ namespace Avalanche.WriteModel.Events
         public long InitialSize { get; set; }
 
         public long EndSize { get; set; }
+
+        public double Throughput { get; set; }
     }
 }

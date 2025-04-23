@@ -5,6 +5,7 @@ using Avalanche.WriteModel.Commands;
 using Avalanche.WriteModel.EventHandlers;
 using Avalanche.WriteModel.Events;
 using Broadcast;
+using MeasureMap;
 using Task = System.Threading.Tasks.Task;
 
 namespace Avalanche.Domain
@@ -80,6 +81,7 @@ namespace Avalanche.Domain
                             Increase = testResult.Increase,
                             InitialSize = testResult.InitialSize,
                             EndSize = testResult.EndSize,
+                            Throughput = testResult.Throughput(),
                             Summary = testResult.Select(r => new ThreadSummary
                             {
                                 ThreadNumber = r.ThreadNumber,
@@ -91,6 +93,7 @@ namespace Avalanche.Domain
                                 Increase = r.Increase,
                                 InitialSize = r.InitialSize,
                                 EndSize = r.EndSize,
+                                Throughput = r.Throughput()
                             })
                         });
                     }

@@ -87,7 +87,8 @@ namespace Avalanche.Controllers.Api
                         s.Slowest,
                         s.Increase,
                         s.InitialSize,
-                        s.EndSize
+                        s.EndSize,
+                        s.Throughput
                     }),
                     ThreadSummary = data.Where(d => d.Type == "ThreadSummary").Select(s => new
                     {
@@ -102,7 +103,8 @@ namespace Avalanche.Controllers.Api
                         s.Slowest,
                         s.Increase,
                         s.InitialSize,
-                        s.EndSize
+                        s.EndSize,
+                        s.Throughput
                     })
                 }
             });

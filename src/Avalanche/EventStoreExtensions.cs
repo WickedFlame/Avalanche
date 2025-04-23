@@ -77,7 +77,8 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Slowest BIGINT,
   Increase BIGINT,
   InitialSize BIGINT,
-  EndSize BIGINT
+  EndSize BIGINT,
+  Throughput REAL
 );
 ";
             using (var connection = new SQLiteConnection("Data Source=readmodel.db"))

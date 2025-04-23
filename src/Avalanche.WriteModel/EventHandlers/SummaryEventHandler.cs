@@ -20,7 +20,7 @@ namespace Avalanche.WriteModel.EventHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, TestCase, Type, ThreadNumber, Iterations, AverageTicks, TotalTime, Fastest, Slowest, Increase, InitialSize, EndSize) Values (@id, @testId, @testcase, @type, @threadNumber, @iterations, @avgTicks, @totalTime, @fastest, @slowest, @increase, @initialSize, @endSize)";
+                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, TestCase, Type, ThreadNumber, Iterations, AverageTicks, TotalTime, Fastest, Slowest, Increase, InitialSize, EndSize, Throughput) Values (@id, @testId, @testcase, @type, @threadNumber, @iterations, @avgTicks, @totalTime, @fastest, @slowest, @increase, @initialSize, @endSize, @throughput)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
@@ -35,7 +35,8 @@ namespace Avalanche.WriteModel.EventHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@increase", @event.Increase));
                 cmd.Parameters.Add(new SQLiteParameter("@initialSize", @event.InitialSize));
                 cmd.Parameters.Add(new SQLiteParameter("@endSize", @event.EndSize));
-                
+                cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
+
                 cmd.ExecuteNonQuery();
             }
         }
@@ -44,7 +45,7 @@ namespace Avalanche.WriteModel.EventHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, TestCase, Type, ThreadNumber, Iterations, AverageTicks, TotalTime, Fastest, Slowest, Increase, InitialSize, EndSize) Values (@id, @testId, @testcase, @type, @threadNumber, @iterations, @avgTicks, @totalTime, @fastest, @slowest, @increase, @initialSize, @endSize)";
+                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, TestCase, Type, ThreadNumber, Iterations, AverageTicks, TotalTime, Fastest, Slowest, Increase, InitialSize, EndSize, Throughput) Values (@id, @testId, @testcase, @type, @threadNumber, @iterations, @avgTicks, @totalTime, @fastest, @slowest, @increase, @initialSize, @endSize, @throughput)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
@@ -59,6 +60,7 @@ namespace Avalanche.WriteModel.EventHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@increase", @event.Increase));
                 cmd.Parameters.Add(new SQLiteParameter("@initialSize", @event.InitialSize));
                 cmd.Parameters.Add(new SQLiteParameter("@endSize", @event.EndSize));
+                cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
 
                 cmd.ExecuteNonQuery();
             }

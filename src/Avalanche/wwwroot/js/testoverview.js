@@ -84,6 +84,7 @@
                     row.querySelector('.TotalTime').innerHTML = s.totalTime;
                     row.querySelector('.AverageTicks').innerHTML = s.averageTicks;
                     row.querySelector('.Iterations').innerHTML = s.iterations;
+                    row.querySelector('.Throughput').innerHTML = s.throughput;
                 });
                 
             }
