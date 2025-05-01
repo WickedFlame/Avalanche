@@ -161,7 +161,7 @@
 
                     document.querySelector('#scenario-status').innerHTML = `Done`;
                     document.querySelector('#StartTests').removeAttribute('disabled');
-                    document.querySelector('#StopTests').setAttribute('disabled');
+                    document.querySelector('#StopTests').setAttribute('disabled', 'true');
                 }
             }
 
