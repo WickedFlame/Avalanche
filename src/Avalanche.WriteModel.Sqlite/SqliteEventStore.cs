@@ -1,9 +1,8 @@
-﻿using Avalanche.WriteModel.Sqlite;
-using Broadcast;
+﻿using Broadcast;
 using System.Data.SQLite;
 using System.Text.Json;
 
-namespace Avalanche.WriteModel
+namespace Avalanche.WriteModel.Sqlite
 {
     public class SqliteEventStore : IEventStore
     {

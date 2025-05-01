@@ -1,6 +1,6 @@
 using Avalanche;
-using Avalanche.WriteModel;
-using Avalanche.WriteModel.EventHandlers;
+using Avalanche.WriteModel.Sqlite;
+using Avalanche.WriteModel.Sqlite.EventHandlers;
 using Avalanche.WriteModel.Events;
 using Broadcast;
 

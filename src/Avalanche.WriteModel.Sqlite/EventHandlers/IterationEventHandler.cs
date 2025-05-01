@@ -1,8 +1,7 @@
 ﻿using Avalanche.WriteModel.Events;
-using Avalanche.WriteModel.Sqlite;
 using System.Data.SQLite;
 
-namespace Avalanche.WriteModel.EventHandlers
+namespace Avalanche.WriteModel.Sqlite.EventHandlers
 {
     public class IterationEventHandler : IEventHandler<IterationLogEvent>
     {
