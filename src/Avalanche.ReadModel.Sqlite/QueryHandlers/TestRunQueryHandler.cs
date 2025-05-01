@@ -86,11 +86,33 @@ namespace Avalanche.ReadModel.QueryHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT * FROM SummaryEvents WHERE TestId = @testId";
+                cmd.CommandText = "SELECT * FROM SummaryEvents WHERE TestId = @testId AND Type = 'TestSummary'";
 
                 cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
 
-                return cmd.Execute<TestSummary>();
+                var summary = cmd.Execute<TestSummary>().ToList();
+
+                if (summary.Any())
+                {
+                    return summary;
+                }
+
+                // get configured test
+                cmd.CommandText = "SELECT * FROM TestRunDetail WHERE TestId = @testId";
+                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+
+                var details = cmd.Execute<TestRunDetail>();
+                summary.AddRange(details
+                    .GroupBy(d => d.TestCase)
+                    .Select(detail => new TestSummary
+                    {
+                        TestId = query.TestId,
+                        TestCase = detail.Key,
+                        Throughput = detail.Sum(d => d.Throughput) / detail.Count(),
+                        Type = "TestSummary"
+                    }));
+
+                return summary;
             }
         }
     }

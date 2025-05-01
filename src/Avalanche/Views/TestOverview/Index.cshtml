@@ -7,7 +7,7 @@
     <aside class="menu px-4 py-4">
         <p class="menu-label">Menu</p>
         <ul class="menu-list">
-            <li>Menu item</li>
+            <li><a asp-controller="Scenario" asp-action="Index" asp-route-name="@Model.Scenario">@Model.Scenario Overview</a></li>
         </ul>
     </aside>
 
@@ -75,7 +75,7 @@
                                 Status
                             </header>
                             <div class="pt-stat-content">
-                                <div class="content">
+                                <div class="content" id="scenario-status">
                                     @(Model.Status?.Name ?? "New")
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                         <table class="table is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>TestCase</th>
                                     <th>Threads</th>
                                     <th>RampupTime</th>
                                     <th>Url</th>

@@ -89,10 +89,11 @@
                 
             }
 
-            data.threadSummary.forEach(ts => {
+            //if (data.threadSummary !== null) {
+            //    data.threadSummary.forEach(ts => {
 
-            });
-
+            //    });
+            //}
         } catch (error) {
             console.error(error.message);
         }
@@ -124,7 +125,8 @@
         this.poller = setInterval(() => {
             this.showChartData(scenario, testname, testId);
             this.showRampupData(scenario, testname, testId);
-        }, 10000);
+            this.showSummaryData(scenario, testname, testId);
+        }, 3000);
     }
 
     async showRampupData(scenario, testname, testId) {
@@ -156,6 +158,10 @@
 
                 if (data.status == `Done` && this.poller) {
                     clearInterval(this.poller);
+
+                    document.querySelector('#scenario-status').innerHTML = `Done`;
+                    document.querySelector('#StartTests').removeAttribute('disabled');
+                    document.querySelector('#StopTests').setAttribute('disabled');
                 }
             }
 
