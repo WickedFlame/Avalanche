@@ -29,12 +29,8 @@
                 throw new Error(`Response status: ${response.status}`);
             }
 
-            const json = await response.json();
+            await response.json();
 
-            //json.tests.forEach(t => {
-            //    let testname = t.name.replace(/ /g, '_');
-            //    this.initChart(t, testname);
-            //});
             location.reload();
         } catch (error) {
             console.error(error.message);
@@ -51,7 +47,7 @@
                 throw new Error(`Response status: ${response.status}`);
             }
 
-            const json = await response.json();
+            await response.json();
 
             location.reload();
         } catch (error) {
@@ -60,7 +56,13 @@
     }
 
 
+    async initSummaryDataPoller(scenario, testname, testid) {
+        this.showSummaryData(scenario, testname, testid);
 
+        this.detailpoller = setInterval(() => {
+            this.showSummaryData(scenario, testname, testid);
+        }, 3000);
+    }
 
     async showSummaryData(scenario, testname, testid) {
         const url = `api/testdata/${scenario}/${testname}/summary/${testid}`;
@@ -86,14 +88,16 @@
                     row.querySelector('.Iterations').innerHTML = s.iterations;
                     row.querySelector('.Throughput').innerHTML = s.throughput;
                 });
-                
             }
 
-            //if (data.threadSummary !== null) {
-            //    data.threadSummary.forEach(ts => {
+            if (data.status == `Done`) {
+                clearInterval(this.detailpoller);
 
-            //    });
-            //}
+                document.querySelector('#scenario-status').innerHTML = `Done`;
+                document.querySelector('#StartTests').removeAttribute('disabled');
+                document.querySelector('#StopTests').setAttribute('disabled', 'true');
+            }
+
         } catch (error) {
             console.error(error.message);
         }
@@ -125,7 +129,6 @@
         this.poller = setInterval(() => {
             this.showChartData(scenario, testname, testId);
             this.showRampupData(scenario, testname, testId);
-            this.showSummaryData(scenario, testname, testId);
         }, 3000);
     }
 
@@ -159,9 +162,9 @@
                 if (data.status == `Done` && this.poller) {
                     clearInterval(this.poller);
 
-                    document.querySelector('#scenario-status').innerHTML = `Done`;
-                    document.querySelector('#StartTests').removeAttribute('disabled');
-                    document.querySelector('#StopTests').setAttribute('disabled', 'true');
+                    //document.querySelector('#scenario-status').innerHTML = `Done`;
+                    //document.querySelector('#StartTests').removeAttribute('disabled');
+                    //document.querySelector('#StopTests').setAttribute('disabled', 'true');
                 }
             }
 

@@ -9,5 +9,7 @@
         public int ThreadId { get; set; }
 
         public double Throughput { get; set; }
+
+        public int Iterations { get; set; }
     }
 }

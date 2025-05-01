@@ -64,7 +64,7 @@ namespace Avalanche.Controllers.Api
             }
 
             var facade = new TestDataFacade();
-            var data = facade.GetSummary(testId);
+            var data = facade.GetSummary(testId, testname);
 
             return Ok(new
             {

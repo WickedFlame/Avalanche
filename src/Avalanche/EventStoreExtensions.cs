@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS TestRunDetail (
   TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
   TestCase VARCHAR(255),
   ThreadId VARCHAR(255),
-  Throughput REAL
+  Throughput REAL,
+  Iterations BIGINT
 );
 
 CREATE TABLE IF NOT EXISTS IterationEvents (

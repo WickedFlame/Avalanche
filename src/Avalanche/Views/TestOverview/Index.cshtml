@@ -175,7 +175,7 @@
                 <text>
                 sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');
                 sites.displayChart('@Model.Scenario', '@test.Name', '@Model.TestId');
-                sites.showSummaryData('@Model.Scenario', '@test.Name', '@Model.TestId');
+                    sites.initSummaryDataPoller('@Model.Scenario', '@test.Name', '@Model.TestId');
                 </text>
             }
         </script>

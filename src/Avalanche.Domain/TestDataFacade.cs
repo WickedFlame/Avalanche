@@ -72,10 +72,10 @@ namespace Avalanche.Domain
 
         }
 
-        public IEnumerable<TestSummary> GetSummary(string testId)
+        public IEnumerable<TestSummary> GetSummary(string testId, string testCase)
         {
             var handler = new TestRunQueryHandler();
-            return handler.Get(new GetSummary { TestId = testId });
+            return handler.Get(new GetSummary { TestId = testId, TestCase = testCase });
         }
     }
 }

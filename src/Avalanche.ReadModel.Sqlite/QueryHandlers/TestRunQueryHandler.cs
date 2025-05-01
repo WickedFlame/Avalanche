@@ -86,9 +86,10 @@ namespace Avalanche.ReadModel.QueryHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT * FROM SummaryEvents WHERE TestId = @testId AND Type = 'TestSummary'";
+                cmd.CommandText = "SELECT * FROM SummaryEvents WHERE TestId = @testId AND Type = 'TestSummary' AND TestCase = @testCase";
 
                 cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@testCase", query.TestCase));
 
                 var summary = cmd.Execute<TestSummary>().ToList();
 
@@ -98,8 +99,9 @@ namespace Avalanche.ReadModel.QueryHandlers
                 }
 
                 // get configured test
-                cmd.CommandText = "SELECT * FROM TestRunDetail WHERE TestId = @testId";
+                cmd.CommandText = "SELECT * FROM TestRunDetail WHERE TestId = @testId AND TestCase = @testCase";
                 cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@testCase", query.TestCase));
 
                 var details = cmd.Execute<TestRunDetail>();
                 summary.AddRange(details
@@ -109,6 +111,7 @@ namespace Avalanche.ReadModel.QueryHandlers
                         TestId = query.TestId,
                         TestCase = detail.Key,
                         Throughput = detail.Sum(d => d.Throughput) / detail.Count(),
+                        Iterations = detail.Sum(d => d.Iterations),
                         Type = "TestSummary"
                     }));
 

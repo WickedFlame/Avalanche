@@ -49,16 +49,7 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             {
                 return;
             }
-
-            var items = lst.GetEvents();
-            if (items.Count() < 10)
-            {
-                return;
-            }
-
-            var time = items.Last().Time - items.First().Time;
-            var countPerSecond = items.Count() / time.TotalSeconds;
-
+            
             using (var cmd = _connection.CreateCommand())
             {
                 cmd.CommandText = "SELECT 1 FROM TestRunDetail WHERE TestId = @testId AND TestCase = @testCase AND ThreadId = @threadId";
@@ -67,13 +58,14 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
 
                 cmd.CommandText = cmd.ExecuteScalar() != null ?
-                    "UPDATE TestRunDetail SET Throughput = @throughput WHERE TestId = @testId AND TestCase = @testCase AND ThreadId = @threadId" :
-                    "INSERT INTO TestRunDetail (TestId, TestCase, ThreadId, Throughput) Values (@testId, @testCase, @threadId, @throughput)";
+                    "UPDATE TestRunDetail SET Throughput = @throughput, Iterations = @iterations WHERE TestId = @testId AND TestCase = @testCase AND ThreadId = @threadId" :
+                    "INSERT INTO TestRunDetail (TestId, TestCase, ThreadId, Throughput, Iterations) Values (@testId, @testCase, @threadId, @throughput, @iterations)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
                 cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.Name));
                 cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-                cmd.Parameters.Add(new SQLiteParameter("@throughput", countPerSecond));
+                cmd.Parameters.Add(new SQLiteParameter("@throughput", lst.GetThroughput()));
+                cmd.Parameters.Add(new SQLiteParameter("@iterations", lst.Count()));
                 cmd.ExecuteNonQuery();
             }
         }
@@ -103,9 +95,22 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             _events.Add(@event);
         }
 
-        public IEnumerable<IterationLogEvent> GetEvents()
+        public int Count()
         {
-            return _events.Skip(Math.Max(0, _events.Count - 10)).OrderBy(e => e.Time).ToList();
+            return _events.Count;
+        }
+
+        public double GetThroughput()
+        {
+            var events = _events.Skip(Math.Max(0, _events.Count - 10)).OrderBy(e => e.Time).ToList();
+
+            if (events.Count < 10)
+            {
+                return 0;
+            }
+
+            var time = events.Last().Time - events.First().Time;
+            return events.Count / time.TotalSeconds;
         }
 
         public bool IsCheckValid()
