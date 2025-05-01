@@ -2,8 +2,6 @@
 using Avalanche.WriteModel;
 using Avalanche.WriteModel.CommandHandlers;
 using Avalanche.WriteModel.Commands;
-using Avalanche.WriteModel.EventHandlers;
-using Avalanche.WriteModel.Events;
 using Broadcast;
 using MeasureMap;
 using Task = System.Threading.Tasks.Task;
@@ -14,22 +12,12 @@ namespace Avalanche.Domain
     {
         private readonly Dispatcher<ICommand> _dispatcher;
 
-        public TestFacade(IEventStore store)
+        public TestFacade(IEventBus eventBus)
         {
-            var eventBus = new EventBus(store);
-            eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
-            eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
-            eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
-            eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
-
-            eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
-            eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
-            eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
-
             _dispatcher = new Dispatcher<ICommand>();
             _dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(eventBus));
             _dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(eventBus));
-            _dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(store, eventBus));
+            _dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(eventBus));
 
             _dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(eventBus));
             _dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(eventBus));
@@ -38,7 +26,8 @@ namespace Avalanche.Domain
 
         public TestSettings Start(string name, string path)
         {
-            var settings = GetTestSettings(path);
+            var tsr = new TestSettingsReader();
+            var settings = tsr.GetTestSettings(path);
 
             Task.Factory.StartNew(() =>
                 {
@@ -126,14 +115,6 @@ namespace Avalanche.Domain
                 EndTime = DateTime.Now,
                 Status = TestRunStatus.Done
             });
-        }
-
-        public TestSettings GetTestSettings(string path)
-        {
-            var reader = new YamlMap.YamlFileReader();
-            var settings = reader.Read<TestSettings>(path);
-
-            return settings;
         }
     }
 }

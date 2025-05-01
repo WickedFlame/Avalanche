@@ -10,8 +10,4 @@
       <DocumentationFile>bin\Release\netstandard2.0\Avalanche.ReadModel.xml</DocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
-      <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
-  </ItemGroup>
-
 </Project>

@@ -1,5 +1,6 @@
 ﻿using Avalanche.ReadModel.Models;
 using Avalanche.ReadModel.Queries;
+using Avalanche.ReadModel.Sqlite;
 using System.Data.SQLite;
 
 namespace Avalanche.ReadModel.QueryHandlers
@@ -15,7 +16,7 @@ namespace Avalanche.ReadModel.QueryHandlers
 
         public TestRunQueryHandler()
         {
-            _connection = new SQLiteConnection("Data Source=readmodel.db");
+            _connection = new SQLiteConnection(Constants.ReadModelDatabase);
             _connection.Open();
         }
 

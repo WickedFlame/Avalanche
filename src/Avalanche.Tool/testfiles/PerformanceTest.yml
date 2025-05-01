@@ -1,0 +1,17 @@
+Tests:
+  - Urls:
+      # - "https://eshop.was.local/"
+      - "https://opacc.ch"
+    Name: Page 1
+    Threads: 4
+    Iterations: 10
+    Init:
+      Url: "https://google.com/"
+
+  - Urls:
+      - "https://opacc.ch"
+    Name: Page 2
+    Threads: 5
+    Iterations: 10
+    Init:
+      Url: "https://google.com/"

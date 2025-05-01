@@ -1,20 +1,14 @@
-﻿using Avalanche.WriteModel;
-using Avalanche.WriteModel.Events;
-using Avalanche.Domain;
+﻿using Avalanche.Domain;
 using Avalanche.Models;
 using Avalanche.ReadModel.QueryHandlers;
 using Microsoft.AspNetCore.Mvc;
-using Broadcast;
 
 namespace Avalanche.Controllers
 {
     public class TestOverviewController : Controller
     {
-        private readonly IEventStore _store;
-
-        public TestOverviewController(IEventStore store)
+        public TestOverviewController()
         {
-            _store = store;
         }
 
         public IActionResult Index(string scenario, string testid)
@@ -24,8 +18,8 @@ namespace Avalanche.Controllers
 
             var path = $"./testfiles/{scenario}.yml";
 
-            var facace = new TestFacade(_store);
-            var settings = facace.GetTestSettings(path);
+            var tsr = new TestSettingsReader();
+            var settings = tsr.GetTestSettings(path);
 
             var model = new TestOverviewModel
             {

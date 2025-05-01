@@ -1,4 +1,5 @@
-﻿using Broadcast;
+﻿using Avalanche.WriteModel.Sqlite;
+using Broadcast;
 using System.Data.SQLite;
 using System.Text.Json;
 
@@ -10,7 +11,7 @@ namespace Avalanche.WriteModel
 
         public SqliteEventStore()
         {
-            _connection = new SQLiteConnection("Data Source=eventstore.db");
+            _connection = new SQLiteConnection(Constants.EventStoreDatabase);
             _connection.Open();
         }
 

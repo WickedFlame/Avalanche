@@ -33,7 +33,7 @@
 
         public void Publish<Tevent>(string id, DateTime time, Tevent @event) where Tevent : IEvent
         {
-            _eventStore.Add(id, DateTime.Now, @event);
+            _eventStore.Add(id, time, @event);
             Send(@event);
         }
 

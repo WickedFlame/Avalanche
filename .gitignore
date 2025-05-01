@@ -400,3 +400,7 @@ FodyWeavers.xsd
 *.sln.iml
 src/Avalanche/eventstore.db
 src/Avalanche/readmodel.db
+src/Avalanche/data/eventstore.db
+src/Avalanche/data/readmodel.db
+src/Avalanche.Tool/data/eventstore.db
+*.db-journal

@@ -32,6 +32,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Broadcast", "src\Broadcast\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel", "src\Avalanche.ReadModel\Avalanche.ReadModel.csproj", "{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.Sqlite", "src\Avalanche.WriteModel.Sqlite\Avalanche.WriteModel.Sqlite.csproj", "{7094F5AA-8F60-4A09-9E46-58713DB57889}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sqlite", "src\Avalanche.ReadModel.Sqlite\Avalanche.ReadModel.Sqlite.csproj", "{7D5B1AD3-48C0-40AC-BC5D-087CEA6EA1DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +72,14 @@ Global
 		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7094F5AA-8F60-4A09-9E46-58713DB57889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7094F5AA-8F60-4A09-9E46-58713DB57889}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7094F5AA-8F60-4A09-9E46-58713DB57889}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7094F5AA-8F60-4A09-9E46-58713DB57889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D5B1AD3-48C0-40AC-BC5D-087CEA6EA1DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D5B1AD3-48C0-40AC-BC5D-087CEA6EA1DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D5B1AD3-48C0-40AC-BC5D-087CEA6EA1DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D5B1AD3-48C0-40AC-BC5D-087CEA6EA1DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

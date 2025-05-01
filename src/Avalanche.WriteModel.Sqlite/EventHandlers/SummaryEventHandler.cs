@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using Avalanche.WriteModel.Sqlite;
 using System.Data;
 using System.Data.SQLite;
 
@@ -12,7 +13,7 @@ namespace Avalanche.WriteModel.EventHandlers
 
         public SummaryEventHandler()
         {
-            _connection = new SQLiteConnection("Data Source=readmodel.db");
+            _connection = new SQLiteConnection(Constants.ReadModelDatabase);
             _connection.Open();
         }
 

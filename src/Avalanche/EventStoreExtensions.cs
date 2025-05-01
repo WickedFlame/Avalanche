@@ -1,13 +1,11 @@
-﻿using System.Data.Common;
+﻿using Avalanche.WriteModel.Sqlite;
 using System.Data.SQLite;
-using System.Runtime.CompilerServices;
-using System.Text.Json;
 
 namespace Avalanche
 {
     public static class EventStoreExtensions
     {
-        public static void UseEventStore(this IApplicationBuilder app)
+        public static void UseSqliteEventStore(this IApplicationBuilder app)
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS Events (
@@ -18,7 +16,7 @@ CREATE TABLE IF NOT EXISTS Events (
   Value VARCHAR (2000)
 );
 ";
-            using (var connection = new SQLiteConnection("Data Source=eventstore.db"))
+            using (var connection = new SQLiteConnection(Constants.EventStoreDatabase))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())
@@ -30,7 +28,7 @@ CREATE TABLE IF NOT EXISTS Events (
             }
         }
 
-        public static void UseReadModel(this IApplicationBuilder app)
+        public static void UseSqliteReadModel(this IApplicationBuilder app)
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS TestRun (
@@ -81,7 +79,7 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Throughput REAL
 );
 ";
-            using (var connection = new SQLiteConnection("Data Source=readmodel.db"))
+            using (var connection = new SQLiteConnection(Constants.ReadModelDatabase))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())

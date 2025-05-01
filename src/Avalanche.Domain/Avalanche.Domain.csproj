@@ -11,8 +11,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Avalanche.ReadModel.Sqlite\Avalanche.ReadModel.Sqlite.csproj" />
       <ProjectReference Include="..\Avalanche.ReadModel\Avalanche.ReadModel.csproj" />
       <ProjectReference Include="..\Avalanche.Runner\Avalanche.Runner.csproj" />
+      <ProjectReference Include="..\Avalanche.WriteModel.Sqlite\Avalanche.WriteModel.Sqlite.csproj" />
     </ItemGroup>
 
 </Project>

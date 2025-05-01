@@ -1,11 +1,27 @@
 using Avalanche;
 using Avalanche.WriteModel;
+using Avalanche.WriteModel.EventHandlers;
+using Avalanche.WriteModel.Events;
 using Broadcast;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddSingleton<IEventStore, SqliteEventStore>();
+builder.Services.AddScoped<IEventBus>(c =>
+{
+    var eventBus = new EventBus(c.GetService<IEventStore>());
+    eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
+    eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
+    eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
+    eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
+
+    eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
+    eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
+    eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
+
+    return eventBus;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -20,8 +36,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseEventStore();
-app.UseReadModel();
+app.UseSqliteEventStore();
+app.UseSqliteReadModel();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

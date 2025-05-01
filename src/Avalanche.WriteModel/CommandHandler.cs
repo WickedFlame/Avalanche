@@ -4,8 +4,7 @@
     {
         public void Handle(ICommand @event)
         {
-            var evnt = @event as T;
-            if (evnt != null)
+            if (@event is T evnt)
             {
                 Handle(evnt);
             }

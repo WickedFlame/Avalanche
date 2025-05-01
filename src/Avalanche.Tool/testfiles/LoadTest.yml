@@ -1,0 +1,24 @@
+Tests:
+  - Urls:
+      # - "https://eshop.was.local/"
+      - "https://opacc.ch"
+    Name: load test 1
+    Threads: 4
+    RampupTime: 45
+    Duration: 1
+    Interval: 90
+#    UseCookies: false
+    Init:
+      # Url: "https://eshop.was.local/"
+      Url: "https://google.com/"
+
+#   - Urls:
+#       - "https://opacc.ch"
+#     Name: Test 2
+#     Threads: 5
+#     Duration: 1
+#     RampupTime: 60
+# #    Interval: 50
+# #    UseCookies: false
+#     Init:
+#       Url: "https://google.com/"
