@@ -1,5 +1,5 @@
 ﻿using Avalanche.Domain;
-using Avalanche.WriteModel;
+using Avalanche.WriteModel.Sqlite;
 using Broadcast;
 using CommandLine;
 

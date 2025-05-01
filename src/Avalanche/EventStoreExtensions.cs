@@ -48,6 +48,12 @@ CREATE TABLE IF NOT EXISTS RampupEvents (
   Value INT
 );
 
+CREATE TABLE IF NOT EXISTS TestRunDetail (
+  TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
+  TestCase VARCHAR(255),
+  ThreadId VARCHAR(255),
+  Throughput REAL
+);
 
 CREATE TABLE IF NOT EXISTS IterationEvents (
   Id VARCHAR(255),
