@@ -63,25 +63,15 @@ namespace Avalanche.Domain
                             TestCase = testResult.TestCase,
                             ThreadNumber = testResult.ThreadNumber,
                             Iterations = testResult.Iterations.Count(),
-                            AverageTicks = testResult.AverageTicks,
-                            TotalTime = testResult.TotalTime.Ticks,
-                            Fastest = testResult.Fastest.Ticks,
-                            Slowest = testResult.Slowest.Ticks,
-                            Increase = testResult.Increase,
-                            InitialSize = testResult.InitialSize,
-                            EndSize = testResult.EndSize,
+                            AverageMilliseconds = (int)testResult.AverageMilliseconds,
+                            TotalMilliseconds = testResult.TotalTime.TotalMilliseconds,
                             Throughput = testResult.Throughput(),
                             Summary = testResult.Select(r => new ThreadSummary
                             {
                                 ThreadNumber = r.ThreadNumber,
                                 Iterations = r.Iterations.Count(),
-                                AverageTicks = r.AverageTicks,
-                                TotalTime = r.TotalTime.Ticks,
-                                Fastest = r.Fastest.Ticks,
-                                Slowest = r.Slowest.Ticks,
-                                Increase = r.Increase,
-                                InitialSize = r.InitialSize,
-                                EndSize = r.EndSize,
+                                AverageMilliseconds = (int)r.AverageTicks.ToMilliseconds(),
+                                TotalMilliseconds = r.TotalTime.TotalMilliseconds,
                                 Throughput = r.Throughput()
                             })
                         });

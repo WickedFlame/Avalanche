@@ -23,13 +23,8 @@ namespace Avalanche.WriteModel.CommandHandlers
                     TestCase = cmd.TestCase,
                     ThreadNumber = result.ThreadNumber,
                     Iterations = result.Iterations,
-                    AverageTicks = result.AverageTicks,
-                    TotalTime = result.TotalTime,
-                    Fastest = result.Fastest,
-                    Slowest = result.Slowest,
-                    Increase = result.Increase,
-                    InitialSize = result.InitialSize,
-                    EndSize = result.EndSize,
+                    AverageMilliseconds = result.AverageMilliseconds,
+                    TotalMilliseconds = result.TotalMilliseconds,
                     Throughput = result.Throughput
                 };
 
@@ -42,13 +37,8 @@ namespace Avalanche.WriteModel.CommandHandlers
                 TestCase = cmd.TestCase,
                 Threads = cmd.Summary.Count(),
                 Iterations = cmd.Iterations,
-                AverageTicks = cmd.AverageTicks,
-                TotalTime = cmd.TotalTime,
-                Fastest = cmd.Fastest,
-                Slowest = cmd.Slowest,
-                Increase = cmd.Increase,
-                InitialSize = cmd.InitialSize,
-                EndSize = cmd.EndSize,
+                AverageMilliseconds = cmd.AverageMilliseconds,
+                TotalMilliseconds = cmd.TotalMilliseconds,
                 Throughput = cmd.Throughput
             };
 

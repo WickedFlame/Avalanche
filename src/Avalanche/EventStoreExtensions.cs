@@ -76,13 +76,8 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Type VARCHAR(100),
   ThreadNumber VARCHAR(255),
   Iterations INT,
-  AverageTicks BIGINT,
-  TotalTime BIGINT,
-  Fastest BIGINT,
-  Slowest BIGINT,
-  Increase BIGINT,
-  InitialSize BIGINT,
-  EndSize BIGINT,
+  AverageMilliseconds REAL,
+  TotalMilliseconds REAL,
   Throughput REAL
 );
 ";

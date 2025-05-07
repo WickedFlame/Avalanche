@@ -81,29 +81,8 @@ namespace Avalanche.Controllers.Api
                         s.Type,
                         s.ThreadNumber,
                         s.Iterations,
-                        AverageTicks = TimeSpan.FromTicks(s.AverageTicks),
-                        TotalTime = TimeSpan.FromTicks(s.TotalTime),
-                        s.Fastest,
-                        s.Slowest,
-                        s.Increase,
-                        s.InitialSize,
-                        s.EndSize,
-                        s.Throughput
-                    }),
-                    ThreadSummary = data.Where(d => d.Type == "ThreadSummary").Select(s => new
-                    {
-                        s.TestId,
-                        s.TestCase,
-                        s.Type,
-                        s.ThreadNumber,
-                        s.Iterations,
-                        AverageTicks = TimeSpan.FromTicks(s.AverageTicks),
-                        TotalTime = TimeSpan.FromTicks(s.TotalTime),
-                        s.Fastest,
-                        s.Slowest,
-                        s.Increase,
-                        s.InitialSize,
-                        s.EndSize,
+                        AverageMilliseconds = TimeSpan.FromMilliseconds(s.AverageMilliseconds),
+                        TotalTime = TimeSpan.FromMilliseconds(s.TotalMilliseconds),
                         s.Throughput
                     })
                 }

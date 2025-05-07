@@ -12,19 +12,9 @@
 
         public int Iterations { get; set; }
 
-        public long AverageTicks { get; set; }
+        public double AverageMilliseconds { get; set; }
 
-        public long TotalTime { get; set; }
-
-        public long Fastest { get; set; }
-
-        public long Slowest { get; set; }
-
-        public long Increase { get; set; }
-
-        public long InitialSize { get; set; }
-
-        public long EndSize { get; set; }
+        public double TotalMilliseconds { get; set; }
 
         public double Throughput { get; set; }
     }

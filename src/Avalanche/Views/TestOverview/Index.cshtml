@@ -135,7 +135,7 @@
                                 <tr>
                                     <th>TestCase</th>
                                     <th>Total Time</th>
-                                    <th>Average Ticks</th>
+                                    <th>Average Milliseconds</th>
                                     <th>Throughput / s</th>
                                     <th>Total iterations</th>
                                 </tr>
@@ -175,7 +175,7 @@
                 <text>
                 sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');
                 sites.displayChart('@Model.Scenario', '@test.Name', '@Model.TestId');
-                    sites.initSummaryDataPoller('@Model.Scenario', '@test.Name', '@Model.TestId');
+                sites.initSummaryDataPoller('@Model.Scenario', '@test.Name', '@Model.TestId');
                 </text>
             }
         </script>

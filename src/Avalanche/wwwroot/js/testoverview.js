@@ -84,7 +84,7 @@
                     let row = ts.querySelector(`#${s.testCase.replaceAll(' ', '_')}`);
                     row.querySelector('.TestCase').innerHTML = s.testCase;
                     row.querySelector('.TotalTime').innerHTML = s.totalTime;
-                    row.querySelector('.AverageTicks').innerHTML = s.averageTicks;
+                    row.querySelector('.AverageMs').innerHTML = s.averageMilliseconds;
                     row.querySelector('.Iterations').innerHTML = s.iterations;
                     row.querySelector('.Throughput').innerHTML = s.throughput;
                 });
