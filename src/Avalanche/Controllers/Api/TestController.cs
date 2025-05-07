@@ -1,6 +1,9 @@
 ﻿using Avalanche.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Broadcast;
+using Avalanche.WriteModel.CommandHandlers;
+using Avalanche.WriteModel.Commands;
+using Avalanche.WriteModel;
 
 namespace Avalanche.Controllers.Api
 {
@@ -8,11 +11,11 @@ namespace Avalanche.Controllers.Api
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly IEventBus _eventBus;
+        private readonly IDispatcher<ICommand> _dispatcher;
 
-        public TestController(IEventBus eventBus)
+        public TestController(IDispatcher<ICommand> dispatcher)
         {
-            _eventBus = eventBus;
+            _dispatcher = dispatcher;
         }
 
         [HttpGet]
@@ -41,7 +44,7 @@ namespace Avalanche.Controllers.Api
             // LoadTest
             var path = $"./testfiles/{name}.yml";
 
-            var facade = new TestFacade(_eventBus);
+            var facade = new TestFacade(_dispatcher);
             var settings = facade.Start(name, path);
 
             return Ok(new
@@ -56,7 +59,7 @@ namespace Avalanche.Controllers.Api
         [Route("{name}/stop/{testId}")]
         public IActionResult Stop(string name, string testId)
         {
-            var facade = new TestFacade(_eventBus);
+            var facade = new TestFacade(_dispatcher);
             facade.Stop(testId);
 
             return Ok(new

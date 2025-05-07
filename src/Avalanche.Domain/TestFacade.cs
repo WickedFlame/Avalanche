@@ -10,18 +10,11 @@ namespace Avalanche.Domain
 {
     public class TestFacade
     {
-        private readonly Dispatcher<ICommand> _dispatcher;
+        private readonly IDispatcher<ICommand> _dispatcher;
 
-        public TestFacade(IEventBus eventBus)
+        public TestFacade(IDispatcher<ICommand> dispatcher)
         {
-            _dispatcher = new Dispatcher<ICommand>();
-            _dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(eventBus));
-            _dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(eventBus));
-            _dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(eventBus));
-
-            _dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(eventBus));
-            _dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(eventBus));
-            _dispatcher.Register<IterationCommand>(new IterationCommandHandler(eventBus));
+            _dispatcher = dispatcher;
         }
 
         public TestSettings Start(string name, string path)

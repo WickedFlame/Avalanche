@@ -3,6 +3,10 @@ using Avalanche.WriteModel.Sqlite;
 using Avalanche.WriteModel.Sqlite.EventHandlers;
 using Avalanche.WriteModel.Events;
 using Broadcast;
+using Avalanche.WriteModel;
+using Avalanche.WriteModel.CommandHandlers;
+using Avalanche.WriteModel.Commands;
+using Microsoft.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +26,24 @@ builder.Services.AddScoped<IEventBus>(c =>
 
     return eventBus;
 });
+builder.Services.AddScoped<IDispatcher<ICommand>>(c =>
+{
+    var eventBus = c.GetService<IEventBus>();
+    var dispatcher = new Dispatcher<ICommand>();
+    dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(eventBus));
+    dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(eventBus));
+    dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(eventBus));
+
+    dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(eventBus));
+    dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(eventBus));
+    dispatcher.Register<IterationCommand>(new IterationCommandHandler(eventBus));
+
+    return dispatcher;
+});
+
+
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

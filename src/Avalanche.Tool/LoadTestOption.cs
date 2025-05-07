@@ -1,4 +1,7 @@
 ﻿using Avalanche.Domain;
+using Avalanche.WriteModel;
+using Avalanche.WriteModel.CommandHandlers;
+using Avalanche.WriteModel.Commands;
 using Avalanche.WriteModel.Sqlite;
 using Broadcast;
 using CommandLine;
@@ -24,11 +27,23 @@ namespace Avalanche
 
             var store = new SqliteEventStore();
             var eventBus = new EventBus(store);
+            var dispatcher = new Dispatcher<ICommand>();
+            dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(eventBus));
+            dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(eventBus));
+            dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(eventBus));
+
+            dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(eventBus));
+            dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(eventBus));
+            dispatcher.Register<IterationCommand>(new IterationCommandHandler(eventBus));
+
+
+
+
 
             // LoadTest
             var path = $"testfiles/{ConfigFile}.yml";
 
-            var facade = new TestFacade(eventBus);
+            var facade = new TestFacade(dispatcher);
             facade.Start(ConfigFile, path);
         }
     }

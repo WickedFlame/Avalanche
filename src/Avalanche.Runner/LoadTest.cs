@@ -90,11 +90,11 @@ namespace Avalanche.Runner
 
                         foreach (var url in test.Urls)
                         {
-                            var time = Stopwatch.StartNew();
+                            //var time = Stopwatch.StartNew();
 
                             var result = client.GetAsync(url).GetAwaiter().GetResult();
 
-                            time.Stop();
+                            //time.Stop();
 
                             if (!ctx.Settings.IsWarmup)
                             {
