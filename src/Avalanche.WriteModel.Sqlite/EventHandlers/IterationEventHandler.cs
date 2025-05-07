@@ -84,45 +84,4 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             }
         }
     }
-
-    public class IterationElementsContainer
-    {
-        private readonly List<IterationLogEvent> _events = new List<IterationLogEvent>();
-        private DateTime _lastCheck;
-
-        public void Add(IterationLogEvent @event)
-        {
-            _events.Add(@event);
-        }
-
-        public int Count()
-        {
-            return _events.Count;
-        }
-
-        public double GetThroughput()
-        {
-            var events = _events.Skip(Math.Max(0, _events.Count - 10)).OrderBy(e => e.Time).ToList();
-
-            if (events.Count < 10)
-            {
-                return 0;
-            }
-
-            var time = events.Last().Time - events.First().Time;
-            return events.Count / time.TotalSeconds;
-        }
-
-        public bool IsCheckValid()
-        {
-            var now = DateTime.Now;
-            if ((now - _lastCheck).TotalSeconds < 2)
-            {
-                return false;
-            }
-
-            _lastCheck = now;
-            return true;
-        }
-    }
 }

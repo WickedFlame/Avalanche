@@ -45,7 +45,7 @@ namespace Avalanche.Controllers.Api
             var path = $"./testfiles/{name}.yml";
 
             var facade = new TestFacade(_dispatcher);
-            var settings = facade.Start(name, path);
+            var settings = facade.StartBackgroundTask(name, path);
 
             return Ok(new
             {

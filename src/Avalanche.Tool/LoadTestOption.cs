@@ -2,7 +2,9 @@
 using Avalanche.WriteModel;
 using Avalanche.WriteModel.CommandHandlers;
 using Avalanche.WriteModel.Commands;
-using Avalanche.WriteModel.Sqlite;
+using Avalanche.WriteModel.Events;
+using Avalanche.WriteModel.Memory;
+using Avalanche.WriteModel.Memory.EventHandlers;
 using Broadcast;
 using CommandLine;
 
@@ -25,16 +27,20 @@ namespace Avalanche
             Console.WriteLine($"Start LoadTest from {ConfigFile}");
 
 
-            var store = new SqliteEventStore();
-            var eventBus = new EventBus(store);
-            var dispatcher = new Dispatcher<ICommand>();
-            dispatcher.Register<StartTestCommand>(new StartTestCommandHandler(eventBus));
-            dispatcher.Register<EndTestCommand>(new EndTestCommandHandler(eventBus));
-            dispatcher.Register<TestResultCommand>(new TestResultCommandHandler(eventBus));
+            var store = new InMemoryEventStore();
 
-            dispatcher.Register<StartupThreadCommand>(new StartupThreadCommandHandler(eventBus));
-            dispatcher.Register<EndThreadCommand>(new EndThreadCommandHandler(eventBus));
-            dispatcher.Register<IterationCommand>(new IterationCommandHandler(eventBus));
+            var eventBus = new EventBus(store);
+            eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
+            eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
+            eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
+            eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
+            eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
+            eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
+            eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
+
+
+            var dispatcher = new CommandDispatcher(eventBus);
+            
 
 
 

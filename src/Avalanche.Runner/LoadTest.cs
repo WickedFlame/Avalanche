@@ -126,7 +126,8 @@ namespace Avalanche.Runner
 
                 var result = session.RunSession();
 
-                result.Trace(new ConsoleResultWriter());
+                //result.Trace(new ConsoleResultWriter());
+                result.Trace();
 
                 results.Add(new TestResult(result)
                 {

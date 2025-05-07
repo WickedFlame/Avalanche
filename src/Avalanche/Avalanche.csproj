@@ -35,6 +35,8 @@
     <ItemGroup>
         <ProjectReference Include="..\Avalanche.Domain\Avalanche.Domain.csproj" />
         <ProjectReference Include="..\Avalanche.ReadModel\Avalanche.ReadModel.csproj" />
+        <ProjectReference Include="..\Avalanche.WriteModel.Memory\Avalanche.WriteModel.Memory.csproj" />
+        <ProjectReference Include="..\Avalanche.WriteModel.Sqlite\Avalanche.WriteModel.Sqlite.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -38,6 +38,8 @@ namespace Avalanche.Runner
 
             log.SendAsync(metric);
 
+            //Console.WriteLine($"Run number {result.Iteration} on Thread {result.ThreadNumber} took {result.Duration.TotalMilliseconds}ms");
+
             return result;
         }
     }

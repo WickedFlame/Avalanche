@@ -4,9 +4,7 @@ Tests:
       - "https://opacc.ch"
     Name: load test 1
     Threads: 4
-    RampupTime: 45
-    Duration: 1
-    Interval: 90
+    Iterations: 10
 #    UseCookies: false
     Init:
       # Url: "https://eshop.was.local/"

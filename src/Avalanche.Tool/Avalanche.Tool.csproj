@@ -49,10 +49,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Avalanche.Domain\Avalanche.Domain.csproj" />
+      <ProjectReference Include="..\Avalanche.WriteModel.Memory\Avalanche.WriteModel.Memory.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="data\" />
       <Folder Include="testfiles\" />
     </ItemGroup>
 

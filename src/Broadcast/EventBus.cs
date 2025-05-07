@@ -17,7 +17,14 @@
 
         public virtual void Send<Tevent>(Tevent @event)
         {
-            var handler = _handlers[@event.GetType()] as IMessageHandler<Tevent>;
+            var key = @event.GetType();
+            if(!_handlers.ContainsKey(key))
+            {
+                Console.WriteLine($"No handler for event type {key}");
+                return;
+            }
+
+            var handler = _handlers[key] as IMessageHandler<Tevent>;
             if (handler == null)
             {
                 return;
