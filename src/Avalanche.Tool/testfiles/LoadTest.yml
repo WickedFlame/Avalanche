@@ -4,7 +4,7 @@ Tests:
       - "https://opacc.ch"
     Name: load test 1
     Threads: 4
-    Iterations: 10
+    Iterations: 50
 #    UseCookies: false
     Init:
       # Url: "https://eshop.was.local/"

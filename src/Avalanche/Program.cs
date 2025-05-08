@@ -1,4 +1,5 @@
 using Avalanche;
+using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.WriteModel;
 using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite;
@@ -9,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddSingleton<IEventStore, SqliteEventStore>();
-builder.Services.AddScoped<IEventBus>(c =>
+builder.Services.AddSingleton<IEventBus>(c =>
 {
     var eventBus = new EventBus(c.GetService<IEventStore>());
     eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
@@ -23,7 +24,8 @@ builder.Services.AddScoped<IEventBus>(c =>
 
     return eventBus;
 });
-builder.Services.AddScoped<IDispatcher<ICommand>, CommandDispatcher>();
+builder.Services.AddSingleton<TestRunQueryHandler>();
+//builder.Services.AddScoped<IDispatcher<ICommand>, CommandDispatcher>();
 
 
 

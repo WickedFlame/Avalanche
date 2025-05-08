@@ -13,9 +13,9 @@ namespace Avalanche.Controllers.Api
     {
         private readonly IDispatcher<ICommand> _dispatcher;
 
-        public TestController(IDispatcher<ICommand> dispatcher)
+        public TestController(IEventBus eventBus)
         {
-            _dispatcher = dispatcher;
+            _dispatcher = new CommandDispatcher(eventBus);
         }
 
         [HttpGet]

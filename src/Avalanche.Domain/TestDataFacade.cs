@@ -9,10 +9,16 @@ namespace Avalanche.Domain
 {
     public class TestDataFacade
     {
+        private readonly TestRunQueryHandler _queryHandler;
+
+        public TestDataFacade(TestRunQueryHandler queryHandler)
+        {
+            _queryHandler = queryHandler;
+        }
+
         public IEnumerable<ChartData> GetChartData(string testId, string testName)
         {
-            var handler = new TestRunQueryHandler();
-            var data = handler.Get(new GetChartData { TestId = testId, TestName = testName });
+            var data = _queryHandler.Get(new GetChartData { TestId = testId, TestName = testName });
 
             return data.Where(c => !c.IsWarmup)
                 .GroupBy(c => c.ThreadId)
@@ -30,8 +36,7 @@ namespace Avalanche.Domain
 
         public IEnumerable<ChartDataRow> GetRampupData(string testId, string testName)
         {
-            var handler = new TestRunQueryHandler();
-            var data = handler.Get(new GetRampupData { TestId = testId, TestName = testName });
+            var data = _queryHandler.Get(new GetRampupData { TestId = testId, TestName = testName });
 
             var lst = new List<ChartDataRow>();
 
@@ -61,7 +66,7 @@ namespace Avalanche.Domain
             }
 
 
-            var test = handler.Get(new GetTestRun { TestId = testId });
+            var test = _queryHandler.Get(new GetTestRun { TestId = testId });
 
             if (test != null && test.Status != TestRunStatus.Done)
             {
@@ -74,8 +79,7 @@ namespace Avalanche.Domain
 
         public IEnumerable<TestSummary> GetSummary(string testId, string testCase)
         {
-            var handler = new TestRunQueryHandler();
-            return handler.Get(new GetSummary { TestId = testId, TestCase = testCase });
+            return _queryHandler.Get(new GetSummary { TestId = testId, TestCase = testCase });
         }
     }
 }

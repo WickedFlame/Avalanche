@@ -8,14 +8,20 @@ namespace Avalanche.Controllers.Api
     [ApiController]
     public class TestDataController : ControllerBase
     {
+        private readonly TestRunQueryHandler _queryHandler;
+
+        public TestDataController(TestRunQueryHandler queryHandler)
+        {
+            _queryHandler = queryHandler;
+        }
+
         [HttpGet]
         [Route("{scenario}/{testname}/chartdata/{testId}")]
         public IActionResult GetChartData(string scenario, string testname, string testId)
         {
-            var trh = new TestRunQueryHandler();
-            var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
+            var lastRun = _queryHandler.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
 
-            var facade = new TestDataFacade();
+            var facade = new TestDataFacade(_queryHandler);
             var data = facade.GetChartData(testId, testname);
 
             return Ok(new
@@ -31,15 +37,14 @@ namespace Avalanche.Controllers.Api
         [Route("{scenario}/{testname}/rampupdata/{testId}")]
         public IActionResult GetRampupData(string scenario, string testname, string testId)
         {
-            var trh = new TestRunQueryHandler();
-            var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
+            var lastRun = _queryHandler.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
 
             if(lastRun == null)
             {
                 return Ok();
             }
 
-            var facade = new TestDataFacade();
+            var facade = new TestDataFacade(_queryHandler);
             var data = facade.GetRampupData(lastRun.TestId, testname);
 
             return Ok(new
@@ -55,15 +60,14 @@ namespace Avalanche.Controllers.Api
         [Route("{scenario}/{testname}/summary/{testId}")]
         public IActionResult GetSummary(string scenario, string testname, string testId)
         {
-            var trh = new TestRunQueryHandler();
-            var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
+            var lastRun = _queryHandler.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
 
             if (lastRun == null)
             {
                 return Ok();
             }
 
-            var facade = new TestDataFacade();
+            var facade = new TestDataFacade(_queryHandler);
             var data = facade.GetSummary(testId, testname);
 
             return Ok(new
