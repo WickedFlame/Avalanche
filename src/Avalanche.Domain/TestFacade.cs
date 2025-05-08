@@ -79,7 +79,7 @@ namespace Avalanche.Domain
                     ThreadNumber = testResult.ThreadNumber,
                     Iterations = testResult.Iterations.Count(),
                     AverageMilliseconds = (int)testResult.AverageMilliseconds,
-                    TotalMilliseconds = testResult.TotalTime.TotalMilliseconds,
+                    TotalMilliseconds = testResult.Duration.TotalMilliseconds,
                     Throughput = testResult.Throughput(),
                     Summary = testResult.Select(r => new ThreadSummary
                     {

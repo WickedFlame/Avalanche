@@ -33,6 +33,8 @@ namespace Avalanche.Runner
 
         public TimeSpan TotalTime => _result.TotalTime;
 
+        public TimeSpan Duration => _result.Elapsed();
+
         public IIterationResult Fastest => _result.Fastest;
 
         public IIterationResult Slowest => _result.Slowest;

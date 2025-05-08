@@ -90,11 +90,8 @@ namespace Avalanche.Runner
 
                         foreach (var url in test.Urls)
                         {
-                            //var time = Stopwatch.StartNew();
-
                             var result = client.GetAsync(url).GetAwaiter().GetResult();
-
-                            //time.Stop();
+                            //TODO: Check if the result is OK
 
                             if (!ctx.Settings.IsWarmup)
                             {
@@ -126,7 +123,6 @@ namespace Avalanche.Runner
 
                 var result = session.RunSession();
 
-                //result.Trace(new ConsoleResultWriter());
                 result.Trace();
 
                 results.Add(new TestResult(result)
