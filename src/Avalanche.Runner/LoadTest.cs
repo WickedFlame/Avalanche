@@ -2,6 +2,7 @@
 using Avalanche.WriteModel.Commands;
 using Broadcast;
 using MeasureMap;
+using RestSharp;
 using System.Diagnostics;
 using System.Net;
 
@@ -30,14 +31,24 @@ namespace Avalanche.Runner
                     {
                         var ctx = new MeasureMap.ExecutionContext(s);
 
-                        var clientHandler = new HttpClientHandler
+
+                        var options = new RestClientOptions()
                         {
-                            AllowAutoRedirect = true,
-                            UseCookies = test.UseCookies,
-                            CookieContainer = new CookieContainer(),
-                            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+                            FollowRedirects = true,
+                            RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true,
                         };
-                        var client = new HttpClient(clientHandler);
+
+                        var client = new RestClient(options);
+
+
+                        //var clientHandler = new HttpClientHandler
+                        //{
+                        //    AllowAutoRedirect = true,
+                        //    UseCookies = test.UseCookies,
+                        //    CookieContainer = new CookieContainer(),
+                        //    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+                        //};
+                        //var client = new HttpClient(clientHandler);
 
                         ctx.Set("httpclient", client);
                         ctx.Set(nameof(IDispatcher<ICommand>), _dispatcher);
@@ -46,7 +57,9 @@ namespace Avalanche.Runner
                         {
                             var time = Stopwatch.StartNew();
 
-                            var result = client.GetAsync(test.Init.Url).GetAwaiter().GetResult();
+                            //var result = client.GetAsync(test.Init.Url).GetAwaiter().GetResult();
+                            var request = new RestRequest(test.Init.Url);
+                            var result = client.GetAsync(request).GetAwaiter().GetResult();
 
                             time.Stop();
 
@@ -69,7 +82,7 @@ namespace Avalanche.Runner
                     })
                     .OnEndPipeline(e =>
                     {
-                        e.Get<HttpClient>("httpclient").Dispose();
+                        e.Get<RestClient>("httpclient").Dispose();
 
                         var metric = new EndThreadCommand
                         {
@@ -86,11 +99,12 @@ namespace Avalanche.Runner
                     })
                     .Task(ctx =>
                     {
-                        var client = ctx.Get<HttpClient>("httpclient");
+                        var client = ctx.Get<RestClient>("httpclient");
 
                         foreach (var url in test.Urls)
                         {
-                            var result = client.GetAsync(url).GetAwaiter().GetResult();
+                            var request = new RestRequest(url);
+                            var result = client.GetAsync(request).GetAwaiter().GetResult();
                             //TODO: Check if the result is OK
 
                             if (!ctx.Settings.IsWarmup)

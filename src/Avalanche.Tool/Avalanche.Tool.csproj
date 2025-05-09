@@ -50,6 +50,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Avalanche.Domain\Avalanche.Domain.csproj" />
       <ProjectReference Include="..\Avalanche.WriteModel.Memory\Avalanche.WriteModel.Memory.csproj" />
+      <ProjectReference Include="..\Avalanche.WriteModel.RestClient\Avalanche.WriteModel.RestClient.csproj" />
     </ItemGroup>
 
     <ItemGroup>

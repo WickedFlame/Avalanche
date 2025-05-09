@@ -8,8 +8,6 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
     {
         private readonly SQLiteConnection _connection;
 
-        private readonly Dictionary<string, IterationElementsContainer> _events = new();
-
         public IterationEventHandler()
         {
             _connection = new SQLiteConnection(Constants.ReadModelDatabase);
@@ -35,21 +33,6 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             //    cmd.ExecuteNonQuery();
             //}
 
-            var key = $"{@event.TestId}_{@event.Name}_{@event.Thread}";
-            if (!_events.ContainsKey(key))
-            {
-                _events.Add(key, new IterationElementsContainer());
-            }
-
-            var lst = _events[key];
-            lst.Add(@event);
-
-            // only write to db if the last update was more than 2 seconds ago
-            if (!lst.IsCheckValid())
-            {
-                return;
-            }
-            
             using (var cmd = _connection.CreateCommand())
             {
                 cmd.CommandText = "SELECT 1 FROM TestRunDetail WHERE TestId = @testId AND TestCase = @testCase AND ThreadId = @threadId";
@@ -64,8 +47,8 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
                 cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.Name));
                 cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-                cmd.Parameters.Add(new SQLiteParameter("@throughput", lst.GetThroughput()));
-                cmd.Parameters.Add(new SQLiteParameter("@iterations", lst.Count()));
+                cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Througput));
+                cmd.Parameters.Add(new SQLiteParameter("@iterations", @event.Iterations));
                 cmd.ExecuteNonQuery();
             }
         }

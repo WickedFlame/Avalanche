@@ -33,11 +33,6 @@
             handler.Handle(@event);
         }
 
-        public void Publish<Tevent>(string id, Tevent @event) where Tevent : IEvent
-        {
-            Publish(id, DateTime.Now, @event);
-        }
-
         public void Publish<Tevent>(string id, DateTime time, Tevent @event) where Tevent : IEvent
         {
             _eventStore.Add(id, time, @event);

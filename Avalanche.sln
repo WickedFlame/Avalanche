@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sqlite"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.Memory", "src\Avalanche.WriteModel.Memory\Avalanche.WriteModel.Memory.csproj", "{2CBC66F1-B3B3-49EF-A2EB-9EA8AD06E35F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.RestClient", "src\Avalanche.WriteModel.RestClient\Avalanche.WriteModel.RestClient.csproj", "{FBC9F53E-AABF-41CB-9257-65B8B9BA2C44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,10 @@ Global
 		{2CBC66F1-B3B3-49EF-A2EB-9EA8AD06E35F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CBC66F1-B3B3-49EF-A2EB-9EA8AD06E35F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CBC66F1-B3B3-49EF-A2EB-9EA8AD06E35F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBC9F53E-AABF-41CB-9257-65B8B9BA2C44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC9F53E-AABF-41CB-9257-65B8B9BA2C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC9F53E-AABF-41CB-9257-65B8B9BA2C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC9F53E-AABF-41CB-9257-65B8B9BA2C44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,6 +7,7 @@ using Avalanche.WriteModel.Memory;
 using Avalanche.WriteModel.Memory.EventHandlers;
 using Broadcast;
 using CommandLine;
+using RestSharp;
 
 namespace Avalanche
 {
@@ -15,6 +16,9 @@ namespace Avalanche
     {
         [Option('f', "configfile", HelpText = "UNC Path to the Configfile", Required = false)]
         public string ConfigFile { get; set; }
+
+        [Option('u', "url", HelpText = "Url to the Avalanche server", Required = false)]
+        public string Url { get; set; }
 
         public void Execute()
         {
@@ -26,25 +30,44 @@ namespace Avalanche
 
             Console.WriteLine($"Start LoadTest from {ConfigFile}");
 
+            if (string.IsNullOrEmpty(Url))
+            {
+                Url = "https://localhost:32773";
+            }
+
+            var options = new RestClientOptions(Url)
+            {
+                FollowRedirects = true,
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true,
+            };
+
+
 
             var store = new InMemoryEventStore();
 
             var eventBus = new EventBus(store);
-            eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
-            eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
-            eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
-            eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
-            eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
-            eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
-            eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
-
+            if (!string.IsNullOrEmpty(Url))
+            {
+                eventBus.Subscribe<StartTestEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.TestRunEventHandler(new RestClient(options)));
+                eventBus.Subscribe<EndTestEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.TestRunEventHandler(new RestClient(options)));
+                eventBus.Subscribe<ThreadSummaryEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.SummaryEventHandler(new RestClient(options)));
+                eventBus.Subscribe<TestSummaryEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.SummaryEventHandler(new RestClient(options)));
+                eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
+                eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
+                eventBus.Subscribe<IterationLogEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.IterationEventHandler(new RestClient(options)));
+            }
+            else
+            {
+                eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
+                eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
+                eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
+                eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
+                eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
+                eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
+                eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
+            }
 
             var dispatcher = new CommandDispatcher(eventBus);
-            
-
-
-
-
 
             // LoadTest
             var path = $"testfiles/{ConfigFile}.yml";

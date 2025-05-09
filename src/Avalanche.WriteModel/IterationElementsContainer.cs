@@ -1,13 +1,13 @@
-﻿using Avalanche.WriteModel.Events;
+﻿using Avalanche.WriteModel.Commands;
 
 namespace Avalanche.WriteModel
 {
     public class IterationElementsContainer
     {
-        private readonly List<IterationLogEvent> _events = new List<IterationLogEvent>();
+        private readonly List<IterationCommand> _events = [];
         private DateTime _lastCheck;
 
-        public void Add(IterationLogEvent @event)
+        public void Add(IterationCommand @event)
         {
             _events.Add(@event);
         }
@@ -42,6 +42,10 @@ namespace Avalanche.WriteModel
             return events.Count / time.TotalSeconds;
         }
 
+        /// <summary>
+        /// Only allow writing of events every 2 seconds
+        /// </summary>
+        /// <returns></returns>
         public bool IsCheckValid()
         {
             var now = DateTime.Now;

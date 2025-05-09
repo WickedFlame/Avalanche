@@ -7,8 +7,6 @@ namespace Broadcast
 
         void Send<Tevent>(Tevent @event);
 
-        void Publish<Tevent>(string id, Tevent @event) where Tevent : IEvent;
-
         void Publish<Tevent>(string id, DateTime time, Tevent @event) where Tevent : IEvent;
     }
 }
