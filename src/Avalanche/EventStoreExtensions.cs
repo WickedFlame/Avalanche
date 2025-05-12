@@ -61,11 +61,9 @@ CREATE TABLE IF NOT EXISTS IterationEvents (
   TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
   Time DATETIME,
   ThreadId INT,
-  Name VARCHAR(255),
-  Message VARCHAR(200),
-  RunNumber INT,
-  IsWarmup BOOL,
-  TotalMilliseconds REAL
+  TestName VARCHAR(255),
+  Throughput REAL,
+  AverageMilliseconds REAL
 );
 
 

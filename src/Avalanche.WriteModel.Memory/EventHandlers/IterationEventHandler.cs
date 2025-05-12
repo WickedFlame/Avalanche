@@ -7,7 +7,7 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
     {
         public void Handle(IterationLogEvent @event)
         {
-            Console.WriteLine($"{{ TestId: {@event.TestId}, TestCase: {@event.Name}, ThreadId: {@event.Thread}, AverageMilliseconds: {@event.AverageMilliseconds}, Throughput: {@event.Througput}, Iterations: {@event.Iterations} }}");
+            Console.WriteLine($"{{ TestId: {@event.TestId}, TestCase: {@event.TestName}, ThreadId: {@event.Thread}, AverageMilliseconds: {@event.AverageMilliseconds}, Throughput: {@event.Throughput}, Iterations: {@event.Iterations} }}");
         }
 
         public void Dispose()

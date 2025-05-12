@@ -8,11 +8,11 @@ namespace Avalanche.WriteModel.Events
 
         public string TestId { get; set; }
 
-        public string Name { get; set; }
+        public string TestName { get; set; }
 
         public int Thread { get; set; }
 
-        public double Througput { get; set; }
+        public double Throughput { get; set; }
 
         public int Iterations { get; set; }
 

@@ -16,28 +16,27 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
 
         public void Handle(IterationLogEvent @event)
         {
-            //using (var cmd = _connection.CreateCommand())
-            //{
-            //    cmd.CommandText = "INSERT INTO IterationEvents (Id, TestId, Time, ThreadId, Name, Message, RunNumber, IsWarmup, TotalMilliseconds) Values (@id, @testId, @time, @threadId, @name, @message, @runNumber, @isWarmup, @totalMilliseconds)";
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "INSERT INTO IterationEvents (Id, TestId, Time, ThreadId, TestName, Throughput, AverageMilliseconds) Values (@id, @testId, @time, @threadId, @name, @throughput, @averageMilliseconds)";
 
-            //    cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
-            //    cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-            //    cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
-            //    cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-            //    cmd.Parameters.Add(new SQLiteParameter("@name", @event.Name));
-            //    cmd.Parameters.Add(new SQLiteParameter("@message", @event.Message));
-            //    cmd.Parameters.Add(new SQLiteParameter("@runNumber", @event.RunNumber));
-            //    cmd.Parameters.Add(new SQLiteParameter("@isWarmup", @event.IsWarmup));
-            //    cmd.Parameters.Add(new SQLiteParameter("@totalMilliseconds", @event.TotalMilliseconds));
+                cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
+                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
+                cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
+                cmd.Parameters.Add(new SQLiteParameter("@name", @event.TestName));
+                //cmd.Parameters.Add(new SQLiteParameter("", @event.Iterations));
+                cmd.Parameters.Add(new SQLiteParameter("@averageMilliseconds", @event.AverageMilliseconds));
+                cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
 
-            //    cmd.ExecuteNonQuery();
-            //}
+                cmd.ExecuteNonQuery();
+            }
 
             using (var cmd = _connection.CreateCommand())
             {
                 cmd.CommandText = "SELECT 1 FROM TestRunDetail WHERE TestId = @testId AND TestCase = @testCase AND ThreadId = @threadId";
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.Name));
+                cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.TestName));
                 cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
 
                 cmd.CommandText = cmd.ExecuteScalar() != null ?
@@ -45,9 +44,9 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                     "INSERT INTO TestRunDetail (TestId, TestCase, ThreadId, Throughput, Iterations) Values (@testId, @testCase, @threadId, @throughput, @iterations)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.Name));
+                cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.TestName));
                 cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-                cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Througput));
+                cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
                 cmd.Parameters.Add(new SQLiteParameter("@iterations", @event.Iterations));
                 cmd.ExecuteNonQuery();
             }

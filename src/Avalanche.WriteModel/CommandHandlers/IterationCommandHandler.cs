@@ -20,7 +20,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 return;
             }
 
-            var key = $"{cmd.TestId}_{cmd.Name}_{cmd.Thread}";
+            var key = $"{cmd.TestId}_{cmd.TestName}_{cmd.Thread}";
             if (!_events.ContainsKey(key))
             {
                 _events.Add(key, new IterationElementsContainer());
@@ -38,10 +38,10 @@ namespace Avalanche.WriteModel.CommandHandlers
             var @event = new Events.IterationLogEvent
             {
                 TestId = cmd.TestId,
-                Name = cmd.Name,
+                TestName = cmd.TestName,
                 Thread = cmd.Thread,
                 Time = cmd.Time,
-                Througput = lst.GetThroughput(),
+                Throughput = lst.GetThroughput(),
                 Iterations = lst.Count(),
                 AverageMilliseconds = lst.GetAverageMilliseconds()
             };

@@ -7,12 +7,12 @@ namespace Avalanche.Runner
 {
     public class ItterationLogCollectionTaskHandler : TaskHandler
     {
-        private readonly string _name;
+        private readonly string _testName;
         private readonly string _testId;
 
         public ItterationLogCollectionTaskHandler(string name, string testId)
         {
-            _name = name;
+            _testName = name;
             _testId = testId;
         }
 
@@ -27,7 +27,7 @@ namespace Avalanche.Runner
                 TestId = _testId,
                 Category = "console",
                 Module = "Measure",
-                Name = _name,
+                TestName = _testName,
                 Message = $"Run number {result.Iteration} on Thread {result.ThreadNumber}",
                 RunNumber = result.Iteration,
                 Thread = result.ThreadNumber,

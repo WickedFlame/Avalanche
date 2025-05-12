@@ -20,7 +20,7 @@ namespace Avalanche.Domain
         {
             var data = _queryHandler.Get(new GetChartData { TestId = testId, TestName = testName });
 
-            return data.Where(c => !c.IsWarmup)
+            return data
                 .GroupBy(c => c.ThreadId)
                 .Select(g => new ChartData
                 {
@@ -28,7 +28,7 @@ namespace Avalanche.Domain
                     Data = g.Select(e => new ChartDataRow
                         {
                             Time = e.Time.ToString("o"),
-                            Value = e.TotalMilliseconds.ToString()
+                            Value = e.Throughput.ToString()
                         })
                 });
             ;

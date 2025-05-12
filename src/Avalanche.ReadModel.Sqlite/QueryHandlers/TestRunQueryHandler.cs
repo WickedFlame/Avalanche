@@ -73,7 +73,7 @@ namespace Avalanche.ReadModel.QueryHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT * FROM IterationEvents WHERE TestId = @testId AND Name = @name ORDER BY Time DESC";
+                cmd.CommandText = "SELECT * FROM IterationEvents WHERE TestId = @testId AND TestName = @name ORDER BY Time DESC";
 
                 cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
                 cmd.Parameters.Add(new SQLiteParameter("@name", query.TestName));
