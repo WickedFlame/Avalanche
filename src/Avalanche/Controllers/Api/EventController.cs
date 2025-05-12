@@ -76,23 +76,5 @@ namespace Avalanche.Controllers.Api
 
             return Ok();
         }
-
-        //[HttpPost]
-        //[Route("starttest/{id}/{time}")]
-        //public IActionResult StartTest(string id, DateTime time, [FromBody] StartTestEvent evnt)
-        //{
-        //    _eventBus.Publish(id, time, evnt);
-
-        //    return Ok();
-        //}
-
-        //[HttpPost]
-        //[Route("endtest/{id}/{time}")]
-        //public IActionResult EndTest(string id, DateTime time, [FromBody] EndTestEvent evnt)
-        //{
-        //    _eventBus.Publish(id, time, evnt);
-
-        //    return Ok();
-        //}
     }
 }

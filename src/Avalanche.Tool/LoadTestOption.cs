@@ -30,9 +30,16 @@ namespace Avalanche
 
             Console.WriteLine($"Start LoadTest from {ConfigFile}");
 
+#if DEBUG
+            // in debug wait until the website is started
+            Console.WriteLine($"Wait until the website is started");
+            System.Threading.Tasks.Task.Delay(10000).Wait();
+#endif
+
             if (string.IsNullOrEmpty(Url))
             {
-                Url = "https://localhost:32773";
+                //Url = "https://localhost:32773";
+                Url = "https://host.docker.internal:32773";
             }
 
             var options = new RestClientOptions(Url)
