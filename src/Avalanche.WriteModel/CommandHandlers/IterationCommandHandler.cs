@@ -30,7 +30,7 @@ namespace Avalanche.WriteModel.CommandHandlers
             lst.Add(cmd);
 
             // only write to db if the last update was more than 2 seconds ago
-            if (!lst.IsCheckValid())
+            if (!lst.IsCheckValid() && !cmd.IsWarmup)
             {
                 return;
             }
@@ -41,6 +41,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 TestName = cmd.TestName,
                 Thread = cmd.Thread,
                 Time = cmd.Time,
+                IsWarmup = cmd.IsWarmup,
                 Throughput = lst.GetThroughput(),
                 Iterations = lst.Count(),
                 AverageMilliseconds = lst.GetAverageMilliseconds()

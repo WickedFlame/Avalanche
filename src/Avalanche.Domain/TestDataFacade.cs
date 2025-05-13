@@ -20,7 +20,7 @@ namespace Avalanche.Domain
         {
             var data = _queryHandler.Get(new GetChartData { TestId = testId, TestName = testName });
 
-            return data
+            return data.Where(c => !c.IsWarmup)
                 .GroupBy(c => c.ThreadId)
                 .Select(g => new ChartData
                 {

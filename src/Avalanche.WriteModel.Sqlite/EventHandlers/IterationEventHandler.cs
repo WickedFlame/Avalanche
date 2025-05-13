@@ -18,16 +18,16 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "INSERT INTO IterationEvents (Id, TestId, Time, ThreadId, TestName, Throughput, AverageMilliseconds) Values (@id, @testId, @time, @threadId, @name, @throughput, @averageMilliseconds)";
+                cmd.CommandText = "INSERT INTO IterationEvents (Id, TestId, Time, ThreadId, TestName, Throughput, AverageMilliseconds, IsWarmup) Values (@id, @testId, @time, @threadId, @name, @throughput, @averageMilliseconds, @isWarmup)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
                 cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
                 cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
                 cmd.Parameters.Add(new SQLiteParameter("@name", @event.TestName));
-                //cmd.Parameters.Add(new SQLiteParameter("", @event.Iterations));
                 cmd.Parameters.Add(new SQLiteParameter("@averageMilliseconds", @event.AverageMilliseconds));
                 cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
+                cmd.Parameters.Add(new SQLiteParameter("@isWarmup", @event.IsWarmup));
 
                 cmd.ExecuteNonQuery();
             }

@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS IterationEvents (
   ThreadId INT,
   TestName VARCHAR(255),
   Throughput REAL,
-  AverageMilliseconds REAL
+  AverageMilliseconds REAL,
+  IsWarmup BOOLEAN
 );
 
 
