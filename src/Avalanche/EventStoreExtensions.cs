@@ -53,7 +53,8 @@ CREATE TABLE IF NOT EXISTS TestRunDetail (
   TestCase VARCHAR(255),
   ThreadId VARCHAR(255),
   Throughput REAL,
-  Iterations BIGINT
+  Iterations BIGINT,
+  Errors INT
 );
 
 CREATE TABLE IF NOT EXISTS IterationEvents (
@@ -64,7 +65,9 @@ CREATE TABLE IF NOT EXISTS IterationEvents (
   TestName VARCHAR(255),
   Throughput REAL,
   AverageMilliseconds REAL,
-  IsWarmup BOOLEAN
+  IsWarmup BOOLEAN,
+  Message VARCHAR(500),
+  StatusCode VARCHAR(50)
 );
 
 

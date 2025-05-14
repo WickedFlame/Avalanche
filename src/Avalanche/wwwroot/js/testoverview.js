@@ -126,10 +126,10 @@
         this.showChartData(scenario, testname, testId);
         this.showRampupData(scenario, testname, testId);
 
-        this.poller = setInterval(() => {
-            this.showChartData(scenario, testname, testId);
-            this.showRampupData(scenario, testname, testId);
-        }, 3000);
+        //this.poller = setInterval(() => {
+        //    this.showChartData(scenario, testname, testId);
+        //    this.showRampupData(scenario, testname, testId);
+        //}, 3000);
     }
 
     async showRampupData(scenario, testname, testId) {
@@ -159,13 +159,9 @@
             if (tmp.length > 0) {
                 this.showChart(`${testname}-rampup`, datasets);
 
-                if (data.status == `Done` && this.poller) {
-                    clearInterval(this.poller);
-
-                    //document.querySelector('#scenario-status').innerHTML = `Done`;
-                    //document.querySelector('#StartTests').removeAttribute('disabled');
-                    //document.querySelector('#StopTests').setAttribute('disabled', 'true');
-                }
+                //if (data.status == `Done` && this.poller) {
+                //    clearInterval(this.poller);
+                //}
             }
 
         } catch (error) {

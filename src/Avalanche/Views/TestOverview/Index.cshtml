@@ -1,5 +1,6 @@
 ﻿@using System.Linq
 @using System.Text.Json
+@using Avalanche.Runner
 @model TestOverviewModel
 
 
@@ -152,13 +153,17 @@
             </div>
         </div>
 
-        @foreach (var config in Model.Settings.Tests)
+
+        @if (Model.Status == TestRunStatus.Done)
         {
-            <div class="pt-element-container py-6">
-                <h2>@config.Name</h2>
-                <partial name="./Partials/Chart" for="@config" />
-                <partial name="./Partials/RampupChart" for="@config" />
-            </div>
+            foreach (var config in Model.Settings.Tests)
+            {
+                <div class="pt-element-container py-6">
+                    <h2>@config.Name</h2>
+                    <partial name="./Partials/Chart" for="@config" />
+                    <partial name="./Partials/RampupChart" for="@config" />
+                </div>
+            }
         }
     </div>
 
@@ -172,9 +177,14 @@
 
             @foreach (var test in Model.Settings.Tests)
             {
+                @if (Model.Status == TestRunStatus.Done)
+                {
+                    <text>
+                        sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');
+                        sites.displayChart('@Model.Scenario', '@test.Name', '@Model.TestId');
+                    </text>
+                }
                 <text>
-                sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');
-                sites.displayChart('@Model.Scenario', '@test.Name', '@Model.TestId');
                 sites.initSummaryDataPoller('@Model.Scenario', '@test.Name', '@Model.TestId');
                 </text>
             }

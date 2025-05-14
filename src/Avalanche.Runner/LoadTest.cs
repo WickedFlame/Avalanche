@@ -40,16 +40,6 @@ namespace Avalanche.Runner
 
                         var client = new RestClient(options);
 
-
-                        //var clientHandler = new HttpClientHandler
-                        //{
-                        //    AllowAutoRedirect = true,
-                        //    UseCookies = test.UseCookies,
-                        //    CookieContainer = new CookieContainer(),
-                        //    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
-                        //};
-                        //var client = new HttpClient(clientHandler);
-
                         ctx.Set("httpclient", client);
                         ctx.Set(nameof(IDispatcher<ICommand>), _dispatcher);
 
@@ -103,13 +93,41 @@ namespace Avalanche.Runner
 
                         foreach (var url in test.Urls)
                         {
-                            var request = new RestRequest(url);
-                            var result = client.GetAsync(request).GetAwaiter().GetResult();
-                            //TODO: Check if the result is OK
-
-                            if (!ctx.Settings.IsWarmup)
+                            try
                             {
-                                //_logger.Write($"Call to {url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms", Opacc.Fof.Commons.Diagnostics.LogLevel.Debug, category: "console", source: test.Name, module: "LoadTest");
+                                var request = new RestRequest(url);
+                                var result = client.GetAsync(request).GetAwaiter().GetResult();
+                                if (!result.IsSuccessful)
+                                {
+                                    var cmd = new IterationFailedCommand
+                                    {
+                                        Time = DateTime.Now,
+                                        TestId = _testId,
+                                        TestName = test.Name,
+                                        Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
+                                        Message = result.ErrorMessage,
+                                        StatusCode = result.StatusCode
+                                    };
+                                    _dispatcher.Send(cmd);
+                                }
+
+                                if (!ctx.Settings.IsWarmup)
+                                {
+                                    //_logger.Write($"Call to {url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms", Opacc.Fof.Commons.Diagnostics.LogLevel.Debug, category: "console", source: test.Name, module: "LoadTest");
+                                }
+                            }
+                            catch(Exception e)
+                            {
+                                var cmd = new IterationFailedCommand
+                                {
+                                    Time = DateTime.Now,
+                                    TestId = _testId,
+                                    TestName = test.Name,
+                                    Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
+                                    Message = e.Message,
+                                    //StatusCode = result.StatusCode
+                                };
+                                _dispatcher.Send(cmd);
                             }
                         }
                     });

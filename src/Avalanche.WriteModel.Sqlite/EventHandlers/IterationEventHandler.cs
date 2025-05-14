@@ -4,7 +4,9 @@ using System.Data.SQLite;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers
 {
-    public class IterationEventHandler : IEventHandler<IterationLogEvent>
+    public class IterationEventHandler :
+        IEventHandler<IterationLogEvent>,
+        IEventHandler<IterationErrorEvent>
     {
         private readonly SQLiteConnection _connection;
 
@@ -48,6 +50,24 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
                 cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
                 cmd.Parameters.Add(new SQLiteParameter("@iterations", @event.Iterations));
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void Handle(IterationErrorEvent @event)
+        {
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "INSERT INTO IterationEvents (Id, TestId, Time, ThreadId, TestName, Message, StatusCode) Values (@id, @testId, @time, @threadId, @name, @message, @statuscode)";
+
+                cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
+                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
+                cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
+                cmd.Parameters.Add(new SQLiteParameter("@name", @event.TestName));
+                cmd.Parameters.Add(new SQLiteParameter("@message", @event.Message));
+                cmd.Parameters.Add(new SQLiteParameter("@statuscode", @event.StatusCode));
+
                 cmd.ExecuteNonQuery();
             }
         }

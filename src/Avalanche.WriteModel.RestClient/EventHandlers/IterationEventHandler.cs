@@ -5,7 +5,8 @@ using System;
 namespace Avalanche.WriteModel.RestClient.EventHandlers
 {
     public class IterationEventHandler : ApiHandler,
-        IEventHandler<IterationLogEvent>
+        IEventHandler<IterationLogEvent>,
+        IEventHandler<IterationErrorEvent>
     {
         public IterationEventHandler(IRestClient client)
             : base(client)
@@ -15,6 +16,11 @@ namespace Avalanche.WriteModel.RestClient.EventHandlers
         public async void Handle(IterationLogEvent evnt)
         {
             await PostAsync("api/event/iteration", evnt);
+        }
+
+        public async void Handle(IterationErrorEvent evnt)
+        {
+            await PostAsync("api/event/iteration/error", evnt);
         }
 
         public void Dispose()

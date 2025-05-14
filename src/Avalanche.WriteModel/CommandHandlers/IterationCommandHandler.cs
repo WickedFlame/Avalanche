@@ -15,11 +15,6 @@ namespace Avalanche.WriteModel.CommandHandlers
 
         public override void Handle(IterationCommand cmd)
         {
-            if(cmd.IsWarmup)
-            {
-                return;
-            }
-
             var key = $"{cmd.TestId}_{cmd.TestName}_{cmd.Thread}";
             if (!_events.ContainsKey(key))
             {

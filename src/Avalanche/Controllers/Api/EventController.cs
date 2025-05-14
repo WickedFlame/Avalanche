@@ -52,7 +52,16 @@ namespace Avalanche.Controllers.Api
 
         [HttpPost]
         [Route("iteration")]
-        public IActionResult IterationSummary([FromBody] IterationLogEvent evnt)
+        public IActionResult Iteration([FromBody] IterationLogEvent evnt)
+        {
+            _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("iteration/Error")]
+        public IActionResult IterationError([FromBody] IterationErrorEvent evnt)
         {
             _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
 
@@ -61,7 +70,7 @@ namespace Avalanche.Controllers.Api
 
         [HttpPost]
         [Route("rampup")]
-        public IActionResult RampupSummary([FromBody] RampupEvent evnt)
+        public IActionResult Rampup([FromBody] RampupEvent evnt)
         {
             _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
 
@@ -70,7 +79,7 @@ namespace Avalanche.Controllers.Api
 
         [HttpPost]
         [Route("rampdown")]
-        public IActionResult RampdonwSummary([FromBody] RampdownEvent evnt)
+        public IActionResult Rampdown([FromBody] RampdownEvent evnt)
         {
             _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
 
