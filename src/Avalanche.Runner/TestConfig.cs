@@ -21,6 +21,8 @@
 
         public bool UseCookies { get; set; } = true;
 
+        public int Delay { get; set; }
+
         public InitConfig Init { get; set; }
     }
 

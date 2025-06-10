@@ -31,7 +31,6 @@ namespace Avalanche.Runner
                     {
                         var ctx = new MeasureMap.ExecutionContext(s);
 
-
                         var options = new RestClientOptions()
                         {
                             FollowRedirects = true,
@@ -47,7 +46,6 @@ namespace Avalanche.Runner
                         {
                             var time = Stopwatch.StartNew();
 
-                            //var result = client.GetAsync(test.Init.Url).GetAwaiter().GetResult();
                             var request = new RestRequest(test.Init.Url);
                             var result = client.GetAsync(request).GetAwaiter().GetResult();
 
@@ -153,7 +151,16 @@ namespace Avalanche.Runner
                     session.SetInterval(TimeSpan.FromMilliseconds(test.Interval));
                 }
 
+                if (test.Delay > 0)
+                {
+                    session.AddDelay(TimeSpan.FromSeconds(test.Delay));
+                }
+
                 var result = session.RunSession();
+
+                //
+                // Wait for the console to write all results before tracing the summeray
+                System.Threading.Tasks.Task.Delay(5000).Wait();
 
                 result.Trace();
 

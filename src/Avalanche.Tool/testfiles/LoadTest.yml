@@ -1,10 +1,19 @@
 Tests:
   - Urls:
-      # - "https://eshop.was.local/"
       - "https://fo-wastest-performance.was.local/"
-    Name: load test 1
+    Name: Startpage
     Threads: 10
     Iterations: 50
+    Delay: 1
 #    UseCookies: false
     Init:
       Url: "https://fo-wastest-performance.was.local/"
+
+  - Urls:
+      - "https://fo-wastest-performance.was.local/de/cat-filter.htm"
+    Name: Detailpage
+    Threads: 10
+    Iterations: 50
+    Delay: 1
+    Init:
+      Url: "https://fo-wastest-performance.was.local/de/cat-filter.htm"
