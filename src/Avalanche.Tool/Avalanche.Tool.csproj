@@ -42,7 +42,7 @@
 
     <ItemGroup>
       <PackageReference Include="CommandLineParser" Version="2.9.1" />
-      <PackageReference Include="MeasureMap" Version="2.3.3-RC42" />
+      <PackageReference Include="MeasureMap" Version="2.4.0" />
       <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
       <PackageReference Include="YamlMap" Version="1.3.0" />
     </ItemGroup>
