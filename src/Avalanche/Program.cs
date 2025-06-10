@@ -24,6 +24,7 @@ builder.Services.AddSingleton<IEventBus>(c =>
     eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
     eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
     eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
+    eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler());
 
     return eventBus;
 });

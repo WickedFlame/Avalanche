@@ -42,19 +42,17 @@ namespace Avalanche
                 Url = "https://host.docker.internal:32773";
             }
 
-            var options = new RestClientOptions(Url)
-            {
-                FollowRedirects = true,
-                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true,
-            };
-
-
-
             var store = new InMemoryEventStore();
 
             var eventBus = new EventBus(store);
             if (!string.IsNullOrEmpty(Url))
             {
+                var options = new RestClientOptions(Url)
+                {
+                    FollowRedirects = true,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true,
+                };
+
                 eventBus.Subscribe<StartTestEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.TestRunEventHandler(new RestClient(options)));
                 eventBus.Subscribe<EndTestEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.TestRunEventHandler(new RestClient(options)));
                 eventBus.Subscribe<ThreadSummaryEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.SummaryEventHandler(new RestClient(options)));
@@ -62,17 +60,17 @@ namespace Avalanche
                 eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
                 eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
                 eventBus.Subscribe<IterationLogEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.IterationEventHandler(new RestClient(options)));
+                eventBus.Subscribe<IterationErrorEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.IterationEventHandler(new RestClient(options)));
             }
-            else
-            {
-                eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
-                eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
-                eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
-                eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
-                eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
-                eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
-                eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
-            }
+
+            eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
+            eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
+            eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
+            eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
+            eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
+            eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
+            eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
+            eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler());
 
             var dispatcher = new CommandDispatcher(eventBus);
 
