@@ -7,6 +7,7 @@ namespace Avalanche.ReadModel.QueryHandlers
 {
     public class TestRunQueryHandler :
         IQueryHandler<IEnumerable<TestRun>, GetTestsQuery>,
+        IQueryHandler<IEnumerable<TestStatistic>, GetTestsStatisticsQuery>,
         IQueryHandler<TestRun, GetLastTestQuery>,
         IQueryHandler<TestRun, GetTestRun>,
         IQueryHandler<IEnumerable<RampupData>, GetRampupData>,
@@ -116,6 +117,18 @@ namespace Avalanche.ReadModel.QueryHandlers
                     }));
 
                 return summary;
+            }
+        }
+
+        public IEnumerable<TestStatistic> Get(GetTestsStatisticsQuery query)
+        {
+            using (var cmd = _connection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT * FROM TestRun tr INNER JOIN SummaryEvents se ON tr.TestId = se.TestId WHERE tr.Scenario = @scenario AND se.Type = 'TestSummary' ORDER BY StartTime DESC";
+
+                cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
+
+                return cmd.Execute<TestStatistic>();
             }
         }
     }

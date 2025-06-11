@@ -34,5 +34,25 @@ namespace Avalanche.Controllers
 
             return View(model);
         }
+
+        public IActionResult Statistics(string name)
+        {
+            var path = $"./testfiles/{name}.yml";
+
+            var tsr = new TestSettingsReader();
+            var settings = tsr.GetTestSettings(path);
+
+            var trh = new TestRunQueryHandler();
+            var stats = trh.Get(new ReadModel.Queries.GetTestsStatisticsQuery {  Scenario = name });
+
+            var model = new ScenarioStatsModel
+            {
+                Name = name,
+                Settings = settings,
+                Stats = stats
+            };
+
+            return View(model);
+        }
     }
 }

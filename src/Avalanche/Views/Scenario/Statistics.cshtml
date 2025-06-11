@@ -1,0 +1,80 @@
+﻿@using System.Linq
+@using System.Text.Json
+@model ScenarioStatsModel
+
+
+<div class="pt-main-content">
+    <aside class="menu px-4 py-4">
+        <p class="menu-label">Navigate</p>
+        <ul class="menu-list">
+            <li><a asp-controller="Home" asp-action="Index">View all Scenarios</a></li>
+            <li><a asp-controller="Scenario" asp-action="Index" asp-route-name="@Model.Name">Back to Scenario</a></li>
+        </ul>
+    </aside>
+
+    <div class="content px-6 py-4">
+        <h1 class="title is-1">@Model.Name</h1>
+
+        <div>
+            <h2>Statistics</h2>
+        </div>
+        @foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
+        {
+            <div class="pt-element-container">
+                <div class="pt-content-panel">
+                    <h3>@grp.Key</h3>
+                    <div>
+                        @{
+                            var setting = Model.Settings.Tests.FirstOrDefault(t => t.Name == grp.Key);
+                            if(setting != null)
+                            {
+                                <div>
+                                    <span>URL: </span><span>@setting.Urls.First()</span>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div>
+                        <div class="overflow-x-auto">
+                            <table class="table is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>TestId</th>
+                                        <th>Time</th>
+                                        <th>Average (ms)</th>
+                                        <th># Iterations</th>
+                                        <th># Fails</th>
+                                        <th>Throughput</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var stat in grp.OrderByDescending(s => s.Time))
+                                    {
+                                        <tr>
+                                            <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@stat.TestId">@stat.TestId</a></td>
+                                            <td>@stat.Time.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                            <td>@stat.AverageMilliseconds</td>
+                                            <td>@stat.Iterations</td>
+                                            <td>0</td>
+                                            <td>@stat.Throughput</td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <text>
+        <script type="module" async>
+            import { TestOverview } from '/js/testoverview.js';
+            var sites = new TestOverview();
+        </script>
+    </text>
+}

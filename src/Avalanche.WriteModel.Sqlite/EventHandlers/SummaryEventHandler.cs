@@ -19,10 +19,11 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, TestCase, Type, ThreadNumber, Iterations, AverageMilliseconds, TotalMilliseconds, Throughput) Values (@id, @testId, @testcase, @type, @threadNumber, @iterations, @avgMs, @totalMs, @throughput)";
+                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, Time, TestCase, Type, ThreadNumber, Iterations, AverageMilliseconds, TotalMilliseconds, Throughput) Values (@id, @testId, @time, @testcase, @type, @threadNumber, @iterations, @avgMs, @totalMs, @throughput)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@time", DateTime.Now));
                 cmd.Parameters.Add(new SQLiteParameter("@testcase", @event.TestCase));
                 cmd.Parameters.Add(new SQLiteParameter("@type", "ThreadSummary"));
                 cmd.Parameters.Add(new SQLiteParameter("@threadNumber", @event.ThreadNumber));
@@ -39,10 +40,11 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, TestCase, Type, ThreadNumber, Iterations, AverageMilliseconds, TotalMilliseconds, Throughput) Values (@id, @testId, @testcase, @type, @threadNumber, @iterations, @avgMs, @totalMs, @throughput)";
+                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, Time, TestCase, Type, ThreadNumber, Iterations, AverageMilliseconds, TotalMilliseconds, Throughput) Values (@id, @testId, @time, @testcase, @type, @threadNumber, @iterations, @avgMs, @totalMs, @throughput)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
+                cmd.Parameters.Add(new SQLiteParameter("@time", DateTime.Now));
                 cmd.Parameters.Add(new SQLiteParameter("@testcase", @event.TestCase));
                 cmd.Parameters.Add(new SQLiteParameter("@type", "TestSummary"));
                 cmd.Parameters.Add(new SQLiteParameter("threadNumber", DBNull.Value));

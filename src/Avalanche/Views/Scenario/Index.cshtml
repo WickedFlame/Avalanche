@@ -5,9 +5,13 @@
 
 <div class="pt-main-content">
     <aside class="menu px-4 py-4">
-        <p class="menu-label">Menu</p>
+        <p class="menu-label">Navigate</p>
         <ul class="menu-list">
-            <li><a asp-controller="Home" asp-action="Index">Test Scenarios</a></li>
+            <li><a asp-controller="Home" asp-action="Index">View all Scenarios</a></li>
+        </ul>
+        <p class="menu-label">Details</p>
+        <ul class="menu-list">
+            <li><a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name">Statistics</a></li>
         </ul>
     </aside>
 
@@ -109,8 +113,8 @@
                                 <tr>
                                     <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId" >@test.Scenario</a></td>
                                     <td>@test.TestId</td>
-                                    <td>@test.StartTime</td>
-                                    <td>@test.EndTime</td>
+                                    <td>@test.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                    <td>@test.EndTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
                                     <td>@test.Status</td>
                                 </tr>
                             }
