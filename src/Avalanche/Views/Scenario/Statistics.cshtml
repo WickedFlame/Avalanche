@@ -18,6 +18,16 @@
         <div>
             <h2>Statistics</h2>
         </div>
+
+
+
+
+        <partial name="./Partials/StatisticsChart" for="@Model" />
+
+        <partial name="./Partials/ThroughputChart" for="@Model" />
+
+
+
         @foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
         {
             <div class="pt-element-container">
@@ -35,7 +45,6 @@
                         }
                     </div>
 
-                    <partial name="./Partials/Chart" for="@grp" />
 
                     <div>
                         <div class="overflow-x-auto">
@@ -79,13 +88,14 @@
             import { Statistics } from '/js/statistics.js';
             var stats = new Statistics();
 
-            @foreach (var test in Model.Settings.Tests)
-            {
-                var data = Model.Stats.Where(s => s.TestCase == test.Name).Select(s => new { s.Time, Value = s.AverageMilliseconds });
-                <text>
-                    stats.initChart('@test.Name', @Html.Raw(JsonSerializer.Serialize(data, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })));
-                </text>
+            @{
+                var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.Time, Value = v.AverageMilliseconds }) });
+                var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.Time, Value = v.Throughput }) });
             }
+
+            stats.initChart('stats-chart', @Html.Raw(JsonSerializer.Serialize(data, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })) );
+            stats.initChart('throughput-chart', @Html.Raw(JsonSerializer.Serialize(throughput, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })) );
+
         </script>
     </text>
 }

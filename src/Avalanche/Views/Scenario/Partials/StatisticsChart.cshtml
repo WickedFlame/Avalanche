@@ -1,14 +1,14 @@
 ﻿@using Avalanche.ReadModel.Models
-@model IEnumerable<TestStatistic>
+@model ScenarioStatsModel
 
 @{
-    var id = $"chart-{Model.First().TestCase.Replace(" ", "_")}";
+    var id = $"stats-chart";
 }
 
 <div class="pt-element-container">
     <div class="pt-content-panel">
         <h2>
-            Stats
+            Average (ms)
         </h2>
         <div>
             <canvas id="@id" style="width:100%;max-width:100%;height:400px;"></canvas>

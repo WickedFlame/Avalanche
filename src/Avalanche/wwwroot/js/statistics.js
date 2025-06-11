@@ -3,33 +3,32 @@
         this.charts = new Map();
     }
 
-    initChart(testname, data) {
-
-        let tmp = [];
-        data.forEach(d => {
-            tmp.push({ x: d.time, y: d.value });
-        })
-
-
+    initChart(name, data) {
         let datasets = [];
-        datasets.push({
-            data: tmp,
-            fill: false,
-            label: testname,
-            //lineTension: 0.1,
-            //radius: 0
+
+        data.forEach(t => {
+            let tmp = [];
+            t.values.forEach(d => {
+                tmp.push({ x: d.time, y: d.value });
+            })
+
+            datasets.push({
+                data: tmp,
+                fill: false,
+                label: t.testCase,
+                //lineTension: 0.1,
+                //radius: 0
+            });
         });
 
-        this.showChart(testname, datasets);
+        this.showChart(name, datasets);
     }
 
-    async showChart(testname, data) {
-        let id = testname.replace(/ /g, '_');
+    async showChart(name, data) {
 
-        if (this.charts[id] === null || this.charts[id] === undefined) {
-            
-            let ctx = document.querySelector(`#chart-${id}`).getContext("2d");
-            this.charts[id] = new Chart(ctx, {
+        if (this.charts[name] === null || this.charts[name] === undefined) {
+            let ctx = document.querySelector(`#${name}`).getContext("2d");
+            this.charts[name] = new Chart(ctx, {
                 type: "line",
                 data: {
                     datasets: data
