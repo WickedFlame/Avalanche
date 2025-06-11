@@ -34,6 +34,9 @@
                             }
                         }
                     </div>
+
+                    <partial name="./Partials/Chart" for="@grp" />
+
                     <div>
                         <div class="overflow-x-auto">
                             <table class="table is-fullwidth">
@@ -73,8 +76,16 @@
 @section scripts {
     <text>
         <script type="module" async>
-            import { TestOverview } from '/js/testoverview.js';
-            var sites = new TestOverview();
+            import { Statistics } from '/js/statistics.js';
+            var stats = new Statistics();
+
+            @foreach (var test in Model.Settings.Tests)
+            {
+                var data = Model.Stats.Where(s => s.TestCase == test.Name).Select(s => new { s.Time, Value = s.AverageMilliseconds });
+                <text>
+                    stats.initChart('@test.Name', @Html.Raw(JsonSerializer.Serialize(data, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })));
+                </text>
+            }
         </script>
     </text>
 }
