@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Globalization;
 using System.Reflection;
 
@@ -79,6 +80,11 @@ namespace Avalanche.ReadModel.Data
 
         public static void ParsePrimitive(PropertyInfo prop, object entity, object value)
         {
+            if(value == null)
+            {
+                return;
+            }
+
             if (prop.PropertyType == typeof(string))
             {
                 prop.SetValue(entity, value.ToString().Trim(), null);
@@ -158,8 +164,11 @@ namespace Avalanche.ReadModel.Data
                         prop.SetValue(entity, guid, null);
                     }
                 }
-
-
+            }
+            else if (prop.PropertyType == typeof(Type))
+            {
+                var type = Type.GetType(value.ToString());
+                prop.SetValue(entity, type, null);
             }
         }
 

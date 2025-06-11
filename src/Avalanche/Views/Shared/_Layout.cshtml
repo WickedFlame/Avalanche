@@ -15,11 +15,11 @@
     <script>
         let htmlTag = document.getElementsByTagName('html')[0];
         let modus = localStorage.getItem('mode');
-        if (modus === 'dark') {
-            htmlTag.classList.remove('theme-light');
-        }else{
+        if (modus === 'light') {
             htmlTag.classList.remove('theme-dark');
             htmlTag.classList.add('theme-light');
+        } else {
+            htmlTag.classList.remove('theme-light');
         }
     </script>
 
@@ -34,8 +34,7 @@
                     
                 </div>
                 <div class="navbar-end">
-                    <div class="navbar-item"><a class="button is-text" asp-area="" asp-controller="Home" asp-action="Index">Home</a></div>
-                    <div class="navbar-item"><a class="button is-text" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></div>
+                    @* <div class="navbar-item"><a class="button is-text" asp-area="" asp-controller="Home" asp-action="Index">Home</a></div> *@
 
                     <div class="wa-navbar-item-l navbar-item">
                         <div class="wa-navbar-btn">
@@ -44,12 +43,10 @@
                             </a>
                         </div>
                     </div>
-
                     <div class="navbar-item has-dropdown is-hoverable">
-                        <a class="navbar-link">Parent</a>
+                        <a class="navbar-link">Admin</a>
                         <div class="navbar-dropdown">
-                            <a class="navbar-item">Link 1</a>
-                            <a class="navbar-item">Link 2</a>
+                            <a class="navbar-item" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
                         </div>
                     </div>
                 </div>
@@ -61,7 +58,6 @@
         @RenderBody()
     </div>
 
-    @* <script src="~/js/site.js" asp-append-version="true" type="module" async></script> *@
     <script type="module" async>
         import { Site } from '/js/site.js';
         var site = new Site();

@@ -10,4 +10,8 @@
       <DocumentationFile>bin\Release\netstandard2.0\Avalanche.ReadModel.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Broadcast\Broadcast.csproj" />
+  </ItemGroup>
+
 </Project>

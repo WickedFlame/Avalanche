@@ -1,5 +1,8 @@
 using Avalanche;
+using Avalanche.Domain;
+using Avalanche.ReadModel;
 using Avalanche.ReadModel.QueryHandlers;
+using Avalanche.ReadModel.Sqlite.QueryHandlers;
 using Avalanche.WriteModel;
 using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite;
@@ -28,8 +31,11 @@ builder.Services.AddSingleton<IEventBus>(c =>
 
     return eventBus;
 });
+builder.Services.AddSingleton<ISettingsQueryHandler, SettingsQueryHandler>();
 builder.Services.AddSingleton<TestRunQueryHandler>();
 //builder.Services.AddScoped<IDispatcher<ICommand>, CommandDispatcher>();
+
+builder.Services.AddTransient<ISettingsFacade, SettingsFacade>();
 
 
 
