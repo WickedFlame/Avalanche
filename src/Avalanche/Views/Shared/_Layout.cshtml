@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" >
+<html lang="en" class="theme-dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,6 +12,18 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
 </head>
 <body>
+    <script>
+        let htmlTag = document.getElementsByTagName('html')[0];
+        let modus = localStorage.getItem('mode');
+        if (modus === 'dark') {
+            htmlTag.classList.remove('theme-light');
+        }else{
+            htmlTag.classList.remove('theme-dark');
+            htmlTag.classList.add('theme-light');
+        }
+    </script>
+
+
     <header>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
@@ -25,9 +37,14 @@
                     <div class="navbar-item"><a class="button is-text" asp-area="" asp-controller="Home" asp-action="Index">Home</a></div>
                     <div class="navbar-item"><a class="button is-text" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></div>
 
-                    <div class="navbar-item">
-                        <input type="checkbox" value="dark" class="toggle theme-controller" checked />
+                    <div class="wa-navbar-item-l navbar-item">
+                        <div class="wa-navbar-btn">
+                            <a class="wa-navbar-btn-icon">
+                                <img src="~/img/light-dark.svg" class="" style="width: 20px; height: 20px;" alt="Light/Dark" title="Change light/dark mode" id="lightswitch">
+                            </a>
+                        </div>
                     </div>
+
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">Parent</a>
                         <div class="navbar-dropdown">
@@ -44,7 +61,12 @@
         @RenderBody()
     </div>
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    @* <script src="~/js/site.js" asp-append-version="true" type="module" async></script> *@
+    <script type="module" async>
+        import { Site } from '/js/site.js';
+        var site = new Site();
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

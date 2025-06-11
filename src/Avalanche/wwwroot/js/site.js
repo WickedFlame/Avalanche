@@ -1,4 +1,21 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+export class Site {
+    constructor() {
+        let sw = document.querySelector('#lightswitch');
+        if (sw) {
+            sw.addEventListener('click', e => this.lightswitch());
+        }
+    }
 
-// Write your JavaScript code.
+    async lightswitch() {
+        let htmlTag = document.getElementsByTagName('html')[0];
+
+        if (htmlTag.classList.contains('theme-light')) {
+            htmlTag.classList.remove('theme-light');
+            localStorage.setItem('mode', 'dark');
+        } else {
+            htmlTag.classList.add('theme-light');
+            localStorage.setItem('mode', 'light');
+        }
+    }
+}
