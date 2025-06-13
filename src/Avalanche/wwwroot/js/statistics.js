@@ -38,7 +38,8 @@
                         x: {
                             type: 'time',
                             distribution: 'linear',
-                            beginAtZero: true
+                            beginAtZero: true,
+                            display: false
                         },
                         y: {
                             stacked: true,

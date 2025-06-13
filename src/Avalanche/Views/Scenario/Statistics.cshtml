@@ -89,8 +89,11 @@
             var stats = new Statistics();
 
             @{
-                var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.Time, Value = v.AverageMilliseconds }) });
-                var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.Time, Value = v.Throughput }) });
+                // var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.Time, Value = v.AverageMilliseconds }) });
+                // var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.Time, Value = v.Throughput }) });
+
+                var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select((v, i) => new { Time = i, Value = v.AverageMilliseconds }) });
+                var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select((v, i) => new { Time = i, Value = v.Throughput }) });
             }
 
             stats.initChart('stats-chart', @Html.Raw(JsonSerializer.Serialize(data, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })) );
