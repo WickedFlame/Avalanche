@@ -105,6 +105,7 @@
                                 <th>StartTime</th>
                                 <th>EndTime</th>
                                 <th>Status</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -116,6 +117,13 @@
                                     <td>@test.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
                                     <td>@test.EndTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
                                     <td>@test.Status</td>
+                                    <td>
+                                        <a class="pt-button" asp-controller="Scenario" asp-action="DeleteTestRun" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId">
+                                            <span class="icon">
+                                                <i class="fa fa-trash"></i>
+                                            </span>
+                                        </a>
+                                    </td>
                                 </tr>
                             }
                         </tbody>

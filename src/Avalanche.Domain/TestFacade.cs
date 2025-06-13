@@ -115,5 +115,13 @@ namespace Avalanche.Domain
                 Status = TestRunStatus.Done
             });
         }
+
+        public void Delete(string testId)
+        {
+            _dispatcher.Send(new DeleteTestRunCommand
+            {
+                TestId = testId
+            });
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace Avalanche.WriteModel
             Register<StartupThreadCommand>(new StartupThreadCommandHandler(eventBus));
             Register<EndThreadCommand>(new EndThreadCommandHandler(eventBus));
             Register<IterationCommand>(new IterationCommandHandler(eventBus));
+
+            Register<DeleteTestRunCommand>(new DeleteTestCommandHandler(eventBus));
         }
     }
 }

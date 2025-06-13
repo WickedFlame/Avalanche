@@ -1,88 +1,109 @@
 ﻿html {
   font-size: 14px;
   position: relative;
-  min-height: 100%; }
+  min-height: 100%;
+}
 
 body {
   color-scheme: light dark;
   height: 100%;
-  margin-bottom: 60px; }
+  margin-bottom: 60px;
+}
 
 .pt-grid {
-  width: 100%; }
-  .pt-grid .pt-row {
-    display: grid;
-    margin-top: 1px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--bulma-border);
-    margin-bottom: 1px; }
-  .pt-grid .pt-row-header {
-    font-weight: 700;
-    background: var(--panel-background-color); }
-  .pt-grid .pt-test-overview-row {
-    grid-template-columns: 1fr 1fr 1fr 1fr; }
+  width: 100%;
+}
+.pt-grid .pt-row {
+  display: grid;
+  margin-top: 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--bulma-border);
+  margin-bottom: 1px;
+}
+.pt-grid .pt-row-header {
+  font-weight: 700;
+  background: var(--panel-background-color);
+}
+.pt-grid .pt-test-overview-row {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
 
 .pt-body {
   height: 100%;
-  padding-top: 20px; }
-  .pt-body .pt-main-content {
-    display: grid;
-    grid-template-columns: 20em 1fr;
-    height: 100%; }
-    .pt-body .pt-main-content .pt-element-container {
-      padding-bottom: 20px; }
-      .pt-body .pt-main-content .pt-element-container table {
-        background: transparent; }
-      .pt-body .pt-main-content .pt-element-container .pt-content-panel {
-        background: var(--panel-background-color);
-        border: 1px solid var(--bulma-border);
-        border-radius: 10px;
-        padding: 2em; }
-    .pt-body .pt-main-content .pt-content-panel {
-      padding-top: 5em;
-      padding-bottom: 2em; }
+  padding-top: 20px;
+}
+.pt-body .pt-main-content {
+  display: grid;
+  grid-template-columns: 20em 1fr;
+  height: 100%;
+}
+.pt-body .pt-main-content .pt-element-container {
+  padding-bottom: 20px;
+}
+.pt-body .pt-main-content .pt-element-container table {
+  background: transparent;
+}
+.pt-body .pt-main-content .pt-element-container .pt-content-panel {
+  background: var(--panel-background-color);
+  border: 1px solid var(--bulma-border);
+  border-radius: 10px;
+  padding: 2em;
+}
+.pt-body .pt-main-content .pt-content-panel {
+  padding-top: 5em;
+  padding-bottom: 2em;
+}
 
 .pt-stats {
   display: inline-grid;
   grid-auto-flow: column;
-  overflow-x: auto; }
-  .pt-stats .pt-stat-item {
-    display: inline-grid;
-    width: 100%;
-    grid-template-columns: repeat(1, 1fr);
-    column-gap: 1rem;
-    padding: 1rem 1.5rem;
-    border: 1px solid var(--bulma-border);
-    border-right: 0; }
-    .pt-stats .pt-stat-item .pt-stat-header {
-      grid-column-start: 1;
-      white-space: nowrap; }
-    .pt-stats .pt-stat-item .pt-stat-content {
-      grid-column-start: 1;
-      white-space: nowrap;
-      font-size: 2.25rem;
-      line-height: 2.5rem;
-      font-weight: 800; }
-    .pt-stats .pt-stat-item .pt-stat-footer {
-      grid-column-start: 1;
-      white-space: nowrap;
-      font-size: .75rem;
-      line-height: 1rem; }
-    .pt-stats .pt-stat-item:first-of-type {
-      border-radius: 10px 0 0 10px; }
-    .pt-stats .pt-stat-item:last-of-type {
-      border-radius: 0 10px 10px 0;
-      border-right: 1px solid var(--bulma-border); }
+  overflow-x: auto;
+}
+.pt-stats .pt-stat-item {
+  display: inline-grid;
+  width: 100%;
+  grid-template-columns: repeat(1, 1fr);
+  column-gap: 1rem;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--bulma-border);
+  border-right: 0;
+}
+.pt-stats .pt-stat-item .pt-stat-header {
+  grid-column-start: 1;
+  white-space: nowrap;
+}
+.pt-stats .pt-stat-item .pt-stat-content {
+  grid-column-start: 1;
+  white-space: nowrap;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 800;
+}
+.pt-stats .pt-stat-item .pt-stat-footer {
+  grid-column-start: 1;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.pt-stats .pt-stat-item:first-of-type {
+  border-radius: 10px 0 0 10px;
+}
+.pt-stats .pt-stat-item:last-of-type {
+  border-radius: 0 10px 10px 0;
+  border-right: 1px solid var(--bulma-border);
+}
 
 .pt-padding-side {
   padding-left: 10px;
-  padding-right: 10px; }
+  padding-right: 10px;
+}
 
 .pt-padding {
   padding-top: 10px;
-  padding-bottom: 10px; }
+  padding-bottom: 10px;
+}
 
-/*# sourceMappingURL=data:application/json;base64,ewoJInZlcnNpb24iOiAzLAoJImZpbGUiOiAid3d3cm9vdC9jc3Mvc2l0ZS5jc3MiLAoJInNvdXJjZXMiOiBbCgkJInd3d3Jvb3QvY3NzL3NpdGUuc2NzcyIKCV0sCgkibmFtZXMiOiBbXSwKCSJtYXBwaW5ncyI6ICJBQUlBLEFBQUEsSUFBSSxDQUFDO0VBQ0gsU0FBUyxFQUFFLElBQUk7RUFDZixRQUFRLEVBQUUsUUFBUTtFQUNsQixVQUFVLEVBQUUsSUFBSSxHQUNqQjs7QUFFRCxBQUFBLElBQUksQ0FBQztFQUNELFlBQVksRUFBRSxVQUFVO0VBQ3hCLE1BQU0sRUFBRSxJQUFJO0VBQ1osYUFBYSxFQUFFLElBQUksR0FDdEI7O0FBRUQsQUFBQSxRQUFRLENBQUM7RUFDTCxLQUFLLEVBQUUsSUFBSSxHQXFCZDtFQXRCRCxBQUdJLFFBSEksQ0FHSixPQUFPLENBQUM7SUFDSixPQUFPLEVBQUUsSUFBSTtJQUNiLFVBQVUsRUFBRSxHQUFHO0lBQ2YsWUFBWSxFQUFFLElBQUk7SUFDbEIsYUFBYSxFQUFFLElBQUk7SUFDbkIsV0FBVyxFQUFFLElBQUk7SUFDakIsY0FBYyxFQUFFLElBQUk7SUFDcEIsYUFBYSxFQUFFLEdBQUcsQ0FBQyxLQUFLLENBQUMsbUJBQW1CO0lBQzVDLGFBQWEsRUFBRSxHQUFHLEdBQ3JCO0VBWkwsQUFjSSxRQWRJLENBY0osY0FBYyxDQUFDO0lBQ1gsV0FBVyxFQUFFLEdBQUc7SUFDaEIsVUFBVSxFQUFFLDZCQUE2QixHQUM1QztFQWpCTCxBQW1CSSxRQW5CSSxDQW1CSixxQkFBcUIsQ0FBQztJQUNsQixxQkFBcUIsRUFBRSxlQUFlLEdBQ3pDOztBQUdMLEFBQUEsUUFBUSxDQUFDO0VBQ0wsTUFBTSxFQUFFLElBQUk7RUFDWixXQUFXLEVBQUUsSUFBSSxHQTJCcEI7RUE3QkQsQUFJSSxRQUpJLENBSUosZ0JBQWdCLENBQUM7SUFDYixPQUFPLEVBQUUsSUFBSTtJQUNiLHFCQUFxQixFQUFFLFFBQVE7SUFDL0IsTUFBTSxFQUFFLElBQUksR0FxQmY7SUE1QkwsQUFTUSxRQVRBLENBSUosZ0JBQWdCLENBS1oscUJBQXFCLENBQUM7TUFDbEIsY0FBYyxFQUFFLElBQUksR0FZdkI7TUF0QlQsQUFZWSxRQVpKLENBSUosZ0JBQWdCLENBS1oscUJBQXFCLENBR2pCLEtBQUssQ0FBQztRQUNGLFVBQVUsRUFBRSxXQUFXLEdBQzFCO01BZGIsQUFnQlksUUFoQkosQ0FJSixnQkFBZ0IsQ0FLWixxQkFBcUIsQ0FPakIsaUJBQWlCLENBQUM7UUFDZCxVQUFVLEVBQUUsNkJBQTZCO1FBQ3pDLE1BQU0sRUFBRSxHQUFHLENBQUMsS0FBSyxDQUFDLG1CQUFtQjtRQUNyQyxhQUFhLEVBQUUsSUFBSTtRQUNuQixPQUFPLEVBQUUsR0FBRyxHQUNmO0lBckJiLEFBd0JRLFFBeEJBLENBSUosZ0JBQWdCLENBb0JaLGlCQUFpQixDQUFDO01BQ2QsV0FBVyxFQUFFLEdBQUc7TUFDaEIsY0FBYyxFQUFFLEdBQUcsR0FDdEI7O0FBSVQsQUFBQSxTQUFTLENBQUM7RUFDTixPQUFPLEVBQUUsV0FBVztFQUNwQixjQUFjLEVBQUUsTUFBTTtFQUN0QixVQUFVLEVBQUUsSUFBSSxHQXdDbkI7RUEzQ0QsQUFLSSxTQUxLLENBS0wsYUFBYSxDQUFDO0lBQ1YsT0FBTyxFQUFFLFdBQVc7SUFDcEIsS0FBSyxFQUFFLElBQUk7SUFDWCxxQkFBcUIsRUFBRSxjQUFjO0lBQ3JDLFVBQVUsRUFBRSxJQUFJO0lBQ2hCLE9BQU8sRUFBRSxXQUFXO0lBQ3BCLE1BQU0sRUFBRSxHQUFHLENBQUMsS0FBSyxDQUFDLG1CQUFtQjtJQUNyQyxZQUFZLEVBQUUsQ0FBQyxHQThCbEI7SUExQ0wsQUFjUSxTQWRDLENBS0wsYUFBYSxDQVNULGVBQWUsQ0FBQztNQUNaLGlCQUFpQixFQUFFLENBQUM7TUFDcEIsV0FBVyxFQUFFLE1BQU0sR0FDdEI7SUFqQlQsQUFtQlEsU0FuQkMsQ0FLTCxhQUFhLENBY1QsZ0JBQWdCLENBQUM7TUFDYixpQkFBaUIsRUFBRSxDQUFDO01BQ3BCLFdBQVcsRUFBRSxNQUFNO01BQ25CLFNBQVMsRUFBRSxPQUFPO01BQ2xCLFdBQVcsRUFBRSxNQUFNO01BQ25CLFdBQVcsRUFBRSxHQUFHLEdBQ25CO0lBekJULEFBMkJRLFNBM0JDLENBS0wsYUFBYSxDQXNCVCxlQUFlLENBQUM7TUFDWixpQkFBaUIsRUFBRSxDQUFDO01BQ3BCLFdBQVcsRUFBRSxNQUFNO01BQ25CLFNBQVMsRUFBRSxNQUFNO01BQ2pCLFdBQVcsRUFBRSxJQUFJLEdBQ3BCO0lBaENULEFBa0NRLFNBbENDLENBS0wsYUFBYSxBQTZCUixjQUFjLENBQUM7TUFDWixhQUFhLEVBQUUsYUFBYSxHQUMvQjtJQXBDVCxBQXNDUSxTQXRDQyxDQUtMLGFBQWEsQUFpQ1IsYUFBYSxDQUFDO01BQ1gsYUFBYSxFQUFFLGFBQWE7TUFDNUIsWUFBWSxFQUFFLEdBQUcsQ0FBQyxLQUFLLENBQUMsbUJBQW1CLEdBQzlDOztBQUlULEFBQUEsZ0JBQWdCLENBQUM7RUFDYixZQUFZLEVBQUUsSUFBSTtFQUNsQixhQUFhLEVBQUUsSUFBSSxHQUN0Qjs7QUFFRCxBQUFBLFdBQVcsQ0FBQztFQUNSLFdBQVcsRUFBRSxJQUFJO0VBQ2pCLGNBQWMsRUFBRSxJQUFJLEdBQ3ZCIgp9 */
+/*# sourceMappingURL=data:application/json;charset=utf-8,%7B%22version%22:3,%22sourceRoot%22:%22%22,%22sources%22:%5B%22file:///C:/Projects/GitHub/Avalanche/src/Avalanche/wwwroot/css/site.scss%22%5D,%22names%22:%5B%5D,%22mappings%22:%22AAIA;EACE;EACA;EACA;;;AAGF;EACI;EACA;EACA;;;AAGJ;EACI;;AAEA;EACI;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAGJ;EACI;EACA;;AAGJ;EACI;;;AAIR;EACI;EACA;;AAEA;EACI;EACA;EACA;;AAEA;EACI;;AAEA;EACI;;AAGJ;EACI;EACA;EACA;EACA;;AAIR;EACI;EACA;;;AAKZ;EACI;EACA;EACA;;AAEA;EACI;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACI;EACA;;AAGJ;EACI;EACA;EACA;EACA;EACA;;AAGJ;EACI;EACA;EACA;EACA;;AAGJ;EACI;;AAGJ;EACI;EACA;;;AAKZ;EACI;EACA;;;AAGJ;EACI;EACA%22%7D */

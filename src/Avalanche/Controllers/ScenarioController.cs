@@ -1,14 +1,19 @@
 ﻿using Avalanche.Domain;
 using Avalanche.Models;
 using Avalanche.ReadModel.QueryHandlers;
+using Avalanche.WriteModel;
+using Broadcast;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers
 {
     public class ScenarioController : Controller
     {
-        public ScenarioController()
+        private readonly IEventBus _eventBus;
+
+        public ScenarioController(IEventBus eventBus)
         {
+            _eventBus = eventBus;
         }
 
         public IActionResult Index(string name)
@@ -53,6 +58,15 @@ namespace Avalanche.Controllers
             };
 
             return View(model);
+        }
+
+        public IActionResult DeleteTestRun(string scenario, string testId)
+        {
+            var dispatcher = new CommandDispatcher(_eventBus);
+            var facade = new TestFacade(dispatcher);
+            facade.Delete(testId);
+
+            return RedirectToAction(nameof(Index), new { name = scenario });
         }
     }
 }

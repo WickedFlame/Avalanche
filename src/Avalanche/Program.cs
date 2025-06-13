@@ -29,11 +29,12 @@ builder.Services.AddSingleton<IEventBus>(c =>
     eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
     eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler());
 
+    eventBus.Subscribe<DeleteTestRunEvent>(new DeleteTestRunEventHandler());
+
     return eventBus;
 });
 builder.Services.AddSingleton<ISettingsQueryHandler, SettingsQueryHandler>();
 builder.Services.AddSingleton<TestRunQueryHandler>();
-//builder.Services.AddScoped<IDispatcher<ICommand>, CommandDispatcher>();
 
 builder.Services.AddTransient<ISettingsFacade, SettingsFacade>();
 
