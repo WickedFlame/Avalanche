@@ -106,7 +106,7 @@ namespace Avalanche.Runner
                                         Message = result.ErrorMessage,
                                         StatusCode = result.StatusCode
                                     };
-                                    _dispatcher.Send(cmd);
+                                    _dispatcher.SendAsync(cmd);
                                 }
 
                                 if (!ctx.Settings.IsWarmup)
@@ -125,7 +125,7 @@ namespace Avalanche.Runner
                                     Message = e.Message,
                                     //StatusCode = result.StatusCode
                                 };
-                                _dispatcher.Send(cmd);
+                                _dispatcher.SendAsync(cmd);
                             }
                         }
                     });

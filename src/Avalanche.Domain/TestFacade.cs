@@ -71,7 +71,7 @@ namespace Avalanche.Domain
 
             foreach (var testResult in data.Results)
             {
-                _dispatcher.Send(new TestResultCommand
+                _dispatcher.SendAsync(new TestResultCommand
                 {
                     //TODO: The id per test/result has to be set. TestId is the overall Run ID
                     TestId = data.TestId,
