@@ -4,6 +4,8 @@
     {
         public List<string> Urls { get; set; }
 
+        public string Request { get; set; }
+
         public string Name { get; set; }
 
         public int Iterations { get; set; }

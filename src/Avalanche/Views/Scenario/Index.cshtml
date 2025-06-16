@@ -90,7 +90,44 @@
             </div>
         </div>
 
-
+        @if (Model.Settings != null)
+        {
+            <div class="pt-element-container">
+                <div class="pt-content-panel">
+                    <h2>Settings</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Threads</th>
+                                    <th>Rampup</th>
+                                    <th>URL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var test in Model.Settings.Tests)
+                                {
+                                    <tr>
+                                        <td>@test.Name</td>
+                                        <td>@test.Threads</td>
+                                        <td>@test.RampupTime</td>
+                                        <td>
+                                            <ul>
+                                                @foreach (var url in test.Urls)
+                                                {
+                                                    <li>@url</li>
+                                                }
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
 
 
         <div class="pt-element-container">
@@ -131,52 +168,7 @@
                 </div>
             </div>
         </div>
-
-
-
-        @if (Model.Settings != null)
-        {
-            <div class="pt-element-container">
-                <div class="pt-content-panel">
-                    <h2>Settings</h2>
-                    <div class="overflow-x-auto">
-                        <table class="table is-fullwidth">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Threads</th>
-                                    <th>Rampup</th>
-                                    <th>URL</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach(var test in Model.Settings.Tests)
-                                {
-                                    <tr>
-                                        <td>@test.Name</td>
-                                        <td>@test.Threads</td>
-                                        <td>@test.RampupTime</td>
-                                        <td>
-                                            <ul>
-                                                @foreach(var url in test.Urls)
-                                                {
-                                                    <li>@url</li>
-                                                }
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        }
-
-
-        </div>
     </div>
-
 </div>
 
 @section scripts {

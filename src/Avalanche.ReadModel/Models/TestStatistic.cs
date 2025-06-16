@@ -6,6 +6,11 @@
 
         public string TestCase { get; set; }
 
+        /// <summary>
+        /// Starttime of the Testrun
+        /// </summary>
+        public DateTime StartTime { get; set; }
+
         public DateTime Time { get; set; }
 
         public string Type { get; set; }

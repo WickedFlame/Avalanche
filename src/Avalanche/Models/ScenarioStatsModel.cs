@@ -10,5 +10,7 @@ namespace Avalanche.Models
         public TestSettings Settings { get; set; }
 
         public IEnumerable<TestStatistic> Stats { get; set; }
+
+        public string Tab { get; set; }
     }
 }

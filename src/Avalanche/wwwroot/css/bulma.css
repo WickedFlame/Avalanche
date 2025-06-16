@@ -21590,4 +21590,8 @@ has-background-danger.is-hoverable:active {
   --panel-background-color: #24292e;
 }
 
+.content ul {
+  margin-inline-start: 0;
+}
+
 /*# sourceMappingURL=bulma.css.map */

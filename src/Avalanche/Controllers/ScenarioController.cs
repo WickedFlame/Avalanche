@@ -40,7 +40,7 @@ namespace Avalanche.Controllers
             return View(model);
         }
 
-        public IActionResult Statistics(string name)
+        public IActionResult Statistics(string name, string tab)
         {
             var path = $"./testfiles/{name}.yml";
 
@@ -54,7 +54,8 @@ namespace Avalanche.Controllers
             {
                 Name = name,
                 Settings = settings,
-                Stats = stats
+                Stats = stats,
+                Tab = tab
             };
 
             return View(model);

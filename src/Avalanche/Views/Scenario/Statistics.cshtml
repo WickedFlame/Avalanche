@@ -20,65 +20,115 @@
         </div>
 
 
+        <div class="tabs is-medium">
+            <ul>
+                @{
+                    var dataActive = string.IsNullOrEmpty(Model.Tab) || Model.Tab == "data" ? "is-active" : "";
+                    var chartsActive = Model.Tab == "charts" ? "is-active" : "";
+                    var detailActive = Model.Tab == "details" ? "is-active" : "";
+                }
+                <li class="@dataActive"><a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name">Data</a></li>
+                <li class="@chartsActive"><a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name" asp-route-tab="charts">Charts</a></li>
+                <li class="@detailActive"><a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name" asp-route-tab="details">Details</a></li>
+            </ul>
+        </div>
 
+        <div>
+            @if (Model.Tab == "charts")
+            {
+                <partial name="./Partials/StatisticsChart" for="@Model" />
 
-        <partial name="./Partials/StatisticsChart" for="@Model" />
-
-        <partial name="./Partials/ThroughputChart" for="@Model" />
-
-
-
-        @foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
-        {
-            <div class="pt-element-container">
-                <div class="pt-content-panel">
-                    <h3>@grp.Key</h3>
-                    <div>
-                        @{
-                            var setting = Model.Settings.Tests.FirstOrDefault(t => t.Name == grp.Key);
-                            if(setting != null)
-                            {
-                                <div>
-                                    <span>URL: </span><span>@setting.Urls.First()</span>
-                                </div>
-                            }
-                        }
-                    </div>
-
-
-                    <div>
-                        <div class="overflow-x-auto">
-                            <table class="table is-fullwidth">
-                                <thead>
-                                    <tr>
-                                        <th>TestId</th>
-                                        <th>Time</th>
-                                        <th>Average (ms)</th>
-                                        <th># Iterations</th>
-                                        <th># Fails</th>
-                                        <th>Throughput</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var stat in grp.OrderByDescending(s => s.Time))
+                <partial name="./Partials/ThroughputChart" for="@Model" />
+            }
+            else if(Model.Tab == "details")
+            {
+                foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
+                {
+                    <div class="pt-element-container">
+                        <div class="pt-content-panel">
+                            <h3>@grp.Key</h3>
+                            <div>
+                                @{
+                                    var setting = Model.Settings.Tests.FirstOrDefault(t => t.Name == grp.Key);
+                                    if (setting != null)
                                     {
-                                        <tr>
-                                            <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@stat.TestId">@stat.TestId</a></td>
-                                            <td>@stat.Time.ToString("dd.MM.yyyy hh:mm:ss")</td>
-                                            <td>@stat.AverageMilliseconds</td>
-                                            <td>@stat.Iterations</td>
-                                            <td>0</td>
-                                            <td>@stat.Throughput</td>
-                                        </tr>
-
+                                        <div>
+                                            <span>URL: </span><span>@setting.Urls.First()</span>
+                                        </div>
                                     }
-                                </tbody>
-                            </table>
+                                }
+                            </div>
+
+
+                            <div>
+                                <div class="overflow-x-auto">
+                                    <table class="table is-fullwidth">
+                                        <thead>
+                                            <tr>
+                                                <th>TestId</th>
+                                                <th>Time</th>
+                                                <th>Average (ms)</th>
+                                                <th># Iterations</th>
+                                                <th># Fails</th>
+                                                <th>Throughput</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var stat in grp.OrderByDescending(s => s.StartTime))
+                                            {
+                                                <tr>
+                                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@stat.TestId">@stat.TestId</a></td>
+                                                    <td>@stat.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                                    <td>@stat.AverageMilliseconds</td>
+                                                    <td>@stat.Iterations</td>
+                                                    <td>0</td>
+                                                    <td>@stat.Throughput</td>
+                                                </tr>
+
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="pt-element-container">
+                    <div class="pt-content-panel">
+                        <div>
+                            <div class="overflow-x-auto">
+                                <table class="table is-fullwidth">
+                                    <thead>
+                                        <tr>
+                                            <th style="vertical-align: bottom;">Scenario</th>
+                                            @foreach(var run in Model.Stats.GroupBy(s => s.TestCase).First().Take(10).OrderByDescending(d => d.StartTime))
+                                            {
+                                                <th style="writing-mode: tb;text-orientation: sideways;transform: rotate(-180deg);">@run.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
+                                        {
+                                            <tr>
+                                                <td>@grp.Key</td>
+                                                @foreach (var run in grp.Take(10).OrderByDescending(d => d.StartTime))
+                                                {
+                                                    <td>@run.AverageMilliseconds</td>
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 </div>
 
