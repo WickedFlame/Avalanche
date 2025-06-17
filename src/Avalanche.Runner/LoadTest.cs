@@ -44,26 +44,34 @@ namespace Avalanche.Runner
 
                         if (test.Init != null && !string.IsNullOrEmpty(test.Init.Url))
                         {
-                            var time = Stopwatch.StartNew();
-
-                            var request = new RestRequest(test.Init.Url);
-                            var result = client.GetAsync(request).GetAwaiter().GetResult();
-
-                            time.Stop();
-
-                            var command = new StartupThreadCommand
+                            try
                             {
-                                TestId = _testId,
-                                Category = "console",
-                                Module = "Init",
-                                Name = test.Name,
-                                Message = $"Init {test.Init.Url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms",
-                                StatusCode = result.StatusCode,
-                                ElapsedMilliseconds = time.ElapsedMilliseconds,
-                                IsWarmup = s.IsWarmup
-                            };
+                                var time = Stopwatch.StartNew();
 
-                            _dispatcher.SendAsync(command);
+                                var request = new RestRequest(test.Init.Url);
+                                var result = client.GetAsync(request).GetAwaiter().GetResult();
+
+                                time.Stop();
+
+                                var command = new StartupThreadCommand
+                                {
+                                    TestId = _testId,
+                                    Category = "console",
+                                    Module = "Init",
+                                    Name = test.Name,
+                                    Message = $"Init {test.Init.Url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms",
+                                    StatusCode = result.StatusCode,
+                                    ElapsedMilliseconds = time.ElapsedMilliseconds,
+                                    IsWarmup = s.IsWarmup
+                                };
+
+                                _dispatcher.SendAsync(command);
+
+                            }
+                            catch (Exception e)
+                            {
+                                //TODO: not sure what to do when the init fails...
+                            }
                         }
 
                         return ctx;

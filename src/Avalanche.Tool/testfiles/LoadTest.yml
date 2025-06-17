@@ -3,7 +3,7 @@ Tests:
       - "https://fo-wastest-performance.was.local/"
     Name: Startpage
     Threads: 10
-    Iterations: 50
+    Iterations: 10
     Delay: 1
 #    UseCookies: false
     Init:
@@ -13,7 +13,7 @@ Tests:
       - "https://fo-wastest-performance.was.local/de/cat-filter.htm"
     Name: Detailpage
     Threads: 10
-    Iterations: 50
+    Iterations: 10
     Delay: 1
     Init:
       Url: "https://fo-wastest-performance.was.local/de/cat-filter.htm"
@@ -22,7 +22,16 @@ Tests:
       - "https://fo-wastest-performance.was.local/de/meeting/"
     Name: Struktur
     Threads: 10
-    Iterations: 50
+    Iterations: 10
     Delay: 1
     Init:
       Url: "https://fo-wastest-performance.was.local/de/meeting/"
+
+  - Urls:
+      - "https://fo-wastest-performance.was.local/de/error/"
+    Name: Error
+    Threads: 10
+    Iterations: 10
+    Delay: 1
+    Init:
+      Url: "https://fo-wastest-performance.was.local/de/error/"

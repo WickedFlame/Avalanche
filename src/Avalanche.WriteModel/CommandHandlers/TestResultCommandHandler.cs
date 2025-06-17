@@ -39,7 +39,9 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Iterations = cmd.Iterations,
                 AverageMilliseconds = cmd.AverageMilliseconds,
                 TotalMilliseconds = cmd.TotalMilliseconds,
-                Throughput = cmd.Throughput
+                Throughput = cmd.Throughput,
+                Slowest = cmd.Slowest,
+                Fastest = cmd.Fastest,
             };
 
             _eventBus.Publish(cmd.TestId, DateTime.Now, sumary);

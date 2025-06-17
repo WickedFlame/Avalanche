@@ -17,5 +17,11 @@
         public double TotalMilliseconds { get; set; }
 
         public double Throughput { get; set; }
+
+        public int Failed { get; set; }
+
+        public double Slowest { get; set; }
+
+        public double Fastest { get; set; }
     }
 }

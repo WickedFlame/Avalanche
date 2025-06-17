@@ -163,7 +163,7 @@
                                     <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId" >@test.Scenario</a></td>
                                     <td>@test.TestId</td>
                                     <td>@test.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
-                                    <td>@test.EndTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                    <td>@(test.EndTime > DateTime.MinValue ? test.EndTime.ToString("dd.MM.yyyy hh:mm:ss") : string.Empty)</td>
                                     <td>@test.Status</td>
                                     <td>
                                         <a class="pt-button" asp-controller="Scenario" asp-action="DeleteTestRun" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId">

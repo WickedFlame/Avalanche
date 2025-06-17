@@ -78,7 +78,9 @@
                                                 <th>Average (ms)</th>
                                                 <th># Iterations</th>
                                                 <th># Fails</th>
-                                                <th>Throughput</th>
+                                                <th>Throughput / s</th>
+                                                <th>Slowest (ms)</th>
+                                                <th>Fastest (ms)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -89,10 +91,11 @@
                                                     <td>@stat.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
                                                     <td>@stat.AverageMilliseconds</td>
                                                     <td>@stat.Iterations</td>
-                                                    <td>0</td>
+                                                    <td>@stat.Failed</td>
                                                     <td>@stat.Throughput</td>
+                                                    <td>@stat.Slowest</td>
+                                                    <td>@stat.Fastest</td>
                                                 </tr>
-
                                             }
                                         </tbody>
                                     </table>

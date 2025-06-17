@@ -17,10 +17,16 @@
 
         public int Iterations { get; set; }
 
+        public int Failed { get; set; }
+
         public double AverageMilliseconds { get; set; }
 
         public double TotalMilliseconds { get; set; }
 
         public double Throughput { get; set; }
+
+        public double Slowest { get; set; }
+
+        public double Fastest { get; set; }
     }
 }

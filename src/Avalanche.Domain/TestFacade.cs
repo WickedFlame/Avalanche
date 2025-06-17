@@ -73,7 +73,6 @@ namespace Avalanche.Domain
             {
                 _dispatcher.SendAsync(new TestResultCommand
                 {
-                    //TODO: The id per test/result has to be set. TestId is the overall Run ID
                     TestId = data.TestId,
                     TestCase = testResult.TestCase,
                     ThreadNumber = testResult.ThreadNumber,
@@ -81,6 +80,8 @@ namespace Avalanche.Domain
                     AverageMilliseconds = (int)testResult.AverageMilliseconds,
                     TotalMilliseconds = testResult.Duration.TotalMilliseconds,
                     Throughput = testResult.Throughput(),
+                    Slowest = testResult.Slowest.Duration.TotalMilliseconds,
+                    Fastest = testResult.Fastest.Duration.TotalMilliseconds,
                     Summary = testResult.Select(r => new ThreadSummary
                     {
                         ThreadNumber = r.ThreadNumber,

@@ -40,7 +40,7 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         {
             using (var cmd = _connection.CreateCommand())
             {
-                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, Time, TestCase, Type, ThreadNumber, Iterations, AverageMilliseconds, TotalMilliseconds, Throughput) Values (@id, @testId, @time, @testcase, @type, @threadNumber, @iterations, @avgMs, @totalMs, @throughput)";
+                cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, Time, TestCase, Type, ThreadNumber, Iterations, AverageMilliseconds, TotalMilliseconds, Throughput, Slowest, Fastest) Values (@id, @testId, @time, @testcase, @type, @threadNumber, @iterations, @avgMs, @totalMs, @throughput, @slowest, @fastest)";
 
                 cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
@@ -52,6 +52,8 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@avgMs", @event.AverageMilliseconds));
                 cmd.Parameters.Add(new SQLiteParameter("@totalMs", @event.TotalMilliseconds));
                 cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
+                cmd.Parameters.Add(new SQLiteParameter("@slowest", @event.Slowest));
+                cmd.Parameters.Add(new SQLiteParameter("@fastest", @event.Fastest));
 
                 cmd.ExecuteNonQuery();
             }

@@ -53,8 +53,7 @@ CREATE TABLE IF NOT EXISTS TestRunDetail (
   TestCase VARCHAR(255),
   ThreadId VARCHAR(255),
   Throughput REAL,
-  Iterations BIGINT,
-  Errors INT
+  Iterations BIGINT
 );
 
 CREATE TABLE IF NOT EXISTS IterationEvents (
@@ -67,7 +66,8 @@ CREATE TABLE IF NOT EXISTS IterationEvents (
   AverageMilliseconds REAL,
   IsWarmup BOOLEAN,
   Message VARCHAR(500),
-  StatusCode VARCHAR(50)
+  StatusCode VARCHAR(50),
+  Error BOOLEAN
 );
 
 
@@ -81,7 +81,9 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Iterations INT,
   AverageMilliseconds REAL,
   TotalMilliseconds REAL,
-  Throughput REAL
+  Throughput REAL,
+  Slowest REAL,
+  Fastest REAL
 );
 ";
             using (var connection = new SQLiteConnection(Constants.ReadModelDatabase))

@@ -87,6 +87,9 @@
                     row.querySelector('.AverageMs').innerHTML = s.averageMilliseconds;
                     row.querySelector('.Iterations').innerHTML = s.iterations;
                     row.querySelector('.Throughput').innerHTML = s.throughput;
+                    row.querySelector('.Fails').innerHTML = s.failed;
+                    row.querySelector('.Slowest').innerHTML = s.slowest;
+                    row.querySelector('.Fastest').innerHTML = s.fastest;
                 });
             }
 

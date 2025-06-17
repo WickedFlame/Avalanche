@@ -15,5 +15,11 @@
         public double Throughput { get; set; }
 
         public double AverageMilliseconds { get; set; }
+
+        public string Message { get; set; }
+
+        public string StatusCode { get; set; }
+
+        public bool Error { get; set; }
     }
 }

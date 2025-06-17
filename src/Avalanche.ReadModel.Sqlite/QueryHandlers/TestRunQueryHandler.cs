@@ -94,8 +94,18 @@ namespace Avalanche.ReadModel.QueryHandlers
 
                 var summary = cmd.Execute<TestSummary>().ToList();
 
+                cmd.CommandText = "SELECT * FROM IterationEvents WHERE TestId = @testId AND Error = true";
+                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+
+                var errors = cmd.Execute<IterationItem>();
+
                 if (summary.Any())
                 {
+                    foreach (var stat in summary)
+                    {
+                        stat.Failed = errors.Count(e => !e.IsWarmup && e.TestName == stat.TestCase);
+                    }
+
                     return summary;
                 }
 
@@ -113,7 +123,10 @@ namespace Avalanche.ReadModel.QueryHandlers
                         TestCase = detail.Key,
                         Throughput = detail.Sum(d => d.Throughput) / detail.Count(),
                         Iterations = detail.Sum(d => d.Iterations),
-                        Type = "TestSummary"
+                        Type = "TestSummary",
+                        Failed = errors.Count(e => !e.IsWarmup && e.TestName == detail.Key),
+                        Slowest = 0,
+                        Fastest = 0
                     }));
 
                 return summary;
@@ -128,7 +141,20 @@ namespace Avalanche.ReadModel.QueryHandlers
 
                 cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
 
-                return cmd.Execute<TestStatistic>();
+                var stats = cmd.Execute<TestStatistic>();
+
+
+                cmd.CommandText = "SELECT * FROM TestRun tr INNER JOIN IterationEvents ie ON tr.TestId = ie.TestId WHERE tr.Scenario = @scenario AND Error = true";
+                cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
+
+                var errors = cmd.Execute<IterationItem>();
+
+                foreach (var stat in stats)
+                {
+                    stat.Failed = errors.Count(e => !e.IsWarmup && e.TestId == stat.TestId && e.TestName == stat.TestCase);
+                }
+
+                return stats;
             }
         }
     }

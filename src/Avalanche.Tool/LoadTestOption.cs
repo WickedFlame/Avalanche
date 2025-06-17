@@ -79,6 +79,10 @@ namespace Avalanche
 
             var facade = new TestFacade(dispatcher);
             facade.Start(ConfigFile, path);
+
+            //
+            // Give the collector some time to finish the work
+            Task.Delay(10000).Wait();
         }
     }
 }

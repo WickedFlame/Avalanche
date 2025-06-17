@@ -17,5 +17,9 @@ namespace Avalanche.WriteModel.Events
         public string TestCase { get; set; }
 
         public double Throughput { get; set; }
+
+        public double Slowest { get; set; }
+
+        public double Fastest { get; set; }
     }
 }

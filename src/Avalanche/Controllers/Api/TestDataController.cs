@@ -87,7 +87,10 @@ namespace Avalanche.Controllers.Api
                         s.Iterations,
                         AverageMilliseconds = TimeSpan.FromMilliseconds(s.AverageMilliseconds),
                         TotalTime = TimeSpan.FromMilliseconds(s.TotalMilliseconds),
-                        s.Throughput
+                        s.Throughput,
+                        s.Failed,
+                        s.Slowest,
+                        s.Fastest
                     })
                 }
             });
