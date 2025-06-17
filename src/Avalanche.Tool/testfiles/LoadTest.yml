@@ -17,3 +17,12 @@ Tests:
     Delay: 1
     Init:
       Url: "https://fo-wastest-performance.was.local/de/cat-filter.htm"
+
+  - Urls:
+      - "https://fo-wastest-performance.was.local/de/meeting/"
+    Name: Struktur
+    Threads: 10
+    Iterations: 50
+    Delay: 1
+    Init:
+      Url: "https://fo-wastest-performance.was.local/de/meeting/"

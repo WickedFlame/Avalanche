@@ -36,10 +36,18 @@
                 options: {
                     scales: {
                         x: {
-                            type: 'time',
-                            distribution: 'linear',
-                            beginAtZero: true,
-                            display: false
+                            type: 'timeseries',
+                            //type: 'time',
+                            //distribution: 'linear',
+                            //beginAtZero: true,
+                            //display: false,
+                            time: {
+                                unit: 'hour',
+                                unitStepSize: 0.5,
+                                displayFormats: {
+                                    'hour': 'HH:mm'
+                                },
+                            }
                         },
                         y: {
                             stacked: true,
