@@ -13,6 +13,15 @@
     </aside>
 
     <div class="content px-6 py-4">
+
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index">Scenarios</a></li>
+                <li><a asp-controller="Scenario" asp-action="Index" asp-route-name="@Model.Scenario">@Model.Scenario</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Detail</a></li>
+            </ul>
+        </nav>
+
         <h1 class="title is-1">@Model.Scenario</h1>
         <div>
             <div class="pt-padding-side py-5">

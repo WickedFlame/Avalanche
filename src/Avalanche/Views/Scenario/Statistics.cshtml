@@ -13,6 +13,14 @@
     </aside>
 
     <div class="content px-6 py-4">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index">Scenarios</a></li>
+                <li><a asp-controller="Scenario" asp-action="Index" asp-route-name="@Model.Name">@Model.Name</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Statistics</a></li>
+            </ul>
+        </nav>
+
         <h1 class="title is-1">@Model.Name</h1>
 
         <div>
@@ -139,11 +147,11 @@
             var stats = new Statistics();
 
             @{
-                // var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.Time, Value = v.AverageMilliseconds }) });
-                // var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.Time, Value = v.Throughput }) });
+                var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.StartTime, Value = v.AverageMilliseconds }) });
+                var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.StartTime, Value = v.Throughput }) });
 
-                var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select((v, i) => new { Time = i, Value = v.AverageMilliseconds }) });
-                var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select((v, i) => new { Time = i, Value = v.Throughput }) });
+                // var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select((v, i) => new { Time = i, Value = v.AverageMilliseconds }) });
+                // var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select((v, i) => new { Time = i, Value = v.Throughput }) });
             }
 
             stats.initChart('stats-chart', @Html.Raw(JsonSerializer.Serialize(data, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })) );

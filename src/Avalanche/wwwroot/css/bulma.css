@@ -21593,5 +21593,8 @@ has-background-danger.is-hoverable:active {
 .content ul {
   margin-inline-start: 0;
 }
+.content li + li {
+  margin-top: 0;
+}
 
 /*# sourceMappingURL=bulma.css.map */
