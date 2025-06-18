@@ -18,24 +18,6 @@ namespace Avalanche.Controllers.Api
             _dispatcher = new CommandDispatcher(eventBus);
         }
 
-        [HttpGet]
-        [Route("{name}")]
-        public IActionResult Get(string name)
-        {
-            return Ok(new
-            {
-                Name = name,
-                StartTime = DateTime.Now.ToString("o"),
-                State = "running",
-                Logs = new[]
-                {
-                    "Started",
-                    "Line 1",
-                    "Line 2"
-                }
-            });
-        }
-
         [HttpPost]
         [Route("{name}/start")]
         public IActionResult Start(string name)

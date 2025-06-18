@@ -1,13 +1,13 @@
 ﻿@model Avalanche.Runner.TestConfig
 
 @{
-    var id = $"chart-{Model.Name.Replace(" ", "_")}-average";
+    var id = $"chart-{Model.Name.Replace(" ", "_")}-throughput";
 }
 
 <div class="pt-element-container">
     <div class="pt-content-panel">
         <h2>
-            Average (ms)
+            Throughput / s
         </h2>
         <div>
             <canvas id="@id" style="width:100%;max-width:100%;height:400px;"></canvas>

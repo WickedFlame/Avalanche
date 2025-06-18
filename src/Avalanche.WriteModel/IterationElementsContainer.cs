@@ -19,27 +19,32 @@ namespace Avalanche.WriteModel
 
         public double GetAverageMilliseconds()
         {
-            var events = _events.Skip(Math.Max(0, _events.Count - 10)).OrderBy(e => e.Time).ToList();
+            var events = _events.Count > 10 ?
+                _events.Skip(Math.Max(0, _events.Count - 10)).OrderBy(e => e.Time).ToList() :
+                _events;
 
-            if (events.Count < 10)
-            {
-                return 0;
-            }
+            //if (events.Count <= 1)
+            //{
+            //    return 0;
+            //}
 
             return events.Average(e => e.TotalMilliseconds);
         }
 
         public double GetThroughput()
         {
-            var events = _events.Skip(Math.Max(0, _events.Count - 10)).OrderBy(e => e.Time).ToList();
+            var events = _events.Count > 50 ?
+                _events.Skip(Math.Max(0, _events.Count - 50)).OrderBy(e => e.Time).ToList() :
+                _events;
 
-            if (events.Count < 10)
+            if (events.Count <= 1)
             {
-                return 0;
+                return 1;
             }
 
             var time = events[events.Count - 1].Time - events[0].Time;
-            return events.Count / time.TotalSeconds;
+            var threads = events.GroupBy(g => g.Thread);
+            return threads.Sum(t => t.Count() / time.TotalSeconds);
         }
 
         /// <summary>

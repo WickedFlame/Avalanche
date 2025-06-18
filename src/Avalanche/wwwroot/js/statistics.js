@@ -45,7 +45,7 @@
                                 unit: 'hour',
                                 unitStepSize: 0.5,
                                 displayFormats: {
-                                    'hour': 'HH:mm'
+                                    'hour': 'HH:mm:ss'
                                 },
                             }
                         },
@@ -53,15 +53,7 @@
                             stacked: true,
                             beginAtZero: true
                         }
-                    },
-                    //plugins: {
-                    //    legend: {
-                    //        display: true,
-                    //        labels: {
-                    //            color: 'rgb(255, 99, 132)'
-                    //        }
-                    //    }
-                    //}
+                    }
                 }
             });
         } else {

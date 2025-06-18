@@ -30,7 +30,6 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
                 cmd.Parameters.Add(new SQLiteParameter("@name", @event.Name));
                 cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
-                //cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
                 cmd.Parameters.Add(new SQLiteParameter("@threadId", null));
                 cmd.Parameters.Add(new SQLiteParameter("@value", 1));
 

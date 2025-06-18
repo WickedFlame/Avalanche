@@ -57,8 +57,8 @@ namespace Avalanche.Controllers.Api
         }
 
         [HttpGet]
-        [Route("{scenario}/{testname}/summary/{testId}")]
-        public IActionResult GetSummary(string scenario, string testname, string testId)
+        [Route("{scenario}/summary/{testId}")]
+        public IActionResult GetSummary(string scenario, string testId)
         {
             var lastRun = _queryHandler.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
 
@@ -68,12 +68,11 @@ namespace Avalanche.Controllers.Api
             }
 
             var facade = new TestDataFacade(_queryHandler);
-            var data = facade.GetSummary(testId, testname);
+            var data = facade.GetSummary(testId);
 
             return Ok(new
             {
                 Scenario = scenario,
-                Testname = testname,
                 TestId = testId,
                 Status = lastRun?.Status ?? "New",
                 Data = new

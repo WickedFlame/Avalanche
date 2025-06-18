@@ -15,6 +15,8 @@ namespace Avalanche.WriteModel.CommandHandlers
 
         public override void Handle(IterationCommand cmd)
         {
+            //
+            // the storage has to be per thread to ensure enough events are sent for the charts
             var key = $"{cmd.TestId}_{cmd.TestName}_{cmd.Thread}";
             if (!_events.ContainsKey(key))
             {
@@ -37,6 +39,8 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Thread = cmd.Thread,
                 Time = cmd.Time,
                 IsWarmup = cmd.IsWarmup,
+                //
+                // GetThroughput should be on all elementst/threads instead of only the current thread
                 Throughput = lst.GetThroughput(),
                 Iterations = lst.Count(),
                 AverageMilliseconds = lst.GetAverageMilliseconds()

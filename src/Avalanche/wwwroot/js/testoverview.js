@@ -56,16 +56,16 @@
     }
 
 
-    async initSummaryDataPoller(scenario, testname, testid) {
-        this.showSummaryData(scenario, testname, testid);
+    async initSummaryDataPoller(scenario, testid) {
+        this.showSummaryData(scenario, testid);
 
         this.detailpoller = setInterval(() => {
-            this.showSummaryData(scenario, testname, testid);
+            this.showSummaryData(scenario, testid);
         }, 3000);
     }
 
-    async showSummaryData(scenario, testname, testid) {
-        const url = `api/testdata/${scenario}/${testname}/summary/${testid}`;
+    async showSummaryData(scenario, testid) {
+        const url = `api/testdata/${scenario}/summary/${testid}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -128,11 +128,6 @@
     displayChart(scenario, testname, testId) {
         this.showChartData(scenario, testname, testId);
         this.showRampupData(scenario, testname, testId);
-
-        //this.poller = setInterval(() => {
-        //    this.showChartData(scenario, testname, testId);
-        //    this.showRampupData(scenario, testname, testId);
-        //}, 3000);
     }
 
     async showRampupData(scenario, testname, testId) {
@@ -161,10 +156,6 @@
 
             if (tmp.length > 0) {
                 this.showChart(`${testname}-rampup`, datasets);
-
-                //if (data.status == `Done` && this.poller) {
-                //    clearInterval(this.poller);
-                //}
             }
 
         } catch (error) {
@@ -183,28 +174,33 @@
             const data = await response.json();
 
             let datasets = [];
+            let tpData = [];
 
             data.chartData.forEach(function (a) {
                 let tmpCd = [];
+                let throughput = [];
                 a.data.forEach(d => {
-                    tmpCd.push({ x: d.time, y: d.value });
+                    tmpCd.push({ x: d.time, y: d.milliseconds });
+                    throughput.push({ x: d.time, y: d.throughput });
                 })
+
                 datasets.push({
                     data: tmpCd,
                     fill: false,
                     label: a.name,
-                    lineTension: 0.1,
-                    radius: 0
+                    //lineTension: 0.1,
+                    //radius: 0
+                });
+                tpData.push({
+                    data: throughput,
+                    fill: false,
+                    label: a.name
                 });
             }, Object.create(null));
 
             if (datasets.length > 0) {
-                this.showChart(testname, datasets);
-
-
-
-                //TODO: stop poller when state is done
-                //TODO: show resultdata when state is done
+                this.showChart(`${testname}-average`, datasets);
+                this.showChart(`${testname}-throughput`, tpData);
             }
 
         } catch (error) {
@@ -227,10 +223,17 @@
                     scales: {
                         x: {
                             type: 'time',
-                            distribution: 'linear',
-                            beginAtZero: true
+                            //distribution: 'linear',
+                            //beginAtZero: true
                             //time: {
                             //    unit: 'second'
+                            //}
+                            //time: {
+                            //    unit: 'hour',
+                            //    unitStepSize: 0.5,
+                            //    displayFormats: {
+                            //        'hour': 'HH:mm:ss'
+                            //    },
                             //}
                         },
                         y: {
@@ -255,5 +258,4 @@
             chart.update();
         }
     }
-
 }

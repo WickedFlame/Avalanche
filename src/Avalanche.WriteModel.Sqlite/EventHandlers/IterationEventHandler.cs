@@ -70,28 +70,6 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
 
                 cmd.ExecuteNonQuery();
             }
-
-            //using (var cmd = _connection.CreateCommand())
-            //{
-            //    cmd.CommandText = "SELECT Failed FROM TestRunDetail WHERE TestId = @testId AND TestCase = @testCase AND ThreadId = @threadId";
-            //    cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-            //    cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.TestName));
-            //    cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-
-            //    var tmp = cmd.ExecuteScalar();
-            //    if(!int.TryParse(tmp?.ToString(), out var failed))
-            //    {
-            //        failed = 0;
-            //    }
-
-            //    cmd.CommandText = "UPDATE TestRunDetail SET Failed = @failed WHERE TestId = @testId AND TestCase = @testCase AND ThreadId = @threadId";
-
-            //    cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-            //    cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.TestName));
-            //    cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-            //    cmd.Parameters.Add(new SQLiteParameter("@failed", failed + 1));
-            //    cmd.ExecuteNonQuery();
-            //}
         }
 
         public void Dispose()

@@ -28,7 +28,8 @@ namespace Avalanche.Domain
                     Data = g.Select(e => new ChartDataRow
                         {
                             Time = e.Time.ToString("o"),
-                            Value = e.Throughput.ToString()
+                            Milliseconds = e.AverageMilliseconds.ToString(),
+                            Throughput = e.Throughput.ToString(),
                         })
                 });
             ;
@@ -77,9 +78,9 @@ namespace Avalanche.Domain
 
         }
 
-        public IEnumerable<TestSummary> GetSummary(string testId, string testCase)
+        public IEnumerable<TestSummary> GetSummary(string testId)
         {
-            return _queryHandler.Get(new GetSummary { TestId = testId, TestCase = testCase });
+            return _queryHandler.Get(new GetSummary { TestId = testId });
         }
     }
 }
