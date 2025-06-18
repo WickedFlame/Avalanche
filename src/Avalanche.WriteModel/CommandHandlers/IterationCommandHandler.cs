@@ -6,11 +6,14 @@ namespace Avalanche.WriteModel.CommandHandlers
     public class IterationCommandHandler : CommandHandler<IterationCommand>
     {
         private readonly IEventBus _eventBus;
-        private readonly Dictionary<string, IterationElementsContainer> _events = new();
+        private readonly EventQueue _events = new();
+        private readonly ManualResetEvent _waitHandle = new(false);
+        private bool _isRunning;
 
         public IterationCommandHandler(IEventBus eventBus)
         {
             _eventBus = eventBus;
+            StartDispatcher();
         }
 
         public override void Handle(IterationCommand cmd)
@@ -23,30 +26,96 @@ namespace Avalanche.WriteModel.CommandHandlers
                 _events.Add(key, new IterationElementsContainer());
             }
 
-            var lst = _events[key];
-            lst.Add(cmd);
+            _events[key].Add(cmd);
 
-            // only write to db if the last update was more than 2 seconds ago
-            if (!lst.IsCheckValid() && !cmd.IsWarmup)
+            _waitHandle.Reset();
+        }
+
+        public void StartDispatcher()
+        {
+
+            _isRunning = true;
+
+            Task.Factory.StartNew(() =>
             {
-                return;
-            }
+                while (_isRunning)
+                {
+                    _waitHandle.Reset();
 
-            var @event = new Events.IterationLogEvent
-            {
-                TestId = cmd.TestId,
-                TestName = cmd.TestName,
-                Thread = cmd.Thread,
-                Time = cmd.Time,
-                IsWarmup = cmd.IsWarmup,
-                //
-                // GetThroughput should be on all elementst/threads instead of only the current thread
-                Throughput = lst.GetThroughput(),
-                Iterations = lst.Count(),
-                AverageMilliseconds = lst.GetAverageMilliseconds()
-            };
+                    foreach (var key in _events.Keys.ToList())
+                    {
+                        var entry = _events.Dequeue(key);
+                        if (entry != null && entry.Any())
+                        {
+                            var cmd = entry.Last();
 
-            _eventBus.Publish(cmd.TestId, cmd.Time, @event);
+                            var @event = new Events.IterationLogEvent
+                            {
+                                TestId = cmd.TestId,
+                                TestName = cmd.TestName,
+                                Thread = cmd.Thread,
+                                Time = cmd.Time,
+                                IsWarmup = cmd.IsWarmup,
+                                //
+                                // GetThroughput should be on all elementst/threads instead of only the current thread
+                                Throughput = entry.GetThroughput(),
+                                Iterations = entry.Count(),
+                                AverageMilliseconds = entry.GetAverageMilliseconds()
+                            };
+
+                            _eventBus.Publish(cmd.TestId, cmd.Time, @event);
+
+                            Console.WriteLine($"Sent events for {key}");
+
+                            if (!_isRunning)
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    _waitHandle.WaitOne(2000);
+                }
+            },
+                CancellationToken.None,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _isRunning = false;
+            _waitHandle.Reset();
+
+            base.Dispose(disposing);
+        }
+    }
+
+    public class EventQueue
+    {
+        private readonly Dictionary<string, IterationElementsContainer> _events = [];
+
+        public IEnumerable<string> Keys => _events.Keys;
+
+        public IterationElementsContainer this[string key] => _events[key];
+
+        internal void Add(string key, IterationElementsContainer iterationElementsContainer)
+        {
+            _events.Add(key, iterationElementsContainer);
+        }
+
+        internal bool ContainsKey(string key)
+        {
+            return _events.ContainsKey(key);
+        }
+
+        internal IterationElementsContainer Dequeue(string key)
+        {
+            var items = _events[key];
+
+            _events[key] = new IterationElementsContainer();
+
+            return items;
         }
     }
 }

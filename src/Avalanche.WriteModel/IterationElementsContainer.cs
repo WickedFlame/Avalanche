@@ -12,9 +12,24 @@ namespace Avalanche.WriteModel
             _events.Add(@event);
         }
 
+        public IterationCommand Last()
+        {
+            if(_events.Count == 0)
+            {
+                return null;
+            }
+
+            return _events[_events.Count - 1];
+        }
+
         public int Count()
         {
             return _events.Count;
+        }
+
+        public bool Any()
+        {
+            return _events.Any();
         }
 
         public double GetAverageMilliseconds()

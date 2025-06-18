@@ -34,13 +34,13 @@ namespace Avalanche
             // in debug wait until the website is started
             Console.WriteLine($"Wait until the website is started");
             System.Threading.Tasks.Task.Delay(10000).Wait();
-#endif
 
             if (string.IsNullOrEmpty(Url))
             {
                 //Url = "https://localhost:32773";
                 Url = "https://host.docker.internal:32773";
             }
+#endif
 
             var store = new InMemoryEventStore();
 
@@ -72,17 +72,18 @@ namespace Avalanche
             eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
             eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler());
 
-            var dispatcher = new CommandDispatcher(eventBus);
+            using (var dispatcher = new CommandDispatcher(eventBus))
+            {
+                // LoadTest
+                var path = $"testfiles/{ConfigFile}.yml";
 
-            // LoadTest
-            var path = $"testfiles/{ConfigFile}.yml";
+                var facade = new TestFacade(dispatcher);
+                facade.Start(ConfigFile, path);
 
-            var facade = new TestFacade(dispatcher);
-            facade.Start(ConfigFile, path);
-
-            //
-            // Give the collector some time to finish the work
-            Task.Delay(10000).Wait();
+                //
+                // Give the collector some time to finish the work
+                Task.Delay(10000).Wait();
+            }
         }
     }
 }

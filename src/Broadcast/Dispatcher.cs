@@ -92,6 +92,10 @@
             if (disposing)
             {
                 Close();
+                foreach (var handler in _handlers)
+                {
+                    handler.Value?.Dispose();
+                }
             }
         }
     }
