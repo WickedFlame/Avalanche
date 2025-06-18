@@ -4,17 +4,6 @@
 
 
 <div class="pt-main-content">
-    <aside class="menu px-4 py-4">
-        <p class="menu-label">Navigate</p>
-        <ul class="menu-list">
-            <li><a asp-controller="Home" asp-action="Index">View all Scenarios</a></li>
-        </ul>
-        <p class="menu-label">Details</p>
-        <ul class="menu-list">
-            <li><a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name">Statistics</a></li>
-        </ul>
-    </aside>
-
     <div class="content px-6 py-4">
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
@@ -27,21 +16,20 @@
         <div>
             <div class="pt-padding-side py-5">
                 <div class="buttons">
-                @if (Model.Status == Avalanche.Runner.TestRunStatus.Running)
-                {
-                    <div class="buttons has-addons" style="margin-bottom:0;">
-                        <a id="StartTests" data-name="@Model.Name" class="button" disabled>Start</a>
-                        <a id="StopTests" data-name="@Model.Name" class="button" disabled>Stop</a>
-                    </div>
-                }
-                else
-                {
+                    @if (Model.Status == Avalanche.Runner.TestRunStatus.Running)
+                    {
                         <div class="buttons has-addons" style="margin-bottom:0;">
-                        <a id="StartTests" data-name="@Model.Name" class="button">Start</a>
-                        <a id="StopTests" data-name="@Model.Name" class="button" disabled>Stop</a>
-                    </div>
-                }
-
+                            <a id="StartTests" data-name="@Model.Name" class="button" disabled>Start</a>
+                            <a id="StopTests" data-name="@Model.Name" class="button" disabled>Stop</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="buttons has-addons" style="margin-bottom:0;">
+                            <a id="StartTests" data-name="@Model.Name" class="button">Start</a>
+                            <a id="StopTests" data-name="@Model.Name" class="button" disabled>Stop</a>
+                        </div>
+                    }
                     <a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name" class="button">Statistics</a>
                 </div>
             </div>

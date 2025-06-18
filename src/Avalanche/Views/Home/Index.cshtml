@@ -6,17 +6,6 @@
 
 
 <div class="pt-main-content">
-    <aside class="menu px-4 py-4">
-        <p class="menu-label">Test Scenarios</p>
-        <ul class="menu-list">
-            @foreach (var test in Model.Tests)
-            {
-                <li><a asp-controller="Scenario" asp-action="Index" asp-route-name="@test.Name">@test.Name</a></li>
-            }
-        </ul>
-    </aside>
-
-
     <div class="content px-6 py-4">
         <h1 class="title is-1">Avalanche</h1>
         <p>Loadtesting platform</p>

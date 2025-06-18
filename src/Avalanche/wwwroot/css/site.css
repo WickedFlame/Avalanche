@@ -37,8 +37,10 @@ body {
 }
 .pt-body .pt-main-content {
   display: grid;
-  grid-template-columns: 20em 1fr;
   height: 100%;
+}
+.pt-body .pt-main-content.pt-has-side-navigation {
+  grid-template-columns: 20em 1fr;
 }
 .pt-body .pt-main-content .pt-element-container {
   padding-bottom: 20px;
@@ -106,4 +108,4 @@ body {
   padding-bottom: 10px;
 }
 
-/*# sourceMappingURL=data:application/json;charset=utf-8,%7B%22version%22:3,%22sourceRoot%22:%22%22,%22sources%22:%5B%22file:///C:/Projects/GitHub/Avalanche/src/Avalanche/wwwroot/css/site.scss%22%5D,%22names%22:%5B%5D,%22mappings%22:%22AAIA;EACE;EACA;EACA;;;AAGF;EACI;EACA;EACA;;;AAGJ;EACI;;AAEA;EACI;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAGJ;EACI;EACA;;AAGJ;EACI;;;AAIR;EACI;EACA;;AAEA;EACI;EACA;EACA;;AAEA;EACI;;AAEA;EACI;;AAGJ;EACI;EACA;EACA;EACA;;AAIR;EACI;EACA;;;AAKZ;EACI;EACA;EACA;;AAEA;EACI;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACI;EACA;;AAGJ;EACI;EACA;EACA;EACA;EACA;;AAGJ;EACI;EACA;EACA;EACA;;AAGJ;EACI;;AAGJ;EACI;EACA;;;AAKZ;EACI;EACA;;;AAGJ;EACI;EACA%22%7D */
+/*# sourceMappingURL=data:application/json;charset=utf-8,%7B%22version%22:3,%22sourceRoot%22:%22%22,%22sources%22:%5B%22file:///C:/Projects/GitHub/Avalanche/src/Avalanche/wwwroot/css/site.scss%22%5D,%22names%22:%5B%5D,%22mappings%22:%22AAIA;EACE;EACA;EACA;;;AAGF;EACI;EACA;EACA;;;AAGJ;EACI;;AAEA;EACI;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAGJ;EACI;EACA;;AAGJ;EACI;;;AAIR;EACI;EACA;;AAEA;EACI;EACA;;AAEA;EACI;;AAGJ;EACI;;AAEA;EACI;;AAGJ;EACI;EACA;EACA;EACA;;AAIR;EACI;EACA;;;AAKZ;EACI;EACA;EACA;;AAEA;EACI;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACI;EACA;;AAGJ;EACI;EACA;EACA;EACA;EACA;;AAGJ;EACI;EACA;EACA;EACA;;AAGJ;EACI;;AAGJ;EACI;EACA;;;AAKZ;EACI;EACA;;;AAGJ;EACI;EACA%22%7D */

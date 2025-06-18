@@ -44,8 +44,11 @@ body {
 
     .pt-main-content {
         display: grid;
-        grid-template-columns: 20em 1fr;
         height: 100%;
+
+        &.pt-has-side-navigation {
+            grid-template-columns: 20em 1fr;
+        }
 
         .pt-element-container {
             padding-bottom: 20px;

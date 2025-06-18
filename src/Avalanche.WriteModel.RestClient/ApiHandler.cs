@@ -15,10 +15,19 @@ namespace Avalanche.WriteModel.RestClient
 
         public async Task PostAsync(string url, IEvent evnt)
         {
-            var request = new RestRequest(url)
-                .AddBody(evnt);
+            try
+            {
+                var request = new RestRequest(url)
+                    .AddBody(evnt);
 
-            var res = await _client.PostAsync(request);
+                var res = await _client.PostAsync(request);
+            }
+            catch
+            {
+                //
+                // do nothing.
+                // just ensure the app continues to work
+            }
         }
     }
 }
