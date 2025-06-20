@@ -81,9 +81,9 @@ namespace Avalanche.WriteModel
 
         public void Merge(IterationElementsContainer entry)
         {
-            foreach (var e in entry)
+            foreach (var en in entry.Where(e => !e.IsWarmup))
             {
-                _events.Add(e);
+                _events.Add(en);
             }
         }
 

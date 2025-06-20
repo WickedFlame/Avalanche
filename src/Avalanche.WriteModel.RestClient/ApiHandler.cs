@@ -1,5 +1,6 @@
 ﻿using Broadcast;
 using RestSharp;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Avalanche.WriteModel.RestClient
@@ -21,6 +22,12 @@ namespace Avalanche.WriteModel.RestClient
                     .AddBody(evnt);
 
                 var res = await _client.PostAsync(request);
+            }
+            catch(HttpRequestException hre)
+            {
+                //
+                // do nothing.
+                // just ensure the app continues to work
             }
             catch
             {

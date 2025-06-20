@@ -1,6 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
-using System.Collections.Generic;
-using System.Data.SQLite;
+using SqlKata.Execution;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers
 {
@@ -8,68 +7,77 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         IEventHandler<IterationLogEvent>,
         IEventHandler<IterationErrorEvent>
     {
-        private readonly SQLiteConnection _connection;
+        private readonly QueryFactory _db;
 
-        public IterationEventHandler()
+        public IterationEventHandler(QueryFactory db)
         {
-            _connection = new SQLiteConnection(Constants.ReadModelDatabase);
-            _connection.Open();
+            _db = db;
         }
 
         public void Handle(IterationLogEvent @event)
         {
-            using (var cmd = _connection.CreateCommand())
+            _db.Query("IterationEvents").Insert(new
             {
-                cmd.CommandText = "INSERT INTO IterationEvents (Id, TestId, Time, ThreadId, TestName, Throughput, AverageMilliseconds, IsWarmup) Values (@id, @testId, @time, @threadId, @name, @throughput, @averageMilliseconds, @isWarmup)";
+                Id = Guid.NewGuid().ToString(),
+                TestId = @event.TestId,
+                Time = @event.Time,
+                ThreadId = @event.Thread,
+                TestName = @event.TestName,
+                AverageMilliseconds = @event.AverageMilliseconds,
+                Throughput = @event.Throughput,
+                IsWarmup = @event.IsWarmup
+            });
 
-                cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
-                cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-                cmd.Parameters.Add(new SQLiteParameter("@name", @event.TestName));
-                cmd.Parameters.Add(new SQLiteParameter("@averageMilliseconds", @event.AverageMilliseconds));
-                cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
-                cmd.Parameters.Add(new SQLiteParameter("@isWarmup", @event.IsWarmup));
+            var trd = _db.Query("TestRunDetail")
+                .Select()
+                .Where(new
+                {
+                    @event.TestId,
+                    TestCase = @event.TestName,
+                    ThreadId = @event.Thread
+                })
+                .Get();
 
-                cmd.ExecuteNonQuery();
+            var query = _db.Query("TestRunDetail");
+            var detail = new
+            {
+                @event.TestId,
+                TestCase = @event.TestName,
+                ThreadId = @event.Thread,
+                Throughput = @event.Throughput,
+                Iterations = @event.Iterations
+            };
+
+            if (trd.Any())
+            {
+                query.AsUpdate(detail).Where(new
+                {
+                    TestId = @event.TestId,
+                    TestCase = @event.TestName,
+                    ThreadId = @event.Thread
+                });
+            }
+            else
+            {
+                query.AsInsert(detail);
             }
 
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT 1 FROM TestRunDetail WHERE TestId = @testId AND TestCase = @testCase AND ThreadId = @threadId";
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.TestName));
-                cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-
-                cmd.CommandText = cmd.ExecuteScalar() != null ?
-                    "UPDATE TestRunDetail SET Throughput = @throughput, Iterations = @iterations WHERE TestId = @testId AND TestCase = @testCase AND ThreadId = @threadId" :
-                    "INSERT INTO TestRunDetail (TestId, TestCase, ThreadId, Throughput, Iterations) Values (@testId, @testCase, @threadId, @throughput, @iterations)";
-
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@testCase", @event.TestName));
-                cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-                cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
-                cmd.Parameters.Add(new SQLiteParameter("@iterations", @event.Iterations));
-                cmd.ExecuteNonQuery();
-            }
+            _db.Execute(query);
         }
 
         public void Handle(IterationErrorEvent @event)
         {
-            using (var cmd = _connection.CreateCommand())
+            _db.Query("IterationEvents").Insert(new
             {
-                cmd.CommandText = "INSERT INTO IterationEvents (Id, TestId, Time, ThreadId, TestName, Message, StatusCode, Error) Values (@id, @testId, @time, @threadId, @name, @message, @statuscode, true)";
-
-                cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
-                cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-                cmd.Parameters.Add(new SQLiteParameter("@name", @event.TestName));
-                cmd.Parameters.Add(new SQLiteParameter("@message", @event.Message));
-                cmd.Parameters.Add(new SQLiteParameter("@statuscode", @event.StatusCode));
-
-                cmd.ExecuteNonQuery();
-            }
+                Id = Guid.NewGuid().ToString(),
+                TestId = @event.TestId,
+                Time = @event.Time,
+                ThreadId = @event.Thread,
+                TestName = @event.TestName,
+                Message = @event.Message,
+                StatusCode = @event.StatusCode,
+                Error = true
+            });
         }
 
         public void Dispose()

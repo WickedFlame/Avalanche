@@ -1,5 +1,4 @@
 ﻿using Broadcast;
-using System.Net;
 
 namespace Avalanche.WriteModel.Events
 {
@@ -13,7 +12,7 @@ namespace Avalanche.WriteModel.Events
 
         public int Thread { get; set; }
 
-        public HttpStatusCode StatusCode { get; set; }
+        public string StatusCode { get; set; }
 
         public string Message { get; set; }
     }

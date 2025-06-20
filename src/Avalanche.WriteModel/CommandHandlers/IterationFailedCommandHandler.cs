@@ -20,7 +20,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 TestName = cmd.TestName,
                 Thread = cmd.Thread,
                 Time = cmd.Time,
-                StatusCode = cmd.StatusCode,
+                StatusCode = $"{(int)cmd.StatusCode}",
                 Message = cmd.Message,
             };
 

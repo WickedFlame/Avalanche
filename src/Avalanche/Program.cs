@@ -9,14 +9,30 @@ using Avalanche.WriteModel.Sqlite;
 using Avalanche.WriteModel.Sqlite.EventHandlers;
 using Broadcast;
 using Microsoft.AspNetCore.OpenApi;
+using SqlKata.Compilers;
+using SqlKata.Execution;
+using System.Data.SQLite;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 
+
+// transient services create a new instance every time they're requested, while scoped services create one instance per client request (or scope)
+// services.AddSingleton<ExampleService>();
+// services.AddTransient<ExampleService>();
+// services.AddScoped<ExampleService>();
+
+
 builder.Services.AddSingleton<IEventStore, SqliteEventStore>();
-builder.Services.AddSingleton<IEventBus>(c =>
+builder.Services.AddTransient<QueryFactory>(c =>
+{
+    var connection = new SQLiteConnection(Constants.ReadModelDatabase);
+    var compiler = new SqliteCompiler();
+    return new QueryFactory(connection, compiler);
+});
+builder.Services.AddTransient<IEventBus>(c =>
 {
     var eventBus = new EventBus(c.GetService<IEventStore>());
     eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
@@ -26,8 +42,8 @@ builder.Services.AddSingleton<IEventBus>(c =>
 
     eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
     eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
-    eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
-    eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler());
+    eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler(c.GetService<QueryFactory>()));
+    eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler(c.GetService<QueryFactory>()));
 
     eventBus.Subscribe<DeleteTestRunEvent>(new DeleteTestRunEventHandler());
 

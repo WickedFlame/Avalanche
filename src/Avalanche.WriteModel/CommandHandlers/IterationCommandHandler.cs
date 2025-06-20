@@ -51,6 +51,11 @@ namespace Avalanche.WriteModel.CommandHandlers
                             var cached = _cache.Get(key);
                             cached.Merge(entry);
 
+                            if(cached.Count() == 0)
+                            {
+                                continue;
+                            }
+
                             var cmd = entry.Last();
 
                             var @event = new Events.IterationLogEvent
