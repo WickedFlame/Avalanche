@@ -26,7 +26,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
         [Test]
         public void IterationEventHandler_IterationLogEvent()
         {
-            var handler = new IterationEventHandler();
+            var handler = new IterationEventHandler(_db);
             handler.Handle(new Events.IterationLogEvent
             {
                 TestId = "1",
@@ -57,7 +57,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
         [Test]
         public void IterationEventHandler_IterationLogEvent_Update()
         {
-            var handler = new IterationEventHandler();
+            var handler = new IterationEventHandler(_db);
             handler.Handle(new Events.IterationLogEvent
             {
                 TestId = "2",
@@ -91,7 +91,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
         [Test]
         public void IterationEventHandler_IterationErrorEvent()
         {
-            var handler = new IterationEventHandler();
+            var handler = new IterationEventHandler(_db);
             handler.Handle(new Events.IterationErrorEvent
             {
                 TestId = "3",

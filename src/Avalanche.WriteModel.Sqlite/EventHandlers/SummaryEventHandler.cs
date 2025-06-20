@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using SqlKata.Execution;
 using System.Data.SQLite;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers
@@ -7,63 +8,46 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         IEventHandler<ThreadSummaryEvent>,
         IEventHandler<TestSummaryEvent>
     {
-        private readonly object _lock = new object();
-        private readonly SQLiteConnection _connection;
+        private readonly QueryFactory _db;
 
-        public SummaryEventHandler()
+        public SummaryEventHandler(QueryFactory db)
         {
-            _connection = new SQLiteConnection(Constants.ReadModelDatabase);
-            _connection.Open();
+            _db = db;
         }
 
         public void Handle(ThreadSummaryEvent @event)
         {
-            lock (_lock)
+            _db.Query("SummaryEvents").Insert(new
             {
-                using (var cmd = _connection.CreateCommand())
-                {
-                    cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, Time, TestCase, Type, ThreadNumber, Iterations, AverageMilliseconds, TotalMilliseconds, Throughput) Values (@id, @testId, @time, @testcase, @type, @threadNumber, @iterations, @avgMs, @totalMs, @throughput)";
-
-                    cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
-                    cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                    cmd.Parameters.Add(new SQLiteParameter("@time", DateTime.Now));
-                    cmd.Parameters.Add(new SQLiteParameter("@testcase", @event.TestCase));
-                    cmd.Parameters.Add(new SQLiteParameter("@type", "ThreadSummary"));
-                    cmd.Parameters.Add(new SQLiteParameter("@threadNumber", @event.ThreadNumber));
-                    cmd.Parameters.Add(new SQLiteParameter("@iterations", @event.Iterations));
-                    cmd.Parameters.Add(new SQLiteParameter("@avgMs", @event.AverageMilliseconds));
-                    cmd.Parameters.Add(new SQLiteParameter("@totalMs", @event.TotalMilliseconds));
-                    cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
-
-                    cmd.ExecuteNonQuery();
-                }
-            }
+                Id = Guid.NewGuid().ToString(),
+                TestId = @event.TestId,
+                Time = DateTime.Now,
+                TestCase = @event.TestCase,
+                Type = "ThreadSummary",
+                ThreadNumber = @event.ThreadNumber,
+                Iterations = @event.Iterations,
+                AverageMilliseconds = @event.AverageMilliseconds,
+                TotalMilliseconds = @event.TotalMilliseconds,
+                Throughput = @event.Throughput
+            });
         }
 
         public void Handle(TestSummaryEvent @event)
         {
-            lock (_lock)
+            _db.Query("SummaryEvents").Insert(new
             {
-                using (var cmd = _connection.CreateCommand())
-                {
-                    cmd.CommandText = "INSERT INTO SummaryEvents (Id, TestId, Time, TestCase, Type, ThreadNumber, Iterations, AverageMilliseconds, TotalMilliseconds, Throughput, Slowest, Fastest) Values (@id, @testId, @time, @testcase, @type, @threadNumber, @iterations, @avgMs, @totalMs, @throughput, @slowest, @fastest)";
-
-                    cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
-                    cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                    cmd.Parameters.Add(new SQLiteParameter("@time", DateTime.Now));
-                    cmd.Parameters.Add(new SQLiteParameter("@testcase", @event.TestCase));
-                    cmd.Parameters.Add(new SQLiteParameter("@type", "TestSummary"));
-                    cmd.Parameters.Add(new SQLiteParameter("threadNumber", DBNull.Value));
-                    cmd.Parameters.Add(new SQLiteParameter("@iterations", @event.Iterations));
-                    cmd.Parameters.Add(new SQLiteParameter("@avgMs", @event.AverageMilliseconds));
-                    cmd.Parameters.Add(new SQLiteParameter("@totalMs", @event.TotalMilliseconds));
-                    cmd.Parameters.Add(new SQLiteParameter("@throughput", @event.Throughput));
-                    cmd.Parameters.Add(new SQLiteParameter("@slowest", @event.Slowest));
-                    cmd.Parameters.Add(new SQLiteParameter("@fastest", @event.Fastest));
-
-                    cmd.ExecuteNonQuery();
-                }
-            }
+                Id = Guid.NewGuid().ToString(),
+                TestId = @event.TestId,
+                Time = DateTime.Now,
+                TestCase = @event.TestCase,
+                Type = "TestSummary",
+                Iterations = @event.Iterations,
+                AverageMilliseconds = @event.AverageMilliseconds,
+                TotalMilliseconds = @event.TotalMilliseconds,
+                Throughput = @event.Throughput,
+                Slowest = @event.Slowest,
+                Fastest = @event.Fastest
+            });
         }
 
         public void Dispose()
@@ -77,8 +61,7 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             if (disposing)
             {
                 // do stuf here
-                _connection.Close();
-                _connection.Dispose();
+                _db.Dispose();
             }
         }
     }

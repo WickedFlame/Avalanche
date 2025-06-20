@@ -37,8 +37,8 @@ builder.Services.AddTransient<IEventBus>(c =>
     var eventBus = new EventBus(c.GetService<IEventStore>());
     eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
     eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
-    eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
-    eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
+    eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler(c.GetService<QueryFactory>()));
+    eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler(c.GetService<QueryFactory>()));
 
     eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
     eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
