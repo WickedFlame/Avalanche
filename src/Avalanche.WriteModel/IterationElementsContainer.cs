@@ -1,8 +1,9 @@
 ﻿using Avalanche.WriteModel.Commands;
+using System.Collections;
 
 namespace Avalanche.WriteModel
 {
-    public class IterationElementsContainer
+    public class IterationElementsContainer : IEnumerable<IterationCommand>
     {
         private readonly List<IterationCommand> _events = [];
         private DateTime _lastCheck;
@@ -76,6 +77,24 @@ namespace Avalanche.WriteModel
 
             _lastCheck = now;
             return true;
+        }
+
+        public void Merge(IterationElementsContainer entry)
+        {
+            foreach (var e in entry)
+            {
+                _events.Add(e);
+            }
+        }
+
+        public IEnumerator<IterationCommand> GetEnumerator()
+        {
+            return _events.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

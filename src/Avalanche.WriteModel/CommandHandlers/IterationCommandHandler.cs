@@ -7,6 +7,7 @@ namespace Avalanche.WriteModel.CommandHandlers
     {
         private readonly IEventBus _eventBus;
         private readonly EventQueue _events = new();
+        private readonly EventQueue _cache = new();
         private readonly ManualResetEvent _waitHandle = new(false);
         private bool _isRunning;
 
@@ -47,6 +48,9 @@ namespace Avalanche.WriteModel.CommandHandlers
                         var entry = _events.Dequeue(key);
                         if (entry != null && entry.Any())
                         {
+                            var cached = _cache.Get(key);
+                            cached.Merge(entry);
+
                             var cmd = entry.Last();
 
                             var @event = new Events.IterationLogEvent
@@ -58,9 +62,9 @@ namespace Avalanche.WriteModel.CommandHandlers
                                 IsWarmup = cmd.IsWarmup,
                                 //
                                 // GetThroughput should be on all elementst/threads instead of only the current thread
-                                Throughput = entry.GetThroughput(),
-                                Iterations = entry.Count(),
-                                AverageMilliseconds = entry.GetAverageMilliseconds()
+                                Throughput = cached.GetThroughput(),
+                                Iterations = cached.Count(),
+                                AverageMilliseconds = cached.GetAverageMilliseconds()
                             };
 
                             _eventBus.Publish(cmd.TestId, cmd.Time, @event);
@@ -99,23 +103,38 @@ namespace Avalanche.WriteModel.CommandHandlers
 
         public IterationElementsContainer this[string key] => _events[key];
 
-        internal void Add(string key, IterationElementsContainer iterationElementsContainer)
+        public void Add(string key, IterationElementsContainer iterationElementsContainer)
         {
             _events.Add(key, iterationElementsContainer);
         }
 
-        internal bool ContainsKey(string key)
+        public bool ContainsKey(string key)
         {
             return _events.ContainsKey(key);
         }
 
-        internal IterationElementsContainer Dequeue(string key)
+        public IterationElementsContainer Dequeue(string key)
         {
+            if (!_events.ContainsKey(key))
+            {
+                return null;
+            }
+
             var items = _events[key];
 
             _events[key] = new IterationElementsContainer();
 
             return items;
+        }
+
+        public IterationElementsContainer Get(string key)
+        {
+            if (!_events.ContainsKey(key))
+            {
+                _events[key] = new IterationElementsContainer();
+            }
+
+            return _events[key];
         }
     }
 }
