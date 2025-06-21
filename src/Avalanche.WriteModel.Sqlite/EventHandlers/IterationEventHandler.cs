@@ -34,25 +34,21 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 .Select()
                 .Where(new
                 {
-                    @event.TestId,
+                    TestId = @event.TestId,
                     TestCase = @event.TestName,
                     ThreadId = @event.Thread
                 })
                 .Get();
 
             var query = _db.Query(nameof(TestRunDetail));
-            var detail = new
-            {
-                @event.TestId,
-                TestCase = @event.TestName,
-                ThreadId = @event.Thread,
-                Throughput = @event.Throughput,
-                Iterations = @event.Iterations
-            };
 
             if (trd.Any())
             {
-                query.AsUpdate(detail)
+                query.AsUpdate(new
+                    {
+                        Throughput = @event.Throughput,
+                        Iterations = @event.Iterations
+                    })
                     .Where(new
                     {
                         TestId = @event.TestId,
@@ -62,7 +58,14 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             }
             else
             {
-                query.AsInsert(detail);
+                query.AsInsert(new
+                {
+                    TestId = @event.TestId,
+                    TestCase = @event.TestName,
+                    ThreadId = @event.Thread,
+                    Throughput = @event.Throughput,
+                    Iterations = @event.Iterations
+                });
             }
 
             _db.Execute(query);
@@ -70,17 +73,18 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
 
         public void Handle(IterationErrorEvent @event)
         {
-            _db.Query(nameof(IterationEvents)).Insert(new
-            {
-                Id = Guid.NewGuid().ToString(),
-                TestId = @event.TestId,
-                Time = @event.Time,
-                ThreadId = @event.Thread,
-                TestName = @event.TestName,
-                Message = @event.Message,
-                StatusCode = @event.StatusCode,
-                Error = true
-            });
+            _db.Query(nameof(IterationEvents))
+                .Insert(new
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    TestId = @event.TestId,
+                    Time = @event.Time,
+                    ThreadId = @event.Thread,
+                    TestName = @event.TestName,
+                    Message = @event.Message,
+                    StatusCode = @event.StatusCode,
+                    Error = true
+                });
         }
 
         public void Dispose()

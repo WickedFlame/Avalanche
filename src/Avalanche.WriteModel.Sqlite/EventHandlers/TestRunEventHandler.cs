@@ -35,6 +35,10 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         public void Handle(EndTestEvent evnt)
         {
             _db.Query(nameof(TestRun))
+                .Where(new
+                {
+                    TestId = evnt.TestId
+                })
                 .Update(new
                 {
                     TestId = evnt.TestId,
