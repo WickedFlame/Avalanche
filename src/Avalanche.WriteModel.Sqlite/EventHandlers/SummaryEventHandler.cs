@@ -1,6 +1,6 @@
 ﻿using Avalanche.WriteModel.Events;
+using Avalanche.WriteModel.Sqlite.DTO;
 using SqlKata.Execution;
-using System.Data.SQLite;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers
 {
@@ -17,37 +17,39 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
 
         public void Handle(ThreadSummaryEvent @event)
         {
-            _db.Query("SummaryEvents").Insert(new
-            {
-                Id = Guid.NewGuid().ToString(),
-                TestId = @event.TestId,
-                Time = DateTime.Now,
-                TestCase = @event.TestCase,
-                Type = "ThreadSummary",
-                ThreadNumber = @event.ThreadNumber,
-                Iterations = @event.Iterations,
-                AverageMilliseconds = @event.AverageMilliseconds,
-                TotalMilliseconds = @event.TotalMilliseconds,
-                Throughput = @event.Throughput
-            });
+            _db.Query(nameof(SummaryEvents))
+                .Insert(new
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    TestId = @event.TestId,
+                    Time = DateTime.Now,
+                    TestCase = @event.TestCase,
+                    Type = "ThreadSummary",
+                    ThreadNumber = @event.ThreadNumber,
+                    Iterations = @event.Iterations,
+                    AverageMilliseconds = @event.AverageMilliseconds,
+                    TotalMilliseconds = @event.TotalMilliseconds,
+                    Throughput = @event.Throughput
+                });
         }
 
         public void Handle(TestSummaryEvent @event)
         {
-            _db.Query("SummaryEvents").Insert(new
-            {
-                Id = Guid.NewGuid().ToString(),
-                TestId = @event.TestId,
-                Time = DateTime.Now,
-                TestCase = @event.TestCase,
-                Type = "TestSummary",
-                Iterations = @event.Iterations,
-                AverageMilliseconds = @event.AverageMilliseconds,
-                TotalMilliseconds = @event.TotalMilliseconds,
-                Throughput = @event.Throughput,
-                Slowest = @event.Slowest,
-                Fastest = @event.Fastest
-            });
+            _db.Query(nameof(SummaryEvents))
+                .Insert(new
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    TestId = @event.TestId,
+                    Time = DateTime.Now,
+                    TestCase = @event.TestCase,
+                    Type = "TestSummary",
+                    Iterations = @event.Iterations,
+                    AverageMilliseconds = @event.AverageMilliseconds,
+                    TotalMilliseconds = @event.TotalMilliseconds,
+                    Throughput = @event.Throughput,
+                    Slowest = @event.Slowest,
+                    Fastest = @event.Fastest
+                });
         }
 
         public void Dispose()

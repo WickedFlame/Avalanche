@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using Avalanche.WriteModel.Sqlite.DTO;
 using Avalanche.WriteModel.Sqlite.EventHandlers;
 using SqlKata.Compilers;
 using SqlKata.Execution;
@@ -77,14 +78,5 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
             se.TestCase.Should().Be("testcase 2");
             se.Type.Should().Be("TestSummary");
         }
-    }
-
-    public class SummaryEvents
-    {
-        public string TestId { get; set; }
-
-        public string TestCase { get; set; }
-
-        public string Type { get; set; }
     }
 }

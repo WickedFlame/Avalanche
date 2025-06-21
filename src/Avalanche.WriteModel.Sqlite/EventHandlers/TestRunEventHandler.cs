@@ -1,4 +1,6 @@
 ﻿using Avalanche.WriteModel.Events;
+using Avalanche.WriteModel.Sqlite.DTO;
+using SqlKata.Execution;
 using System.Data.SQLite;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers
@@ -8,40 +10,37 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         IEventHandler<EndTestEvent>
     {
         private readonly SQLiteConnection _connection;
+        private QueryFactory _db;
 
-        public TestRunEventHandler()
+        public TestRunEventHandler(QueryFactory db)
         {
             _connection = new SQLiteConnection(Constants.ReadModelDatabase);
             _connection.Open();
+
+            _db = db;
         }
 
         public void Handle(StartTestEvent evnt)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "INSERT INTO TestRun (TestId, Scenario, StartTime, Status) Values (@testId, @scenario, @startTime, @status)";
-
-                cmd.Parameters.Add(new SQLiteParameter("@testId", evnt.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@scenario", evnt.Scenario));
-                cmd.Parameters.Add(new SQLiteParameter("@startTime", evnt.StartTime));
-                cmd.Parameters.Add(new SQLiteParameter("@status", evnt.Status));
-
-                cmd.ExecuteNonQuery();
-            }
+            _db.Query(nameof(TestRun))
+                .Insert(new
+                {
+                    TestId = evnt.TestId,
+                    Scenario = evnt.Scenario,
+                    StartTime = evnt.StartTime,
+                    Status = evnt.Status
+                });
         }
 
         public void Handle(EndTestEvent evnt)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "UPDATE TestRun SET EndTime = @endTime, Status = @status WHERE TestId = @testId";
-
-                cmd.Parameters.Add(new SQLiteParameter("@testId", evnt.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@endTime", evnt.EndTime));
-                cmd.Parameters.Add(new SQLiteParameter("@status", evnt.Status));
-
-                cmd.ExecuteNonQuery();
-            }
+            _db.Query(nameof(TestRun))
+                .Update(new
+                {
+                    TestId = evnt.TestId,
+                    EndTime = evnt.EndTime,
+                    Status = evnt.Status
+                });
         }
 
         public void Dispose()

@@ -1,4 +1,5 @@
-﻿using Avalanche.WriteModel.Sqlite.EventHandlers;
+﻿using Avalanche.WriteModel.Sqlite.DTO;
+using Avalanche.WriteModel.Sqlite.EventHandlers;
 using SqlKata.Compilers;
 using SqlKata.Execution;
 using System.Data.SQLite;
@@ -111,23 +112,5 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
             ie.StatusCode.Should().Be("503");
             ie.Message.Should().Be("the message");
         }
-    }
-
-    public class IterationEvents
-    {
-        public string TestId { get; set; }
-
-        public string Message {  get; set; }
-
-        public string StatusCode {  get; set; }
-
-        public bool Error { get; set; }
-    }
-
-    public class TestRunDetail
-    {
-        public string TestId { get; set; }
-
-        public double Throughput { get; set; }
     }
 }

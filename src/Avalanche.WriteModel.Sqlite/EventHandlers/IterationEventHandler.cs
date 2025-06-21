@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using Avalanche.WriteModel.Sqlite.DTO;
 using SqlKata.Execution;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers
@@ -16,19 +17,20 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
 
         public void Handle(IterationLogEvent @event)
         {
-            _db.Query("IterationEvents").Insert(new
-            {
-                Id = Guid.NewGuid().ToString(),
-                TestId = @event.TestId,
-                Time = @event.Time,
-                ThreadId = @event.Thread,
-                TestName = @event.TestName,
-                AverageMilliseconds = @event.AverageMilliseconds,
-                Throughput = @event.Throughput,
-                IsWarmup = @event.IsWarmup
-            });
+            _db.Query(nameof(IterationEvents))
+                .Insert(new
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    TestId = @event.TestId,
+                    Time = @event.Time,
+                    ThreadId = @event.Thread,
+                    TestName = @event.TestName,
+                    AverageMilliseconds = @event.AverageMilliseconds,
+                    Throughput = @event.Throughput,
+                    IsWarmup = @event.IsWarmup
+                });
 
-            var trd = _db.Query("TestRunDetail")
+            var trd = _db.Query(nameof(TestRunDetail))
                 .Select()
                 .Where(new
                 {
@@ -38,7 +40,7 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 })
                 .Get();
 
-            var query = _db.Query("TestRunDetail");
+            var query = _db.Query(nameof(TestRunDetail));
             var detail = new
             {
                 @event.TestId,
@@ -50,12 +52,13 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
 
             if (trd.Any())
             {
-                query.AsUpdate(detail).Where(new
-                {
-                    TestId = @event.TestId,
-                    TestCase = @event.TestName,
-                    ThreadId = @event.Thread
-                });
+                query.AsUpdate(detail)
+                    .Where(new
+                    {
+                        TestId = @event.TestId,
+                        TestCase = @event.TestName,
+                        ThreadId = @event.Thread
+                    });
             }
             else
             {
@@ -67,7 +70,7 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
 
         public void Handle(IterationErrorEvent @event)
         {
-            _db.Query("IterationEvents").Insert(new
+            _db.Query(nameof(IterationEvents)).Insert(new
             {
                 Id = Guid.NewGuid().ToString(),
                 TestId = @event.TestId,
