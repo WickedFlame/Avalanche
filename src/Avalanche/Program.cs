@@ -45,7 +45,7 @@ builder.Services.AddTransient<IEventBus>(c =>
     eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler(c.GetService<QueryFactory>()));
     eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler(c.GetService<QueryFactory>()));
 
-    eventBus.Subscribe<DeleteTestRunEvent>(new DeleteTestRunEventHandler());
+    eventBus.Subscribe<DeleteTestRunEvent>(new DeleteTestRunEventHandler(c.GetService<QueryFactory>()));
 
     return eventBus;
 });

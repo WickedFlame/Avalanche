@@ -1,4 +1,6 @@
 ﻿using Avalanche.WriteModel.Events;
+using Avalanche.WriteModel.Sqlite.DTO;
+using SqlKata.Execution;
 using System.Data.SQLite;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers
@@ -6,51 +8,50 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
     public class DeleteTestRunEventHandler :
         IEventHandler<DeleteTestRunEvent>
     {
-        private readonly SQLiteConnection _connection;
+        private readonly QueryFactory _db;
 
-        public DeleteTestRunEventHandler()
+        public DeleteTestRunEventHandler(QueryFactory db)
         {
-            _connection = new SQLiteConnection(Constants.ReadModelDatabase);
-            _connection.Open();
+            _db = db;
         }
 
 
         public void Handle(DeleteTestRunEvent @event)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "DELETE FROM SummaryEvents where TestId = @testId";
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.ExecuteNonQuery();
-            }
+            _db.Query(nameof(TestRun))
+                .Where(new
+                {
+                    TestId = "del1"
+                })
+                .Delete();
 
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "DELETE FROM IterationEvents where TestId = @testId";
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.ExecuteNonQuery();
-            }
+            _db.Query(nameof(SummaryEvents))
+                .Where(new
+                {
+                    TestId = "del1"
+                })
+                .Delete();
 
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "DELETE FROM TestRunDetail where TestId = @testId";
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.ExecuteNonQuery();
-            }
+            _db.Query(nameof(IterationEvents))
+                .Where(new
+                {
+                    TestId = "del1"
+                })
+                .Delete();
 
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "DELETE FROM RampupEvents where TestId = @testId";
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.ExecuteNonQuery();
-            }
+            _db.Query(nameof(TestRunDetail))
+                .Where(new
+                {
+                    TestId = "del1"
+                })
+                .Delete();
 
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "DELETE FROM TestRun where TestId = @testId";
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.ExecuteNonQuery();
-            }
+            _db.Query(nameof(RampupEvents))
+                .Where(new
+                {
+                    TestId = "del1"
+                })
+                .Delete();
         }
 
         public void Dispose()
@@ -64,8 +65,7 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             if (disposing)
             {
                 // do stuf here
-                _connection.Close();
-                _connection.Dispose();
+                _db.Dispose();
             }
         }
     }
