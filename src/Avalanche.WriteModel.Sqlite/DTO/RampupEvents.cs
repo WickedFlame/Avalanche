@@ -1,14 +1,7 @@
-﻿using Broadcast;
-
-namespace Avalanche.WriteModel.Events
+﻿namespace Avalanche.WriteModel.Sqlite.DTO
 {
-    public class RampupEvent : IEvent
+    public class RampupEvents
     {
-        public RampupEvent()
-        {
-            Time = DateTime.Now;
-        }
-
         public DateTime Time { get; set; }
 
         public string TestId { get; set; }
@@ -18,5 +11,9 @@ namespace Avalanche.WriteModel.Events
         public long ElapsedMilliseconds { get; set; }
 
         public bool IsWarmup { get; set; }
+
+        public int ThreadId { get; set; }
+
+        public int Value { get; set; }
     }
 }

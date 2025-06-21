@@ -1,5 +1,6 @@
 ﻿using Avalanche.WriteModel.Events;
-using System.Data.SQLite;
+using Avalanche.WriteModel.Sqlite.DTO;
+using SqlKata.Execution;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers
 {
@@ -7,12 +8,11 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         IEventHandler<RampupEvent>,
         IEventHandler<RampdownEvent>
     {
-        private readonly SQLiteConnection _connection;
+        private readonly QueryFactory _db;
 
-        public RampupEventHandler()
+        public RampupEventHandler(QueryFactory db)
         {
-            _connection = new SQLiteConnection(Constants.ReadModelDatabase);
-            _connection.Open();
+            _db = db;
         }
 
         public void Handle(RampupEvent @event)
@@ -22,19 +22,15 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 return;
             }
 
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "INSERT INTO RampupEvents (Id, TestId, Name, Time, ThreadId, Value) Values (@id, @testId, @name, @time, @threadId, @value)";
-
-                cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@name", @event.Name));
-                cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
-                cmd.Parameters.Add(new SQLiteParameter("@threadId", null));
-                cmd.Parameters.Add(new SQLiteParameter("@value", 1));
-
-                cmd.ExecuteNonQuery();
-            }
+            _db.Query(nameof(RampupEvents))
+                .Insert(new
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    TestId = @event.TestId,
+                    Time = DateTime.Now,
+                    Name = @event.Name,
+                    Value = 1
+                });
         }
 
         public void Handle(RampdownEvent @event)
@@ -44,19 +40,16 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 return;
             }
 
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "INSERT INTO RampupEvents (Id, TestId, Name, Time, ThreadId, Value) Values (@id, @testId, @name, @time, @threadId, @value)";
-
-                cmd.Parameters.Add(new SQLiteParameter("@id", Guid.NewGuid().ToString()));
-                cmd.Parameters.Add(new SQLiteParameter("@name", @event.Name));
-                cmd.Parameters.Add(new SQLiteParameter("@testId", @event.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@time", @event.Time));
-                cmd.Parameters.Add(new SQLiteParameter("@threadId", @event.Thread));
-                cmd.Parameters.Add(new SQLiteParameter("@value", -1));
-
-                cmd.ExecuteNonQuery();
-            }
+            _db.Query(nameof(RampupEvents))
+                .Insert(new
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    TestId = @event.TestId,
+                    Time = DateTime.Now,
+                    Name = @event.Name,
+                    ThreadId = @event.Thread,
+                    Value = -1
+                });
         }
 
         public void Dispose()
@@ -70,8 +63,7 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             if (disposing)
             {
                 // do stuf here
-                _connection.Close();
-                _connection.Dispose();
+                _db.Dispose();
             }
         }
     }

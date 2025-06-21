@@ -40,8 +40,8 @@ builder.Services.AddTransient<IEventBus>(c =>
     eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler(c.GetService<QueryFactory>()));
     eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler(c.GetService<QueryFactory>()));
 
-    eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
-    eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
+    eventBus.Subscribe<RampupEvent>(new RampupEventHandler(c.GetService<QueryFactory>()));
+    eventBus.Subscribe<RampdownEvent>(new RampupEventHandler(c.GetService<QueryFactory>()));
     eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler(c.GetService<QueryFactory>()));
     eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler(c.GetService<QueryFactory>()));
 

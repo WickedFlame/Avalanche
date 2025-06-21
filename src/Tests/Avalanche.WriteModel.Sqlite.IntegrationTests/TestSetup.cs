@@ -28,15 +28,15 @@
         [OneTimeTearDown]
         public void TearDown()
         {
-            if (File.Exists("data/readmodel.db"))
-            {
-                File.Delete("data/readmodel.db");
-            }
+            //if (File.Exists("data/readmodel.db"))
+            //{
+            //    File.Delete("data/readmodel.db");
+            //}
 
-            if (File.Exists("data/eventstore.db"))
-            {
-                File.Delete("data/eventstore.db");
-            }
+            //if (File.Exists("data/eventstore.db"))
+            //{
+            //    File.Delete("data/eventstore.db");
+            //}
         }
     }
 }
