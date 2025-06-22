@@ -9,15 +9,13 @@
     {
 
         private readonly Dictionary<Type, IMessageHandler> _handlers = [];
-
         private readonly Queue<T> _queue = new();
-
-        private readonly ManualResetEvent _waitHandle = new(false);
-        private bool _isRunning;
+        private readonly TimedDispatcher _dispatcher;
 
         public Dispatcher()
         {
-            StartDispatcher();
+            _dispatcher = new(5000, () => DispatcherTask());
+            _dispatcher.StartDispatcher();
         }
 
         public void Register<Tc>(IMessageHandler<T> handler) where Tc : class, T
@@ -25,42 +23,29 @@
             _handlers[typeof(Tc)] = handler;
         }
 
-        public void StartDispatcher()
+
+        private bool DispatcherTask()
         {
+            var entry = _queue.Any() ? _queue.Dequeue() : default;
+            while (entry != null)
+            {
+                Send(entry);
 
-            _isRunning = true;
+                entry = _queue.Any() ? _queue.Dequeue() : default;
 
-            Task.Factory.StartNew(() =>
+                if (!_dispatcher.IsRunning)
                 {
-                    while (_isRunning)
-                    {
-                        _waitHandle.Reset();
+                    return false;
+                }
+            }
 
-                        var entry = _queue.Any() ? _queue.Dequeue() : default;
-                        while (entry != null)
-                        {
-                            Send(entry);
-
-                            entry = _queue.Any() ? _queue.Dequeue() : default;
-
-                            if (!_isRunning)
-                            {
-                                break;
-                            }
-                        }
-
-                        _waitHandle.WaitOne(5000);
-                    }
-                },
-                CancellationToken.None,
-                TaskCreationOptions.LongRunning,
-                TaskScheduler.Default);
+            return true;
         }
 
         public void SendAsync<Tc>(Tc @event) where Tc : class, T
         {
             _queue.Enqueue(@event);
-            _waitHandle.Reset();
+            _dispatcher.Continue();
         }
 
 
@@ -77,8 +62,8 @@
 
         public void Close()
         {
-            _isRunning = false;
-            _waitHandle.Reset();
+            _dispatcher.IsRunning = false;
+            _dispatcher.Continue();
         }
 
         public void Dispose()

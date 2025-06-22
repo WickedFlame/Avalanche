@@ -8,13 +8,13 @@ namespace Avalanche.WriteModel.CommandHandlers
         private readonly IEventBus _eventBus;
         private readonly EventQueue _events = new();
         private readonly EventQueue _cache = new();
-        private readonly ManualResetEvent _waitHandle = new(false);
-        private bool _isRunning;
+        private readonly TimedDispatcher _dispatcher;
 
         public IterationCommandHandler(IEventBus eventBus)
         {
             _eventBus = eventBus;
-            StartDispatcher();
+            _dispatcher = new(2000, () => DispatcherTask());
+            _dispatcher.StartDispatcher();
         }
 
         public override void Handle(IterationCommand cmd)
@@ -29,72 +29,57 @@ namespace Avalanche.WriteModel.CommandHandlers
 
             _events[key].Add(cmd);
 
-            _waitHandle.Reset();
+            _dispatcher.Continue();
         }
 
-        public void StartDispatcher()
+        public bool DispatcherTask()
         {
-
-            _isRunning = true;
-
-            Task.Factory.StartNew(() =>
+            foreach (var key in _events.Keys.ToList())
             {
-                while (_isRunning)
+                var entry = _events.Dequeue(key);
+                if (entry != null && entry.Any())
                 {
-                    _waitHandle.Reset();
+                    var cached = _cache.Get(key);
+                    cached.Merge(entry);
 
-                    foreach (var key in _events.Keys.ToList())
+                    if (cached.Count() == 0)
                     {
-                        var entry = _events.Dequeue(key);
-                        if (entry != null && entry.Any())
-                        {
-                            var cached = _cache.Get(key);
-                            cached.Merge(entry);
-
-                            if(cached.Count() == 0)
-                            {
-                                continue;
-                            }
-
-                            var cmd = entry.Last();
-
-                            var @event = new Events.IterationLogEvent
-                            {
-                                TestId = cmd.TestId,
-                                TestName = cmd.TestName,
-                                Thread = cmd.Thread,
-                                Time = cmd.Time,
-                                IsWarmup = cmd.IsWarmup,
-                                //
-                                // GetThroughput should be on all elementst/threads instead of only the current thread
-                                Throughput = cached.GetThroughput(),
-                                Iterations = cached.Count(),
-                                AverageMilliseconds = cached.GetAverageMilliseconds()
-                            };
-
-                            _eventBus.Publish(cmd.TestId, cmd.Time, @event);
-
-                            Console.WriteLine($"Sent events for {key}");
-
-                            if (!_isRunning)
-                            {
-                                break;
-                            }
-                        }
+                        continue;
                     }
 
-                    _waitHandle.WaitOne(2000);
+                    var cmd = entry.Last();
+
+                    var @event = new Events.IterationLogEvent
+                    {
+                        TestId = cmd.TestId,
+                        TestName = cmd.TestName,
+                        Thread = cmd.Thread,
+                        Time = cmd.Time,
+                        IsWarmup = cmd.IsWarmup,
+                        //
+                        // GetThroughput should be on all elementst/threads instead of only the current thread
+                        Throughput = cached.GetThroughput(),
+                        Iterations = cached.Count(),
+                        AverageMilliseconds = cached.GetAverageMilliseconds()
+                    };
+
+                    _eventBus.Publish(cmd.TestId, cmd.Time, @event);
+
+                    Console.WriteLine($"Sent events for {key}");
+
+                    if (!_dispatcher.IsRunning)
+                    {
+                        return false;
+                    }
                 }
-            },
-                CancellationToken.None,
-                TaskCreationOptions.LongRunning,
-                TaskScheduler.Default);
+            }
+
+            return true;
         }
 
         protected override void Dispose(bool disposing)
         {
-            _isRunning = false;
-            _waitHandle.Reset();
+            _dispatcher.Close();
 
             base.Dispose(disposing);
         }
