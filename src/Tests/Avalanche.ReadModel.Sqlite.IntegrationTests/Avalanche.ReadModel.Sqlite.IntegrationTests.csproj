@@ -1,15 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
+
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AwesomeAssertions" Version="9.0.0" />
-        <PackageReference Include="coverlet.collector" Version="6.0.4" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
         <PackageReference Include="Moq" Version="4.20.72" />
         <PackageReference Include="NUnit" Version="4.3.2" />
@@ -21,17 +21,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Avalanche.DataSource.Sqlite\Avalanche.DataSource.Sqlite.csproj" />
-      <ProjectReference Include="..\..\Avalanche.WriteModel.Sqlite\Avalanche.WriteModel.Sqlite.csproj" />
+        <ProjectReference Include="..\..\Avalanche.DataSource.Sqlite\Avalanche.DataSource.Sqlite.csproj" />
+        <ProjectReference Include="..\..\Avalanche.DataSource\Avalanche.DataSource.csproj" />
+        <ProjectReference Include="..\..\Avalanche.ReadModel.Sqlite\Avalanche.ReadModel.Sqlite.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <Using Include="NUnit.Framework" />
         <Using Include="AwesomeAssertions" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="_Snapshots\" />
     </ItemGroup>
 
 </Project>

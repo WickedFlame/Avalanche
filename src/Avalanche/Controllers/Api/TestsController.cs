@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Avalanche.DataSource;
 using Avalanche.Domain;
-using Avalanche.Models;
-using System.Xml.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers.Api
 {
@@ -10,18 +8,18 @@ namespace Avalanche.Controllers.Api
     [ApiController]
     public class TestsController : ControllerBase
     {
+        private readonly IProjectionConnectionBuilder _builder;
+
+        public TestsController(IProjectionConnectionBuilder builder)
+        {
+            _builder = builder;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            var facade = new TestsFacade();
+            var facade = new TestsFacade(_builder);
             return Ok(facade.GetAvailiableTests());
         }
-
-        //[HttpGet]
-        //[Route("active")]
-        //public IActionResult GetActive()
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

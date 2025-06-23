@@ -1,16 +1,16 @@
-﻿namespace Avalanche.WriteModel.Sqlite.DTO
+﻿using System;
+
+namespace Avalanche.DataSource.DTO
 {
     public class RampupEvents
     {
-        public DateTime Time { get; set; }
+        public string Id { get; set; }
 
         public string TestId { get; set; }
 
         public string Name { get; set; }
 
-        public long ElapsedMilliseconds { get; set; }
-
-        public bool IsWarmup { get; set; }
+        public DateTime Time { get; set; }
 
         public int ThreadId { get; set; }
 

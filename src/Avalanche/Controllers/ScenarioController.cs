@@ -1,4 +1,5 @@
-﻿using Avalanche.Domain;
+﻿using Avalanche.DataSource;
+using Avalanche.Domain;
 using Avalanche.Models;
 using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.WriteModel;
@@ -10,10 +11,12 @@ namespace Avalanche.Controllers
     public class ScenarioController : Controller
     {
         private readonly IEventBus _eventBus;
+        private readonly IProjectionConnectionBuilder _builder;
 
-        public ScenarioController(IEventBus eventBus)
+        public ScenarioController(IEventBus eventBus, IProjectionConnectionBuilder builder)
         {
             _eventBus = eventBus;
+            _builder = builder;
         }
 
         public IActionResult Index(string name)
@@ -23,7 +26,7 @@ namespace Avalanche.Controllers
             var tsr = new TestSettingsReader();
             var settings = tsr.GetTestSettings(path);
 
-            var trh = new TestRunQueryHandler();
+            var trh = new TestRunQueryHandler(_builder);
             var runs = trh.Get(new ReadModel.Queries.GetTestsQuery { Scenario = name });
 
             var lastRun = trh.Get(new ReadModel.Queries.GetLastTestQuery { Scenario = name });
@@ -47,7 +50,7 @@ namespace Avalanche.Controllers
             var tsr = new TestSettingsReader();
             var settings = tsr.GetTestSettings(path);
 
-            var trh = new TestRunQueryHandler();
+            var trh = new TestRunQueryHandler(_builder);
             var stats = trh.Get(new ReadModel.Queries.GetTestsStatisticsQuery {  Scenario = name });
 
             var model = new ScenarioStatsModel

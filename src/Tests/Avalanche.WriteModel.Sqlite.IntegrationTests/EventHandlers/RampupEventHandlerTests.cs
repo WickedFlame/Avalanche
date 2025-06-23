@@ -1,14 +1,10 @@
-﻿using Avalanche.WriteModel.Events;
-using Avalanche.WriteModel.Sqlite.DTO;
+﻿using Avalanche.DataSource.DTO;
+using Avalanche.DataSource.Sqlite;
+using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite.EventHandlers;
 using SqlKata.Compilers;
 using SqlKata.Execution;
-using System;
-using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
 {
@@ -33,7 +29,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
         [Test]
         public void RampupEventHandler_RampupEvent()
         {
-            var handler = new RampupEventHandler(_db);
+            var handler = new RampupEventHandler(new ProjectionConnectionBuilder());
             handler.Handle(new RampupEvent
             {
                 TestId = "1",
@@ -54,7 +50,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
         [Test]
         public void RampupEventHandler_RampupEvent_Warmup()
         {
-            var handler = new RampupEventHandler(_db);
+            var handler = new RampupEventHandler(new ProjectionConnectionBuilder());
             handler.Handle(new RampupEvent
             {
                 TestId = "2",
@@ -78,7 +74,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
         [Test]
         public void RampupEventHandler_RampdownEvent()
         {
-            var handler = new RampupEventHandler(_db);
+            var handler = new RampupEventHandler(new ProjectionConnectionBuilder());
             handler.Handle(new RampdownEvent
             {
                 TestId = "3",
@@ -101,7 +97,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
         [Test]
         public void RampupEventHandler_RampdownEvent_Warmup()
         {
-            var handler = new RampupEventHandler(_db);
+            var handler = new RampupEventHandler(new ProjectionConnectionBuilder());
             handler.Handle(new RampdownEvent
             {
                 TestId = "4",

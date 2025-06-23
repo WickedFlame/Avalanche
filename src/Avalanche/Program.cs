@@ -27,12 +27,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 
 builder.Services.AddSingleton<IEventStore, SqliteEventStore>();
-builder.Services.AddTransient<QueryFactory>(c =>
-{
-    var connection = new SQLiteConnection(Constants.ReadModelDatabase);
-    var compiler = new SqliteCompiler();
-    return new QueryFactory(connection, compiler);
-});
 builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
 builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Sqlite.ProjectionConnectionBuilder>();
 
@@ -56,6 +50,7 @@ builder.Services.AddTransient<IEventBus>(c =>
 builder.Services.AddSingleton<ISettingsQueryHandler, SettingsQueryHandler>();
 builder.Services.AddSingleton<TestRunQueryHandler>();
 
+builder.Services.AddTransient<ITestRunQueryHandler, TestRunQueryHandler>();
 builder.Services.AddTransient<ISettingsFacade, SettingsFacade>();
 
 

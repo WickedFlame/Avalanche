@@ -1,6 +1,6 @@
 ﻿using Avalanche.DataSource;
+using Avalanche.DataSource.DTO;
 using Avalanche.WriteModel.Events;
-using Avalanche.WriteModel.Sqlite.DTO;
 using SqlKata.Execution;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers
@@ -36,6 +36,20 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         }
 
         public void Handle(TestSummaryEvent @event)
+        {
+            try
+            {
+                Write(@event);
+            }
+            catch
+            {
+                //
+                // Ensure the SummaryEvent is written to the Database
+                Write(@event);
+            }
+        }
+
+        private void Write(TestSummaryEvent @event)
         {
             var db = _builder.Build();
             db.Query(nameof(SummaryEvents))

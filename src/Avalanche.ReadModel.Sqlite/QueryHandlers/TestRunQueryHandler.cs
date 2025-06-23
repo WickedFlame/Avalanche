@@ -1,119 +1,129 @@
-﻿using Avalanche.ReadModel.Models;
+﻿using Avalanche.DataSource;
+using Avalanche.ReadModel.Models;
 using Avalanche.ReadModel.Queries;
 using Avalanche.ReadModel.Sqlite;
-using System.Data.SQLite;
+using SqlKata.Execution;
 
 namespace Avalanche.ReadModel.QueryHandlers
 {
-    public class TestRunQueryHandler :
-        IQueryHandler<IEnumerable<TestRun>, GetTestsQuery>,
-        IQueryHandler<IEnumerable<TestStatistic>, GetTestsStatisticsQuery>,
-        IQueryHandler<TestRun, GetLastTestQuery>,
-        IQueryHandler<TestRun, GetTestRun>,
-        IQueryHandler<IEnumerable<RampupData>, GetRampupData>,
-        IQueryHandler<IEnumerable<TestSummary>, GetSummary>
+    public class TestRunQueryHandler : ITestRunQueryHandler
     {
-        private readonly SQLiteConnection _connection;
+        private readonly IProjectionConnectionBuilder _builder;
 
-        public TestRunQueryHandler()
+        public TestRunQueryHandler(IProjectionConnectionBuilder builder)
         {
-            _connection = new SQLiteConnection(Constants.ReadModelDatabase);
-            _connection.Open();
+            _builder = builder;
         }
 
         public IEnumerable<TestRun> Get(GetTestsQuery query)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT * FROM TestRun WHERE Scenario = @scenario ORDER BY StartTime DESC";
-
-                cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
-
-                return cmd.Execute<TestRun>();
-            }
+            var db = _builder.Build();
+            return db.Query(nameof(DataSource.DTO.TestRun))
+                .Select()
+                .Where(new
+                {
+                    Scenario = query.Scenario,
+                })
+                .OrderByDesc("StartTime")
+                .Get<TestRun>();
         }
 
         public TestRun Get(GetLastTestQuery query)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT * FROM TestRun WHERE Scenario = @scenario ORDER BY StartTime DESC";
-
-                cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
-
-                return cmd.Execute<TestRun>().FirstOrDefault();
-            }
+            var db = _builder.Build();
+            return db.Query(nameof(DataSource.DTO.TestRun))
+                .Select()
+                .Where(new
+                {
+                    Scenario = query.Scenario,
+                })
+                .OrderByDesc("StartTime")
+                .FirstOrDefault<TestRun>();
         }
 
         public TestRun Get(GetTestRun query)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT * FROM TestRun WHERE TestId = @testId ORDER BY StartTime DESC";
-
-                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
-
-                return cmd.Execute<TestRun>().FirstOrDefault();
-            }
+            var db = _builder.Build();
+            return db.Query(nameof(DataSource.DTO.TestRun))
+                .Select()
+                .Where(new
+                {
+                    TestId = query.TestId,
+                })
+                .OrderByDesc("StartTime")
+                .FirstOrDefault<TestRun>();
         }
 
         public IEnumerable<RampupData> Get(GetRampupData query)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT * FROM RampupEvents WHERE TestId = @testId AND Name = @name ORDER BY Time DESC";
-
-                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@name", query.TestName));
-
-                return cmd.Execute<RampupData>();
-            }
+            var db = _builder.Build();
+            return db.Query(nameof(DataSource.DTO.RampupEvents))
+                .Select()
+                .Where(new
+                {
+                    TestId = query.TestId,
+                    Name = query.TestName
+                })
+                .OrderByDesc("Time")
+                .Get<RampupData>();
         }
 
         public IEnumerable<IterationItem> Get(GetChartData query)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT * FROM IterationEvents WHERE TestId = @testId AND TestName = @name ORDER BY Time DESC";
-
-                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
-                cmd.Parameters.Add(new SQLiteParameter("@name", query.TestName));
-
-                return cmd.Execute<IterationItem>();
-            }
+            var db = _builder.Build();
+            return db.Query(nameof(DataSource.DTO.IterationEvents))
+                .Select()
+                .Where(new
+                {
+                    TestId = query.TestId,
+                    TestName = query.TestName
+                })
+                .OrderByDesc("Time")
+                .Get<IterationItem>();
         }
 
         public IEnumerable<TestSummary> Get(GetSummary query)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT * FROM SummaryEvents WHERE TestId = @testId AND Type = 'TestSummary'";
-
-                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
-
-                var summary = cmd.Execute<TestSummary>().ToList();
-
-                cmd.CommandText = "SELECT * FROM IterationEvents WHERE TestId = @testId AND Error = true";
-                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
-
-                var errors = cmd.Execute<IterationItem>();
-
-                if (summary.Any())
+            var db = _builder.Build();
+            var summary = db.Query(nameof(DataSource.DTO.SummaryEvents))
+                .Select()
+                .Where(new
                 {
-                    foreach (var stat in summary)
-                    {
-                        stat.Failed = errors.Count(e => !e.IsWarmup && e.TestName == stat.TestCase);
-                    }
+                    TestId = query.TestId,
+                    Type = "TestSummary"
+                })
+                .Get<TestSummary>()
+                .ToList();
 
-                    return summary;
+            var errors = db.Query(nameof(DataSource.DTO.IterationEvents))
+                .Select()
+                .Where(new
+                {
+                    TestId = query.TestId,
+                    Error = true
+                })
+                .Get<IterationItem>();
+
+            if (summary.Any())
+            {
+                foreach (var stat in summary)
+                {
+                    stat.Failed = errors.Count(e => !e.IsWarmup && e.TestName == stat.TestCase);
                 }
 
-                // get configured test
-                cmd.CommandText = "SELECT * FROM TestRunDetail WHERE TestId = @testId";
-                cmd.Parameters.Add(new SQLiteParameter("@testId", query.TestId));
+                return summary;
+            }
 
-                var details = cmd.Execute<TestRunDetail>();
-                summary.AddRange(details
+            // get configured test
+            var details = db.Query(nameof(DataSource.DTO.TestRunDetail))
+                .Select()
+                .Where(new
+                {
+                    TestId = query.TestId
+                })
+                .Get<TestRunDetail>();
+
+            summary.AddRange(details
                     .GroupBy(d => d.TestCase)
                     .Select(detail => new TestSummary
                     {
@@ -127,33 +137,40 @@ namespace Avalanche.ReadModel.QueryHandlers
                         Fastest = 0
                     }));
 
-                return summary;
-            }
+            return summary;
         }
 
         public IEnumerable<TestStatistic> Get(GetTestsStatisticsQuery query)
         {
-            using (var cmd = _connection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT * FROM TestRun tr INNER JOIN SummaryEvents se ON tr.TestId = se.TestId WHERE tr.Scenario = @scenario AND se.Type = 'TestSummary' ORDER BY StartTime DESC";
-
-                cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
-
-                var stats = cmd.Execute<TestStatistic>();
-
-
-                cmd.CommandText = "SELECT * FROM TestRun tr INNER JOIN IterationEvents ie ON tr.TestId = ie.TestId WHERE tr.Scenario = @scenario AND Error = true";
-                cmd.Parameters.Add(new SQLiteParameter("@scenario", query.Scenario));
-
-                var errors = cmd.Execute<IterationItem>();
-
-                foreach (var stat in stats)
+            var db = _builder.Build();
+            var stats = db.Query(nameof(DataSource.DTO.TestRun))
+                .Join(nameof(DataSource.DTO.SummaryEvents), "TestRun.TestId", "SummaryEvents.TestId")
+                .Select()
+                .Where(new
                 {
-                    stat.Failed = errors.Count(e => !e.IsWarmup && e.TestId == stat.TestId && e.TestName == stat.TestCase);
-                }
+                    Scenario = query.Scenario,
+                    Type = "TestSummary"
+                })
+                .OrderByDesc("StartTime")
+                .Get<TestStatistic>();
 
-                return stats;
+
+            var errors = db.Query(nameof(DataSource.DTO.TestRun))
+                .Join(nameof(DataSource.DTO.IterationEvents), "TestRun.TestId", "IterationEvents.TestId")
+                .Select()
+                .Where(new
+                {
+                    Scenario = query.Scenario,
+                    Error = true
+                })
+                .Get<IterationItem>();
+
+            foreach (var stat in stats)
+            {
+                stat.Failed = errors.Count(e => !e.IsWarmup && e.TestId == stat.TestId && e.TestName == stat.TestCase);
             }
+
+            return stats;
         }
     }
 }

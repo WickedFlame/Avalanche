@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource.Sqlite
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource", "src\Avalanche.DataSource\Avalanche.DataSource.csproj", "{7B0197FB-891B-475B-9200-1EA99E6DE8C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sqlite.IntegrationTests", "src\Tests\Avalanche.ReadModel.Sqlite.IntegrationTests\Avalanche.ReadModel.Sqlite.IntegrationTests.csproj", "{955603E6-60CD-470F-A4C7-84C7C8523D80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +114,10 @@ Global
 		{7B0197FB-891B-475B-9200-1EA99E6DE8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B0197FB-891B-475B-9200-1EA99E6DE8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B0197FB-891B-475B-9200-1EA99E6DE8C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +125,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CF91D702-69C9-446F-B75A-82AF31B4C1D5} = {F2FA2E45-46AE-4A6A-8245-08D649966825}
 		{8FECB523-8220-4B16-8117-80FF0E52EF2F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{955603E6-60CD-470F-A4C7-84C7C8523D80} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9E111167-6D37-4E6A-A3C2-F292C3F6D5BC}

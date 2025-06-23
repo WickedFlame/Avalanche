@@ -1,14 +1,10 @@
-﻿using Avalanche.WriteModel.Events;
-using Avalanche.WriteModel.Sqlite.DTO;
+﻿using Avalanche.DataSource.DTO;
+using Avalanche.DataSource.Sqlite;
+using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite.EventHandlers;
 using SqlKata.Compilers;
 using SqlKata.Execution;
-using System;
-using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
 {
@@ -60,7 +56,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
                 });
             
 
-            var handler = new DeleteTestRunEventHandler(_db);
+            var handler = new DeleteTestRunEventHandler(new ProjectionConnectionBuilder());
             handler.Handle(new DeleteTestRunEvent
             {
                 TestId = "del1"

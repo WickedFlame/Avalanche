@@ -1,12 +1,19 @@
-﻿using Avalanche.ReadModel.Queries;
+﻿using Avalanche.DataSource;
+using Avalanche.ReadModel.Queries;
 using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.Runner;
-using System.Xml.Linq;
 
 namespace Avalanche.Domain
 {
     public class TestsFacade
     {
+        private readonly IProjectionConnectionBuilder _builder;
+
+        public TestsFacade(IProjectionConnectionBuilder builder)
+        {
+            _builder = builder;
+        }
+
         public IEnumerable<TestDefinition> GetAvailiableTests()
         {
             var path = Environment.GetEnvironmentVariable("TESTFILE_PATH");
@@ -23,7 +30,7 @@ namespace Avalanche.Domain
                 State = TestRunStatus.New
             };
 
-            var handler = new TestRunQueryHandler();
+            var handler = new TestRunQueryHandler(_builder);
             var test = handler.Get(new GetLastTestQuery { Scenario = definition.Name});
             if (test != null)
             {

@@ -1,14 +1,10 @@
-﻿using Avalanche.WriteModel.Events;
-using Avalanche.WriteModel.Sqlite.DTO;
+﻿using Avalanche.DataSource.DTO;
+using Avalanche.DataSource.Sqlite;
+using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite.EventHandlers;
 using SqlKata.Compilers;
 using SqlKata.Execution;
-using System;
-using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
 {
@@ -33,7 +29,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
         [Test]
         public void TestRunEventHandler_StartTestEvent()
         {
-            var handler = new TestRunEventHandler(_db);
+            var handler = new TestRunEventHandler(new ProjectionConnectionBuilder() );
             handler.Handle(new StartTestEvent
             {
                 TestId = "1",
@@ -63,7 +59,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests.EventHandlers
                 Status = "Started"
             });
 
-            var handler = new TestRunEventHandler(_db);
+            var handler = new TestRunEventHandler(new ProjectionConnectionBuilder());
             handler.Handle(new EndTestEvent
             {
                 TestId = "2",

@@ -1,4 +1,5 @@
-﻿using Avalanche.Domain;
+﻿using Avalanche.DataSource;
+using Avalanche.Domain;
 using Avalanche.Models;
 using Avalanche.ReadModel.QueryHandlers;
 using Microsoft.AspNetCore.Mvc;
@@ -7,13 +8,16 @@ namespace Avalanche.Controllers
 {
     public class TestOverviewController : Controller
     {
-        public TestOverviewController()
+        private readonly IProjectionConnectionBuilder _builder;
+
+        public TestOverviewController(IProjectionConnectionBuilder builder)
         {
+            _builder = builder;
         }
 
         public IActionResult Index(string scenario, string testid)
         {
-            var trh = new TestRunQueryHandler();
+            var trh = new TestRunQueryHandler(_builder);
             var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testid });
 
             var path = $"./testfiles/{scenario}.yml";

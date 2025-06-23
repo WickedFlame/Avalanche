@@ -1,4 +1,6 @@
-﻿namespace Avalanche.WriteModel.Sqlite.DTO
+﻿using System;
+
+namespace Avalanche.DataSource.DTO
 {
     public class IterationEvents
     {

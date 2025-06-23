@@ -1,0 +1,12 @@
+---data
+AverageMilliseconds: 123
+Failed: 1
+Fastest: 21.5
+Iterations: 50
+Slowest: 51.2
+TestCase: Test 1
+TestId: 2
+ThreadNumber: 0
+Throughput: 2.1
+TotalMilliseconds: 321
+Type: TestSummary

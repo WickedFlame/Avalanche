@@ -1,6 +1,6 @@
 ﻿using Avalanche.DataSource;
+using Avalanche.DataSource.DTO;
 using Avalanche.WriteModel.Events;
-using Avalanche.WriteModel.Sqlite.DTO;
 using SqlKata.Execution;
 
 namespace Avalanche.WriteModel.Sqlite.EventHandlers

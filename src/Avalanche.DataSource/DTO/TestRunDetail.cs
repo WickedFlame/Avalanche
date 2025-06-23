@@ -1,4 +1,4 @@
-﻿namespace Avalanche.WriteModel.Sqlite.DTO
+﻿namespace Avalanche.DataSource.DTO
 {
     public class TestRunDetail
     {
