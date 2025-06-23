@@ -14,12 +14,12 @@ namespace Avalanche.WriteModel.RestClient
             _client = client;
         }
 
-        public async Task PostAsync(string url, IEvent evnt)
+        public async Task PostAsync(string url, object body)
         {
             try
             {
                 var request = new RestRequest(url)
-                    .AddBody(evnt);
+                    .AddBody(body);
 
                 var res = await _client.PostAsync(request);
             }

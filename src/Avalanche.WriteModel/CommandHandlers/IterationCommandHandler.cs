@@ -22,12 +22,15 @@ namespace Avalanche.WriteModel.CommandHandlers
             //
             // the storage has to be per thread to ensure enough events are sent for the charts
             var key = $"{cmd.TestId}_{cmd.TestName}_{cmd.Thread}";
-            if (!_events.ContainsKey(key))
+            lock (_events)
             {
-                _events.Add(key, new IterationElementsContainer());
-            }
+                if (!_events.ContainsKey(key))
+                {
+                    _events.Add(key, []);
+                }
 
-            _events[key].Add(cmd);
+                _events[key].Add(cmd);
+            }
 
             _dispatcher.Continue();
         }
@@ -65,8 +68,6 @@ namespace Avalanche.WriteModel.CommandHandlers
 
                     _eventBus.Publish(cmd.TestId, cmd.Time, @event);
 
-                    Console.WriteLine($"Sent events for {key}");
-
                     if (!_dispatcher.IsRunning)
                     {
                         return false;
@@ -82,49 +83,6 @@ namespace Avalanche.WriteModel.CommandHandlers
             _dispatcher.Close();
 
             base.Dispose(disposing);
-        }
-    }
-
-    public class EventQueue
-    {
-        private readonly Dictionary<string, IterationElementsContainer> _events = [];
-
-        public IEnumerable<string> Keys => _events.Keys;
-
-        public IterationElementsContainer this[string key] => _events[key];
-
-        public void Add(string key, IterationElementsContainer iterationElementsContainer)
-        {
-            _events.Add(key, iterationElementsContainer);
-        }
-
-        public bool ContainsKey(string key)
-        {
-            return _events.ContainsKey(key);
-        }
-
-        public IterationElementsContainer Dequeue(string key)
-        {
-            if (!_events.ContainsKey(key))
-            {
-                return null;
-            }
-
-            var items = _events[key];
-
-            _events[key] = new IterationElementsContainer();
-
-            return items;
-        }
-
-        public IterationElementsContainer Get(string key)
-        {
-            if (!_events.ContainsKey(key))
-            {
-                _events[key] = new IterationElementsContainer();
-            }
-
-            return _events[key];
         }
     }
 }

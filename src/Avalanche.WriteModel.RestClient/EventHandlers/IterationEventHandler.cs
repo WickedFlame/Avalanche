@@ -1,6 +1,10 @@
 ﻿using Avalanche.WriteModel.Events;
+using Broadcast;
 using RestSharp;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Avalanche.WriteModel.RestClient.EventHandlers
 {
@@ -8,19 +12,55 @@ namespace Avalanche.WriteModel.RestClient.EventHandlers
         IEventHandler<IterationLogEvent>,
         IEventHandler<IterationErrorEvent>
     {
+        private readonly object _lock = new();
+
+        private readonly TimedDispatcher _dispatcher;
+        private readonly List<IterationLogEvent> _events = [];
+
         public IterationEventHandler(IRestClient client)
             : base(client)
         {
+            _dispatcher = new(5000, () => DispatcherTask());
+            _dispatcher.StartDispatcher();
         }
 
-        public async void Handle(IterationLogEvent evnt)
+        public void Handle(IterationLogEvent evnt)
         {
-            await PostAsync("api/event/iteration", evnt);
+            lock(_lock)
+            {
+                _events.Add(evnt);
+            }
         }
 
         public async void Handle(IterationErrorEvent evnt)
         {
             await PostAsync("api/event/iteration/error", evnt);
+        }
+
+
+        private bool DispatcherTask()
+        {
+            DispatcherAsync().Wait();
+            return true;
+        }
+
+        private async Task<bool> DispatcherAsync()
+        {
+            if (_events.Count == 0)
+            {
+                return true;
+            }
+
+            var events = _events.ToList();
+
+            lock (_lock)
+            {
+                _events.Clear();
+            }
+
+            await PostAsync("api/event/iterations", events);
+
+            return true;
         }
 
         public void Dispose()
@@ -34,6 +74,7 @@ namespace Avalanche.WriteModel.RestClient.EventHandlers
             if (disposing)
             {
                 // do stuf here;
+                _dispatcher.Close();
             }
         }
     }

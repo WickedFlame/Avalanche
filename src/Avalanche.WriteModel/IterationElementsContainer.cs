@@ -37,12 +37,7 @@ namespace Avalanche.WriteModel
         {
             var events = _events.Count > 10 ?
                 _events.Skip(Math.Max(0, _events.Count - 10)).OrderBy(e => e.Time).ToList() :
-                _events;
-
-            //if (events.Count <= 1)
-            //{
-            //    return 0;
-            //}
+                _events.ToList();
 
             return events.Average(e => e.TotalMilliseconds);
         }
