@@ -1,4 +1,5 @@
 using Avalanche;
+using Avalanche.DataSource;
 using Avalanche.Domain;
 using Avalanche.ReadModel;
 using Avalanche.ReadModel.QueryHandlers;
@@ -32,6 +33,8 @@ builder.Services.AddTransient<QueryFactory>(c =>
     var compiler = new SqliteCompiler();
     return new QueryFactory(connection, compiler);
 });
+builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
+
 builder.Services.AddTransient<IEventBus>(c =>
 {
     var eventBus = new EventBus(c.GetService<IEventStore>());

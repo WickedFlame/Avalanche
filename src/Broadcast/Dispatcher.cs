@@ -7,6 +7,7 @@
 
     public class Dispatcher<T> : IDispatcher<T>, IDisposable
     {
+        private readonly object _lock = new object();
 
         private readonly Dictionary<Type, IMessageHandler> _handlers = [];
         private readonly Queue<T> _queue = new();
@@ -26,12 +27,12 @@
 
         private bool DispatcherTask()
         {
-            var entry = _queue.Any() ? _queue.Dequeue() : default;
+            var entry = GetNext();
             while (entry != null)
             {
                 Send(entry);
 
-                entry = _queue.Any() ? _queue.Dequeue() : default;
+                entry = GetNext();
 
                 if (!_dispatcher.IsRunning)
                 {
@@ -42,9 +43,21 @@
             return true;
         }
 
+        private T GetNext()
+        {
+            lock (_lock)
+            {
+                return _queue.Count > 0 ? _queue.Dequeue() : default;
+            }
+        }
+
         public void SendAsync<Tc>(Tc @event) where Tc : class, T
         {
-            _queue.Enqueue(@event);
+            lock (_lock)
+            {
+                _queue.Enqueue(@event);
+            }
+
             _dispatcher.Continue();
         }
 

@@ -21,35 +21,35 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             _db.Query(nameof(TestRun))
                 .Where(new
                 {
-                    TestId = "del1"
+                    TestId = @event.TestId
                 })
                 .Delete();
 
             _db.Query(nameof(SummaryEvents))
                 .Where(new
                 {
-                    TestId = "del1"
+                    TestId = @event.TestId
                 })
                 .Delete();
 
             _db.Query(nameof(IterationEvents))
                 .Where(new
                 {
-                    TestId = "del1"
+                    TestId = @event.TestId
                 })
                 .Delete();
 
             _db.Query(nameof(TestRunDetail))
                 .Where(new
                 {
-                    TestId = "del1"
+                    TestId = @event.TestId
                 })
                 .Delete();
 
             _db.Query(nameof(RampupEvents))
                 .Where(new
                 {
-                    TestId = "del1"
+                    TestId = @event.TestId
                 })
                 .Delete();
         }

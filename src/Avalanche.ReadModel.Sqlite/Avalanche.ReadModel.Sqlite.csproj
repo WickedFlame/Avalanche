@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Avalanche.DataSource\Avalanche.DataSource.csproj" />
       <ProjectReference Include="..\Avalanche.ReadModel\Avalanche.ReadModel.csproj" />
     </ItemGroup>
 </Project>

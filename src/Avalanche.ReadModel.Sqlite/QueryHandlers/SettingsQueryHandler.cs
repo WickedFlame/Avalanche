@@ -1,21 +1,24 @@
-﻿using Avalanche.ReadModel.Queries;
+﻿using Avalanche.DataSource;
+using Avalanche.ReadModel.Queries;
 using Broadcast;
-using System.Data.SQLite;
+using SqlKata.Execution;
 
 namespace Avalanche.ReadModel.Sqlite.QueryHandlers
 {
     public class SettingsQueryHandler : ISettingsQueryHandler
     {
+        private readonly QueryFactory _db;
+
+        public SettingsQueryHandler(IEventStoreConnectionBuilder builder)
+        {
+            _db = builder.Build();
+        }
+
         public IEnumerable<EventModel> Get(GetEventStoreEvents query)
         {
-            var connection = new SQLiteConnection(Constants.EventStoreDatabase);
-            connection.Open();
-            using (var cmd = connection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT * FROM Events";
-
-                return cmd.Execute<EventModel>();
-            }
+            return _db.Query(nameof(Avalanche.DataSource.DTO.Events))
+                .Select()
+                .Get<EventModel>();
         }
     }
 }

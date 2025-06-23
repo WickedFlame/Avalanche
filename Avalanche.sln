@@ -42,7 +42,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.RestCl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanch.WriteModel.Sqlite.Tests", "src\Tests\Avalanche.WriteModel.Sqlite.IntegrationTests\Avalanche.WriteModel.Sqlite.IntegrationTests.csproj", "{8FECB523-8220-4B16-8117-80FF0E52EF2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.Sqlite.IntegrationTests", "src\Tests\Avalanche.WriteModel.Sqlite.IntegrationTests\Avalanche.WriteModel.Sqlite.IntegrationTests.csproj", "{8FECB523-8220-4B16-8117-80FF0E52EF2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource.Sqlite", "src\Avalanche.DataSource.Sqlite\Avalanche.DataSource.Sqlite.csproj", "{75682221-FDA8-4FC6-B3E0-3DA1B4867FC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource", "src\Avalanche.DataSource\Avalanche.DataSource.csproj", "{7B0197FB-891B-475B-9200-1EA99E6DE8C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +104,14 @@ Global
 		{8FECB523-8220-4B16-8117-80FF0E52EF2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FECB523-8220-4B16-8117-80FF0E52EF2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FECB523-8220-4B16-8117-80FF0E52EF2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75682221-FDA8-4FC6-B3E0-3DA1B4867FC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75682221-FDA8-4FC6-B3E0-3DA1B4867FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75682221-FDA8-4FC6-B3E0-3DA1B4867FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75682221-FDA8-4FC6-B3E0-3DA1B4867FC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B0197FB-891B-475B-9200-1EA99E6DE8C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B0197FB-891B-475B-9200-1EA99E6DE8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B0197FB-891B-475B-9200-1EA99E6DE8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B0197FB-891B-475B-9200-1EA99E6DE8C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

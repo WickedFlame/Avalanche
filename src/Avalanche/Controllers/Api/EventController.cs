@@ -65,6 +65,12 @@ namespace Avalanche.Controllers.Api
         {
             foreach (var evnt in evnts)
             {
+                if(evnt == null)
+                {
+                    //TODO: Write Log
+                    continue;
+                }
+
                 _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
             }
 

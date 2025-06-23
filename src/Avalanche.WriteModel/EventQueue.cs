@@ -2,6 +2,8 @@
 {
     public class EventQueue
     {
+        private readonly object _lock = new();
+
         private readonly Dictionary<string, IterationElementsContainer> _events = [];
 
         public IEnumerable<string> Keys => _events.Keys;
@@ -20,26 +22,32 @@
 
         public IterationElementsContainer Dequeue(string key)
         {
-            if (!_events.ContainsKey(key))
+            lock (_lock)
             {
-                return null;
+                if (!_events.ContainsKey(key))
+                {
+                    return null;
+                }
+
+                var items = _events[key];
+
+                _events[key] = [];
+
+                return items;
             }
-
-            var items = _events[key];
-
-            _events[key] = [];
-
-            return items;
         }
 
         public IterationElementsContainer Get(string key)
         {
-            if (!_events.ContainsKey(key))
+            lock (_lock)
             {
-                _events[key] = [];
-            }
+                if (!_events.ContainsKey(key))
+                {
+                    _events[key] = [];
+                }
 
-            return _events[key];
+                return _events[key];
+            }
         }
     }
 }

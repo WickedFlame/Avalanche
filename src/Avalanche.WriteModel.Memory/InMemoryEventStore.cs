@@ -6,7 +6,7 @@ namespace Avalanche.WriteModel.Memory
 {
     public class InMemoryEventStore : IEventStore
     {
-        private readonly List<EventStoreItem> _events = new List<EventStoreItem>();
+        private readonly List<EventStoreItem> _events = [];
 
         public string Add<T>(string testId, DateTime time, T model) where T : IEvent
         {
@@ -21,6 +21,20 @@ namespace Avalanche.WriteModel.Memory
             });
 
             return id;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // do stuf here
+            }
         }
     }
 }

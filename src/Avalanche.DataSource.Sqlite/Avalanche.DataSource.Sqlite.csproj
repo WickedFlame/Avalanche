@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,8 +12,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Avalanche.DataSource\Avalanche.DataSource.csproj" />
-        <ProjectReference Include="..\Avalanche.WriteModel\Avalanche.WriteModel.csproj" />
-        <ProjectReference Include="..\Broadcast\Broadcast.csproj" />
+        <ProjectReference Include="..\Avalanche.WriteModel.Sqlite\Avalanche.WriteModel.Sqlite.csproj" />
     </ItemGroup>
 
 </Project>

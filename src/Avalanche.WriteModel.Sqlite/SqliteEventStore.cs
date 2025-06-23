@@ -1,35 +1,64 @@
-﻿using Broadcast;
-using System.Data.SQLite;
+﻿using Avalanche.DataSource;
+using Broadcast;
+using SqlKata.Execution;
 using System.Text.Json;
 
 namespace Avalanche.WriteModel.Sqlite
 {
     public class SqliteEventStore : IEventStore
     {
-        private readonly SQLiteConnection _connection;
+        private readonly IEventStoreConnectionBuilder _builder;
 
-        public SqliteEventStore()
+        public SqliteEventStore(IEventStoreConnectionBuilder connectionBuilder)
         {
-            _connection = new SQLiteConnection(Constants.EventStoreDatabase);
-            _connection.Open();
+            _builder = connectionBuilder;
         }
 
         public string Add<T>(string testId, DateTime time, T model) where T : IEvent
         {
-            using (var cmd = _connection.CreateCommand())
+            var id = Guid.NewGuid().ToString();
+            var value = JsonSerializer.Serialize(model);
+            var type = model.GetType().AssemblyQualifiedName;
+
+            try
             {
-                var id = Guid.NewGuid().ToString();
+                Write(id, testId, time, type, value);
+            }
+            catch (Exception ex)
+            {
+                //
+                // recreate the connection and try again
+                Write(id, testId, time, type, value);
+            }
 
-                cmd.CommandText = "INSERT INTO Events (Id, TestId, Time, EventType, Value) Values (@id, @testId, @time, @eventType, @value)";
-                cmd.Parameters.Add(new SQLiteParameter("@id", id));
-                cmd.Parameters.Add(new SQLiteParameter("@testId", testId));
-                cmd.Parameters.Add(new SQLiteParameter("@time", time));
-                cmd.Parameters.Add(new SQLiteParameter("@eventType", model.GetType().AssemblyQualifiedName));
-                cmd.Parameters.Add(new SQLiteParameter("@value", JsonSerializer.Serialize(model)));
+            return id;
+        }
 
-                cmd.ExecuteNonQuery();
+        private void Write(string id, string testId, DateTime time, string type, string value)
+        {
+            var db = _builder.Build();
+            db.Query(nameof(Avalanche.DataSource.DTO.Events))
+                    .Insert(new
+                    {
+                        Id = id,
+                        TestId = testId,
+                        Time = time,
+                        EventType = type,
+                        Value = value
+                    });
+        }
 
-                return id;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // do stuf here
             }
         }
     }
