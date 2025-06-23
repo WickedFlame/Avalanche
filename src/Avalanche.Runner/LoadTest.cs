@@ -112,7 +112,8 @@ namespace Avalanche.Runner
                                         TestName = test.Name,
                                         Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
                                         Message = result.ErrorMessage,
-                                        StatusCode = result.StatusCode
+                                        StatusCode = result.StatusCode,
+                                        IsWarmup = ctx.Settings.IsWarmup
                                     };
                                     _dispatcher.SendAsync(cmd);
                                 }
@@ -131,6 +132,7 @@ namespace Avalanche.Runner
                                     TestName = test.Name,
                                     Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
                                     Message = e.Message,
+                                    IsWarmup = ctx.Settings.IsWarmup
                                     //StatusCode = result.StatusCode
                                 };
                                 _dispatcher.SendAsync(cmd);

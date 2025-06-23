@@ -22,6 +22,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 Time = cmd.Time,
                 StatusCode = $"{(int)cmd.StatusCode}",
                 Message = cmd.Message,
+                IsWarmup = cmd.IsWarmup
             };
 
             _eventBus.Publish(cmd.TestId, cmd.Time, @event);

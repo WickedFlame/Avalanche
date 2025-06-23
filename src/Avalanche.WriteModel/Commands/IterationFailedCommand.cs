@@ -15,5 +15,7 @@ namespace Avalanche.WriteModel.Commands
         public string Message { get; set; }
 
         public HttpStatusCode StatusCode { get; set; }
+
+        public bool IsWarmup { get; set; }
     }
 }

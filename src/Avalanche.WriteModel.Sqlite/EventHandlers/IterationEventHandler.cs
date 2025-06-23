@@ -86,7 +86,8 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                     TestName = @event.TestName,
                     Message = @event.Message,
                     StatusCode = @event.StatusCode,
-                    Error = true
+                    Error = true,
+                    IsWarmup = @event.IsWarmup
                 });
         }
 
