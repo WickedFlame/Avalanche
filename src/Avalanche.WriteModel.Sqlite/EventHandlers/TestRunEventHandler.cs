@@ -1,4 +1,5 @@
-﻿using Avalanche.WriteModel.Events;
+﻿using Avalanche.DataSource;
+using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite.DTO;
 using SqlKata.Execution;
 using System.Data.SQLite;
@@ -9,20 +10,17 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         IEventHandler<StartTestEvent>,
         IEventHandler<EndTestEvent>
     {
-        private readonly SQLiteConnection _connection;
-        private QueryFactory _db;
+        private readonly IProjectionConnectionBuilder _builder;
 
-        public TestRunEventHandler(QueryFactory db)
+        public TestRunEventHandler(IProjectionConnectionBuilder builder)
         {
-            _connection = new SQLiteConnection(Constants.ReadModelDatabase);
-            _connection.Open();
-
-            _db = db;
+            _builder = builder;
         }
 
         public void Handle(StartTestEvent evnt)
         {
-            _db.Query(nameof(TestRun))
+            var db = _builder.Build();
+            db.Query(nameof(TestRun))
                 .Insert(new
                 {
                     TestId = evnt.TestId,
@@ -34,7 +32,8 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
 
         public void Handle(EndTestEvent evnt)
         {
-            _db.Query(nameof(TestRun))
+            var db = _builder.Build();
+            db.Query(nameof(TestRun))
                 .Where(new
                 {
                     TestId = evnt.TestId
@@ -58,8 +57,6 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             if (disposing)
             {
                 // do stuf here
-                _connection.Close();
-                _connection.Dispose();
             }
         }
     }

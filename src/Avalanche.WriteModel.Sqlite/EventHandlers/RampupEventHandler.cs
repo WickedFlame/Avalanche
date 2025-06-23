@@ -1,4 +1,5 @@
-﻿using Avalanche.WriteModel.Events;
+﻿using Avalanche.DataSource;
+using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite.DTO;
 using SqlKata.Execution;
 
@@ -8,11 +9,11 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         IEventHandler<RampupEvent>,
         IEventHandler<RampdownEvent>
     {
-        private readonly QueryFactory _db;
+        private readonly IProjectionConnectionBuilder _builder;
 
-        public RampupEventHandler(QueryFactory db)
+        public RampupEventHandler(IProjectionConnectionBuilder builder)
         {
-            _db = db;
+            _builder = builder;
         }
 
         public void Handle(RampupEvent @event)
@@ -22,7 +23,8 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 return;
             }
 
-            _db.Query(nameof(RampupEvents))
+            var db = _builder.Build();
+            db.Query(nameof(RampupEvents))
                 .Insert(new
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -40,7 +42,8 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 return;
             }
 
-            _db.Query(nameof(RampupEvents))
+            var db = _builder.Build();
+            db.Query(nameof(RampupEvents))
                 .Insert(new
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -63,7 +66,6 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             if (disposing)
             {
                 // do stuf here
-                _db.Dispose();
             }
         }
     }

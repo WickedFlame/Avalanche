@@ -34,21 +34,22 @@ builder.Services.AddTransient<QueryFactory>(c =>
     return new QueryFactory(connection, compiler);
 });
 builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
+builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Sqlite.ProjectionConnectionBuilder>();
 
 builder.Services.AddTransient<IEventBus>(c =>
 {
     var eventBus = new EventBus(c.GetService<IEventStore>());
-    eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler(c.GetService<QueryFactory>()));
-    eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler(c.GetService<QueryFactory>()));
-    eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler(c.GetService<QueryFactory>()));
-    eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler(c.GetService<QueryFactory>()));
+    eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+    eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+    eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+    eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler(c.GetService<IProjectionConnectionBuilder>()));
 
-    eventBus.Subscribe<RampupEvent>(new RampupEventHandler(c.GetService<QueryFactory>()));
-    eventBus.Subscribe<RampdownEvent>(new RampupEventHandler(c.GetService<QueryFactory>()));
-    eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler(c.GetService<QueryFactory>()));
-    eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler(c.GetService<QueryFactory>()));
+    eventBus.Subscribe<RampupEvent>(new RampupEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+    eventBus.Subscribe<RampdownEvent>(new RampupEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+    eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+    eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler(c.GetService<IProjectionConnectionBuilder>()));
 
-    eventBus.Subscribe<DeleteTestRunEvent>(new DeleteTestRunEventHandler(c.GetService<QueryFactory>()));
+    eventBus.Subscribe<DeleteTestRunEvent>(new DeleteTestRunEventHandler(c.GetService<IProjectionConnectionBuilder>()));
 
     return eventBus;
 });

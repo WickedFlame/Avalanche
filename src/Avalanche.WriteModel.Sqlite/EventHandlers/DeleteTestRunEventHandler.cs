@@ -1,4 +1,5 @@
-﻿using Avalanche.WriteModel.Events;
+﻿using Avalanche.DataSource;
+using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite.DTO;
 using SqlKata.Execution;
 using System.Data.SQLite;
@@ -8,45 +9,46 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
     public class DeleteTestRunEventHandler :
         IEventHandler<DeleteTestRunEvent>
     {
-        private readonly QueryFactory _db;
+        private readonly IProjectionConnectionBuilder _builder;
 
-        public DeleteTestRunEventHandler(QueryFactory db)
+        public DeleteTestRunEventHandler(IProjectionConnectionBuilder builder)
         {
-            _db = db;
+            _builder = builder;
         }
 
 
         public void Handle(DeleteTestRunEvent @event)
         {
-            _db.Query(nameof(TestRun))
+            var db = _builder.Build();
+            db.Query(nameof(TestRun))
                 .Where(new
                 {
                     TestId = @event.TestId
                 })
                 .Delete();
 
-            _db.Query(nameof(SummaryEvents))
+            db.Query(nameof(SummaryEvents))
                 .Where(new
                 {
                     TestId = @event.TestId
                 })
                 .Delete();
 
-            _db.Query(nameof(IterationEvents))
+            db.Query(nameof(IterationEvents))
                 .Where(new
                 {
                     TestId = @event.TestId
                 })
                 .Delete();
 
-            _db.Query(nameof(TestRunDetail))
+            db.Query(nameof(TestRunDetail))
                 .Where(new
                 {
                     TestId = @event.TestId
                 })
                 .Delete();
 
-            _db.Query(nameof(RampupEvents))
+            db.Query(nameof(RampupEvents))
                 .Where(new
                 {
                     TestId = @event.TestId
@@ -65,7 +67,6 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             if (disposing)
             {
                 // do stuf here
-                _db.Dispose();
             }
         }
     }

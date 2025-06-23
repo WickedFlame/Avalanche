@@ -1,4 +1,5 @@
-﻿using Avalanche.WriteModel.Events;
+﻿using Avalanche.DataSource;
+using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite.DTO;
 using SqlKata.Execution;
 
@@ -8,16 +9,17 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         IEventHandler<IterationLogEvent>,
         IEventHandler<IterationErrorEvent>
     {
-        private readonly QueryFactory _db;
+        private readonly IProjectionConnectionBuilder _builder;
 
-        public IterationEventHandler(QueryFactory db)
+        public IterationEventHandler(IProjectionConnectionBuilder builder)
         {
-            _db = db;
+            _builder = builder;
         }
 
         public void Handle(IterationLogEvent @event)
         {
-            _db.Query(nameof(IterationEvents))
+            var db = _builder.Build();
+            db.Query(nameof(IterationEvents))
                 .Insert(new
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -30,7 +32,7 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                     IsWarmup = @event.IsWarmup
                 });
 
-            var trd = _db.Query(nameof(TestRunDetail))
+            var trd = db.Query(nameof(TestRunDetail))
                 .Select()
                 .Where(new
                 {
@@ -40,7 +42,7 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 })
                 .Get();
 
-            var query = _db.Query(nameof(TestRunDetail));
+            var query = db.Query(nameof(TestRunDetail));
 
             if (trd.Any())
             {
@@ -68,12 +70,13 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
                 });
             }
 
-            _db.Execute(query);
+            db.Execute(query);
         }
 
         public void Handle(IterationErrorEvent @event)
         {
-            _db.Query(nameof(IterationEvents))
+            var db  = _builder.Build();
+            db.Query(nameof(IterationEvents))
                 .Insert(new
                 {
                     Id = Guid.NewGuid().ToString(),

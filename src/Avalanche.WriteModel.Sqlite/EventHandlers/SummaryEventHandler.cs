@@ -1,4 +1,5 @@
-﻿using Avalanche.WriteModel.Events;
+﻿using Avalanche.DataSource;
+using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sqlite.DTO;
 using SqlKata.Execution;
 
@@ -8,16 +9,17 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
         IEventHandler<ThreadSummaryEvent>,
         IEventHandler<TestSummaryEvent>
     {
-        private readonly QueryFactory _db;
+        private readonly IProjectionConnectionBuilder _builder;
 
-        public SummaryEventHandler(QueryFactory db)
+        public SummaryEventHandler(IProjectionConnectionBuilder builder)
         {
-            _db = db;
+            _builder = builder;
         }
 
         public void Handle(ThreadSummaryEvent @event)
         {
-            _db.Query(nameof(SummaryEvents))
+            var db = _builder.Build();
+            db.Query(nameof(SummaryEvents))
                 .Insert(new
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -35,7 +37,8 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
 
         public void Handle(TestSummaryEvent @event)
         {
-            _db.Query(nameof(SummaryEvents))
+            var db = _builder.Build();
+            db.Query(nameof(SummaryEvents))
                 .Insert(new
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -63,7 +66,6 @@ namespace Avalanche.WriteModel.Sqlite.EventHandlers
             if (disposing)
             {
                 // do stuf here
-                _db.Dispose();
             }
         }
     }
