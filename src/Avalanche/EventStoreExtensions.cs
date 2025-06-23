@@ -7,12 +7,12 @@ namespace Avalanche
     {
         public static void UseSqliteEventStore(this IApplicationBuilder app)
         {
-            Avalanche.WriteModel.Sqlite.EventStoreBuilder.CreateEventStore();
+            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateEventStore();
         }
 
         public static void UseSqliteReadModel(this IApplicationBuilder app)
         {
-            Avalanche.WriteModel.Sqlite.EventStoreBuilder.CreateWriteModel();
+            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateWriteModel();
         }
     }
 }

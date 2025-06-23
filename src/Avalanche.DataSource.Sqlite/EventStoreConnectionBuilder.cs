@@ -1,5 +1,4 @@
-﻿using Avalanche.WriteModel.Sqlite;
-using SqlKata.Compilers;
+﻿using SqlKata.Compilers;
 using SqlKata.Execution;
 using System.Data.SQLite;
 

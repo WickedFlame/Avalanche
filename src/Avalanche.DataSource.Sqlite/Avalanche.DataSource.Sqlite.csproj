@@ -12,7 +12,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Avalanche.DataSource\Avalanche.DataSource.csproj" />
-        <ProjectReference Include="..\Avalanche.WriteModel.Sqlite\Avalanche.WriteModel.Sqlite.csproj" />
     </ItemGroup>
 
 </Project>

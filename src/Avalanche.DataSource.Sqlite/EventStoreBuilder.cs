@@ -1,6 +1,6 @@
 ﻿using System.Data.SQLite;
 
-namespace Avalanche.WriteModel.Sqlite
+namespace Avalanche.DataSource.Sqlite
 {
     public static class EventStoreBuilder
     {

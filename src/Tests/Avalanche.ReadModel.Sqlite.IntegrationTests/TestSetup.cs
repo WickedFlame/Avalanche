@@ -21,8 +21,8 @@
                 File.Delete("data/eventstore.db");
             }
 
-            Avalanche.WriteModel.Sqlite.EventStoreBuilder.CreateEventStore();
-            Avalanche.WriteModel.Sqlite.EventStoreBuilder.CreateWriteModel();
+            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateEventStore();
+            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateWriteModel();
         }
 
         [OneTimeTearDown]
