@@ -1,4 +1,5 @@
 ﻿using Avalanche.Domain;
+using Avalanche.ReadModel;
 using Avalanche.ReadModel.QueryHandlers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,9 @@ namespace Avalanche.Controllers.Api
     [ApiController]
     public class TestDataController : ControllerBase
     {
-        private readonly TestRunQueryHandler _queryHandler;
+        private readonly ITestRunQueryHandler _queryHandler;
 
-        public TestDataController(TestRunQueryHandler queryHandler)
+        public TestDataController(ITestRunQueryHandler queryHandler)
         {
             _queryHandler = queryHandler;
         }

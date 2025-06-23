@@ -9,7 +9,8 @@ namespace Avalanche.ReadModel
         IQueryHandler<TestRun, GetLastTestQuery>,
         IQueryHandler<TestRun, GetTestRun>,
         IQueryHandler<IEnumerable<RampupData>, GetRampupData>,
-        IQueryHandler<IEnumerable<TestSummary>, GetSummary>
+        IQueryHandler<IEnumerable<TestSummary>, GetSummary>,
+        IQueryHandler<IEnumerable<IterationItem>, GetChartData>
     {
     }
 }

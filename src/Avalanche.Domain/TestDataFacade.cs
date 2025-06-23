@@ -1,4 +1,5 @@
 ﻿using Avalanche.Domain.Models;
+using Avalanche.ReadModel;
 using Avalanche.ReadModel.Models;
 using Avalanche.ReadModel.Queries;
 using Avalanche.ReadModel.QueryHandlers;
@@ -9,9 +10,9 @@ namespace Avalanche.Domain
 {
     public class TestDataFacade
     {
-        private readonly TestRunQueryHandler _queryHandler;
+        private readonly ITestRunQueryHandler _queryHandler;
 
-        public TestDataFacade(TestRunQueryHandler queryHandler)
+        public TestDataFacade(ITestRunQueryHandler queryHandler)
         {
             _queryHandler = queryHandler;
         }

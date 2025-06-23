@@ -1,6 +1,6 @@
 ﻿namespace Avalanche.ReadModel.Queries
 {
-    public class GetChartData
+    public class GetChartData : IQuery
     {
         public string TestId { get; set; }
 

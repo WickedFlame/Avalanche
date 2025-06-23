@@ -48,8 +48,6 @@ builder.Services.AddTransient<IEventBus>(c =>
     return eventBus;
 });
 builder.Services.AddSingleton<ISettingsQueryHandler, SettingsQueryHandler>();
-builder.Services.AddSingleton<TestRunQueryHandler>();
-
 builder.Services.AddTransient<ITestRunQueryHandler, TestRunQueryHandler>();
 builder.Services.AddTransient<ISettingsFacade, SettingsFacade>();
 
