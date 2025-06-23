@@ -11,8 +11,6 @@ namespace Avalanche.Runner
 
         public TestSettings Settings { get; set; }
 
-        public TestRunStatus Status { get; set; }
-
         public DateTime StartTime { get; set; }
     }
 }

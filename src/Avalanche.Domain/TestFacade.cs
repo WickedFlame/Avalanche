@@ -50,7 +50,6 @@ namespace Avalanche.Domain
             {
                 TestId = Guid.NewGuid().ToString(),
                 Name = name,
-                Status = TestRunStatus.New,
                 Settings = settings
             };
 
@@ -62,8 +61,7 @@ namespace Avalanche.Domain
             {
                 TestId = data.TestId,
                 Scenario = name,
-                StartTime = data.StartTime,
-                Status = TestRunStatus.Running
+                StartTime = data.StartTime
             });
 
 
@@ -93,12 +91,10 @@ namespace Avalanche.Domain
                 });
             }
 
-
             _dispatcher.Send(new EndTestCommand
             {
                 TestId = data.TestId,
-                EndTime = DateTime.Now,
-                Status = TestRunStatus.Done
+                EndTime = DateTime.Now
             });
 
 
@@ -112,8 +108,7 @@ namespace Avalanche.Domain
             _dispatcher.Send(new EndTestCommand
             {
                 TestId = testId,
-                EndTime = DateTime.Now,
-                Status = TestRunStatus.Done
+                EndTime = DateTime.Now
             });
         }
 

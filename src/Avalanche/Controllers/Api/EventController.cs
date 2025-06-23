@@ -60,6 +60,18 @@ namespace Avalanche.Controllers.Api
         }
 
         [HttpPost]
+        [Route("iterations")]
+        public IActionResult Iterations([FromBody] IEnumerable<IterationLogEvent> evnts)
+        {
+            foreach (var evnt in evnts)
+            {
+                _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
         [Route("iteration/Error")]
         public IActionResult IterationError([FromBody] IterationErrorEvent evnt)
         {

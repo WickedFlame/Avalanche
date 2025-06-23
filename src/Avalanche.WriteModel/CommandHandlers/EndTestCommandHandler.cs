@@ -18,7 +18,7 @@ namespace Avalanche.WriteModel.CommandHandlers
             {
                 TestId = cmd.TestId,
                 EndTime = cmd.EndTime,
-                Status = cmd.Status
+                Status = TestRunStatus.Done
             };
 
             _eventBus.Publish(cmd.TestId, cmd.EndTime, @event);
