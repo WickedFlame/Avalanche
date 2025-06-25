@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using Microsoft.Extensions.Logging;
 using RestSharp;
 using System;
 
@@ -9,8 +10,8 @@ namespace Avalanche.WriteModel.RestClient.EventHandlers
         IEventHandler<RampupEvent>,
         IEventHandler<RampdownEvent>
     {
-        public RampupEventHandler(IRestClient client)
-            : base(client)
+        public RampupEventHandler(IRestClient client, ILoggerFactory loggerFactory)
+            : base(client, loggerFactory)
         {
         }
 

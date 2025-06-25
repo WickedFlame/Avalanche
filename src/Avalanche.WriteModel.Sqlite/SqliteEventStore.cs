@@ -1,5 +1,6 @@
 ﻿using Avalanche.DataSource;
 using Broadcast;
+using Microsoft.Extensions.Logging;
 using SqlKata.Execution;
 using System.Text.Json;
 
@@ -8,10 +9,12 @@ namespace Avalanche.WriteModel.Sqlite
     public class SqliteEventStore : IEventStore
     {
         private readonly IEventStoreConnectionBuilder _builder;
+        private readonly ILogger<SqliteEventStore> _logger;
 
-        public SqliteEventStore(IEventStoreConnectionBuilder connectionBuilder)
+        public SqliteEventStore(IEventStoreConnectionBuilder connectionBuilder, ILogger<SqliteEventStore> logger)
         {
             _builder = connectionBuilder;
+            _logger = logger;
         }
 
         public string Add<T>(string testId, DateTime time, T model) where T : IEvent
@@ -26,6 +29,8 @@ namespace Avalanche.WriteModel.Sqlite
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Write to EventStora caused an error. Will Retry to add onece more.");
+
                 //
                 // recreate the connection and try again
                 Write(id, testId, time, type, value);

@@ -10,6 +10,7 @@ using Avalanche.WriteModel.Sqlite;
 using Avalanche.WriteModel.Sqlite.EventHandlers;
 using Broadcast;
 using Microsoft.AspNetCore.OpenApi;
+using OpenTelemetry.Logs;
 using SqlKata.Compilers;
 using SqlKata.Execution;
 using System.Data.SQLite;
@@ -52,6 +53,12 @@ builder.Services.AddTransient<ITestRunQueryHandler, TestRunQueryHandler>();
 builder.Services.AddTransient<ISettingsFacade, SettingsFacade>();
 
 
+
+builder.Services.AddLogging((loggingBuilder) => loggingBuilder
+        .SetMinimumLevel(LogLevel.Debug)
+        .AddOpenTelemetry(options =>
+            options.AddConsoleExporter())
+        );
 
 
 

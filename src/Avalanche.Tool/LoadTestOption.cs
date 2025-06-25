@@ -7,6 +7,8 @@ using Avalanche.WriteModel.Memory;
 using Avalanche.WriteModel.Memory.EventHandlers;
 using Broadcast;
 using CommandLine;
+using MeasureMap.Diagnostics;
+using Microsoft.Extensions.Logging;
 using RestSharp;
 
 namespace Avalanche
@@ -20,18 +22,24 @@ namespace Avalanche
         [Option('u', "url", HelpText = "Url to the Avalanche server", Required = false)]
         public string Url { get; set; }
 
+        public ILoggerFactory LoggerFactory { get; set; }
+
         public void Execute()
         {
             if (string.IsNullOrEmpty(ConfigFile))
             {
+                //Logger.LogInformation($"The Parameter --configfile or -f has to be provided with the path to the config file");
                 Console.WriteLine("The Parameter --configfile or -f has to be provided with the path to the config file");
+
                 ConfigFile = "LoadTest";
             }
 
+            //Logger.LogInformation($"Start LoadTest from {ConfigFile}");
             Console.WriteLine($"Start LoadTest from {ConfigFile}");
 
 #if DEBUG
             // in debug wait until the website is started
+            //Logger.LogInformation($"Wait until the website is started");
             Console.WriteLine($"Wait until the website is started");
             System.Threading.Tasks.Task.Delay(10000).Wait();
 
@@ -53,14 +61,14 @@ namespace Avalanche
                     RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true,
                 };
 
-                eventBus.Subscribe<StartTestEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.TestRunEventHandler(new RestClient(options)));
-                eventBus.Subscribe<EndTestEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.TestRunEventHandler(new RestClient(options)));
-                eventBus.Subscribe<ThreadSummaryEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.SummaryEventHandler(new RestClient(options)));
-                eventBus.Subscribe<TestSummaryEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.SummaryEventHandler(new RestClient(options)));
+                eventBus.Subscribe<StartTestEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.TestRunEventHandler(new RestClient(options), LoggerFactory));
+                eventBus.Subscribe<EndTestEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.TestRunEventHandler(new RestClient(options), LoggerFactory));
+                eventBus.Subscribe<ThreadSummaryEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.SummaryEventHandler(new RestClient(options), LoggerFactory));
+                eventBus.Subscribe<TestSummaryEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.SummaryEventHandler(new RestClient(options), LoggerFactory));
                 eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
                 eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
-                eventBus.Subscribe<IterationLogEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.IterationEventHandler(new RestClient(options)));
-                eventBus.Subscribe<IterationErrorEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.IterationEventHandler(new RestClient(options)));
+                eventBus.Subscribe<IterationLogEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.IterationEventHandler(new RestClient(options), LoggerFactory));
+                eventBus.Subscribe<IterationErrorEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.IterationEventHandler(new RestClient(options), LoggerFactory));
             }
 
             eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
@@ -77,7 +85,7 @@ namespace Avalanche
                 // LoadTest
                 var path = $"testfiles/{ConfigFile}.yml";
 
-                var facade = new TestFacade(dispatcher);
+                var facade = new TestFacade(dispatcher, LoggerFactory);
                 facade.Start(ConfigFile, path);
 
                 //

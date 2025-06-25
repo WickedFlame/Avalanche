@@ -1,5 +1,7 @@
 ﻿using Avalanche.DataSource.Sqlite;
 using Broadcast;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Polaroider;
 using SqlKata.Compilers;
 using SqlKata.Execution;
@@ -28,7 +30,7 @@ namespace Avalanche.WriteModel.Sqlite.IntegrationTests
         [Test]
         public void SqliteEventStore_Add()
         {
-            var store = new SqliteEventStore(new EventStoreConnectionBuilder());
+            var store = new SqliteEventStore(new EventStoreConnectionBuilder(), Mock.Of<ILogger<SqliteEventStore>>());
 
             store.Add("1", DateTime.Now, new TestEvent { Id = 1 });
 

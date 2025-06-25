@@ -8,9 +8,12 @@ namespace Avalanche.Controllers.Api
     [ApiController]
     public class EventController : ControllerBase
     {
+        private readonly ILogger<EventController> _logger;
         private readonly IEventBus _eventBus;
-        public EventController(IEventBus eventBus)
+
+        public EventController(ILogger<EventController> logger, IEventBus eventBus)
         {
+            _logger = logger;
             _eventBus = eventBus;
         }
 
@@ -67,7 +70,7 @@ namespace Avalanche.Controllers.Api
             {
                 if(evnt == null)
                 {
-                    //TODO: Write Log
+                    _logger.LogWarning("Event that is null was passed to iterations endpoint");
                     continue;
                 }
 

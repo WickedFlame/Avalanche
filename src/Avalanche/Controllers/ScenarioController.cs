@@ -5,6 +5,7 @@ using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.WriteModel;
 using Broadcast;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Avalanche.Controllers
 {
@@ -12,11 +13,13 @@ namespace Avalanche.Controllers
     {
         private readonly IEventBus _eventBus;
         private readonly IProjectionConnectionBuilder _builder;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public ScenarioController(IEventBus eventBus, IProjectionConnectionBuilder builder)
+        public ScenarioController(IEventBus eventBus, IProjectionConnectionBuilder builder, ILoggerFactory loggerFactory)
         {
             _eventBus = eventBus;
             _builder = builder;
+            _loggerFactory = loggerFactory;
         }
 
         public IActionResult Index(string name)
@@ -67,7 +70,7 @@ namespace Avalanche.Controllers
         public IActionResult DeleteTestRun(string scenario, string testId)
         {
             var dispatcher = new CommandDispatcher(_eventBus);
-            var facade = new TestFacade(dispatcher);
+            var facade = new TestFacade(dispatcher, _loggerFactory);
             facade.Delete(testId);
 
             return RedirectToAction(nameof(Index), new { name = scenario });

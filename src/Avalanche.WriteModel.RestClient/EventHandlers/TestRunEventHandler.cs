@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using Microsoft.Extensions.Logging;
 using RestSharp;
 using System;
 
@@ -8,8 +9,8 @@ namespace Avalanche.WriteModel.RestClient.EventHandlers
         IEventHandler<StartTestEvent>,
         IEventHandler<EndTestEvent>
     {
-        public TestRunEventHandler(IRestClient client)
-            : base(client)
+        public TestRunEventHandler(IRestClient client, ILoggerFactory loggerFactory)
+            : base(client, loggerFactory)
         {
         }
 

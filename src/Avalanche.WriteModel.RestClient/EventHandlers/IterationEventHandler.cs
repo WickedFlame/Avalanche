@@ -1,5 +1,6 @@
 ﻿using Avalanche.WriteModel.Events;
 using Broadcast;
+using Microsoft.Extensions.Logging;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,8 @@ namespace Avalanche.WriteModel.RestClient.EventHandlers
         private readonly TimedDispatcher _dispatcher;
         private readonly List<IterationLogEvent> _events = [];
 
-        public IterationEventHandler(IRestClient client)
-            : base(client)
+        public IterationEventHandler(IRestClient client, ILoggerFactory loggerFactory)
+            : base(client, loggerFactory)
         {
             _dispatcher = new(5000, () => DispatcherTask());
             _dispatcher.StartDispatcher();

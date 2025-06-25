@@ -1,9 +1,9 @@
 ﻿using Avalanche.Runner;
 using Avalanche.WriteModel;
-using Avalanche.WriteModel.CommandHandlers;
 using Avalanche.WriteModel.Commands;
 using Broadcast;
 using MeasureMap;
+using Microsoft.Extensions.Logging;
 using Task = System.Threading.Tasks.Task;
 
 namespace Avalanche.Domain
@@ -11,10 +11,12 @@ namespace Avalanche.Domain
     public class TestFacade
     {
         private readonly IDispatcher<ICommand> _dispatcher;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public TestFacade(IDispatcher<ICommand> dispatcher)
+        public TestFacade(IDispatcher<ICommand> dispatcher, ILoggerFactory loggerFactory)
         {
             _dispatcher = dispatcher;
+            _loggerFactory = loggerFactory;
         }
 
         public TestSettings StartBackgroundTask(string name, string path)
@@ -53,7 +55,7 @@ namespace Avalanche.Domain
                 Settings = settings
             };
 
-            var loadtest = new LoadTest(data.TestId, _dispatcher);
+            var loadtest = new LoadTest(data.TestId, _dispatcher, _loggerFactory);
             data.StartTime = DateTime.Now;
 
 

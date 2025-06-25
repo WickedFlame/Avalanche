@@ -2,6 +2,7 @@
 using Avalanche.WriteModel.Commands;
 using Broadcast;
 using MeasureMap;
+using Microsoft.Extensions.Logging;
 using RestSharp;
 using System.Diagnostics;
 using System.Net;
@@ -12,11 +13,13 @@ namespace Avalanche.Runner
     {
         private readonly string _testId;
         private readonly IDispatcher<ICommand> _dispatcher;
+        private readonly ILogger<LoadTest> _logger;
 
-        public LoadTest(string testId, IDispatcher<ICommand> dispatcher)
+        public LoadTest(string testId, IDispatcher<ICommand> dispatcher, ILoggerFactory logger)
         {
             _testId = testId;
             _dispatcher = dispatcher;
+            _logger = logger.CreateLogger<LoadTest>();
         }
 
         public IEnumerable<TestResult> Run(TestSettings settings)
@@ -66,11 +69,10 @@ namespace Avalanche.Runner
                                 };
 
                                 _dispatcher.SendAsync(command);
-
                             }
                             catch (Exception e)
                             {
-                                //TODO: not sure what to do when the init fails...
+                                _logger.LogError(e, "Error in OnStartPipeline Event for Test {TestId}", _testId);
                             }
                         }
 
@@ -116,11 +118,8 @@ namespace Avalanche.Runner
                                         IsWarmup = ctx.Settings.IsWarmup
                                     };
                                     _dispatcher.SendAsync(cmd);
-                                }
 
-                                if (!ctx.Settings.IsWarmup)
-                                {
-                                    //_logger.Write($"Call to {url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms", Opacc.Fof.Commons.Diagnostics.LogLevel.Debug, category: "console", source: test.Name, module: "LoadTest");
+                                    _logger.LogInformation("Call to {Url} for Test {TestId} resulted in StatusCode {StatusCode}", url, _testId, result.StatusCode);
                                 }
                             }
                             catch(Exception e)
@@ -136,6 +135,8 @@ namespace Avalanche.Runner
                                     //StatusCode = result.StatusCode
                                 };
                                 _dispatcher.SendAsync(cmd);
+
+                                _logger.LogError(e, "Call to {Url} for Test {TestId} caused an error", url, _testId);
                             }
                         }
                     });
