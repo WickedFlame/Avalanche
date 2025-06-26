@@ -1,0 +1,71 @@
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/dotNET-Core.gitlab-ci.yml
+# Note: When updating this template, please consider updating the official CI .NET template at:
+# https://gitlab.com/gitlab-org/gitlab-foss/-/blob/master/lib/gitlab/ci/templates/dotNET-Core.gitlab-ci.yml
+# This is a simple example illustrating how to build and test .NET Core project
+# with GitLab Continuous Integration / Continuous Delivery.
+#
+# ### Specify the Docker image
+#
+# Instead of installing .NET Core SDK manually, a docker image is used
+# with already pre-installed .NET Core SDK.
+#
+# The 'latest' tag targets the latest available version of .NET Core SDK image.
+# If preferred, you can explicitly specify version of .NET Core (e.g. using '2.2-sdk' tag).
+#
+# See other available tags for .NET Core: https://hub.docker.com/_/microsoft-dotnet
+# Learn more about Docker tags: https://docs.docker.com/glossary/?term=tag
+# and the Docker itself: https://opensource.com/resources/what-docker
+default:
+  image: docker:24
+  services:
+    - name: docker:24-dind
+      alias: docker
+
+variables:
+  VERSION: "0.0.1"
+  IMAGENAME-WEB: "avalanche-web-$CI_COMMIT_SHA"
+  IMAGENAME-TOOL: "avalanche-tool-$CI_COMMIT_SHA"
+  IMAGETAG-WEB: "$CI_REGISTRY/wickedflame/avalanche-web:$CI_COMMIT_SHA"
+  IMAGETAG-TOOL: "$CI_REGISTRY/wickedflame/avalanche-tool:$CI_COMMIT_SHA"
+
+build-web-image:
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -f dockerfile.web --build-arg="VERSION=$VERSION" -t $IMAGETAG-WEB .
+    - mkdir image
+    - docker save $IMAGETAG-WEB -o image/$IMAGENAME-WEB.tar
+  artifacts:
+    paths:
+      - image
+  allow_failure: false
+
+build-tool-image:
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -f dockerfile.tool --build-arg="VERSION=$VERSION" -t $IMAGETAG-TOOL .
+    - mkdir image
+    - docker save $IMAGETAG-TOOL -o image/$IMAGENAME-TOOL.tar
+  artifacts:
+    paths:
+      - image
+  allow_failure: false
+
+push-web-image:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      when: manual
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker load -i image/$IMAGENAME-WEB.tar
+    - docker tag $IMAGETAG-WEB $CI_REGISTRY/wickedflame/avalanche
+    - docker tag $IMAGETAG-WEB $CI_REGISTRY/wickedflame/avalanche:$VERSION
+    - docker push $CI_REGISTRY/wickedflame/avalanche
+    - docker push $CI_REGISTRY/wickedflame/avalanche:$VERSION
+    
