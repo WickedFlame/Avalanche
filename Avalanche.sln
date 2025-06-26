@@ -5,8 +5,11 @@ VisualStudioVersion = 17.10.35201.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9446EC16-8A58-4F45-AF00-0062B27E2821}"
 	ProjectSection(SolutionItems) = preProject
+		.gitlab-ci.yml = .gitlab-ci.yml
 		Changelog.md = Changelog.md
+		Dockerfile.tool = Dockerfile.tool
 		readme.md = readme.md
+		Dockerfile.web = Dockerfile.web
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{CF91D702-69C9-446F-B75A-82AF31B4C1D5}"

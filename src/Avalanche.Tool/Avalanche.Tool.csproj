@@ -2,15 +2,15 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <RuntimeIdentifiers>linux-x64;win-x64</RuntimeIdentifiers>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
 
 
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Authors>Chris Walpen</Authors>
+        <!--<SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
+        <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+        <Authors>Christian Walpen</Authors>
         <Company>WickedFlame</Company>
         <Description>LoadTest Component for Avalanche Test</Description>
         <Copyright>@WickedFlame 2025</Copyright>
@@ -21,13 +21,13 @@
         <FileVersion>1.0.0.0</FileVersion>
         <PackageVersion>1.0.0</PackageVersion>
         <InformationalVersion>1.0.0</InformationalVersion>
-        <Title>Avalanche</Title>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <!--<Title>Avalanche</Title>-->
+        <!--<PublishRepositoryUrl>true</PublishRepositoryUrl>-->
         <!--<PackageReadmeFile>README.md</PackageReadmeFile>-->
         <AssemblyName>Avalanche.Tool</AssemblyName>
         
-        <PackAsTool>true</PackAsTool>
-        <ToolCommandName>avalanche</ToolCommandName>
+        <!--<PackAsTool>true</PackAsTool>-->
+        <!--<ToolCommandName>avalanche</ToolCommandName>-->
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..</DockerfileContext>
     </PropertyGroup>
@@ -36,9 +36,9 @@
         <DockerfileRunArguments>-v ../../../../Avalanche/data:/data</DockerfileRunArguments>
     </PropertyGroup>-->
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DocumentationFile>bin\Release\netstandard2.0\Avalanche.Tool.xml</DocumentationFile>
-    </PropertyGroup>
+    </PropertyGroup>-->
 
     <ItemGroup>
       <PackageReference Include="CommandLineParser" Version="2.9.1" />

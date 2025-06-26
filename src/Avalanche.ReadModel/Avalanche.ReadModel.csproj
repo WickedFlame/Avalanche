@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-      <ImplicitUsings>enable</ImplicitUsings>
-      <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <DocumentationFile>bin\Release\netstandard2.0\Avalanche.ReadModel.xml</DocumentationFile>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
-  <ItemGroup>
-    <ProjectReference Include="..\Broadcast\Broadcast.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Broadcast\Broadcast.csproj" />
+    </ItemGroup>
 
 </Project>

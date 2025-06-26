@@ -6,9 +6,9 @@
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DocumentationFile>bin\Release\netstandard2.0\Avalanche.WriteModel.xml</DocumentationFile>
-    </PropertyGroup>
+    </PropertyGroup>-->
 
     <ItemGroup>
         <PackageReference Include="System.Text.Json" Version="8.0.5" />

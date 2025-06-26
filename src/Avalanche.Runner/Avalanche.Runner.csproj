@@ -6,9 +6,9 @@
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DocumentationFile>bin\Release\netstandard2.0\Avalanche.Runner.xml</DocumentationFile>
-    </PropertyGroup>
+    </PropertyGroup>-->
 
     <ItemGroup>
         <PackageReference Include="MeasureMap" Version="2.4.0" />

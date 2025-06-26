@@ -404,3 +404,5 @@ src/Avalanche/data/eventstore.db
 src/Avalanche/data/readmodel.db
 src/Avalanche.Tool/data/eventstore.db
 *.db-journal
+\!Build/
+\!Deploy/

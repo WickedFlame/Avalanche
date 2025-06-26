@@ -1,18 +1,19 @@
 using System;
-using System.Linq;
-using System.Text;
+using System.IO;
+using NuGet.Common;
 using Nuke.Common;
-using Nuke.Common.CI;
-using Nuke.Common.Execution;
+using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
+using Nuke.Common.Tools.Coverlet;
+using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitVersion;
+using Nuke.Common.Tools.SonarScanner;
 using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.EnvironmentInfo;
-using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
+using Serilog;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.SonarScanner.SonarScannerTasks;
 
-[NuGetPackageRequirement("Avalanche")]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
@@ -21,33 +22,83 @@ class Build : NukeBuild
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
-    public static int Main () => Execute<Build>(x => x.LoadTest);
+    public static int Main() => Execute<Build>(x => x.Compile);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    readonly Configuration Configuration = Configuration.Release;
 
-    [NuGetPackage("Opacc.Fof.Avalanche", "Opacc.Fof.Avalanche.dll")]
-    readonly Tool Avalanche;
+    [Parameter("Version to be injected in the Build")]
+    public string Version { get; set; } = $"0.0.1.{DateTime.Today.Month * 31 + DateTime.Today.Day}1";
 
-    [Parameter("")]
-    readonly string ConfigFile;
+    [Solution] readonly Solution Solution;
 
-    //
-    // nuke loadtest -configfile "../tests/loadTest.yml"
-    //
+    AbsolutePath SourceDirectory => RootDirectory / "src";
 
-    Target LoadTest => _ => _
+    AbsolutePath PublishDirectory => RootDirectory / "!Build";
+
+    Target Clean => _ => _
+        .Before(Restore)
         .Executes(() =>
         {
-            var parameters = new StringBuilder()
-                .Append("loadtest");
-
-            if(!string.IsNullOrEmpty(ConfigFile))
-            {
-                parameters.Append($" --configfile {ConfigFile}");
-            }
-
-            Avalanche(parameters.ToString());
+            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(d => d.DeleteDirectory());
         });
 
+    Target Restore => _ => _
+        .Executes(() =>
+        {
+            DotNetRestore(s => s.SetProjectFile(Solution));
+        });
+
+    Target Compile => _ => _
+        .DependsOn(Clean)
+        .DependsOn(Restore)
+        .Executes(() =>
+        {
+            DotNetBuild(s => s
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .SetVersion(Version)
+                .SetAssemblyVersion(Version)
+                .SetFileVersion(Version)
+                .EnableNoRestore());
+        });
+
+    Target Test => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTest(s => s
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .SetNoBuild(true)
+                .EnableNoRestore());
+        });
+
+
+    Target Deploy => _ => _
+        .DependsOn(Clean)
+        .DependsOn(Restore)
+        .Executes(() =>
+        {
+            // cleanup
+            (PublishDirectory / "web").CreateOrCleanDirectory();
+
+            DotNetPublish(o => o
+                .SetConfiguration(Configuration)
+                .SetVersion(Version)
+                .SetAssemblyVersion(Version)
+                .SetFileVersion(Version)
+                .SetProject(RootDirectory / "src" / "Avalanche")
+                .SetPublishProfile("FolderProfile")
+                .SetOutput(PublishDirectory / "web"));
+
+            DotNetPublish(o => o
+                .SetConfiguration(Configuration)
+                .SetVersion(Version)
+                .SetAssemblyVersion(Version)
+                .SetFileVersion(Version)
+                .SetProject(RootDirectory / "src" / "Avalanche.Tool")
+                .SetPublishProfile("FolderProfile")
+                .SetOutput(PublishDirectory / "tool"));
+        });
 }
