@@ -17,7 +17,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 as runtime
 WORKDIR /app
 
 # COPY --from=build-env /src/!Build/web/ /app/
-COPY /src/ /app/
+COPY --from=build-env /src/ /app/
 
 VOLUME /app/Config
 EXPOSE 8080
