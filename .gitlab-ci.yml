@@ -14,7 +14,7 @@ stages:
   - deploy
 
 before_script:
-  - docker login "${CI_REGISTRY:?}" -u "${CI_REGISTRY_USER:?}" -p "${CI_JOB_TOKEN:?}"
+#  - docker login "${CI_REGISTRY:?}" -u "${CI_REGISTRY_USER:?}" -p "${CI_JOB_TOKEN:?}"
   - dotnet tool install Nuke.GlobalTool --global
   # - docker login -u "{$CI_REGISTRY_USER:?}" -p "${CI_REGISTRY_PASSWORD:?}" "${CI_REGISTRY:?}"
 
@@ -29,6 +29,8 @@ build_solution:
   - nuke deploy -version $VERSION
 
 build_image:
+  before_script:
+    - docker login "${CI_REGISTRY:?}" -u "${CI_REGISTRY_USER:?}" -p "${CI_JOB_TOKEN:?}"
   stage: deploy
   image: docker:latest
   services:
