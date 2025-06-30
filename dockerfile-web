@@ -1,16 +1,17 @@
-# FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 
 WORKDIR /src
 
 COPY . .
 COPY .* .
 
-# ARG VERSION
+ARG VERSION
 
-# RUN dotnet tool install Nuke.GlobalTool --global
-# RUN dotnet restore
-# RUN dotnet restore ./build/_build.csproj
-# RUN nuke deploy -version $VERSION
+RUN dotnet tool install Nuke.GlobalTool --global
+RUN export PATH="$PATH:/root/.dotnet/tools"
+RUN dotnet restore
+RUN dotnet restore ./build/_build.csproj
+RUN nuke deploy -version $VERSION
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 as runtime
 
