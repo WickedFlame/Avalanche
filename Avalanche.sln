@@ -8,8 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitlab-ci - Copy.yml = .gitlab-ci - Copy.yml
 		.gitlab-ci.yml = .gitlab-ci.yml
 		Changelog.md = Changelog.md
-		Dockerfile.tool = Dockerfile.tool
-		Dockerfile.web = Dockerfile.web
+		dockerfile-tool = dockerfile-tool
+		dockerfile-web = dockerfile-web
 		readme.md = readme.md
 	EndProjectSection
 EndProject
