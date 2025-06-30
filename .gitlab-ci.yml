@@ -28,7 +28,7 @@ build_solution:
   - nuke deploy -version $VERSION
 
 build_image:
-  stage: build
+  stage: deploy
   image: docker:latest
   services:
     - docker:dind
