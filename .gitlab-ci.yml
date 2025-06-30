@@ -39,7 +39,7 @@ build_image:
   script:
 #    - docker build -f dockerfile-web --pull -t "$IMAGE_TAG" .
 # https://forum.gitlab.com/t/copying-previous-job-artifacts-into-a-dockerfile/122159/2 
-    - cp -r ./!Build/web/ docker-context/
+    - cp -r !Build/web/ docker-context/
     - docker build -f dockerfile-web docker-context/ -t "$IMAGE_TAG" .
     - docker push "$IMAGE_TAG"
   only:
