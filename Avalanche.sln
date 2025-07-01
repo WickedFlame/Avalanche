@@ -36,9 +36,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Broadcast", "src\Broadcast\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel", "src\Avalanche.ReadModel\Avalanche.ReadModel.csproj", "{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.Sqlite", "src\Avalanche.WriteModel.Sqlite\Avalanche.WriteModel.Sqlite.csproj", "{7094F5AA-8F60-4A09-9E46-58713DB57889}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.Sql", "src\Avalanche.WriteModel.Sql\Avalanche.WriteModel.Sql.csproj", "{7094F5AA-8F60-4A09-9E46-58713DB57889}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sqlite", "src\Avalanche.ReadModel.Sqlite\Avalanche.ReadModel.Sqlite.csproj", "{7D5B1AD3-48C0-40AC-BC5D-087CEA6EA1DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sql", "src\Avalanche.ReadModel.Sql\Avalanche.ReadModel.Sql.csproj", "{7D5B1AD3-48C0-40AC-BC5D-087CEA6EA1DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.Memory", "src\Avalanche.WriteModel.Memory\Avalanche.WriteModel.Memory.csproj", "{2CBC66F1-B3B3-49EF-A2EB-9EA8AD06E35F}"
 EndProject
@@ -46,13 +46,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.RestCl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.Sqlite.IntegrationTests", "src\Tests\Avalanche.WriteModel.Sqlite.IntegrationTests\Avalanche.WriteModel.Sqlite.IntegrationTests.csproj", "{8FECB523-8220-4B16-8117-80FF0E52EF2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel.Sql.IntegrationTests", "src\Tests\Avalanche.WriteModel.Sql.IntegrationTests\Avalanche.WriteModel.Sql.IntegrationTests.csproj", "{8FECB523-8220-4B16-8117-80FF0E52EF2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource.Sqlite", "src\Avalanche.DataSource.Sqlite\Avalanche.DataSource.Sqlite.csproj", "{75682221-FDA8-4FC6-B3E0-3DA1B4867FC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource", "src\Avalanche.DataSource\Avalanche.DataSource.csproj", "{7B0197FB-891B-475B-9200-1EA99E6DE8C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sqlite.IntegrationTests", "src\Tests\Avalanche.ReadModel.Sqlite.IntegrationTests\Avalanche.ReadModel.Sqlite.IntegrationTests.csproj", "{955603E6-60CD-470F-A4C7-84C7C8523D80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sql.IntegrationTests", "src\Tests\Avalanche.ReadModel.Sql.IntegrationTests\Avalanche.ReadModel.Sql.IntegrationTests.csproj", "{955603E6-60CD-470F-A4C7-84C7C8523D80}"
+EndProject
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

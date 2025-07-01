@@ -1,4 +1,4 @@
-﻿using Avalanche.WriteModel.Sqlite;
+﻿using Avalanche.WriteModel.Sql;
 using System.Data.SQLite;
 
 namespace Avalanche

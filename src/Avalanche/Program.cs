@@ -3,11 +3,11 @@ using Avalanche.DataSource;
 using Avalanche.Domain;
 using Avalanche.ReadModel;
 using Avalanche.ReadModel.QueryHandlers;
-using Avalanche.ReadModel.Sqlite.QueryHandlers;
+using Avalanche.ReadModel.Sql.QueryHandlers;
 using Avalanche.WriteModel;
 using Avalanche.WriteModel.Events;
-using Avalanche.WriteModel.Sqlite;
-using Avalanche.WriteModel.Sqlite.EventHandlers;
+using Avalanche.WriteModel.Sql;
+using Avalanche.WriteModel.Sql.EventHandlers;
 using Broadcast;
 using Microsoft.AspNetCore.OpenApi;
 using OpenTelemetry.Logs;
@@ -27,7 +27,7 @@ builder.Services.AddEndpointsApiExplorer();
 // services.AddScoped<ExampleService>();
 
 
-builder.Services.AddSingleton<IEventStore, SqliteEventStore>();
+builder.Services.AddSingleton<IEventStore, SqlEventStore>();
 builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
 builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Sqlite.ProjectionConnectionBuilder>();
 
