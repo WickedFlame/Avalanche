@@ -26,10 +26,27 @@ builder.Services.AddEndpointsApiExplorer();
 // services.AddTransient<ExampleService>();
 // services.AddScoped<ExampleService>();
 
+var eventStoreSource = Environment.GetEnvironmentVariable("EVENT_STORE_DATASOURCE");
+if (eventStoreSource == "pgsql")
+{
+    builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Pgsql.EventStoreConnectionBuilder>();
+}
+else
+{
+    builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
+}
+
+var readModelSource = Environment.GetEnvironmentVariable("READ_MODEL_DATASOURCE");
+if (readModelSource == "pgsql")
+{
+    builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Pgsql.ProjectionConnectionBuilder>();
+}
+else
+{
+    builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Sqlite.ProjectionConnectionBuilder>();
+}
 
 builder.Services.AddSingleton<IEventStore, SqlEventStore>();
-builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
-builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Sqlite.ProjectionConnectionBuilder>();
 
 builder.Services.AddTransient<IEventBus>(c =>
 {
@@ -77,8 +94,23 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSqliteEventStore();
-app.UseSqliteReadModel();
+if (eventStoreSource == "pgsql")
+{
+    app.UsePostgresEventStore();
+}
+else
+{
+    app.UseSqliteEventStore();
+}
+
+if (readModelSource == "pgsql")
+{
+    app.UsePostgresReadModel();
+}
+else
+{
+    app.UseSqliteReadModel();
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

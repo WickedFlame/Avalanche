@@ -54,6 +54,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sql.IntegrationTests", "src\Tests\Avalanche.ReadModel.Sql.IntegrationTests\Avalanche.ReadModel.Sql.IntegrationTests.csproj", "{955603E6-60CD-470F-A4C7-84C7C8523D80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource.Pgsql", "src\Avalanche.DataSource.Pgsql\Avalanche.DataSource.Pgsql.csproj", "{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +124,10 @@ Global
 		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

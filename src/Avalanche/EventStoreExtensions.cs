@@ -14,5 +14,18 @@ namespace Avalanche
         {
             Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateWriteModel();
         }
+
+
+
+
+        public static void UsePostgresEventStore(this IApplicationBuilder app)
+        {
+            Avalanche.DataSource.Pgsql.EventStoreBuilder.CreateEventStore();
+        }
+
+        public static void UsePostgresReadModel(this IApplicationBuilder app)
+        {
+            Avalanche.DataSource.Pgsql.EventStoreBuilder.CreateWriteModel();
+        }
     }
 }
