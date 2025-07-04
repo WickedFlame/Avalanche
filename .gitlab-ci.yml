@@ -28,6 +28,7 @@ build_solution:
   - dotnet restore
   - dotnet restore ./build/_build.csproj
   - nuke deploy -version $VERSION
+  - ls -la
 
 build_image:
   before_script:
@@ -38,6 +39,7 @@ build_image:
     - docker:dind
   script:
 #    - docker build -f dockerfile-web --pull -t "$IMAGE_TAG" .
+    - ls -la
 # https://forum.gitlab.com/t/copying-previous-job-artifacts-into-a-dockerfile/122159/2 
     - cp -r !Build/web/ docker-context/
     - docker build -f dockerfile-web docker-context/ -t "$IMAGE_TAG" .
