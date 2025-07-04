@@ -19,6 +19,7 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
 
         public void Handle(TestSummaryEvent @event)
         {
+            Console.WriteLine($"{@event.TestCase}, Average: {@event.AverageMilliseconds}ms");
         }
 
         public void Dispose()
