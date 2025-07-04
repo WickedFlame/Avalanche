@@ -29,6 +29,10 @@ build_solution:
   - dotnet restore ./build/_build.csproj
   - nuke deploy -version $VERSION
   - ls -la
+  artifacts:
+    paths:
+      - artifacts/**/*.*
+      - artifacts/**/*.*
 
 build_image:
   before_script:
@@ -41,7 +45,7 @@ build_image:
 #    - docker build -f dockerfile-web --pull -t "$IMAGE_TAG" .
     - ls -la
 # https://forum.gitlab.com/t/copying-previous-job-artifacts-into-a-dockerfile/122159/2 
-    - cp -r !Build/web/ docker-context/
+    - cp -r artifacts/web/ docker-context/
     - docker build -f dockerfile-web docker-context/ -t "$IMAGE_TAG" .
     - docker push "$IMAGE_TAG"
   only:

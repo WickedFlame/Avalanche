@@ -16,7 +16,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 as runtime
 
 WORKDIR /app
 
-# COPY --from=build-env /src/!Build/web/ /app/
+# COPY --from=build-env /src/artifacts/web/ /app/
 COPY --from=build-env /src/ /app/
 
 VOLUME /app/Config

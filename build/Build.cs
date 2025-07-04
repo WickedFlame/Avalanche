@@ -34,7 +34,7 @@ class Build : NukeBuild
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
 
-    AbsolutePath PublishDirectory => RootDirectory / "!Build";
+    AbsolutePath PublishDirectory => RootDirectory / "artifacts";
 
     Target Clean => _ => _
         .Before(Restore)
