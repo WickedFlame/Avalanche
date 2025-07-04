@@ -5,21 +5,13 @@ WORKDIR /src
 COPY . .
 COPY .* .
 
-# ARG VERSION
-
-# RUN dotnet tool install Nuke.GlobalTool --global
-# RUN dotnet restore
-# RUN dotnet restore ./build/_build.csproj
-# RUN nuke deploy -version $VERSION
-
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 
 WORKDIR /app
 
 COPY --from=build-env /src/artifacts/web/ /app/
-# COPY --from=build-env /src/ /app/
 
-VOLUME /app/Config
+VOLUME /app/testfiles
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "/app/Avalanche.dll"]

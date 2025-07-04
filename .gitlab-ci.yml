@@ -62,9 +62,9 @@ deploy_tool:
     - docker:dind
   script:
     - ls -la
-    - docker build -f dockerfile-tool -t "IMAGE_TAG_TOOL" .
-    - docker tag IMAGE_TAG_TOOL $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:latest
-    - docker tag IMAGE_TAG_TOOL $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:$VERSION
+    - docker build -f dockerfile-tool -t "$IMAGE_TAG_TOOL" .
+    - docker tag $IMAGE_TAG_TOOL $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:latest
+    - docker tag $IMAGE_TAG_TOOL $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:$VERSION
     - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:latest
     - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:$VERSION
   only:
