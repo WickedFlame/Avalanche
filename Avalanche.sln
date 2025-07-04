@@ -5,6 +5,7 @@ VisualStudioVersion = 17.10.35201.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9446EC16-8A58-4F45-AF00-0062B27E2821}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		.gitlab-ci - Copy.yml = .gitlab-ci - Copy.yml
 		.gitlab-ci.yml = .gitlab-ci.yml
 		Changelog.md = Changelog.md

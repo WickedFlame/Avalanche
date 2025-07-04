@@ -77,8 +77,9 @@ namespace Avalanche
             eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
             eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
             eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
-            eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
-            eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler());
+            var iterationHandler = new IterationEventHandler();
+            eventBus.Subscribe<IterationLogEvent>(iterationHandler);
+            eventBus.Subscribe<IterationErrorEvent>(iterationHandler);
 
             using (var dispatcher = new CommandDispatcher(eventBus))
             {
@@ -92,6 +93,8 @@ namespace Avalanche
                 // Give the collector some time to finish the work
                 Task.Delay(10000).Wait();
             }
+
+            eventBus.Dispose();
         }
     }
 }
