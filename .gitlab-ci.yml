@@ -3,7 +3,7 @@ image: mcr.microsoft.com/dotnet/sdk:8.0
 
 variables:
   DOCKER_DRIVER: overlay2
-  IMAGE_TAG: "$CI_REGISTRY/wickedflame/avalanche-web:$CI_COMMIT_SHA"
+  IMAGE_TAG: "$CI_REGISTRY/wickedflame/avalanche/avalanche-web:$CI_COMMIT_SHA"
   VERSION: 0.0.1
 
 services:
