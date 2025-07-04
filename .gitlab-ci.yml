@@ -11,17 +11,9 @@ services:
 
 stages:
   - build
+  - buildimage
   - deploy
-
-# before_script:
-#  - docker login "${CI_REGISTRY:?}" -u "${CI_REGISTRY_USER:?}" -p "${CI_JOB_TOKEN:?}"
-  # - dotnet tool install Nuke.GlobalTool --global
-  # - export PATH="$PATH:/root/.dotnet/tools"
-  # - docker login -u "{$CI_REGISTRY_USER:?}" -p "${CI_REGISTRY_PASSWORD:?}" "${CI_REGISTRY:?}"
-
-#  - echo "${CI_BUILD_TOKEN:?}" | docker login -u "{$CI_REGISTRY_USER:?}" --password-stdin "${CI_REGISTRY:?}"
-#  - echo "${REGISTRY_PASSWORD:?}" | docker login --password-stdin -u "${REGISTRY_USER:?}" -- "${CI_REGISTRY:?}"
-
+  
 build_solution:
   stage: build
   before_script:
@@ -37,7 +29,21 @@ build_solution:
       - artifacts/**/*.*
       - artifacts/**/*.*
 
-build_image:
+build_web_image:
+  stage: buildimage
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - ls -la
+    - docker build -f dockerfile-web -t "$IMAGE_TAG" .
+  only:
+    - main
+    - dev
+    - merge_requests
+
+
+deploy_web_image:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   #   - docker login "${CI_REGISTRY:?}" -u "${CI_REGISTRY_USER:?}" -p "${CI_JOB_TOKEN:?}"
@@ -51,7 +57,7 @@ build_image:
 # https://forum.gitlab.com/t/copying-previous-job-artifacts-into-a-dockerfile/122159/2 
 #    - cp -r artifacts/web/ docker-context/
 #    - docker build -f dockerfile-web docker-context/ -t "$IMAGE_TAG" .
-    - docker build -f dockerfile-web -t "$IMAGE_TAG" .
+#    - docker build -f dockerfile-web -t "$IMAGE_TAG" .
 #    - docker push "$IMAGE_TAG"
     - docker tag $IMAGE_TAG $CI_REGISTRY/wickedflame/avalanche/avalanche-web:latest
     - docker tag $IMAGE_TAG $CI_REGISTRY/wickedflame/avalanche/avalanche-web:$VERSION

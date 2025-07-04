@@ -12,7 +12,7 @@ COPY .* .
 # RUN dotnet restore ./build/_build.csproj
 # RUN nuke deploy -version $VERSION
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 as runtime
+# FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 
 WORKDIR /app
 
