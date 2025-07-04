@@ -53,9 +53,9 @@ build_image:
 #    - docker build -f dockerfile-web docker-context/ -t "$IMAGE_TAG" .
     - docker build -f dockerfile-web -t "$IMAGE_TAG" .
 #    - docker push "$IMAGE_TAG"
-    - docker tag "$IMAGE_TAG" $CI_REGISTRY/wickedflame/avalanche/avaanche-web
+    - docker tag "$IMAGE_TAG" $CI_REGISTRY/wickedflame/avalanche/avaanche-web:latest
     - docker tag "$IMAGE_TAG" $CI_REGISTRY/wickedflame/avalanche/avaanche-web:$VERSION
-    - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-web
+    - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-web:latest
     - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-web:$VERSION
   only:
     - main
