@@ -35,8 +35,8 @@ build_solution:
       - artifacts/**/*.*
 
 build_image:
-  before_script:
-    - docker login "${CI_REGISTRY:?}" -u "${CI_REGISTRY_USER:?}" -p "${CI_JOB_TOKEN:?}"
+  # before_script:
+  #   - docker login "${CI_REGISTRY:?}" -u "${CI_REGISTRY_USER:?}" -p "${CI_JOB_TOKEN:?}"
   stage: deploy
   image: docker:latest
   services:
@@ -47,6 +47,7 @@ build_image:
 # https://forum.gitlab.com/t/copying-previous-job-artifacts-into-a-dockerfile/122159/2 
 #    - cp -r artifacts/web/ docker-context/
 #    - docker build -f dockerfile-web docker-context/ -t "$IMAGE_TAG" .
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - docker build -f dockerfile-web -t "$IMAGE_TAG" .
     - docker push "$IMAGE_TAG"
   only:
