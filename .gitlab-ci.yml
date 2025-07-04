@@ -4,6 +4,7 @@ image: mcr.microsoft.com/dotnet/sdk:8.0
 variables:
   DOCKER_DRIVER: overlay2
   IMAGE_TAG: "$CI_REGISTRY/wickedflame/avalanche/avalanche-web:$CI_COMMIT_SHA"
+  IMAGE_TAG_TOOL: "$CI_REGISTRY/wickedflame/avalanche/avalanche-tool:$CI_COMMIT_SHA"
   VERSION: 0.0.1
 
 services:
@@ -11,7 +12,6 @@ services:
 
 stages:
   - build
-  - buildimage
   - deploy
   
 build_solution:
@@ -27,23 +27,8 @@ build_solution:
   artifacts:
     paths:
       - artifacts/**/*.*
-      - artifacts/**/*.*
 
-build_web_image:
-  stage: buildimage
-  image: docker:latest
-  services:
-    - docker:dind
-  script:
-    - ls -la
-    - docker build -f dockerfile-web -t "$IMAGE_TAG" .
-  only:
-    - main
-    - dev
-    - merge_requests
-
-
-deploy_web_image:
+deploy_web:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   #   - docker login "${CI_REGISTRY:?}" -u "${CI_REGISTRY_USER:?}" -p "${CI_JOB_TOKEN:?}"
@@ -57,7 +42,7 @@ deploy_web_image:
 # https://forum.gitlab.com/t/copying-previous-job-artifacts-into-a-dockerfile/122159/2 
 #    - cp -r artifacts/web/ docker-context/
 #    - docker build -f dockerfile-web docker-context/ -t "$IMAGE_TAG" .
-#    - docker build -f dockerfile-web -t "$IMAGE_TAG" .
+    - docker build -f dockerfile-web -t "$IMAGE_TAG" .
 #    - docker push "$IMAGE_TAG"
     - docker tag $IMAGE_TAG $CI_REGISTRY/wickedflame/avalanche/avalanche-web:latest
     - docker tag $IMAGE_TAG $CI_REGISTRY/wickedflame/avalanche/avalanche-web:$VERSION
@@ -67,6 +52,26 @@ deploy_web_image:
     - main
     - dev
     - merge_requests
+
+deploy_tool:
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - ls -la
+    - docker build -f dockerfile-tool -t "IMAGE_TAG_TOOL" .
+    - docker tag IMAGE_TAG_TOOL $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:latest
+    - docker tag IMAGE_TAG_TOOL $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:$VERSION
+    - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:latest
+    - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:$VERSION
+  only:
+    - main
+    - dev
+    - merge_requests
+
 
 # deploy:
 #   stage: deploy
