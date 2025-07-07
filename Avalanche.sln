@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sql.Int
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource.Pgsql", "src\Avalanche.DataSource.Pgsql\Avalanche.DataSource.Pgsql.csproj", "{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.Test.WebSite", "src\Tests\Avalanche.Test.WebSite\Avalanche.Test.WebSite.csproj", "{12B98C77-3E13-4C38-AE6A-518A0382320E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12B98C77-3E13-4C38-AE6A-518A0382320E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12B98C77-3E13-4C38-AE6A-518A0382320E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12B98C77-3E13-4C38-AE6A-518A0382320E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12B98C77-3E13-4C38-AE6A-518A0382320E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +143,7 @@ Global
 		{CF91D702-69C9-446F-B75A-82AF31B4C1D5} = {F2FA2E45-46AE-4A6A-8245-08D649966825}
 		{8FECB523-8220-4B16-8117-80FF0E52EF2F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{955603E6-60CD-470F-A4C7-84C7C8523D80} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{12B98C77-3E13-4C38-AE6A-518A0382320E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9E111167-6D37-4E6A-A3C2-F292C3F6D5BC}

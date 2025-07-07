@@ -51,6 +51,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="testfiles\local.yml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="testfiles\LongRunning.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
