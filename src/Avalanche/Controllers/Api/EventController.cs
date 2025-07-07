@@ -1,4 +1,6 @@
-﻿using Avalanche.WriteModel.Events;
+﻿using Avalanche.Domain;
+using Avalanche.Runner;
+using Avalanche.WriteModel.Events;
 using Broadcast;
 using Microsoft.AspNetCore.Mvc;
 
@@ -103,6 +105,18 @@ namespace Avalanche.Controllers.Api
         public IActionResult Rampdown([FromBody] RampdownEvent evnt)
         {
             _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("initscenario/{name}")]
+        public IActionResult InitScenario(string name, [FromBody] Scenario evnt)
+        {
+            var path = $"./scenarios/{name}.yml";
+
+            var tsr = new ScenarioReader();
+            tsr.SaveScenario(path, evnt);
 
             return Ok();
         }

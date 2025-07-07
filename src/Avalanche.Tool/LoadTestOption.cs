@@ -67,6 +67,7 @@ namespace Avalanche
                 eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
                 eventBus.Subscribe<IterationLogEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.IterationEventHandler(new RestClient(options), LoggerFactory));
                 eventBus.Subscribe<IterationErrorEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.IterationEventHandler(new RestClient(options), LoggerFactory));
+                eventBus.Subscribe<InitScenarioEvent>(new Avalanche.WriteModel.RestClient.EventHandlers.ScenarioEventHandler(new RestClient(options), LoggerFactory));
             }
 
             eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
@@ -90,7 +91,31 @@ namespace Avalanche
                 }
 
                 var facade = new TestFacade(dispatcher, LoggerFactory);
-                facade.Start(ConfigFile, path);
+                var scenario = facade.GetScenario(path);
+
+                eventBus.Send(new InitScenarioEvent
+                {
+                    Name = ConfigFile,
+                    Tests = scenario.Tests.Select(t => new WriteModel.Events.TestConfig
+                    {
+                        Name = t.Name,
+                        Urls = t.Urls,
+                        Delay = t.Delay,
+                        Duration = t.Duration,
+                        Interval = t.Interval,
+                        Iterations = t.Iterations,
+                        RampupTime = t.RampupTime,
+                        Request = t.Request,
+                        Threads = t.Threads,
+                        UseCookies = t.UseCookies,
+                        Init = new WriteModel.Events.InitConfig
+                        {
+                            Url = t.Init.Url
+                        }
+                    })
+                });
+
+                facade.Start(ConfigFile, scenario);
 
                 //
                 // Give the collector some time to finish the work

@@ -13,19 +13,19 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["NuGet.Config", "."]
-COPY ["src/Tests/Avalanche.Test.WebSite/Avalanche.Test.WebSite.csproj", "src/Tests/Avalanche.Test.WebSite/"]
-RUN dotnet restore "./src/Tests/Avalanche.Test.WebSite/Avalanche.Test.WebSite.csproj"
+COPY ["src/Tests/Avalanche.Test.Client/Avalanche.Test.Client.csproj", "src/Tests/Avalanche.Test.Client/"]
+RUN dotnet restore "./src/Tests/Avalanche.Test.Client/Avalanche.Test.Client.csproj"
 COPY . .
-WORKDIR "/src/src/Tests/Avalanche.Test.WebSite"
-RUN dotnet build "./Avalanche.Test.WebSite.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/src/Tests/Avalanche.Test.Client"
+RUN dotnet build "./Avalanche.Test.Client.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Avalanche.Test.WebSite.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Avalanche.Test.Client.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Avalanche.Test.WebSite.dll"]
+ENTRYPOINT ["dotnet", "Avalanche.Test.Client.dll"]
