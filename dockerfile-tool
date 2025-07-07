@@ -1,17 +1,12 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
-
-WORKDIR /src
-
-COPY . .
-COPY .* .
-
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 as runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
 WORKDIR /app
 
-COPY --from=build-env /src/artifacts/tool/ /app/
+# Copy the artifacts to the container
+COPY artifacts/tool/. /app/
 
+# Create volume for scenarios folder
 VOLUME /app/scenarios
-# EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "/app/Avalanche.Tool.exe"]
+# Run the Avalanche.Tool.exe application
+ENTRYPOINT ["dotnet", "Avalanche.Tool.exe"]

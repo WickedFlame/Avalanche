@@ -4,6 +4,26 @@ Loadtesting for Web Applications
 
 
 
+```
+docker pull registry.gitlab.com/wickedflame/avalanche/avalanche-tool
+```
+
+```
+docker run --rm -i registry.gitlab.com/wickedflame/avalanche/avalanche-tool run -f local
+```
+
+| Short | long |  |
+|---|---|---|
+| -f | --configfile |  |
+| -u | --url |  |
+
+```
+docker export registry.gitlab.com/wickedflame/avalanche/avalanche-tool | tar t > avalanche-tool-files.txt
+docker image save registry.gitlab.com/wickedflame/avalanche/avalanche-tool > avalanche-tool-files.tar
+```
+
+
+## What is Load Testing
 ### Load Testing
 Load tests apply an ordinary amount of stress to an application to see how it performs. For example, you may load test an ecommerce application using traffic levels that you've seen during Black Friday or other peak holidays. The goal is to identify any bottlenecks that might arise and address them before new code is deployed.
 
