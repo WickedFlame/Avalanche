@@ -12,6 +12,7 @@ services:
 
 stages:
   - build
+  - test
   - deploy
   
 build_solution:
@@ -23,35 +24,32 @@ build_solution:
   - dotnet restore
   - dotnet restore ./build/_build.csproj
   - nuke deploy -version $VERSION
-  - ls -la
   artifacts:
     paths:
       - artifacts/**/*.*
 
+test_solution:
+  stage: test
+  only:
+    - main
+    - dev
+    - merge_requests
+
 deploy_web:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-  #   - docker login "${CI_REGISTRY:?}" -u "${CI_REGISTRY_USER:?}" -p "${CI_JOB_TOKEN:?}"
   stage: deploy
   image: docker:latest
   services:
     - docker:dind
   script:
-#    - docker build -f dockerfile-web --pull -t "$IMAGE_TAG" .
-    - ls -la
-# https://forum.gitlab.com/t/copying-previous-job-artifacts-into-a-dockerfile/122159/2 
-#    - cp -r artifacts/web/ docker-context/
-#    - docker build -f dockerfile-web docker-context/ -t "$IMAGE_TAG" .
     - docker build -f dockerfile-web -t "$IMAGE_TAG" .
-#    - docker push "$IMAGE_TAG"
     - docker tag $IMAGE_TAG $CI_REGISTRY/wickedflame/avalanche/avalanche-web:latest
     - docker tag $IMAGE_TAG $CI_REGISTRY/wickedflame/avalanche/avalanche-web:$VERSION
     - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-web:latest
     - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-web:$VERSION
   only:
     - main
-    - dev
-    - merge_requests
 
 deploy_tool:
   before_script:
@@ -69,8 +67,6 @@ deploy_tool:
     - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-tool:$VERSION
   only:
     - main
-    - dev
-    - merge_requests
 
 
 # deploy:
