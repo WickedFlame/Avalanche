@@ -1,10 +1,14 @@
 {
-  "profiles": {
-    "Avalanche.Tool": {
-      "commandName": "Project"
-    },
-    "Container (Dockerfile)": {
-      "commandName": "Docker"
+    "profiles": {
+        "Avalanche.Tool": {
+            "commandName": "Project"
+        },
+        "Container (Dockerfile)": {
+            "commandName": "Docker"
+        },
+        "Container local (Dockerfile)": {
+            "commandName": "Docker",
+            "commandLineArgs": "-f local"
+        }
     }
-  }
 }
