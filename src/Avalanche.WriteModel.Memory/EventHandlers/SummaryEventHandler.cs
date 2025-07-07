@@ -6,8 +6,7 @@ using System.Text;
 namespace Avalanche.WriteModel.Memory.EventHandlers
 {
     public class SummaryEventHandler :
-        IEventHandler<ThreadSummaryEvent>,
-        IEventHandler<TestSummaryEvent>
+        IEventHandler<ThreadSummaryEvent>
     {
         public SummaryEventHandler()
         {
@@ -15,11 +14,6 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
 
         public void Handle(ThreadSummaryEvent @event)
         {
-        }
-
-        public void Handle(TestSummaryEvent @event)
-        {
-            Console.WriteLine($"{@event.TestCase}, Average: {@event.AverageMilliseconds}ms");
         }
 
         public void Dispose()

@@ -4,18 +4,13 @@ using System;
 namespace Avalanche.WriteModel.Memory.EventHandlers
 {
     public class TestRunEventHandler :
-        IEventHandler<StartTestEvent>,
-        IEventHandler<EndTestEvent>
+        IEventHandler<StartTestEvent>
     {
         public TestRunEventHandler()
         {
         }
 
         public void Handle(StartTestEvent evnt)
-        {
-        }
-
-        public void Handle(EndTestEvent evnt)
         {
         }
 
