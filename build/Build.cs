@@ -40,7 +40,11 @@ class Build : NukeBuild
         .Before(Restore)
         .Executes(() =>
         {
-            PublishDirectory.GetDirectories().ForEach(x => x.DeleteDirectory());
+            if (PublishDirectory.Exists())
+            {
+                PublishDirectory.GetDirectories().ForEach(x => x.DeleteDirectory());
+            }
+
             SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(d => d.DeleteDirectory());
         });
 
