@@ -167,13 +167,15 @@ namespace Avalanche.Runner
                     session.AddDelay(TimeSpan.FromSeconds(test.Delay));
                 }
 
+                session.SetMinLogLevel(MeasureMap.Diagnostics.LogLevel.Warning);
+
                 var result = session.RunSession();
 
                 //
                 // Wait for the console to write all results before tracing the summeray
                 System.Threading.Tasks.Task.Delay(5000).Wait();
-
-                result.Trace();
+                
+                //result.Trace();
 
                 results.Add(new TestResult(result)
                 {

@@ -6,18 +6,13 @@ using System.Text;
 namespace Avalanche.WriteModel.Memory.EventHandlers
 {
     public class SummaryEventHandler :
-        IEventHandler<ThreadSummaryEvent>,
-        IEventHandler<TestSummaryEvent>
+        IEventHandler<ThreadSummaryEvent>
     {
         public SummaryEventHandler()
         {
         }
 
         public void Handle(ThreadSummaryEvent @event)
-        {
-        }
-
-        public void Handle(TestSummaryEvent @event)
         {
         }
 

@@ -10,14 +10,16 @@
         {
             _timeout = timeout;
             _task = task;
-
-            StartDispatcher();
         }
 
         public bool IsRunning { get; set; }
 
         public void StartDispatcher()
         {
+            if (IsRunning)
+            {
+                return;
+            }
 
             IsRunning = true;
 

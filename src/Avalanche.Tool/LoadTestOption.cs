@@ -28,13 +28,11 @@ namespace Avalanche
         {
             if (string.IsNullOrEmpty(ConfigFile))
             {
-                //Logger.LogInformation($"The Parameter --configfile or -f has to be provided with the path to the config file");
                 Console.WriteLine("The Parameter --configfile or -f has to be provided with the path to the config file");
 
                 ConfigFile = "LoadTest";
             }
 
-            //Logger.LogInformation($"Start LoadTest from {ConfigFile}");
             Console.WriteLine($"Start LoadTest from {ConfigFile}");
 
 #if DEBUG
@@ -72,13 +70,15 @@ namespace Avalanche
             }
 
             eventBus.Subscribe<StartTestEvent>(new TestRunEventHandler());
-            eventBus.Subscribe<EndTestEvent>(new TestRunEventHandler());
             eventBus.Subscribe<ThreadSummaryEvent>(new SummaryEventHandler());
-            eventBus.Subscribe<TestSummaryEvent>(new SummaryEventHandler());
             eventBus.Subscribe<RampupEvent>(new RampupEventHandler());
             eventBus.Subscribe<RampdownEvent>(new RampupEventHandler());
-            eventBus.Subscribe<IterationLogEvent>(new IterationEventHandler());
-            eventBus.Subscribe<IterationErrorEvent>(new IterationEventHandler());
+
+            var outputHandler = new ConsoleOutpuEventHandler();
+            eventBus.Subscribe<EndTestEvent>(outputHandler);
+            eventBus.Subscribe<TestSummaryEvent>(outputHandler);
+            eventBus.Subscribe<IterationLogEvent>(outputHandler);
+            eventBus.Subscribe<IterationErrorEvent>(outputHandler);
 
             using (var dispatcher = new CommandDispatcher(eventBus))
             {
@@ -92,6 +92,8 @@ namespace Avalanche
                 // Give the collector some time to finish the work
                 Task.Delay(10000).Wait();
             }
+
+            eventBus.Dispose();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Avalanche.WriteModel.RestClient.EventHandlers
         public IterationEventHandler(IRestClient client, ILoggerFactory loggerFactory)
             : base(client, loggerFactory)
         {
-            _dispatcher = new(5000, () => DispatcherTask());
+            _dispatcher = new(2000, () => DispatcherTask());
             _dispatcher.StartDispatcher();
         }
 
