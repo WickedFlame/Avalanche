@@ -30,6 +30,8 @@ build_solution:
 
 test_solution:
   stage: test
+  script:
+  - echo "test stage"
   only:
     - main
     - dev
