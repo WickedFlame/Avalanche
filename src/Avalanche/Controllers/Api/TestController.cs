@@ -24,10 +24,10 @@ namespace Avalanche.Controllers.Api
         {
 
             // LoadTest
-            var path = $"./testfiles/{name}.yml";
+            var path = $"./scenarios/{name}.yml";
 
             var facade = new TestFacade(_dispatcher, _loggerFactory);
-            var settings = facade.StartBackgroundTask(name, path);
+            var settings = facade.StartBackgroundScenario(name, path);
 
             return Ok(new
             {

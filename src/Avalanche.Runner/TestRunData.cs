@@ -9,7 +9,7 @@ namespace Avalanche.Runner
 
         public IEnumerable<Avalanche.Runner.TestResult> Results { get; set; }
 
-        public TestSettings Settings { get; set; }
+        public Scenario Settings { get; set; }
 
         public DateTime StartTime { get; set; }
     }

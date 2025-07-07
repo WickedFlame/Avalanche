@@ -56,10 +56,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="testfiles\LoadTest.yml">
+      <None Update="scenarios\LoadTest.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="testfiles\local.yml">
+      <None Update="scenarios\local.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

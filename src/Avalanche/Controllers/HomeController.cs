@@ -23,7 +23,7 @@ namespace Avalanche.Controllers
 
             var model = new TestsViewModel
             {
-                Tests = facade.GetAvailiableTests()
+                Tests = facade.GetScenarios()
             };
 
             return View(model);

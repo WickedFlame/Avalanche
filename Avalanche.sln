@@ -16,11 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{CF91D702-69C9-446F-B75A-82AF31B4C1D5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testfiles", "testfiles", "{2C578269-6DDA-41CB-93D4-DC24F23BEC9C}"
-	ProjectSection(SolutionItems) = preProject
-		testfiles\LoadTest.yml = testfiles\LoadTest.yml
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche", "src\Avalanche\Avalanche.csproj", "{0F261368-EB82-4758-81A9-3693295AA1CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.Domain", "src\Avalanche.Domain\Avalanche.Domain.csproj", "{331960C1-CFC3-4505-A901-3899237D4393}"

@@ -22,7 +22,7 @@ namespace Avalanche.Runner
             _logger = logger.CreateLogger<LoadTest>();
         }
 
-        public IEnumerable<TestResult> Run(TestSettings settings)
+        public IEnumerable<TestResult> Run(Scenario settings)
         {
             var results = new List<TestResult>();
 
