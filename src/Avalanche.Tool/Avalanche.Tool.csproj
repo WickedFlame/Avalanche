@@ -56,14 +56,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="testfiles\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="testfiles\LoadTest.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="testfiles\PerformanceTest.yml">
+      <None Update="testfiles\local.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

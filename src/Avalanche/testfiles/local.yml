@@ -1,0 +1,28 @@
+Tests:
+  - Urls:
+      - "https://localhost:32770/"
+    Name: Startpage
+    Threads: 10
+    Iterations: 10
+    Delay: 1
+#    UseCookies: false
+    Init:
+      Url: "https://localhost:32770/"
+
+  - Urls:
+      - "https://localhost:32770/Home/Privacy"
+    Name: Privacy
+    Threads: 10
+    Iterations: 10
+    Delay: 1
+    Init:
+      Url: "https://localhost:32770/Home/Privacy"
+
+  - Urls:
+      - "https://localhost:32770/Home/Error"
+    Name: Error
+    Threads: 10
+    Iterations: 10
+    Delay: 1
+    Init:
+      Url: "https://localhost:32770/Home/Error"
