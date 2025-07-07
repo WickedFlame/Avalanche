@@ -83,7 +83,11 @@ namespace Avalanche
             using (var dispatcher = new CommandDispatcher(eventBus))
             {
                 // LoadTest
-                var path = $"scenarios/{ConfigFile}.yml";
+                var path = $"{ConfigFile}.yml";
+                if(!File.Exists(path))
+                {
+                    path = $"scenarios/{ConfigFile}.yml";
+                }
 
                 var facade = new TestFacade(dispatcher, LoggerFactory);
                 facade.Start(ConfigFile, path);
