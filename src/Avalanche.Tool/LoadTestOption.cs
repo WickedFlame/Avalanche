@@ -33,7 +33,7 @@ namespace Avalanche
                 ConfigFile = "LoadTest";
             }
 
-            Console.WriteLine($"Start LoadTest from {ConfigFile}");
+            Console.WriteLine($"Scenario: {ConfigFile}");
 
 #if DEBUG
             // in debug wait until the website is started
@@ -83,7 +83,7 @@ namespace Avalanche
             using (var dispatcher = new CommandDispatcher(eventBus))
             {
                 // LoadTest
-                var path = $"testfiles/{ConfigFile}.yml";
+                var path = $"scenarios/{ConfigFile}.yml";
 
                 var facade = new TestFacade(dispatcher, LoggerFactory);
                 facade.Start(ConfigFile, path);

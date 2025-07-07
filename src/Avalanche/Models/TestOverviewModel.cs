@@ -10,7 +10,7 @@ namespace Avalanche.Models
 
         public DateTime? StartTime { get; set; }
 
-        public TestSettings Settings { get; set; }
+        public Scenario Settings { get; set; }
 
         public TestRunStatus Status { get; set; }
     }

@@ -51,16 +51,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="testfiles\local.yml">
+      <None Update="scenarios\local.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="testfiles\LongRunning.yml">
+      <None Update="scenarios\LongRunning.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="testfiles\PerformanceTest.yml">
+      <None Update="scenarios\PerformanceTest.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="testfiles\LoadTest.yml">
+      <None Update="scenarios\LoadTest.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

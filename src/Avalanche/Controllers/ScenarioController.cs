@@ -24,10 +24,10 @@ namespace Avalanche.Controllers
 
         public IActionResult Index(string name)
         {
-            var path = $"./testfiles/{name}.yml";
+            var path = $"./scenarios/{name}.yml";
 
-            var tsr = new TestSettingsReader();
-            var settings = tsr.GetTestSettings(path);
+            var tsr = new ScenarioReader();
+            var settings = tsr.GetScenario(path);
 
             var trh = new TestRunQueryHandler(_builder);
             var runs = trh.Get(new ReadModel.Queries.GetTestsQuery { Scenario = name });
@@ -48,10 +48,10 @@ namespace Avalanche.Controllers
 
         public IActionResult Statistics(string name, string tab)
         {
-            var path = $"./testfiles/{name}.yml";
+            var path = $"./scenarios/{name}.yml";
 
-            var tsr = new TestSettingsReader();
-            var settings = tsr.GetTestSettings(path);
+            var tsr = new ScenarioReader();
+            var settings = tsr.GetScenario(path);
 
             var trh = new TestRunQueryHandler(_builder);
             var stats = trh.Get(new ReadModel.Queries.GetTestsStatisticsQuery {  Scenario = name });

@@ -14,7 +14,7 @@
             "launchBrowser": true,
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "TESTFILE_PATH": "./testfiles"
+                "SCENARIO_PATH": "./scenarios"
             },
             "dotnetRunMessages": true,
             "applicationUrl": "https://localhost:32773;http://localhost:5175"
@@ -33,7 +33,7 @@
             "environmentVariables": {
                 "ASPNETCORE_HTTPS_PORTS": "8081",
                 "ASPNETCORE_HTTP_PORTS": "32773",
-                "TESTFILE_PATH": "./testfiles",
+                "SCENARIO_PATH": "./scenarios",
                 "EVENT_STORE_DATASOURCE": "pgsql",
                 "READ_MODEL_DATASOURCE": "pgsql"
             },

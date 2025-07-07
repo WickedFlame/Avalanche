@@ -14,12 +14,12 @@ namespace Avalanche.Domain
             _builder = builder;
         }
 
-        public IEnumerable<TestDefinition> GetAvailiableTests()
+        public IEnumerable<TestDefinition> GetScenarios()
         {
-            var path = Environment.GetEnvironmentVariable("TESTFILE_PATH");
-            var testfiles = Directory.GetFiles(path ?? "./testfiles");
+            var path = Environment.GetEnvironmentVariable("SCENARIO_PATH");
+            var scenarios = Directory.GetFiles(path ?? "./scenarios");
 
-            return testfiles.Select(f => GetDefinition(f));
+            return scenarios.Select(f => GetDefinition(f));
         }
 
         private TestDefinition GetDefinition(string name)

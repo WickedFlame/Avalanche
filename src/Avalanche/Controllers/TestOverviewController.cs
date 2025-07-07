@@ -20,10 +20,10 @@ namespace Avalanche.Controllers
             var trh = new TestRunQueryHandler(_builder);
             var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testid });
 
-            var path = $"./testfiles/{scenario}.yml";
+            var path = $"./scenarios/{scenario}.yml";
 
-            var tsr = new TestSettingsReader();
-            var settings = tsr.GetTestSettings(path);
+            var tsr = new ScenarioReader();
+            var settings = tsr.GetScenario(path);
 
             var model = new TestOverviewModel
             {

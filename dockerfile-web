@@ -11,7 +11,7 @@ WORKDIR /app
 
 COPY --from=build-env /src/artifacts/web/ /app/
 
-VOLUME /app/testfiles
+VOLUME /app/scenarios
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "/app/Avalanche.dll"]

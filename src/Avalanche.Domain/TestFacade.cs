@@ -19,10 +19,10 @@ namespace Avalanche.Domain
             _loggerFactory = loggerFactory;
         }
 
-        public TestSettings StartBackgroundTask(string name, string path)
+        public Scenario StartBackgroundScenario(string name, string path)
         {
-            var tsr = new TestSettingsReader();
-            var settings = tsr.GetTestSettings(path);
+            var tsr = new ScenarioReader();
+            var settings = tsr.GetScenario(path);
 
             Task.Factory.StartNew(() =>
                 {
@@ -36,17 +36,17 @@ namespace Avalanche.Domain
         }
 
 
-        public TestSettings Start(string name, string path)
+        public Scenario Start(string name, string path)
         {
-            var tsr = new TestSettingsReader();
-            var settings = tsr.GetTestSettings(path);
+            var tsr = new ScenarioReader();
+            var settings = tsr.GetScenario(path);
 
             Run(name, settings);
 
             return settings;
         }
 
-        private void Run(string name, TestSettings settings)
+        private void Run(string name, Scenario settings)
         {
             var data = new TestRunData
             {

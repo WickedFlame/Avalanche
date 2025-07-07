@@ -1,6 +1,6 @@
 ﻿namespace Avalanche.Runner
 {
-    public class TestSettings
+    public class Scenario
     {
         public List<TestConfig> Tests { get; set; }
     }

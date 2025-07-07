@@ -2,12 +2,12 @@
 
 namespace Avalanche.Domain
 {
-    public class TestSettingsReader
+    public class ScenarioReader
     {
-        public TestSettings GetTestSettings(string path)
+        public Scenario GetScenario(string path)
         {
             var reader = new YamlMap.YamlFileReader();
-            var settings = reader.Read<TestSettings>(path);
+            var settings = reader.Read<Scenario>(path);
 
             return settings;
         }
