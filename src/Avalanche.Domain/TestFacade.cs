@@ -21,43 +21,46 @@ namespace Avalanche.Domain
 
         public Scenario StartBackgroundScenario(string name, string path)
         {
-            var tsr = new ScenarioReader();
-            var settings = tsr.GetScenario(path);
+            var scenario = GetScenario(path);
 
             Task.Factory.StartNew(() =>
                 {
-                    Run(name, settings);
+                    Run(name, scenario);
                 },
                 CancellationToken.None,
                 TaskCreationOptions.LongRunning,
                 TaskScheduler.Default);
 
-            return settings;
+            return scenario;
         }
 
 
-        public Scenario Start(string name, string path)
+        public Scenario Start(string name, Scenario scenario)
+        {
+            Run(name, scenario);
+
+            return scenario;
+        }
+
+        public Scenario GetScenario(string path)
         {
             var tsr = new ScenarioReader();
-            var settings = tsr.GetScenario(path);
+            var scenario = tsr.GetScenario(path);
 
-            Run(name, settings);
-
-            return settings;
+            return scenario;
         }
 
-        private void Run(string name, Scenario settings)
+        private void Run(string name, Scenario scenario)
         {
             var data = new TestRunData
             {
                 TestId = Guid.NewGuid().ToString(),
                 Name = name,
-                Settings = settings
+                Scenario = scenario
             };
 
             var loadtest = new LoadTest(data.TestId, _dispatcher, _loggerFactory);
             data.StartTime = DateTime.Now;
-
 
             _dispatcher.Send(new StartTestCommand
             {
@@ -66,8 +69,7 @@ namespace Avalanche.Domain
                 StartTime = data.StartTime
             });
 
-
-            data.Results = loadtest.Run(settings);
+            data.Results = loadtest.Run(scenario);
 
             foreach (var testResult in data.Results)
             {

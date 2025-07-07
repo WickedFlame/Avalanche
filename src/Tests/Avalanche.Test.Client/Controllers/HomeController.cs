@@ -1,8 +1,8 @@
-using Avalanche.Test.WebSite.Models;
+using Avalanche.Test.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace Avalanche.Test.WebSite.Controllers
+namespace Avalanche.Test.Client.Controllers
 {
     public class HomeController : Controller
     {

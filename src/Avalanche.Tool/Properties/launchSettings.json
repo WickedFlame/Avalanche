@@ -4,7 +4,8 @@
             "commandName": "Project"
         },
         "Container (Dockerfile)": {
-            "commandName": "Docker"
+            "commandName": "Docker",
+            "commandLineArgs": "-f LoadTest"
         },
         "Container local (Dockerfile)": {
             "commandName": "Docker",

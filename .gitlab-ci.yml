@@ -21,7 +21,7 @@ build_solution:
     - dotnet tool install Nuke.GlobalTool --global
     - export PATH="$PATH:/root/.dotnet/tools"
   script:
-  - dotnet restore
+  - dotnet restore Avalanche.sln
   - dotnet restore ./build/_build.csproj
   - nuke deploy -version $VERSION
   artifacts:

@@ -11,5 +11,11 @@ namespace Avalanche.Domain
 
             return settings;
         }
+
+        public void SaveScenario(string path , Scenario evnt)
+        {
+            var writer = new YamlMap.YamlFileWriter();
+            writer.Write(path, evnt);
+        }
     }
 }

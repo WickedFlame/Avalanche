@@ -1,4 +1,4 @@
-namespace Avalanche.Test.WebSite.Models
+namespace Avalanche.Test.Client.Models
 {
     public class ErrorViewModel
     {
