@@ -13,7 +13,7 @@ namespace Avalanche.WriteModel.CommandHandlers
         public IterationCommandHandler(IEventBus eventBus)
         {
             _eventBus = eventBus;
-            _dispatcher = new(2000, () => DispatcherTask());
+            _dispatcher = new(1000, () => DispatcherTask());
             _dispatcher.StartDispatcher();
         }
 
