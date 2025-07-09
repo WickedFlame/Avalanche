@@ -6,7 +6,7 @@ WORKDIR /app
 COPY artifacts/tool/. /app/
 
 # Create volume for scenarios folder
-VOLUME /app/scenarios
+# VOLUME /scenarios
 
 # Run the Avalanche.Tool.exe application
-ENTRYPOINT ["dotnet", "Avalanche.Tool.exe"]
+ENTRYPOINT ["dotnet", "Avalanche.Tool.dll"]

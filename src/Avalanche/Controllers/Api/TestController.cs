@@ -24,7 +24,7 @@ namespace Avalanche.Controllers.Api
         {
 
             // LoadTest
-            var path = $"./scenarios/{name}.yml";
+            var path = PathMapper.GetScenarioFile(name);
 
             var facade = new TestFacade(_dispatcher, _loggerFactory);
             var settings = facade.StartBackgroundScenario(name, path);

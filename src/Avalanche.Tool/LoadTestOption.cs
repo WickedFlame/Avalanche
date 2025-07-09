@@ -84,11 +84,7 @@ namespace Avalanche
             using (var dispatcher = new CommandDispatcher(eventBus))
             {
                 // LoadTest
-                var path = $"{ConfigFile}.yml";
-                if(!File.Exists(path))
-                {
-                    path = $"scenarios/{ConfigFile}.yml";
-                }
+                var path = GetFilePath(ConfigFile);
 
                 var facade = new TestFacade(dispatcher, LoggerFactory);
                 var scenario = facade.GetScenario(path);
@@ -123,6 +119,35 @@ namespace Avalanche
             }
 
             eventBus.Dispose();
+        }
+
+        private static string GetFilePath(string scenario)
+        {
+            var path = $"{scenario}.yml";
+            if(File.Exists(path))
+            {
+                return path;
+            }
+
+            path = $"../{scenario}.yml";
+            if (File.Exists(path))
+            {
+                return path;
+            }
+
+            path = $"scenarios/{scenario}.yml";
+            if (File.Exists(path))
+            {
+                return path;
+            }
+
+            path = $"../scenarios/{scenario}.yml";
+            if (File.Exists(path))
+            {
+                return path;
+            }
+
+            return $"{scenario}.yml";
         }
     }
 }

@@ -16,8 +16,8 @@ namespace Avalanche.Domain
 
         public IEnumerable<TestDefinition> GetScenarios()
         {
-            var path = Environment.GetEnvironmentVariable("SCENARIO_PATH");
-            var scenarios = Directory.GetFiles(path ?? "./scenarios");
+            var path = PathMapper.GetScenarioPath();
+            var scenarios = Directory.GetFiles(path);
 
             return scenarios.Select(f => GetDefinition(f));
         }

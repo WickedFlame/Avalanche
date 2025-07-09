@@ -3,6 +3,7 @@ using Avalanche.Domain;
 using Avalanche.Models;
 using Avalanche.ReadModel.QueryHandlers;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 
 namespace Avalanche.Controllers
 {
@@ -20,7 +21,7 @@ namespace Avalanche.Controllers
             var trh = new TestRunQueryHandler(_builder);
             var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testid });
 
-            var path = $"./scenarios/{scenario}.yml";
+            var path = PathMapper.GetScenarioFile(scenario);
 
             var tsr = new ScenarioReader();
             var settings = tsr.GetScenario(path);

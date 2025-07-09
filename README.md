@@ -12,12 +12,17 @@ docker pull registry.gitlab.com/wickedflame/avalanche/avalanche-tool
 docker run --rm -i registry.gitlab.com/wickedflame/avalanche/avalanche-tool run -f local
 ```
 
+```
+docker build -f dockerfile-tool -t "avalanche-tmp:latest" . --no-cache --force-rm=true
+```
+
 | Short | long |  |
 |---|---|---|
 | -f | --configfile |  |
 | -u | --url |  |
 
 ```
+docker run -t -i -v <host_dir>:<container_dir>  ubuntu /bin/bash
 docker export registry.gitlab.com/wickedflame/avalanche/avalanche-tool | tar t > avalanche-tool-files.txt
 docker image save registry.gitlab.com/wickedflame/avalanche/avalanche-tool > avalanche-tool-files.tar
 ```

@@ -1,17 +1,15 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
-
-WORKDIR /src
-
-COPY . .
-COPY .* .
-
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
 WORKDIR /app
 
-COPY --from=build-env /src/artifacts/web/ /app/
+# Copy all published files from artifacts/web/ to /app in the container
+COPY artifacts/web/. /app/
 
-VOLUME /app/scenarios
+# Optional: expose the default ASP.NET Core port
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "/app/Avalanche.dll"]
+# Optional: create a volume for scenarios if your app uses it
+# VOLUME /scenarios
+
+# Start the web application
+ENTRYPOINT ["dotnet", "Avalanche.dll"]

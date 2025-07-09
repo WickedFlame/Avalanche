@@ -45,7 +45,14 @@ class Build : NukeBuild
                 PublishDirectory.GetDirectories().ForEach(x => x.DeleteDirectory());
             }
 
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(d => d.DeleteDirectory());
+            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(d =>
+            {
+                try
+                { 
+                    d.DeleteDirectory();
+                }
+                catch { }
+            });
         });
 
     Target Restore => _ => _
@@ -105,5 +112,17 @@ class Build : NukeBuild
                 .SetProject(RootDirectory / "src" / "Avalanche.Tool")
                 .SetPublishProfile("FolderProfile")
                 .SetOutput(PublishDirectory / "tool"));
+
+            if((PublishDirectory / "web" / "scenarios").DirectoryExists())
+            {
+                Serilog.Log.Write(Serilog.Events.LogEventLevel.Information, $"Delete files in {(PublishDirectory / "web" / "scenarios")}");
+                (PublishDirectory / "web" / "scenarios").GetFiles().ForEach(f => f.DeleteFile());
+            }
+
+            if ((PublishDirectory / "tool" / "scenarios").DirectoryExists())
+            {
+                Serilog.Log.Write(Serilog.Events.LogEventLevel.Information, $"Delete files in {(PublishDirectory / "tool" / "scenarios")}");
+                (PublishDirectory / "tool" / "scenarios").GetFiles().ForEach(f => f.DeleteFile());
+            }
         });
 }

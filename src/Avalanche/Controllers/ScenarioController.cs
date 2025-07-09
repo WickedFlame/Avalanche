@@ -24,7 +24,7 @@ namespace Avalanche.Controllers
 
         public IActionResult Index(string name)
         {
-            var path = $"./scenarios/{name}.yml";
+            var path = PathMapper.GetScenarioFile(name);
 
             var tsr = new ScenarioReader();
             var settings = tsr.GetScenario(path);
@@ -48,7 +48,7 @@ namespace Avalanche.Controllers
 
         public IActionResult Statistics(string name, string tab)
         {
-            var path = $"./scenarios/{name}.yml";
+            var path = PathMapper.GetScenarioFile(name);
 
             var tsr = new ScenarioReader();
             var settings = tsr.GetScenario(path);

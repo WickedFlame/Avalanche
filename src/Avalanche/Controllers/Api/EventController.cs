@@ -113,7 +113,7 @@ namespace Avalanche.Controllers.Api
         [Route("initscenario/{name}")]
         public IActionResult InitScenario(string name, [FromBody] Scenario evnt)
         {
-            var path = $"./scenarios/{name}.yml";
+            var path = PathMapper.GetScenarioFile(name);
 
             var tsr = new ScenarioReader();
             tsr.SaveScenario(path, evnt);
