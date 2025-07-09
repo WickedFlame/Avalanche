@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS Events (
 ";
             CreateDatabaseIfNotExists("eventstore");
 
-            using (var connection = new NpgsqlConnection(Constants.EventStoreDatabase))
+            var builder = new ConnectionBuilder(Constants.EventStoreDatabase);
+            using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())
@@ -31,8 +32,8 @@ CREATE TABLE IF NOT EXISTS Events (
 
         private static void CreateDatabaseIfNotExists(string db)
         {
-            var cs = Constants.EventStoreDatabase.Replace($"Database={db};", "Database=postgres;");
-            using (var connection = new NpgsqlConnection(cs))
+            var builder = new ConnectionBuilder("postgres");
+            using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())
@@ -47,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Events (
                 }
             }
 
-            using (var connection = new NpgsqlConnection(cs))
+            using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())
@@ -118,7 +119,8 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
 ";
             CreateDatabaseIfNotExists("readmodel");
 
-            using (var connection = new NpgsqlConnection(Constants.ReadModelDatabase))
+            var builder = new ConnectionBuilder(Constants.ReadModelDatabase);
+            using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())
