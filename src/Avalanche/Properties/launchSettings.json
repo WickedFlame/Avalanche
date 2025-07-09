@@ -34,8 +34,12 @@
                 "ASPNETCORE_HTTPS_PORTS": "8081",
                 "ASPNETCORE_HTTP_PORTS": "32773",
                 "SCENARIO_PATH": "./scenarios",
-                "EVENT_STORE_DATASOURCE": "pgsql",
-                "READ_MODEL_DATASOURCE": "pgsql"
+                "AV_EVENT_STORE_DB": "pgsql",
+                "AV_READ_MODEL_DB": "pgsql",
+                "AV_DB_SERVER": "host.docker.internal",
+                "AV_DB_PORT": "5432",
+                "AV_DB_USERNAME": "avalancheuser",
+                "AV_DB_PASSWORD": "pGadm1n"
             },
             "publishAllPorts": true,
             "useSSL": true

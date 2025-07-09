@@ -26,7 +26,7 @@ builder.Services.AddEndpointsApiExplorer();
 // services.AddTransient<ExampleService>();
 // services.AddScoped<ExampleService>();
 
-var eventStoreSource = Environment.GetEnvironmentVariable("EVENT_STORE_DATASOURCE");
+var eventStoreSource = Environment.GetEnvironmentVariable("AV_EVENT_STORE_DB");
 if (eventStoreSource == "pgsql")
 {
     builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Pgsql.EventStoreConnectionBuilder>();
@@ -36,7 +36,7 @@ else
     builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
 }
 
-var readModelSource = Environment.GetEnvironmentVariable("READ_MODEL_DATASOURCE");
+var readModelSource = Environment.GetEnvironmentVariable("AV_READ_MODEL_DB");
 if (readModelSource == "pgsql")
 {
     builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Pgsql.ProjectionConnectionBuilder>();
