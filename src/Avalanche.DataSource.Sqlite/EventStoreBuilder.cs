@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS TestRun (
 CREATE TABLE IF NOT EXISTS RampupEvents (
   Id VARCHAR(255),
   TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
-  Name VARCHAR(255),
+  TestCase VARCHAR(255),
   Time DATETIME,
   ThreadId VARCHAR(255),
   Value INT
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS IterationEvents (
   TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
   Time DATETIME,
   ThreadId INT,
-  TestName VARCHAR(255),
+  TestCase VARCHAR(255),
   Throughput REAL,
   AverageMilliseconds REAL,
   IsWarmup BOOLEAN,

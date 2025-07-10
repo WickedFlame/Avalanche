@@ -16,7 +16,7 @@ namespace Avalanche.WriteModel.Commands
 
         public string Module { get; set; }
 
-        public string TestName { get; set; }
+        public string TestCase { get; set; }
 
         public string Message { get; set; }
 

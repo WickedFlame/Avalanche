@@ -61,7 +61,7 @@ namespace Avalanche.Runner
                                     TestId = _testId,
                                     Category = "console",
                                     Module = "Init",
-                                    Name = test.Name,
+                                    TestCase = test.Name,
                                     Message = $"Init {test.Init.Url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms",
                                     StatusCode = result.StatusCode,
                                     ElapsedMilliseconds = time.ElapsedMilliseconds,
@@ -87,7 +87,7 @@ namespace Avalanche.Runner
                             TestId = _testId,
                             Category = "console",
                             Module = "End",
-                            Name = test.Name,
+                            TestCase = test.Name,
                             Message = $"End Run for Thread {e.Get(ContextKeys.ThreadNumber)}",
                             Thread = e.Get<int>(ContextKeys.ThreadNumber),
                             IsWarmup = e.Settings.IsWarmup
@@ -111,7 +111,7 @@ namespace Avalanche.Runner
                                     {
                                         Time = DateTime.Now,
                                         TestId = _testId,
-                                        TestName = test.Name,
+                                        TestCase = test.Name,
                                         Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
                                         Message = result.ErrorMessage,
                                         StatusCode = result.StatusCode,
@@ -128,7 +128,7 @@ namespace Avalanche.Runner
                                 {
                                     Time = DateTime.Now,
                                     TestId = _testId,
-                                    TestName = test.Name,
+                                    TestCase = test.Name,
                                     Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
                                     Message = e.Message,
                                     IsWarmup = ctx.Settings.IsWarmup

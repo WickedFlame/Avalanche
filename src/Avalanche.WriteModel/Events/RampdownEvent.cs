@@ -17,7 +17,7 @@ namespace Avalanche.WriteModel.Events
 
         public string TestId { get; set; }
 
-        public string Name { get; set; }
+        public string TestCase { get; set; }
 
         public string Message { get; set; }
 

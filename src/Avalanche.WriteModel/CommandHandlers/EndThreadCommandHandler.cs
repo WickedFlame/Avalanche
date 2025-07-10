@@ -19,7 +19,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 TestId = cmd.TestId,
                 Category = cmd.Category,
                 Module = cmd.Module,
-                Name = cmd.Name,
+                TestCase = cmd.TestCase,
                 Message = cmd.Message,
                 Thread = cmd.Thread,
                 IsWarmup = cmd.IsWarmup

@@ -109,7 +109,7 @@
 
 
 
-    initChart(testsetting, testname) {
+    initChart(testsetting, testcase) {
         let datasets = [];
         for (let i = 0; i < testsetting.threads; i++) {
             datasets.push({
@@ -121,17 +121,17 @@
             });
         }
 
-        this.showChart(testname, datasets);
+        this.showChart(testcase, datasets);
     }
 
     // gets called to start polling for chart data
-    displayChart(scenario, testname, testId) {
-        this.showChartData(scenario, testname, testId);
-        this.showRampupData(scenario, testname, testId);
+    displayChart(scenario, testcase, testId) {
+        this.showChartData(scenario, testcase, testId);
+        this.showRampupData(scenario, testcase, testId);
     }
 
-    async showRampupData(scenario, testname, testId) {
-        const url = `api/testdata/${scenario}/${testname}/rampupdata/${testId}`;
+    async showRampupData(scenario, testcase, testId) {
+        const url = `api/testdata/${scenario}/${testcase}/rampupdata/${testId}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -155,7 +155,7 @@
             });
 
             if (tmp.length > 0) {
-                this.showChart(`${testname}-rampup`, datasets);
+                this.showChart(`${testcase}-rampup`, datasets);
             }
 
         } catch (error) {
@@ -163,8 +163,8 @@
         }
     }
 
-    async showChartData(scenario, testname, testId) {
-        const url = `api/testdata/${scenario}/${testname}/chartdata/${testId}`;
+    async showChartData(scenario, testcase, testId) {
+        const url = `api/testdata/${scenario}/${testcase}/chartdata/${testId}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -199,8 +199,8 @@
             }, Object.create(null));
 
             if (datasets.length > 0) {
-                this.showChart(`${testname}-average`, datasets);
-                this.showChart(`${testname}-throughput`, tpData);
+                this.showChart(`${testcase}-average`, datasets);
+                this.showChart(`${testcase}-throughput`, tpData);
             }
 
         } catch (error) {
@@ -208,8 +208,8 @@
         }
     }
 
-    async showChart(testname, data) {
-        let id = testname.replace(/ /g, '_');
+    async showChart(testcase, data) {
+        let id = testcase.replace(/ /g, '_');
 
         if (this.charts[id] === null || this.charts[id] === undefined) {
             

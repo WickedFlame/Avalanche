@@ -33,7 +33,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
             handler.Handle(new RampupEvent
             {
                 TestId = "1",
-                Name = "test 1",
+                TestCase = "test 1",
                 Time = DateTime.Now
             });
 
@@ -42,7 +42,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 .Where("TestId", "1")
                 .First<RampupEvents>();
 
-            se.Name.Should().Be("test 1");
+            se.TestCase.Should().Be("test 1");
             se.Time.Should().BeAfter(DateTime.Now.AddMinutes(-1));
             se.Value.Should().Be(1);
         }
@@ -54,7 +54,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
             handler.Handle(new RampupEvent
             {
                 TestId = "2",
-                Name = "test 2",
+                TestCase = "test 2",
                 Time = DateTime.Now,
                 IsWarmup = true
             });
@@ -78,7 +78,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
             handler.Handle(new RampdownEvent
             {
                 TestId = "3",
-                Name = "test 3",
+                TestCase = "test 3",
                 Time = DateTime.Now,
                 Thread = 1
             });
@@ -88,7 +88,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 .Where("TestId", "3")
                 .First<RampupEvents>();
 
-            se.Name.Should().Be("test 3");
+            se.TestCase.Should().Be("test 3");
             se.Time.Should().BeAfter(DateTime.Now.AddMinutes(-1));
             se.ThreadId.Should().Be(1);
             se.Value.Should().Be(-1);
@@ -101,7 +101,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
             handler.Handle(new RampdownEvent
             {
                 TestId = "4",
-                Name = "test 4",
+                TestCase = "test 4",
                 Time = DateTime.Now,
                 Thread = 1,
                 IsWarmup = true
