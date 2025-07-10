@@ -33,7 +33,7 @@ namespace Avalanche.Controllers.Api
             {
                 Name = name,
                 State = "started",
-                Tests = settings.Tests
+                Tests = settings.TestCases
             });
         }
 

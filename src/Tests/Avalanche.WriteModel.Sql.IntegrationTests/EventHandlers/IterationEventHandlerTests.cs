@@ -34,7 +34,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 TestId = "1",
                 Time = DateTime.Now,
                 Thread = 1,
-                TestName = "First",
+                TestCase = "First",
                 AverageMilliseconds = 123,
                 IsWarmup = false,
                 Throughput = 2.3,
@@ -65,7 +65,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 TestId = "2",
                 Time = DateTime.Now,
                 Thread = 1,
-                TestName = "First",
+                TestCase = "First",
                 AverageMilliseconds = 123,
                 IsWarmup = false,
                 Throughput = 2.3,
@@ -76,7 +76,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 TestId = "2",
                 Time = DateTime.Now,
                 Thread = 1,
-                TestName = "First",
+                TestCase = "First",
                 AverageMilliseconds = 123,
                 IsWarmup = false,
                 Throughput = 1.2,
@@ -98,8 +98,8 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
             {
                 TestId = "3",
                 Time = DateTime.Now,
-                Thread = 1,
-                TestName = "First",
+                ThreadId = 1,
+                TestCase = "First",
                 Message = "the message",
                 StatusCode = "503"
             });

@@ -2,9 +2,7 @@
 using Avalanche.ReadModel;
 using Avalanche.ReadModel.Models;
 using Avalanche.ReadModel.Queries;
-using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.Runner;
-using Avalanche.WriteModel.Events;
 
 namespace Avalanche.Domain
 {
@@ -17,9 +15,9 @@ namespace Avalanche.Domain
             _queryHandler = queryHandler;
         }
 
-        public IEnumerable<ChartData> GetChartData(string testId, string testName)
+        public IEnumerable<ChartData> GetChartData(string testId, string testcase)
         {
-            var data = _queryHandler.Get(new GetChartData { TestId = testId, TestName = testName });
+            var data = _queryHandler.Get(new GetChartData { TestId = testId, TestCase = testcase });
 
             return data.Where(c => !c.IsWarmup)
                 .GroupBy(c => c.ThreadId)
@@ -36,9 +34,9 @@ namespace Avalanche.Domain
             ;
         }
 
-        public IEnumerable<ChartDataRow> GetRampupData(string testId, string testName)
+        public IEnumerable<ChartDataRow> GetRampupData(string testId, string testCase)
         {
-            var data = _queryHandler.Get(new GetRampupData { TestId = testId, TestName = testName });
+            var data = _queryHandler.Get(new GetRampupData { TestId = testId, TestCase = testCase });
 
             var lst = new List<ChartDataRow>();
 

@@ -92,23 +92,25 @@
         {
             <div class="pt-element-container">
                 <div class="pt-content-panel">
-                    <h2>Settings</h2>
+                    <h2>Scenario</h2>
                     <div class="overflow-x-auto">
                         <table class="table is-fullwidth">
                             <thead>
                                 <tr>
                                     <th>TestCase</th>
-                                    <th>Threads</th>
-                                    <th>RampupTime</th>
-                                    <th>Url</th>
+                                    <th>Users</th>
+                                    <th>Iterations</th>
+                                    <th>Rampup</th>
+                                    <th>URL</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach(var test in Model.Settings.Tests)
+                                @foreach(var test in Model.Settings.TestCases)
                                 {
                                     <tr>
                                         <td>@test.Name</td>
-                                        <td>@test.Threads</td>
+                                        <td>@test.Users</td>
+                                        <td>@test.Iterations</td>
                                         <td>@test.RampupTime</td>
                                         <td>
                                             <ul>
@@ -146,7 +148,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var test in Model.Settings.Tests)
+                                @foreach (var test in Model.Settings.TestCases)
                                 {
                                     <partial name="./Partials/SummaryRow" for="@test" />
                                 }
@@ -160,7 +162,7 @@
 
         @if (Model.Status == TestRunStatus.Done)
         {
-            foreach (var config in Model.Settings.Tests)
+            foreach (var config in Model.Settings.TestCases)
             {
                 <div class="pt-element-container py-6">
                     <h2>@config.Name</h2>
@@ -180,7 +182,7 @@
             import { TestOverview } from '/js/testoverview.js';
             var sites = new TestOverview();
 
-            @foreach (var test in Model.Settings.Tests)
+            @foreach (var test in Model.Settings.TestCases)
             {
                 @if (Model.Status == TestRunStatus.Done)
                 {

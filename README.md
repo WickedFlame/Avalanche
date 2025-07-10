@@ -2,6 +2,23 @@
 Loadtesting for Web Applications
 
 
+
+Tool
+[x] Rename Parameter ConfigFile to Scenario (-s --scenario)
+
+Scenario config
+[x] Rename Tests to TestCases
+[x] Rename TestConfig to TestCase (class)
+- Refactor URLs to single Url
+[x] Rename Threads to Users (config and UI)
+
+- Rename TestName to TestCase
+- Rename ThreadNumber to ThreadId
+- Rename Name in TestRuns to Scenario
+
+
+
+
 ## App
 ### Postgres
 | Name | Value |  | 
@@ -23,8 +40,38 @@ Loadtesting for Web Applications
 | -u    | --url        |   |
 
 
+## Domain
+```
+Scenario:
+  Name: name of the scenario (same as filename)
+  Tests: <- refactor to TestCases
+    - Name: name of the test
+      # Threads: 10
+      Users: amount of threads
+      Urls:
+      - 'https://host.docker.internal:32770/'
+      Iterations: 10
+      Duration: 0
+      Interval: 0
+      RampupTime: 0
+      UseCookies: True
+      Delay: 1
+      Init:
+        Url: 'https://host.docker.internal:32770/'
+```
 
-
+```
+TestRun:
+  TestId: unique id for each testrun
+  Scenario: name of the scenario
+  Tests:
+    - TestName: <- refactor to TestCase. name of the test. taken from the scenario config
+      TestCase: name of the test. taken from the scenario config
+      Id: generated id. not relevant...
+      ThreadId: Id of the thread that the test war run in
+      ThreadNumber: <- refactor to threadid
+```
+# Docker
 
 ```
 docker pull registry.gitlab.com/wickedflame/avalanche/avalanche-tool
@@ -70,7 +117,7 @@ These tests may be run parallel to a continuous integration pipeline, but their 
 ### Scalability Testing
 Scalability tests measure an application's performance when certain elements are scaled up or down. For example, an e-commerce application might test what happens when the number of new customer sign-ups increases or how a decrease in new orders could impact resource usage. They might run at the hardware, software or database level.
 
-These tests tend to run less frequently since they’re designed to diagnose specific issues rather than broadly help identify bottlenecks within the entire application.
+These tests tend to run less frequently since theyï¿½re designed to diagnose specific issues rather than broadly help identify bottlenecks within the entire application.
 
 ### Volume Testing
 Also known as flood tests, measure how well an application responds to large volumes of data in the database. In addition to simulating network requests, a database is vastly expanded to see if there's an impact with database queries or accessibility with an increase in network requests. Basically it tries to uncover difficult-to-spot bottlenecks.

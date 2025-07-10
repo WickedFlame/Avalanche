@@ -26,7 +26,7 @@ namespace Avalanche.Runner
         {
             var results = new List<TestResult>();
 
-            foreach (var test in settings.Tests)
+            foreach (var test in settings.TestCases)
             {
                 var session = ProfilerSession.StartSession()
                     .AddMiddleware(new ItterationLogCollectionTaskHandler(test.Name, _testId))
@@ -61,7 +61,7 @@ namespace Avalanche.Runner
                                     TestId = _testId,
                                     Category = "console",
                                     Module = "Init",
-                                    Name = test.Name,
+                                    TestCase = test.Name,
                                     Message = $"Init {test.Init.Url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms",
                                     StatusCode = result.StatusCode,
                                     ElapsedMilliseconds = time.ElapsedMilliseconds,
@@ -85,11 +85,9 @@ namespace Avalanche.Runner
                         var metric = new EndThreadCommand
                         {
                             TestId = _testId,
-                            Category = "console",
-                            Module = "End",
-                            Name = test.Name,
-                            Message = $"End Run for Thread {e.Get(ContextKeys.ThreadNumber)}",
-                            Thread = e.Get<int>(ContextKeys.ThreadNumber),
+                            TestCase = test.Name,
+                            Message = $"End Run for Thread {e.Get(ContextKeys.ThreadId)}",
+                            ThreadId = e.Get<int>(ContextKeys.ThreadId),
                             IsWarmup = e.Settings.IsWarmup
                         };
 
@@ -111,8 +109,8 @@ namespace Avalanche.Runner
                                     {
                                         Time = DateTime.Now,
                                         TestId = _testId,
-                                        TestName = test.Name,
-                                        Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
+                                        TestCase = test.Name,
+                                        ThreadId = ctx.Get<int>(ContextKeys.ThreadId),
                                         Message = result.ErrorMessage,
                                         StatusCode = result.StatusCode,
                                         IsWarmup = ctx.Settings.IsWarmup
@@ -128,8 +126,8 @@ namespace Avalanche.Runner
                                 {
                                     Time = DateTime.Now,
                                     TestId = _testId,
-                                    TestName = test.Name,
-                                    Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
+                                    TestCase = test.Name,
+                                    ThreadId = ctx.Get<int>(ContextKeys.ThreadId),
                                     Message = e.Message,
                                     IsWarmup = ctx.Settings.IsWarmup
                                     //StatusCode = result.StatusCode
@@ -146,10 +144,10 @@ namespace Avalanche.Runner
                     session.SetIterations(test.Iterations);
                 }
 
-                if (test.Threads > 0)
+                if (test.Users > 0)
                 {
                     var rampup = test.RampupTime > 0 ? TimeSpan.FromSeconds(test.RampupTime) : TimeSpan.Zero;
-                    session.SetThreads(test.Threads, rampup);
+                    session.SetThreads(test.Users, rampup);
                 }
 
                 if (test.Duration > 0)

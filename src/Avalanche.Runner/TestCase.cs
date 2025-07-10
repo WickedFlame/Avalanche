@@ -1,16 +1,14 @@
 ﻿namespace Avalanche.Runner
 {
-    public class TestConfig
+    public class TestCase
     {
         public List<string> Urls { get; set; }
-
-        public string Request { get; set; }
 
         public string Name { get; set; }
 
         public int Iterations { get; set; }
 
-        public int Threads { get; set; }
+        public int Users { get; set; }
 
         public int Duration { get; set; }
 

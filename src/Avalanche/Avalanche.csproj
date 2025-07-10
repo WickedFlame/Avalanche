@@ -51,9 +51,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="scenarios\local.yml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="scenarios\LongRunning.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

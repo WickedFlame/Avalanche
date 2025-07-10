@@ -16,8 +16,8 @@ namespace Avalanche
     [Verb("loadtest", true, HelpText = "Start a load test")]
     public class LoadTestOption
     {
-        [Option('f', "configfile", HelpText = "UNC Path to the Configfile", Required = false)]
-        public string ConfigFile { get; set; }
+        [Option('s', "scenario", HelpText = "UNC Path to the Scenario YML file. The filename has to be the same as the scenario", Required = false)]
+        public string Scenario { get; set; }
 
         [Option('u', "url", HelpText = "Url to the Avalanche server", Required = false)]
         public string Url { get; set; }
@@ -26,14 +26,14 @@ namespace Avalanche
 
         public void Execute()
         {
-            if (string.IsNullOrEmpty(ConfigFile))
+            if (string.IsNullOrEmpty(Scenario))
             {
-                Console.WriteLine("The Parameter --configfile or -f has to be provided with the path to the config file");
+                Console.WriteLine("The Parameter --scenario or -s has to be provided with the path to the config file");
 
-                ConfigFile = "LoadTest";
+                Scenario = "LoadTest";
             }
 
-            Console.WriteLine($"Scenario: {ConfigFile}");
+            Console.WriteLine($"SCENARIO: {Scenario}");
 
 #if DEBUG
             // in debug wait until the website is started
@@ -84,15 +84,15 @@ namespace Avalanche
             using (var dispatcher = new CommandDispatcher(eventBus))
             {
                 // LoadTest
-                var path = GetFilePath(ConfigFile);
+                var path = GetFilePath(Scenario);
 
                 var facade = new TestFacade(dispatcher, LoggerFactory);
                 var scenario = facade.GetScenario(path);
 
                 eventBus.Send(new InitScenarioEvent
                 {
-                    Name = ConfigFile,
-                    Tests = scenario.Tests.Select(t => new WriteModel.Events.TestConfig
+                    Name = Scenario,
+                    TestCases = scenario.TestCases.Select(t => new WriteModel.Events.TestCase
                     {
                         Name = t.Name,
                         Urls = t.Urls,
@@ -101,8 +101,7 @@ namespace Avalanche
                         Interval = t.Interval,
                         Iterations = t.Iterations,
                         RampupTime = t.RampupTime,
-                        Request = t.Request,
-                        Threads = t.Threads,
+                        Users = t.Users,
                         UseCookies = t.UseCookies,
                         Init = new WriteModel.Events.InitConfig
                         {
@@ -111,7 +110,7 @@ namespace Avalanche
                     })
                 });
 
-                facade.Start(ConfigFile, scenario);
+                facade.Start(Scenario, scenario);
 
                 //
                 // Give the collector some time to finish the work

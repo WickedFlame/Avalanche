@@ -17,11 +17,9 @@ namespace Avalanche.WriteModel.CommandHandlers
             var @event = new Events.RampdownEvent
             {
                 TestId = cmd.TestId,
-                Category = cmd.Category,
-                Module = cmd.Module,
-                Name = cmd.Name,
+                TestCase = cmd.TestCase,
                 Message = cmd.Message,
-                Thread = cmd.Thread,
+                ThreadId = cmd.ThreadId,
                 IsWarmup = cmd.IsWarmup
             };
 

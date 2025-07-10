@@ -6,7 +6,7 @@
 
         public string TestId { get; set; }
 
-        public string TestName { get; set; }
+        public string TestCase { get; set; }
 
         public int ThreadId { get; set; }
 

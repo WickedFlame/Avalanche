@@ -2,6 +2,6 @@
 {
     public class Scenario
     {
-        public List<TestConfig> Tests { get; set; }
+        public List<TestCase> TestCases { get; set; }
     }
 }

@@ -49,7 +49,7 @@
                             <h3>@grp.Key</h3>
                             <div>
                                 @{
-                                    var setting = Model.Settings.Tests.FirstOrDefault(t => t.Name == grp.Key);
+                                    var setting = Model.Settings.TestCases.FirstOrDefault(t => t.Name == grp.Key);
                                     if (setting != null)
                                     {
                                         <div>

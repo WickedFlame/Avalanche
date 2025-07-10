@@ -17,7 +17,7 @@ namespace Avalanche.WriteModel.CommandHandlers
             var @event = new Events.RampupEvent
             {
                 TestId = cmd.TestId,
-                Name = cmd.Name,
+                TestCase = cmd.TestCase,
                 ElapsedMilliseconds = cmd.ElapsedMilliseconds,
                 IsWarmup = cmd.IsWarmup
             };

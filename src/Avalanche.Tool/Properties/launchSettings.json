@@ -5,11 +5,11 @@
         },
         "Container (Dockerfile)": {
             "commandName": "Docker",
-            "commandLineArgs": "-f LoadTest"
+            "commandLineArgs": "-s LoadTest"
         },
         "Container local (Dockerfile)": {
             "commandName": "Docker",
-            "commandLineArgs": "-f local"
+            "commandLineArgs": "-s local"
         }
     }
 }

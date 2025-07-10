@@ -93,23 +93,25 @@
         {
             <div class="pt-element-container">
                 <div class="pt-content-panel">
-                    <h2>Settings</h2>
+                    <h2>Scenario</h2>
                     <div class="overflow-x-auto">
                         <table class="table is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Threads</th>
+                                    <th>TestCase</th>
+                                    <th>Users</th>
+                                    <th>Iterations</th>
                                     <th>Rampup</th>
                                     <th>URL</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var test in Model.Settings.Tests)
+                                @foreach (var test in Model.Settings.TestCases)
                                 {
                                     <tr>
                                         <td>@test.Name</td>
-                                        <td>@test.Threads</td>
+                                        <td>@test.Users</td>
+                                        <td>@test.Iterations</td>
                                         <td>@test.RampupTime</td>
                                         <td>
                                             <ul>
@@ -136,7 +138,6 @@
                     <table class="table is-fullwidth">
                         <thead>
                             <tr>
-                                <th>Scenario</th>
                                 <th>TestId</th>
                                 <th>StartTime</th>
                                 <th>EndTime</th>
@@ -148,8 +149,7 @@
                             @foreach (var test in Model.Runs)
                             {
                                 <tr>
-                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId" >@test.Scenario</a></td>
-                                    <td>@test.TestId</td>
+                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId">@test.TestId</a></td>
                                     <td>@test.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
                                     <td>@(test.EndTime > DateTime.MinValue ? test.EndTime.ToString("dd.MM.yyyy hh:mm:ss") : string.Empty)</td>
                                     <td>@test.Status</td>

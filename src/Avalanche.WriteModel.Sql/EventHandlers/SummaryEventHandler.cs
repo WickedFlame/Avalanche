@@ -27,7 +27,7 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     Time = DateTime.Now,
                     TestCase = @event.TestCase,
                     Type = "ThreadSummary",
-                    ThreadNumber = @event.ThreadNumber,
+                    ThreadId = @event.ThreadId,
                     Iterations = @event.Iterations,
                     AverageMilliseconds = @event.AverageMilliseconds,
                     TotalMilliseconds = @event.TotalMilliseconds,

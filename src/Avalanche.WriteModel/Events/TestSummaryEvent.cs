@@ -6,7 +6,7 @@ namespace Avalanche.WriteModel.Events
     {
         public string TestId { get; set; }
 
-        public int Threads { get; set; }
+        public int Users { get; set; }
 
         public int Iterations { get; set; }
 

@@ -26,7 +26,7 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     TestId = @event.TestId,
                     Time = @event.Time,
                     ThreadId = @event.Thread,
-                    TestName = @event.TestName,
+                    TestCase = @event.TestCase,
                     AverageMilliseconds = @event.AverageMilliseconds,
                     Throughput = @event.Throughput,
                     IsWarmup = @event.IsWarmup
@@ -37,7 +37,7 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                 .Where(new
                 {
                     TestId = @event.TestId,
-                    TestCase = @event.TestName,
+                    TestCase = @event.TestCase,
                     ThreadId = @event.Thread
                 })
                 .Get();
@@ -54,7 +54,7 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     .Where(new
                     {
                         TestId = @event.TestId,
-                        TestCase = @event.TestName,
+                        TestCase = @event.TestCase,
                         ThreadId = @event.Thread
                     });
             }
@@ -63,7 +63,7 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                 query.AsInsert(new
                 {
                     TestId = @event.TestId,
-                    TestCase = @event.TestName,
+                    TestCase = @event.TestCase,
                     ThreadId = @event.Thread,
                     Throughput = @event.Throughput,
                     Iterations = @event.Iterations
@@ -82,8 +82,8 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     Id = Guid.NewGuid().ToString(),
                     TestId = @event.TestId,
                     Time = @event.Time,
-                    ThreadId = @event.Thread,
-                    TestName = @event.TestName,
+                    ThreadId = @event.ThreadId,
+                    TestCase = @event.TestCase,
                     Message = @event.Message,
                     StatusCode = @event.StatusCode,
                     Error = true,

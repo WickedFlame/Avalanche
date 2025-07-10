@@ -8,9 +8,9 @@ namespace Avalanche.WriteModel.Commands
 
         public string TestId { get; set; }
 
-        public string TestName { get; set; }
+        public string TestCase { get; set; }
 
-        public int Thread { get; set; }
+        public int ThreadId { get; set; }
 
         public string Message { get; set; }
 

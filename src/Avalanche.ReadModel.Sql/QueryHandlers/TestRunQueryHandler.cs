@@ -61,7 +61,7 @@ namespace Avalanche.ReadModel.QueryHandlers
                 .Where(new
                 {
                     TestId = query.TestId,
-                    Name = query.TestName
+                    TestCase = query.TestCase
                 })
                 .OrderByDesc("Time")
                 .Get<RampupData>();
@@ -75,7 +75,7 @@ namespace Avalanche.ReadModel.QueryHandlers
                 .Where(new
                 {
                     TestId = query.TestId,
-                    TestName = query.TestName
+                    TestCase = query.TestCase
                 })
                 .OrderByDesc("Time")
                 .Get<IterationItem>();
@@ -107,7 +107,7 @@ namespace Avalanche.ReadModel.QueryHandlers
             {
                 foreach (var stat in summary)
                 {
-                    stat.Failed = errors.Count(e => !e.IsWarmup && e.TestName == stat.TestCase);
+                    stat.Failed = errors.Count(e => !e.IsWarmup && e.TestCase == stat.TestCase);
                 }
 
                 return summary;
@@ -131,7 +131,7 @@ namespace Avalanche.ReadModel.QueryHandlers
                         Throughput = detail.Sum(d => d.Throughput) / detail.Count(),
                         Iterations = detail.Sum(d => d.Iterations),
                         Type = "TestSummary",
-                        Failed = errors.Count(e => !e.IsWarmup && e.TestName == detail.Key),
+                        Failed = errors.Count(e => !e.IsWarmup && e.TestCase == detail.Key),
                         Slowest = 0,
                         Fastest = 0
                     }));
@@ -166,7 +166,7 @@ namespace Avalanche.ReadModel.QueryHandlers
 
             foreach (var stat in stats)
             {
-                stat.Failed = errors.Count(e => !e.IsWarmup && e.TestId == stat.TestId && e.TestName == stat.TestCase);
+                stat.Failed = errors.Count(e => !e.IsWarmup && e.TestId == stat.TestId && e.TestCase == stat.TestCase);
             }
 
             return stats;

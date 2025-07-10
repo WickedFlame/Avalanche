@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 
 namespace Avalanche.WriteModel.Commands
 {
@@ -20,7 +17,7 @@ namespace Avalanche.WriteModel.Commands
 
         public string Module { get; set; }
 
-        public string Name { get; set; }
+        public string TestCase { get; set; }
 
         public string Message { get; set; }
 

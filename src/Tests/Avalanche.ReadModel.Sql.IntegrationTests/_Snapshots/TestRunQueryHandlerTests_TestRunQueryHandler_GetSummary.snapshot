@@ -6,7 +6,7 @@ Iterations: 50
 Slowest: 51.2
 TestCase: Test 1
 TestId: 2
-ThreadNumber: 0
+ThreadId: 0
 Throughput: 2.1
 TotalMilliseconds: 321
 Type: TestSummary

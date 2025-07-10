@@ -21,7 +21,7 @@ namespace Avalanche.WriteModel.CommandHandlers
         {
             //
             // the storage has to be per thread to ensure enough events are sent for the charts
-            var key = $"{cmd.TestId}_{cmd.TestName}_{cmd.Thread}";
+            var key = $"{cmd.TestId}_{cmd.TestCase}_{cmd.ThreadId}";
             lock (_events)
             {
                 if (!_events.ContainsKey(key))
@@ -55,8 +55,8 @@ namespace Avalanche.WriteModel.CommandHandlers
                     var @event = new Events.IterationLogEvent
                     {
                         TestId = cmd.TestId,
-                        TestName = cmd.TestName,
-                        Thread = cmd.Thread,
+                        TestCase = cmd.TestCase,
+                        Thread = cmd.ThreadId,
                         Time = cmd.Time,
                         IsWarmup = cmd.IsWarmup,
                         //

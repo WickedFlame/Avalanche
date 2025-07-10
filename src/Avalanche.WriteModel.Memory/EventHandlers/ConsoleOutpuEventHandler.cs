@@ -34,12 +34,12 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
 
             lock (_lock)
             {
-                if (!_events.ContainsKey(@event.TestName))
+                if (!_events.ContainsKey(@event.TestCase))
                 {
-                    _events[@event.TestName] = [];
+                    _events[@event.TestCase] = [];
                 }
 
-                _events[@event.TestName][@event.Thread] = @event;
+                _events[@event.TestCase][@event.Thread] = @event;
             }
         }
 
@@ -66,8 +66,8 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
         public void Handle(TestSummaryEvent @event)
         {
             _dispatcher.Close();
-            var errors = _errors.Count(e => e.TestName == @event.TestCase);
-            Console.WriteLine($"  {@event.TestCase.FormatTestCaseTitle()}   Users: {@event.Threads}, Throughput: {@event.Throughput}/s, Iterations: {@event.Iterations}, Errors: {errors}, Average: {@event.AverageMilliseconds}ms");
+            var errors = _errors.Count(e => e.TestCase == @event.TestCase);
+            Console.WriteLine($"  {@event.TestCase.FormatTestCaseTitle()}   Users: {@event.Users}, Throughput: {@event.Throughput}/s, Iterations: {@event.Iterations}, Errors: {errors}, Average: {@event.AverageMilliseconds}ms");
         }
 
         private bool DispatcherTask()
@@ -82,7 +82,7 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
                 Console.WriteLine("");
                 foreach (var test in _events)
                 {
-                    var errors = _errors.Where(e => e.TestName == test.Key);
+                    var errors = _errors.Where(e => e.TestCase == test.Key);
                     Console.WriteLine($"{test.Key.FormatTestCaseTitle()}   Users: {test.Value.Count}, Throughput: -/s, Iterations: {test.Value.Sum(t => t.Value.Iterations)}, Errors: {errors.Count()}");
                 }
             }

@@ -8,7 +8,7 @@ namespace Avalanche.DataSource.DTO
 
         public string TestId { get; set; }
 
-        public string Name { get; set; }
+        public string TestCase { get; set; }
 
         public DateTime Time { get; set; }
 
