@@ -35,7 +35,7 @@ namespace Avalanche.WriteModel.CommandHandlers
             {
                 TestId = cmd.TestId,
                 TestCase = cmd.TestCase,
-                Threads = cmd.Summary.Count(),
+                Users = cmd.Summary.Count(),
                 Iterations = cmd.Iterations,
                 AverageMilliseconds = cmd.AverageMilliseconds,
                 TotalMilliseconds = cmd.TotalMilliseconds,

@@ -92,7 +92,7 @@ namespace Avalanche
                 eventBus.Send(new InitScenarioEvent
                 {
                     Name = Scenario,
-                    Tests = scenario.Tests.Select(t => new WriteModel.Events.TestConfig
+                    TestCases = scenario.TestCases.Select(t => new WriteModel.Events.TestCase
                     {
                         Name = t.Name,
                         Urls = t.Urls,
@@ -101,8 +101,7 @@ namespace Avalanche
                         Interval = t.Interval,
                         Iterations = t.Iterations,
                         RampupTime = t.RampupTime,
-                        Request = t.Request,
-                        Threads = t.Threads,
+                        Users = t.Users,
                         UseCookies = t.UseCookies,
                         Init = new WriteModel.Events.InitConfig
                         {

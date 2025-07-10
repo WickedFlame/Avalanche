@@ -6,20 +6,18 @@ namespace Avalanche.WriteModel.Events
     {
         public string Name { get; set; }
 
-        public IEnumerable<TestConfig> Tests { get; set; }
+        public IEnumerable<TestCase> TestCases { get; set; }
     }
 
-    public class TestConfig
+    public class TestCase
     {
         public IEnumerable<string> Urls { get; set; }
-
-        public string Request { get; set; }
 
         public string Name { get; set; }
 
         public int Iterations { get; set; }
 
-        public int Threads { get; set; }
+        public int Users { get; set; }
 
         public int Duration { get; set; }
 

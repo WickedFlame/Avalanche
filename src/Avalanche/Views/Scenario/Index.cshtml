@@ -99,17 +99,17 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Threads</th>
+                                    <th>Users</th>
                                     <th>Rampup</th>
                                     <th>URL</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var test in Model.Settings.Tests)
+                                @foreach (var test in Model.Settings.TestCases)
                                 {
                                     <tr>
                                         <td>@test.Name</td>
-                                        <td>@test.Threads</td>
+                                        <td>@test.Users</td>
                                         <td>@test.RampupTime</td>
                                         <td>
                                             <ul>

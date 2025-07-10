@@ -26,7 +26,7 @@ namespace Avalanche.Runner
         {
             var results = new List<TestResult>();
 
-            foreach (var test in settings.Tests)
+            foreach (var test in settings.TestCases)
             {
                 var session = ProfilerSession.StartSession()
                     .AddMiddleware(new ItterationLogCollectionTaskHandler(test.Name, _testId))
@@ -146,10 +146,10 @@ namespace Avalanche.Runner
                     session.SetIterations(test.Iterations);
                 }
 
-                if (test.Threads > 0)
+                if (test.Users > 0)
                 {
                     var rampup = test.RampupTime > 0 ? TimeSpan.FromSeconds(test.RampupTime) : TimeSpan.Zero;
-                    session.SetThreads(test.Threads, rampup);
+                    session.SetThreads(test.Users, rampup);
                 }
 
                 if (test.Duration > 0)

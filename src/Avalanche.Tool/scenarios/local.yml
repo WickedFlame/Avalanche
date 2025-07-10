@@ -1,8 +1,8 @@
-Tests:
+TestCases:
   - Urls:
       - "https://host.docker.internal:32770/"
     Name: Startpage
-    Threads: 10
+    Users: 10
     Iterations: 10
     Delay: 1
 #    UseCookies: false
@@ -12,7 +12,7 @@ Tests:
   - Urls:
       - "https://host.docker.internal:32770/Home/Privacy"
     Name: Privacy
-    Threads: 10
+    Users: 10
     Iterations: 10
     Delay: 1
     Init:
@@ -21,7 +21,7 @@ Tests:
   - Urls:
       - "https://host.docker.internal:32770/Home/Error"
     Name: Error
-    Threads: 10
+    Users: 10
     Iterations: 10
     Delay: 1
     Init:

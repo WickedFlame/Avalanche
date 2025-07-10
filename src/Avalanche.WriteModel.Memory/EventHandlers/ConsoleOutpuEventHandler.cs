@@ -67,7 +67,7 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
         {
             _dispatcher.Close();
             var errors = _errors.Count(e => e.TestName == @event.TestCase);
-            Console.WriteLine($"  {@event.TestCase.FormatTestCaseTitle()}   Users: {@event.Threads}, Throughput: {@event.Throughput}/s, Iterations: {@event.Iterations}, Errors: {errors}, Average: {@event.AverageMilliseconds}ms");
+            Console.WriteLine($"  {@event.TestCase.FormatTestCaseTitle()}   Users: {@event.Users}, Throughput: {@event.Throughput}/s, Iterations: {@event.Iterations}, Errors: {errors}, Average: {@event.AverageMilliseconds}ms");
         }
 
         private bool DispatcherTask()

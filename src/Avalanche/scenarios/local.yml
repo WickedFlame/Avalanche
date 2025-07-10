@@ -1,9 +1,9 @@
-Tests:
+TestCases:
   - Urls:
       - 'https://host.docker.internal:32770/'
     Name: Startpage
     Iterations: 10
-    Threads: 10
+    Users: 10
     Duration: 0
     Interval: 0
     RampupTime: 0
@@ -15,7 +15,7 @@ Tests:
       - 'https://host.docker.internal:32770/Home/Privacy'
     Name: Privacy
     Iterations: 10
-    Threads: 10
+    Users: 10
     Duration: 0
     Interval: 0
     RampupTime: 0
@@ -27,7 +27,7 @@ Tests:
       - 'https://host.docker.internal:32770/Home/Error'
     Name: Error
     Iterations: 10
-    Threads: 10
+    Users: 10
     Duration: 0
     Interval: 0
     RampupTime: 0
