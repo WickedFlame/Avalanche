@@ -1,35 +1,26 @@
 # Avalanche
 Loadtesting for Web Applications
 
-
-
-Tool
-[x] Rename Parameter ConfigFile to Scenario (-s --scenario)
-
-Scenario config
-[x] Rename Tests to TestCases
-[x] Rename TestConfig to TestCase (class)
-- Refactor URLs to single Url
-[x] Rename Threads to Users (config and UI)
-
-- Rename TestName to TestCase
-- Rename ThreadNumber to ThreadId
-- Rename Name in TestRuns to Scenario
-
-
-
-
 ## App
+### Inmemory
+Volumes
+- /app/data
+- /app/scenarios or /scenarios
+
 ### Postgres
-| Name | Value |  | 
-|---|---|---|
-| AV_EVENT_STORE_DB | pgsql | |
-| AV_READ_MODEL_DB  | pgsql | |
-| AV_DB             | pgsql | |
-| AV_DB_SERVER | | |
-| AV_DB_PORT | | |
-| AV_DB_USERNAME | | |
-| AV_DB_PASSWORD | | |
+Volumes
+- /app/scenarios or /scenarios
+
+| Name              | Value       |   | 
+|-------------------|-------------|---|
+| AV_EVENT_STORE_DB | pgsql       |   |
+| AV_READ_MODEL_DB  | pgsql       |   |
+| AV_DB             | pgsql       |   |
+| AV_DB_SERVER      |             |   |
+| AV_DB_PORT        |             |   |
+| AV_DB_USERNAME    |             |   |
+| AV_DB_PASSWORD    |             |   |
+| SCENARIO_PATH     | ./scenarios | Optional path to the scenarios. This has to be same as the volume. |
 
 
 
@@ -117,7 +108,7 @@ These tests may be run parallel to a continuous integration pipeline, but their 
 ### Scalability Testing
 Scalability tests measure an application's performance when certain elements are scaled up or down. For example, an e-commerce application might test what happens when the number of new customer sign-ups increases or how a decrease in new orders could impact resource usage. They might run at the hardware, software or database level.
 
-These tests tend to run less frequently since they�re designed to diagnose specific issues rather than broadly help identify bottlenecks within the entire application.
+These tests tend to run less frequently since they're designed to diagnose specific issues rather than broadly help identify bottlenecks within the entire application.
 
 ### Volume Testing
 Also known as flood tests, measure how well an application responds to large volumes of data in the database. In addition to simulating network requests, a database is vastly expanded to see if there's an impact with database queries or accessibility with an increase in network requests. Basically it tries to uncover difficult-to-spot bottlenecks.
