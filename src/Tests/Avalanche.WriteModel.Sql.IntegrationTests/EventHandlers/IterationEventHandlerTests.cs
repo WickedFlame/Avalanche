@@ -98,7 +98,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
             {
                 TestId = "3",
                 Time = DateTime.Now,
-                Thread = 1,
+                ThreadId = 1,
                 TestCase = "First",
                 Message = "the message",
                 StatusCode = "503"

@@ -50,7 +50,7 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     TestId = @event.TestId,
                     Time = DateTime.Now,
                     TestCase = @event.TestCase,
-                    ThreadId = @event.Thread,
+                    ThreadId = @event.ThreadId,
                     Value = -1
                 });
         }

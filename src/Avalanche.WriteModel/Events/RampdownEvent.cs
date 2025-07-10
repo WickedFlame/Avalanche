@@ -11,10 +11,6 @@ namespace Avalanche.WriteModel.Events
 
         public DateTime Time { get; set; }
 
-        public string Category { get; set; }
-
-        public string Module { get; set; }
-
         public string TestId { get; set; }
 
         public string TestCase { get; set; }
@@ -23,7 +19,7 @@ namespace Avalanche.WriteModel.Events
 
         public int RunNumber { get; set; }
 
-        public int Thread { get; set; }
+        public int ThreadId { get; set; }
 
         public bool IsWarmup { get; set; }
     }

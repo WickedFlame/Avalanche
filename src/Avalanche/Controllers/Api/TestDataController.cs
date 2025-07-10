@@ -83,7 +83,7 @@ namespace Avalanche.Controllers.Api
                         s.TestId,
                         s.TestCase,
                         s.Type,
-                        s.ThreadNumber,
+                        s.ThreadId,
                         s.Iterations,
                         AverageMilliseconds = TimeSpan.FromMilliseconds(s.AverageMilliseconds),
                         TotalTime = TimeSpan.FromMilliseconds(s.TotalMilliseconds),

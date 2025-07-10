@@ -111,7 +111,7 @@
 
     initChart(testsetting, testcase) {
         let datasets = [];
-        for (let i = 0; i < testsetting.threads; i++) {
+        for (let i = 0; i < testsetting.users; i++) {
             datasets.push({
                 data: [],
                 fill: false,

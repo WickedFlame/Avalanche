@@ -25,12 +25,10 @@ namespace Avalanche.Runner
             var metric = new IterationCommand
             {
                 TestId = _testId,
-                Category = "console",
-                Module = "Measure",
                 TestCase = _testCase,
-                Message = $"Run number {result.Iteration} on Thread {result.ThreadNumber}",
+                Message = $"Run number {result.Iteration} on Thread {result.ThreadId}",
                 RunNumber = result.Iteration,
-                Thread = result.ThreadNumber,
+                ThreadId = result.ThreadId,
                 IsWarmup = context.Settings.IsWarmup,
                 TotalMilliseconds = result.Duration.TotalMilliseconds,
                 Time = result.TimeStamp

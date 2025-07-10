@@ -82,7 +82,7 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     Id = Guid.NewGuid().ToString(),
                     TestId = @event.TestId,
                     Time = @event.Time,
-                    ThreadId = @event.Thread,
+                    ThreadId = @event.ThreadId,
                     TestCase = @event.TestCase,
                     Message = @event.Message,
                     StatusCode = @event.StatusCode,

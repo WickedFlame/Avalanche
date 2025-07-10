@@ -85,11 +85,9 @@ namespace Avalanche.Runner
                         var metric = new EndThreadCommand
                         {
                             TestId = _testId,
-                            Category = "console",
-                            Module = "End",
                             TestCase = test.Name,
-                            Message = $"End Run for Thread {e.Get(ContextKeys.ThreadNumber)}",
-                            Thread = e.Get<int>(ContextKeys.ThreadNumber),
+                            Message = $"End Run for Thread {e.Get(ContextKeys.ThreadId)}",
+                            ThreadId = e.Get<int>(ContextKeys.ThreadId),
                             IsWarmup = e.Settings.IsWarmup
                         };
 
@@ -112,7 +110,7 @@ namespace Avalanche.Runner
                                         Time = DateTime.Now,
                                         TestId = _testId,
                                         TestCase = test.Name,
-                                        Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
+                                        ThreadId = ctx.Get<int>(ContextKeys.ThreadId),
                                         Message = result.ErrorMessage,
                                         StatusCode = result.StatusCode,
                                         IsWarmup = ctx.Settings.IsWarmup
@@ -129,7 +127,7 @@ namespace Avalanche.Runner
                                     Time = DateTime.Now,
                                     TestId = _testId,
                                     TestCase = test.Name,
-                                    Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
+                                    ThreadId = ctx.Get<int>(ContextKeys.ThreadId),
                                     Message = e.Message,
                                     IsWarmup = ctx.Settings.IsWarmup
                                     //StatusCode = result.StatusCode

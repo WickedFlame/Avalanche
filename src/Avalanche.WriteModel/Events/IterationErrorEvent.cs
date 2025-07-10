@@ -10,7 +10,7 @@ namespace Avalanche.WriteModel.Events
 
         public string TestCase { get; set; }
 
-        public int Thread { get; set; }
+        public int ThreadId { get; set; }
 
         public string StatusCode { get; set; }
 

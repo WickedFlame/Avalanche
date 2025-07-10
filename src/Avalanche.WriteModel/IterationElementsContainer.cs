@@ -54,7 +54,7 @@ namespace Avalanche.WriteModel
             }
 
             var time = events[events.Count - 1].Time - events[0].Time;
-            var threads = events.GroupBy(g => g.Thread);
+            var threads = events.GroupBy(g => g.ThreadId);
             return threads.Sum(t => t.Count() / time.TotalSeconds);
         }
 

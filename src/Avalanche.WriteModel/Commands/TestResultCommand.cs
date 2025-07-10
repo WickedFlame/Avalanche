@@ -2,7 +2,7 @@
 {
     public class ThreadSummary
     {
-        public int ThreadNumber { get; set; }
+        public int ThreadId { get; set; }
 
         public int Iterations { get; set; }
 

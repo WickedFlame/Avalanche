@@ -34,7 +34,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
             {
                 TestId = "1",
                 TestCase = "testcase 1",
-                ThreadNumber = 1,
+                ThreadId = 1,
                 Iterations = 1,
                 AverageMilliseconds = 1,
                 TotalMilliseconds = 1,

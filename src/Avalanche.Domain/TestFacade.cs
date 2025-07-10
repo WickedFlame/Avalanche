@@ -77,7 +77,7 @@ namespace Avalanche.Domain
                 {
                     TestId = data.TestId,
                     TestCase = testResult.TestCase,
-                    ThreadNumber = testResult.ThreadNumber,
+                    ThreadId = testResult.ThreadId,
                     Iterations = testResult.Iterations.Count(),
                     AverageMilliseconds = (int)testResult.AverageMilliseconds,
                     TotalMilliseconds = testResult.Duration.TotalMilliseconds,
@@ -86,7 +86,7 @@ namespace Avalanche.Domain
                     Fastest = testResult.Fastest.Duration.TotalMilliseconds,
                     Summary = testResult.Select(r => new ThreadSummary
                     {
-                        ThreadNumber = r.ThreadNumber,
+                        ThreadId = r.ThreadId,
                         Iterations = r.Iterations.Count(),
                         AverageMilliseconds = (int)r.AverageTicks.ToMilliseconds(),
                         TotalMilliseconds = r.TotalTime.TotalMilliseconds,

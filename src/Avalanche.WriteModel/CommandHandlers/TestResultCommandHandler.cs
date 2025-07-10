@@ -21,7 +21,7 @@ namespace Avalanche.WriteModel.CommandHandlers
                 {
                     TestId = cmd.TestId,
                     TestCase = cmd.TestCase,
-                    ThreadNumber = result.ThreadNumber,
+                    ThreadId = result.ThreadId,
                     Iterations = result.Iterations,
                     AverageMilliseconds = result.AverageMilliseconds,
                     TotalMilliseconds = result.TotalMilliseconds,

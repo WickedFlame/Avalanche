@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Time TIMESTAMP,
   TestCase VARCHAR(255),
   Type VARCHAR(100),
-  ThreadNumber VARCHAR(255),
+  ThreadId INT,
   Iterations INT,
   AverageMilliseconds REAL,
   TotalMilliseconds REAL,

@@ -80,7 +80,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 TestId = "3",
                 TestCase = "test 3",
                 Time = DateTime.Now,
-                Thread = 1
+                ThreadId = 1
             });
 
             var se = _db.Query(nameof(RampupEvents))
@@ -103,7 +103,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 TestId = "4",
                 TestCase = "test 4",
                 Time = DateTime.Now,
-                Thread = 1,
+                ThreadId = 1,
                 IsWarmup = true
             });
 
