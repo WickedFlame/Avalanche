@@ -42,6 +42,11 @@ body {
     height: 100%;
     padding-top: 20px;
 
+    .pt-navigation-container {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+    }
+
     .pt-main-content {
         display: grid;
         height: 100%;
