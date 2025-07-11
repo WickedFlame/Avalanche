@@ -30,7 +30,26 @@
                             <a id="StopTests" data-name="@Model.Name" class="button" disabled>Stop</a>
                         </div>
                     }
-                    <a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name" class="button">Statistics</a>
+
+                    @if(Model.Runs.Any())
+                    {
+                        <a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name" class="button">Statistics</a>
+                    }
+                    else
+                    {
+                        <a class="button" disabled>Statistics</a>
+                    }
+
+                    <div class="navbar-end">
+                        <div class="buttons has-addons" style="margin-bottom:0;">
+                            <a asp-controller="ScenarioEditor" asp-action="Index" asp-route-scenario="@Model.Name" class="button">Edit scenario</a>
+                            <a data-name="@Model.Name" class="button" disabled>
+                                <span class="icon">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 

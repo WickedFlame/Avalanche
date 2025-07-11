@@ -7,6 +7,13 @@ namespace Avalanche.Controllers
 {
     public class ScenarioEditorController : Controller
     {
+        private readonly ILogger<ScenarioEditorController> _logger;
+
+        public ScenarioEditorController(ILogger<ScenarioEditorController> logger)
+        {
+            _logger = logger;
+        }
+
         public IActionResult Index(string scenario)
         {
             var path = PathMapper.GetScenarioPath();
@@ -32,9 +39,9 @@ namespace Avalanche.Controllers
             {
                 YamlMap.Serializer.Deserialize<Scenario>(model.RawContent);
             }
-            catch
+            catch(Exception e)
             {
-                throw new InvalidDataException();
+                _logger.LogError(e, "Scenario {Scenario} has a invalid format and cannot be used for testing", model.Name);
             }
 
 
