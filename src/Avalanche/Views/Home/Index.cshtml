@@ -4,44 +4,54 @@
     ViewData["Title"] = "Home Page";
 }
 
+<div class="pt-navigation-container">
+    <div class="pt-padding-side py-5">
+        <aside class="menu px-4 py-4">
+            <p class="menu-label">Edit</p>
+            <ul class="menu-list">
+                <li><a asp-controller="ScenarioEditor" asp-action="Index">Scenario editor</a></li>
+            </ul>
+        </aside>
+    </div>
+    <div class="pt-main-content">
+        <div class="content px-6 py-4">
+            <h1 class="title is-1">Avalanche</h1>
+            <p>Loadtesting platform</p>
 
-<div class="pt-main-content">
-    <div class="content px-6 py-4">
-        <h1 class="title is-1">Avalanche</h1>
-        <p>Loadtesting platform</p>
-        <div class="py-6">
-            <div class="pt-element-container">
-                <div class="pt-content-panel">
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Testscenario</th>
-                                <th>State</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var test in Model.Tests)
-                            {
-                                var stateCls = test.State.Name switch
-                                {
-                                    "New" => "is-white",
-                                    "Running" => "is-link",
-                                    "Done" => "is-success",
-                                    _ => "is-white"
-                                };
+            <div class="py-6">
+                <div class="pt-element-container">
+                    <div class="pt-content-panel">
+                        <table class="table is-fullwidth">
+                            <thead>
                                 <tr>
-                                    <td><a asp-controller="Scenario" asp-action="Index" asp-route-name="@test.Name">@test.Name</a></td>
-                                    <td><div class="tag @stateCls">@test.State</div></td>
-                                    <td></td>
-                                    <td></td>
+                                    <th>Testscenario</th>
+                                    <th>State</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var test in Model.Tests)
+                                {
+                                    var stateCls = test.State.Name switch
+                                    {
+                                        "New" => "is-white",
+                                        "Running" => "is-link",
+                                        "Done" => "is-success",
+                                        _ => "is-white"
+                                    };
+                                    <tr>
+                                        <td><a asp-controller="Scenario" asp-action="Index" asp-route-name="@test.Name">@test.Name</a></td>
+                                        <td><div class="tag @stateCls">@test.State</div></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>        
+        </div>        
+    </div>
 </div>

@@ -44,7 +44,7 @@ namespace Avalanche.Domain
 
         public Scenario GetScenario(string path)
         {
-            var tsr = new ScenarioReader();
+            var tsr = new ScenarioReader(_loggerFactory);
             var scenario = tsr.GetScenario(path);
 
             return scenario;

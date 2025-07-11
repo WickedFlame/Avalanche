@@ -11,11 +11,13 @@ namespace Avalanche.Controllers.Api
     public class EventController : ControllerBase
     {
         private readonly ILogger<EventController> _logger;
+        private readonly ILoggerFactory _factory;
         private readonly IEventBus _eventBus;
 
-        public EventController(ILogger<EventController> logger, IEventBus eventBus)
+        public EventController(ILoggerFactory factory, IEventBus eventBus)
         {
-            _logger = logger;
+            _logger = factory.CreateLogger<EventController>();
+            _factory = factory;
             _eventBus = eventBus;
         }
 
@@ -115,7 +117,7 @@ namespace Avalanche.Controllers.Api
         {
             var path = PathMapper.GetScenarioFile(name);
 
-            var tsr = new ScenarioReader();
+            var tsr = new ScenarioReader(_factory);
             tsr.SaveScenario(path, evnt);
 
             return Ok();
