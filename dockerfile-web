@@ -9,7 +9,7 @@ COPY artifacts/web/. /app/
 EXPOSE 8080
 
 # Optional: create a volume for scenarios if your app uses it
-# VOLUME /scenarios
+VOLUME /scenarios
 VOLUME /app/data
 
 # Start the web application

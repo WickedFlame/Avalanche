@@ -37,7 +37,6 @@ Scenario:
   Name: name of the scenario (same as filename)
   Tests: <- refactor to TestCases
     - Name: name of the test
-      # Threads: 10
       Users: amount of threads
       Urls:
       - 'https://host.docker.internal:32770/'
@@ -63,9 +62,51 @@ TestRun:
       ThreadNumber: <- refactor to threadid
 ```
 # Docker
+### Tool
+```
+docker pull registry.gitlab.com/wickedflame/avalanche/avalanche-tool:latest
+docker run --rm -i -v ./scenarios:/scenarios registry.gitlab.com/wickedflame/avalanche/avalanche-tool:latest run -s local
+```
+
+## Docker compose
+Open
+[] Postgers service
+[x] avalanche-web service
+[] avalanche-tool service
 
 ```
-docker pull registry.gitlab.com/wickedflame/avalanche/avalanche-tool
+services:
+  avalanche:
+    container_name: avalanche_web
+    restart: unless-stopped
+    image: registry.gitlab.com/wickedflame/avalanche/avalanche-web:latest
+    volumes:
+      - ./scenarios:/scenarios
+    environment:
+      AV_EVENT_STORE_DB: pgsql
+      AV_READ_MODEL_DB: pgsql
+      AV_DB_SERVER:
+      AV_DB_PORT;
+      AV_DB_USERNAME:
+      AV_DB_PASSWORD:
+      SCENARIO_PATH:./scenarios
+
+networks:
+  default:
+  avalanche_default:
+    name: avalanche_default
+    external: true
+```
+
+
+
+
+
+
+
+```
+docker pull registry.gitlab.com/wickedflame/avalanche/avalanche-tool:latest
+docker run --rm -i -v ./scenarios:/scenarios registry.gitlab.com/wickedflame/avalanche/avalanche-tool run -s local
 ```
 
 ```

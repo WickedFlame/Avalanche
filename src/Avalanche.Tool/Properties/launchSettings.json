@@ -5,11 +5,15 @@
         },
         "Container (Dockerfile)": {
             "commandName": "Docker",
-            "commandLineArgs": "-s LoadTest"
+            "commandLineArgs": "-s LoadTest -u https://host.docker.internal:32773"
         },
         "Container local (Dockerfile)": {
             "commandName": "Docker",
-            "commandLineArgs": "-s local"
+            "commandLineArgs": "-s local -u https://host.docker.internal:32773"
+        },
+        "Container lab (Dockerfile)": {
+            "commandName": "Docker",
+            "commandLineArgs": "-s lab -u https://host.docker.internal:32773"
         }
     }
 }

@@ -40,12 +40,6 @@ namespace Avalanche
             //Logger.LogInformation($"Wait until the website is started");
             Console.WriteLine($"Wait until the website is started");
             System.Threading.Tasks.Task.Delay(10000).Wait();
-
-            if (string.IsNullOrEmpty(Url))
-            {
-                //Url = "https://localhost:32773";
-                Url = "https://host.docker.internal:32773";
-            }
 #endif
 
             var store = new InMemoryEventStore();
