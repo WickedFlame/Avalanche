@@ -1,11 +1,9 @@
 ﻿
 namespace Avalanche.Models
 {
-    public class ScenarioConfigModel
+    public class ScenarioEditorModel : RawScenarioModel
     {
         public IEnumerable<string> Scenarios { get; set; }
-
-        public RawScenarioModel Scenario { get; set; }
     }
 
     public class RawScenarioModel

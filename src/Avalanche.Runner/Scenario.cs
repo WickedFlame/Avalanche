@@ -2,6 +2,6 @@
 {
     public class Scenario
     {
-        public List<TestCase> TestCases { get; set; }
+        public List<TestCase> TestCases { get; set; } = new List<TestCase>();
     }
 }

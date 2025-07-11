@@ -26,7 +26,7 @@ namespace Avalanche.Controllers
         {
             var path = PathMapper.GetScenarioFile(name);
 
-            var tsr = new ScenarioReader();
+            var tsr = new ScenarioReader(_loggerFactory);
             var settings = tsr.GetScenario(path);
 
             var trh = new TestRunQueryHandler(_builder);
@@ -50,7 +50,7 @@ namespace Avalanche.Controllers
         {
             var path = PathMapper.GetScenarioFile(name);
 
-            var tsr = new ScenarioReader();
+            var tsr = new ScenarioReader(_loggerFactory);
             var settings = tsr.GetScenario(path);
 
             var trh = new TestRunQueryHandler(_builder);

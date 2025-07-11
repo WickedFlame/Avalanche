@@ -10,10 +10,12 @@ namespace Avalanche.Controllers
     public class TestOverviewController : Controller
     {
         private readonly IProjectionConnectionBuilder _builder;
+        private readonly ILoggerFactory _factory;
 
-        public TestOverviewController(IProjectionConnectionBuilder builder)
+        public TestOverviewController(IProjectionConnectionBuilder builder, ILoggerFactory factory)
         {
             _builder = builder;
+            _factory = factory;
         }
 
         public IActionResult Index(string scenario, string testid)
@@ -23,7 +25,7 @@ namespace Avalanche.Controllers
 
             var path = PathMapper.GetScenarioFile(scenario);
 
-            var tsr = new ScenarioReader();
+            var tsr = new ScenarioReader(_factory);
             var settings = tsr.GetScenario(path);
 
             var model = new TestOverviewModel

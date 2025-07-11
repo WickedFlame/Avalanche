@@ -1,4 +1,4 @@
-﻿@model ScenarioConfigModel
+﻿@model ScenarioEditorModel
 
 
 <div class="pt-navigation-container">
@@ -6,13 +6,13 @@
         <aside class="menu px-4 py-4">
             <p class="menu-label">Edit</p>
             <ul class="menu-list">
-                <li><a asp-controller="ScenarioConfig" asp-action="Index">New Scenario</a></li>
+                <li><a asp-controller="ScenarioEditor" asp-action="Index">New Scenario</a></li>
             </ul>
             <p class="menu-label">Scenarios</p>
             <ul class="menu-list">
                 @foreach (var scenario in Model.Scenarios)
                 {
-                    <li><a asp-controller="ScenarioConfig" asp-action="Index" asp-route-scenario="@scenario">@scenario</a></li>
+                    <li><a asp-controller="ScenarioEditor" asp-action="Index" asp-route-scenario="@scenario">@scenario</a></li>
                 }
             </ul>
         </aside>
@@ -30,19 +30,19 @@
 
 
             <div>
-                @using (Html.BeginForm("SaveScenario", "ScenarioConfig", FormMethod.Post, new { id = "SaveScenario" }))
+                @using (Html.BeginForm("SaveScenario", "ScenarioEditor", FormMethod.Post, new { id = "SaveScenario" }))
                 {
                     <div class="content-header content-container" id="sticky-header">
                         <div class="field">
                             <label class="field-label">Scenario*</label>
                             <div class="control">
-                                <input class="input" type="text" placeholder="Scenario..." asp-for="@Model.Scenario.Name" value="@Model.Scenario.Name" />
+                                <input class="input" type="text" placeholder="Scenario..." asp-for="@Model.Name" />
                             </div>
                         </div>
                         <div class="field">
                             <label class="field-label">Configuration*</label>
                             <div class="control">
-                                <textarea class="textarea" rows="35" asp-for="@Model.Scenario.RawContent">@Model.Scenario.RawContent</textarea>
+                                <textarea class="textarea" rows="35" asp-for="@Model.RawContent"></textarea>
                             </div>
                         </div>
                         <div class="field">
