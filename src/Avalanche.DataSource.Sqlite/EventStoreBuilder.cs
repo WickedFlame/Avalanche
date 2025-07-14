@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS IterationEvents (
   TestCase VARCHAR(255),
   Throughput REAL,
   AverageMilliseconds REAL,
+  ContentLength BIGINT,
   IsWarmup BOOLEAN,
   Message VARCHAR(500),
   StatusCode VARCHAR(50),

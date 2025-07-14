@@ -58,6 +58,17 @@ namespace Avalanche.WriteModel
             return threads.Sum(t => t.Count() / time.TotalSeconds);
         }
 
+        public int GetContentLength()
+        {
+            var tmp = _events.Where(e => e.ContentLength > 0);
+
+            var events = tmp.Count() > 10 ?
+                tmp.Skip(Math.Max(0, _events.Count - 10)).OrderBy(e => e.Time).ToList() :
+                tmp.ToList();
+
+            return (int)events.Average(e => e.ContentLength);
+        }
+
         /// <summary>
         /// Only allow writing of events every 2 seconds
         /// </summary>

@@ -40,6 +40,11 @@ namespace Avalanche.Runner
                             RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true,
                         };
 
+                        if (test.UseCookies)
+                        {
+                            options.CookieContainer = new CookieContainer();
+                        }
+
                         var client = new RestClient(options);
 
                         ctx.Set("httpclient", client);
@@ -93,6 +98,10 @@ namespace Avalanche.Runner
 
                         _dispatcher.SendAsync(metric);
                     })
+                    .PreExecute(ctx =>
+                    {
+                        ctx.Set("ContentLength", null);
+                    })
                     .Task(ctx =>
                     {
                         var client = ctx.Get<RestClient>("httpclient");
@@ -119,6 +128,8 @@ namespace Avalanche.Runner
 
                                     _logger.LogInformation("Call to {Url} for Test {TestId} resulted in StatusCode {StatusCode}", url, _testId, result.StatusCode);
                                 }
+
+                                ctx.Set("ContentLength", result.ContentLength);
                             }
                             catch(Exception e)
                             {

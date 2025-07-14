@@ -63,7 +63,8 @@ namespace Avalanche.WriteModel.CommandHandlers
                         // GetThroughput should be on all elementst/threads instead of only the current thread
                         Throughput = cached.GetThroughput(),
                         Iterations = cached.Count(),
-                        AverageMilliseconds = cached.GetAverageMilliseconds()
+                        AverageMilliseconds = cached.GetAverageMilliseconds(),
+                        ContentLength = cached.GetContentLength()
                     };
 
                     _eventBus.Publish(cmd.TestId, cmd.Time, @event);

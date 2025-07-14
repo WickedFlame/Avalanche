@@ -29,7 +29,8 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     TestCase = @event.TestCase,
                     AverageMilliseconds = @event.AverageMilliseconds,
                     Throughput = @event.Throughput,
-                    IsWarmup = @event.IsWarmup
+                    IsWarmup = @event.IsWarmup,
+                    ContentLength = @event.ContentLength
                 });
 
             var trd = db.Query(nameof(TestRunDetail))

@@ -83,7 +83,7 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
                 foreach (var test in _events)
                 {
                     var errors = _errors.Where(e => e.TestCase == test.Key);
-                    Console.WriteLine($"{test.Key.FormatTestCaseTitle()}   Users: {test.Value.Count}, Throughput: -/s, Iterations: {test.Value.Sum(t => t.Value.Iterations)}, Errors: {errors.Count()}");
+                    Console.WriteLine($"{test.Key.FormatTestCaseTitle()}   Users: {test.Value.Count}, Throughput: -/s, Iterations: {test.Value.Sum(t => t.Value.Iterations)}, Errors: {errors.Count()}, ContentSize: {test.Value.Average(t => t.Value.ContentLength)}");
                 }
             }
 

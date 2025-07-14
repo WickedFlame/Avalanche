@@ -19,5 +19,7 @@ namespace Avalanche.WriteModel.Events
         public double AverageMilliseconds { get; set; }
 
         public bool IsWarmup { get; set; }
+
+        public int ContentLength { get; set; }
     }
 }

@@ -23,5 +23,7 @@ namespace Avalanche.WriteModel.Commands
         public bool IsWarmup { get; set; }
 
         public double TotalMilliseconds { get; set; }
+
+        public long ContentLength { get; set; }
     }
 }
