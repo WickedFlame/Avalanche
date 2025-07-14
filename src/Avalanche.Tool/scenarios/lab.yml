@@ -1,0 +1,11 @@
+TestCases:
+  - Urls:
+      - "https://localhost:44301/de/start.htm"
+    Name: Startpage
+    Users: 20
+    Iterations: 100
+    Interval: 1000
+#    Delay: 1
+    UseCookies: false
+    Init:
+      Url: "https://localhost:44301/de/start.htm"
