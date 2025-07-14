@@ -67,7 +67,7 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
         {
             _dispatcher.Close();
             var errors = _errors.Count(e => e.TestCase == @event.TestCase);
-            Console.WriteLine($"  {@event.TestCase.FormatTestCaseTitle()}   Users: {@event.Users}, Throughput: {@event.Throughput}/s, Iterations: {@event.Iterations}, Errors: {errors}, Average: {@event.AverageMilliseconds}ms");
+            Console.WriteLine($"  {@event.TestCase.FormatTestCaseTitle()}   Users: {@event.Users}, Throughput: {@event.Throughput}/s, Iterations: {@event.Iterations}, Errors: {errors}, Average: {(int)@event.AverageMilliseconds}ms");
         }
 
         private bool DispatcherTask()
@@ -83,7 +83,7 @@ namespace Avalanche.WriteModel.Memory.EventHandlers
                 foreach (var test in _events)
                 {
                     var errors = _errors.Where(e => e.TestCase == test.Key);
-                    Console.WriteLine($"{test.Key.FormatTestCaseTitle()}   Users: {test.Value.Count}, Throughput: -/s, Iterations: {test.Value.Sum(t => t.Value.Iterations)}, Errors: {errors.Count()}, ContentSize: {test.Value.Average(t => t.Value.ContentLength)}");
+                    Console.WriteLine($"{test.Key.FormatTestCaseTitle()}   Users: {test.Value.Count}, Throughput: {test.Value.Average(t => t.Value.Throughput)}/s, Average: {(int)test.Value.Average(t => t.Value.AverageMilliseconds)}ms, Iterations: {test.Value.Sum(t => t.Value.Iterations)}, Errors: {errors.Count()}, ContentSize: {test.Value.Average(t => t.Value.ContentLength)}");
                 }
             }
 

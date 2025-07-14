@@ -130,6 +130,7 @@ namespace Avalanche.ReadModel.QueryHandlers
                         TestCase = detail.Key,
                         Throughput = detail.Sum(d => d.Throughput) / detail.Count(),
                         Iterations = detail.Sum(d => d.Iterations),
+                        AverageMilliseconds = detail.Average(d => d.AverageMilliseconds),
                         Type = "TestSummary",
                         Failed = errors.Count(e => !e.IsWarmup && e.TestCase == detail.Key),
                         Slowest = 0,

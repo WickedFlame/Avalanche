@@ -84,7 +84,8 @@ CREATE TABLE IF NOT EXISTS TestRunDetail (
   TestCase VARCHAR(255),
   ThreadId INT,
   Throughput REAL,
-  Iterations BIGINT
+  Iterations BIGINT,
+  AverageMilliseconds REAL
 );
 
 CREATE TABLE IF NOT EXISTS IterationEvents (

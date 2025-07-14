@@ -50,7 +50,8 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                 query.AsUpdate(new
                     {
                         Throughput = @event.Throughput,
-                        Iterations = @event.Iterations
+                        Iterations = @event.Iterations,
+                        AverageMilliseconds = @event.AverageMilliseconds
                     })
                     .Where(new
                     {
@@ -67,7 +68,8 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     TestCase = @event.TestCase,
                     ThreadId = @event.Thread,
                     Throughput = @event.Throughput,
-                    Iterations = @event.Iterations
+                    Iterations = @event.Iterations,
+                    AverageMilliseconds = @event.AverageMilliseconds
                 });
             }
 

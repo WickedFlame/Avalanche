@@ -11,5 +11,7 @@
         public double Throughput { get; set; }
 
         public int Iterations { get; set; }
+
+        public long AverageMilliseconds { get; set; }
     }
 }
