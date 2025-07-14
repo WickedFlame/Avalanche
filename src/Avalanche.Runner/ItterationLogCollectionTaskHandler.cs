@@ -32,7 +32,7 @@ namespace Avalanche.Runner
                 IsWarmup = context.Settings.IsWarmup,
                 TotalMilliseconds = result.Duration.TotalMilliseconds,
                 Time = result.TimeStamp,
-                ContentLength = context.Get<long>("ContentLength")
+                ContentLength = context.Get<long?>("ContentLength")
             };
 
             log.SendAsync(metric);

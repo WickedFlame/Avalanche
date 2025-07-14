@@ -24,6 +24,6 @@ namespace Avalanche.WriteModel.Commands
 
         public double TotalMilliseconds { get; set; }
 
-        public long ContentLength { get; set; }
+        public long? ContentLength { get; set; }
     }
 }
