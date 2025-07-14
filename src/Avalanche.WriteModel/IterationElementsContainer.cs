@@ -63,8 +63,13 @@ namespace Avalanche.WriteModel
             var tmp = _events.Where(e => e.ContentLength > 0);
 
             var events = tmp.Count() > 10 ?
-                tmp.Skip(Math.Max(0, _events.Count - 10)).OrderBy(e => e.Time).ToList() :
+                tmp.Skip(Math.Max(0, tmp.Count() - 10)).OrderBy(e => e.Time).ToList() :
                 tmp.ToList();
+
+            if(events.Count <= 0)
+            {
+                return 0;
+            }
 
             return (int)events.Average(e => e.ContentLength);
         }

@@ -108,7 +108,7 @@ namespace Avalanche
 
                 //
                 // Give the collector some time to finish the work
-                Task.Delay(10000).Wait();
+                Task.Delay(5000).Wait();
             }
 
             eventBus.Dispose();
@@ -119,27 +119,32 @@ namespace Avalanche
             var path = $"{scenario}.yml";
             if(File.Exists(path))
             {
+                Console.WriteLine($"Starting Scenario {scenario} in {path}");
                 return path;
             }
 
             path = $"../{scenario}.yml";
             if (File.Exists(path))
             {
+                Console.WriteLine($"Starting Scenario {scenario} in {path}");
                 return path;
             }
 
             path = $"scenarios/{scenario}.yml";
             if (File.Exists(path))
             {
+                Console.WriteLine($"Starting Scenario {scenario} in {path}");
                 return path;
             }
 
             path = $"../scenarios/{scenario}.yml";
             if (File.Exists(path))
             {
+                Console.WriteLine($"Starting Scenario {scenario} in {path}");
                 return path;
             }
 
+            Console.WriteLine($"File for Scenario {scenario} was not found");
             return $"{scenario}.yml";
         }
     }

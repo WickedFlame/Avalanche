@@ -98,6 +98,15 @@ networks:
     external: true
 ```
 
+### Add to local docker registry
+```
+docker build -f dockerfile-tool -t "avalanche-tmp:latest" . --no-cache --force-rm=true
+```
+```
+docker run --rm -i -v ./scenarios:/scenarios avalanche-tmp:latest run -s local
+```
+
+
 
 
 
@@ -113,9 +122,7 @@ docker run --rm -i -v ./scenarios:/scenarios registry.gitlab.com/wickedflame/ava
 docker run --rm -i registry.gitlab.com/wickedflame/avalanche/avalanche-tool run -f local
 ```
 
-```
-docker build -f dockerfile-tool -t "avalanche-tmp:latest" . --no-cache --force-rm=true
-```
+
 
 
 ```

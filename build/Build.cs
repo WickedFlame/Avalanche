@@ -117,12 +117,14 @@ class Build : NukeBuild
             {
                 Serilog.Log.Write(Serilog.Events.LogEventLevel.Information, $"Delete files in {(PublishDirectory / "web" / "scenarios")}");
                 (PublishDirectory / "web" / "scenarios").GetFiles().ForEach(f => f.DeleteFile());
+                (PublishDirectory / "web" / "scenarios").DeleteDirectory();
             }
 
             if ((PublishDirectory / "tool" / "scenarios").DirectoryExists())
             {
                 Serilog.Log.Write(Serilog.Events.LogEventLevel.Information, $"Delete files in {(PublishDirectory / "tool" / "scenarios")}");
                 (PublishDirectory / "tool" / "scenarios").GetFiles().ForEach(f => f.DeleteFile());
+                (PublishDirectory / "tool" / "scenarios").DeleteDirectory();
             }
         });
 }

@@ -129,7 +129,7 @@ namespace Avalanche.Runner
                                     _logger.LogInformation("Call to {Url} for Test {TestId} resulted in StatusCode {StatusCode}", url, _testId, result.StatusCode);
                                 }
 
-                                ctx.Set("ContentLength", result.ContentLength);
+                                ctx.Set("ContentLength", (long)result.RawBytes.Length);
                             }
                             catch(Exception e)
                             {
