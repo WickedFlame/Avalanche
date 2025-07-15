@@ -100,7 +100,7 @@ namespace Avalanche.Runner
                     })
                     .PreExecute(ctx =>
                     {
-                        ctx.Set("ContentLength", null);
+                        ctx.Set("ContentLength", 0L);
                     })
                     .Task(ctx =>
                     {

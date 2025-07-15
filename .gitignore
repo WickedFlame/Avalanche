@@ -406,3 +406,5 @@ src/Avalanche.Tool/data/eventstore.db
 *.db-journal
 artifacts/**/*.*
 \!Deploy/
+.idea/.idea.Avalanche
+build/_build.csproj.DotSettings

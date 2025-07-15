@@ -12,9 +12,9 @@
             "commandName": "Docker",
             "commandLineArgs": "-s local -u https://host.docker.internal:32773"
         },
-        "Container lab (Dockerfile)": {
+        "Container performance (Dockerfile)": {
             "commandName": "Docker",
-            "commandLineArgs": "-s lab -u https://host.docker.internal:32773"
+            "commandLineArgs": "-s performance -u https://host.docker.internal:32773"
         }
     }
 }
