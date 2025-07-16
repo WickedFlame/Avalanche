@@ -23,12 +23,22 @@ builder.Services.AddEndpointsApiExplorer();
 
 // https://www.scottbrady.io/docker/aspnet-core-and-docker-environment-variables
 
+using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+    .SetMinimumLevel(LogLevel.Trace)
+        .AddOpenTelemetry(options =>
+            options.AddConsoleExporter())
+        );
+var logger = loggerFactory.CreateLogger<Program>();
+
 var config = new ConfigurationBuilder()
             .AddEnvironmentVariables()
             .Build();
 builder.Services.AddSingleton(config);
-var tmp = Environment.GetEnvironmentVariable("AV_EVENT_STORE_DB");
+
 var eventStoreSource = config.GetValue<string>("AV_EVENT_STORE_DB");
+
+logger.LogInformation(string.IsNullOrEmpty(eventStoreSource) ? "No DB Server defined. Switching to default" : "Using configured Sqlprovider {Provider}", eventStoreSource)
+
 if (eventStoreSource == "pgsql")
 {
     builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Pgsql.EventStoreConnectionBuilder>();
@@ -71,15 +81,11 @@ builder.Services.AddSingleton<ISettingsQueryHandler, SettingsQueryHandler>();
 builder.Services.AddTransient<ITestRunQueryHandler, TestRunQueryHandler>();
 builder.Services.AddTransient<ISettingsFacade, SettingsFacade>();
 
-
-
 builder.Services.AddLogging((loggingBuilder) => loggingBuilder
         .SetMinimumLevel(LogLevel.Debug)
         .AddOpenTelemetry(options =>
             options.AddConsoleExporter())
         );
-
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -21,6 +21,7 @@ Volumes
 | AV_DB_USERNAME    |             |   |
 | AV_DB_PASSWORD    |             |   |
 | SCENARIO_PATH     | ./scenarios | Optional path to the scenarios. This has to be same as the volume. |
+| DATA_PATH         |             |   |
 
 
 
@@ -76,8 +77,32 @@ Open
 
 ```
 services:
-  avalanche:
-    container_name: avalanche_web
+  postgres:
+    container_name: avalanche_postgres
+    restart: unless-stopped
+    image: postgres:17
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data
+    environment:
+#      POSTGRES_DB: avalanche
+      POSTGRES_USER: avl
+      POSTGRES_PASSWORD: pGreSsql1
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: avalanche@opacc.ch
+      PGADMIN_DEFAULT_PASSWORD: pGadm1n
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
+
+  client:
+    container_name: avalanche_pgadmin
+    container_name: client
     restart: unless-stopped
     image: registry.gitlab.com/wickedflame/avalanche/avalanche-web:latest
     volumes:
@@ -86,21 +111,45 @@ services:
       AV_EVENT_STORE_DB: pgsql
       AV_READ_MODEL_DB: pgsql
       AV_DB_SERVER:
-      AV_DB_PORT;
-      AV_DB_USERNAME:
-      AV_DB_PASSWORD:
+      AV_DB_PORT: 5432
+      AV_DB_USERNAME: avl
+      AV_DB_PASSWORD: pGreSsql1
       SCENARIO_PATH:./scenarios
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    networks:
+      - default
+      - traefik_default
+    labels:
+      - "traefik.http.routers.avalanche.tls=true"
+      - "traefik.http.routers.avalanche.rule=Host(`avalanche.was.local`)"
+      - "traefik.http.routers.avalanche.entrypoints=websecure"
+      - "traefik.http.services.avalanche.loadbalancer.server.port=8080"
+
+#  avalanche:
+#    container_name: avalanche
+#    restart: unless-stopped
+#    image: registry.gitlab.com/wickedflame/avalanche/avalanche-tool:latest
+#    volumes:
+#      - ./scenarios:/scenarios
+
+# volumes:
+#   avalanche_postgres_data:
+#     external: true
 
 networks:
   default:
-  avalanche_default:
-    name: avalanche_default
+  traefik_default:
+    name: traefik_default
     external: true
 ```
 
 ### Add to local docker registry
 ```
 docker build -f dockerfile-tool -t "avalanche-tmp:latest" . --no-cache --force-rm=true
+docker build -f dockerfile-web -t "avalanche-client:latest" . --no-cache --force-rm=true
 ```
 ```
 docker run --rm -i -v ./scenarios:/scenarios avalanche-tmp:latest run -s local
