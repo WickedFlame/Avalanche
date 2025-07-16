@@ -26,6 +26,15 @@ builder.Services.AddEndpointsApiExplorer();
 // services.AddTransient<ExampleService>();
 // services.AddScoped<ExampleService>();
 
+//public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
+//            .AddEnvironmentVariables()
+//            .Build();
+Console.WriteLine("Listing all environment variables");
+foreach(var va in Environment.GetEnvironmentVariables())
+{
+    Console.WriteLine($"EnvironmentVar: {va.ToString()}");
+}
+
 var eventStoreSource = Environment.GetEnvironmentVariable("AV_EVENT_STORE_DB");
 if (eventStoreSource == "pgsql")
 {
