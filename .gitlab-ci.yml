@@ -52,6 +52,7 @@ deploy_web:
     - docker push $CI_REGISTRY/wickedflame/avalanche/avalanche-web:$VERSION
   only:
     - main
+    - dev
 
 deploy_tool:
   before_script:
