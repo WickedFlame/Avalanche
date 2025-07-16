@@ -1,10 +1,11 @@
-﻿using Npgsql;
+﻿using Microsoft.Extensions.Configuration;
+using Npgsql;
 
 namespace Avalanche.DataSource.Pgsql
 {
     public static class EventStoreBuilder
     {
-        public static void CreateEventStore()
+        public static void CreateEventStore(IConfiguration config)
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS Events (
@@ -15,9 +16,9 @@ CREATE TABLE IF NOT EXISTS Events (
   Value VARCHAR (2000)
 );
 ";
-            CreateDatabaseIfNotExists("eventstore");
+            CreateDatabaseIfNotExists("eventstore", config);
 
-            var builder = new ConnectionBuilder(Constants.EventStoreDatabase);
+            var builder = new ConnectionBuilder(Constants.EventStoreDatabase, config);
             using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
@@ -30,9 +31,9 @@ CREATE TABLE IF NOT EXISTS Events (
             }
         }
 
-        private static void CreateDatabaseIfNotExists(string db)
+        private static void CreateDatabaseIfNotExists(string db, IConfiguration config)
         {
-            var builder = new ConnectionBuilder("postgres");
+            var builder = new ConnectionBuilder("postgres", config);
             using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
@@ -59,7 +60,7 @@ CREATE TABLE IF NOT EXISTS Events (
             }
         }
 
-        public static void CreateWriteModel()
+        public static void CreateWriteModel(IConfiguration config)
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS TestRun (
@@ -119,9 +120,9 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Fastest REAL
 );
 ";
-            CreateDatabaseIfNotExists("readmodel");
+            CreateDatabaseIfNotExists("readmodel", config);
 
-            var builder = new ConnectionBuilder(Constants.ReadModelDatabase);
+            var builder = new ConnectionBuilder(Constants.ReadModelDatabase, config);
             using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
             {
                 connection.Open();

@@ -1,17 +1,19 @@
-﻿namespace Avalanche.DataSource.Pgsql
+﻿using Microsoft.Extensions.Configuration;
+
+namespace Avalanche.DataSource.Pgsql
 {
     public class ConnectionBuilder
     {
         private readonly DatabaseSettings _settings;
 
-        public ConnectionBuilder(string dbName)
+        public ConnectionBuilder(string dbName, IConfiguration config)
         {
             _settings = new DatabaseSettings
             {
-                URL = Environment.GetEnvironmentVariable("AV_DB_SERVER"),
-                Port = Environment.GetEnvironmentVariable("AV_DB_PORT"),
-                UserName = Environment.GetEnvironmentVariable("AV_DB_USERNAME"),
-                Password = Environment.GetEnvironmentVariable("AV_DB_PASSWORD"),
+                URL = config["AV_DB_SERVER"],
+                Port = config["AV_DB_PORT"],
+                UserName = config["AV_DB_USERNAME"],
+                Password = config["AV_DB_PASSWORD"],
                 Database = dbName
             };
         }

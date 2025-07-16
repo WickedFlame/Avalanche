@@ -1,14 +1,13 @@
 using Avalanche.DataSource.DTO;
 using Avalanche.DataSource.Sqlite;
-using Avalanche.ReadModel.Queries;
 using Avalanche.ReadModel.QueryHandlers;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework.Internal;
 using Polaroider;
 using SqlKata.Compilers;
 using SqlKata.Execution;
 using System.Data.SQLite;
-using System.Threading;
 
 namespace Avalanche.ReadModel.Sql.IntegrationTests
 {
@@ -20,13 +19,13 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _handler = new TestRunQueryHandler(new ProjectionConnectionBuilder());
+            _handler = new TestRunQueryHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
         }
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            var connection = new SQLiteConnection(Constants.ReadModelDatabase);
+            var connection = new SQLiteConnection($"Data Source=data/{Constants.ReadModel}.db");
             var compiler = new SqliteCompiler();
             _db = new QueryFactory(connection, compiler);
 

@@ -1,12 +1,13 @@
-﻿using Npgsql;
+﻿using Microsoft.Extensions.Configuration;
+using Npgsql;
 using SqlKata.Execution;
 
 namespace Avalanche.DataSource.Pgsql
 {
     public class EventStoreConnectionBuilder : ConnectionBuilder, IEventStoreConnectionBuilder
     {
-        public EventStoreConnectionBuilder()
-            : base("eventstore")
+        public EventStoreConnectionBuilder(IConfiguration config)
+            : base("eventstore", config)
         {
         }
 

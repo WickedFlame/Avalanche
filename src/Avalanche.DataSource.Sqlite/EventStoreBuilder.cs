@@ -1,10 +1,11 @@
-﻿using System.Data.SQLite;
+﻿using Microsoft.Extensions.Configuration;
+using System.Data.SQLite;
 
 namespace Avalanche.DataSource.Sqlite
 {
     public static class EventStoreBuilder
     {
-        public static void CreateEventStore()
+        public static void CreateEventStore(IConfiguration config)
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS Events (
@@ -15,7 +16,7 @@ CREATE TABLE IF NOT EXISTS Events (
   Value VARCHAR (2000)
 );
 ";
-            var builder = new ConnectionStringBuilder(Constants.EventStore);
+            var builder = new ConnectionStringBuilder(Constants.EventStore, config);
             using (var connection = new SQLiteConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
@@ -28,7 +29,7 @@ CREATE TABLE IF NOT EXISTS Events (
             }
         }
 
-        public static void CreateWriteModel()
+        public static void CreateWriteModel(IConfiguration config)
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS TestRun (
@@ -88,7 +89,7 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Fastest REAL
 );
 ";
-            var builder = new ConnectionStringBuilder(Constants.ReadModel);
+            var builder = new ConnectionStringBuilder(Constants.ReadModel, config);
             using (var connection = new SQLiteConnection(builder.BuildConnectionString()))
             {
                 connection.Open();

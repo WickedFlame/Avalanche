@@ -4,16 +4,11 @@ using Avalanche.Domain;
 using Avalanche.ReadModel;
 using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.ReadModel.Sql.QueryHandlers;
-using Avalanche.WriteModel;
 using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sql;
 using Avalanche.WriteModel.Sql.EventHandlers;
 using Broadcast;
-using Microsoft.AspNetCore.OpenApi;
 using OpenTelemetry.Logs;
-using SqlKata.Compilers;
-using SqlKata.Execution;
-using System.Data.SQLite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,16 +21,14 @@ builder.Services.AddEndpointsApiExplorer();
 // services.AddTransient<ExampleService>();
 // services.AddScoped<ExampleService>();
 
-//public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-//            .AddEnvironmentVariables()
-//            .Build();
-Console.WriteLine("Listing all environment variables");
-foreach(var va in Environment.GetEnvironmentVariables())
-{
-    Console.WriteLine($"EnvironmentVar: {va.ToString()}");
-}
+// https://www.scottbrady.io/docker/aspnet-core-and-docker-environment-variables
 
-var eventStoreSource = Environment.GetEnvironmentVariable("AV_EVENT_STORE_DB");
+var config = new ConfigurationBuilder()
+            .AddEnvironmentVariables()
+            .Build();
+builder.Services.AddSingleton(config);
+var tmp = Environment.GetEnvironmentVariable("AV_EVENT_STORE_DB");
+var eventStoreSource = config.GetValue<string>("AV_EVENT_STORE_DB");
 if (eventStoreSource == "pgsql")
 {
     builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Pgsql.EventStoreConnectionBuilder>();
@@ -45,7 +38,7 @@ else
     builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
 }
 
-var readModelSource = Environment.GetEnvironmentVariable("AV_READ_MODEL_DB");
+var readModelSource = config.GetValue<string>("AV_READ_MODEL_DB");
 if (readModelSource == "pgsql")
 {
     builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Pgsql.ProjectionConnectionBuilder>();
@@ -105,20 +98,20 @@ if (!app.Environment.IsDevelopment())
 
 if (eventStoreSource == "pgsql")
 {
-    app.UsePostgresEventStore();
+    app.UsePostgresEventStore(config);
 }
 else
 {
-    app.UseSqliteEventStore();
+    app.UseSqliteEventStore(config);
 }
 
 if (readModelSource == "pgsql")
 {
-    app.UsePostgresReadModel();
+    app.UsePostgresReadModel(config);
 }
 else
 {
-    app.UseSqliteReadModel();
+    app.UseSqliteReadModel(config);
 }
 
 app.UseHttpsRedirection();

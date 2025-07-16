@@ -1,5 +1,6 @@
 ﻿using Avalanche.DataSource.Sqlite;
 using Broadcast;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Polaroider;
@@ -16,7 +17,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            var connection = new SQLiteConnection(Constants.EventStoreDatabase);
+            var connection = new SQLiteConnection($"Data Source=data/{Constants.EventStore}.db");
             var compiler = new SqliteCompiler();
             _db = new QueryFactory(connection, compiler);
         }
@@ -30,7 +31,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests
         [Test]
         public void SqliteEventStore_Add()
         {
-            var store = new SqlEventStore(new EventStoreConnectionBuilder(), Mock.Of<ILogger<SqlEventStore>>());
+            var store = new SqlEventStore(new EventStoreConnectionBuilder(Mock.Of<IConfiguration>()), Mock.Of<ILogger<SqlEventStore>>());
 
             store.Add("1", DateTime.Now, new TestEvent { Id = 1 });
 

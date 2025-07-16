@@ -1,12 +1,13 @@
-﻿using Npgsql;
+﻿using Microsoft.Extensions.Configuration;
+using Npgsql;
 using SqlKata.Execution;
 
 namespace Avalanche.DataSource.Pgsql
 {
     public class ProjectionConnectionBuilder : ConnectionBuilder, IProjectionConnectionBuilder
     {
-        public ProjectionConnectionBuilder()
-            : base("readmodel")
+        public ProjectionConnectionBuilder(IConfiguration config)
+            : base("readmodel", config)
         {
         }
 

@@ -4,6 +4,6 @@
     {
         public static readonly string ReadModel = "readmodel";
 
-        public static readonly string EventStore = "Data Source=data/eventstore.db";
+        public static readonly string EventStore = "eventstore";
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
 using System.IO;
 
 namespace Avalanche.DataSource.Sqlite
@@ -7,9 +7,9 @@ namespace Avalanche.DataSource.Sqlite
     {
         private readonly string _connectionString;
 
-        public ConnectionStringBuilder(string dbName)
+        public ConnectionStringBuilder(string dbName, IConfiguration config)
         {
-            var dataPath = GetDataPath();
+            var dataPath = GetDataPath(config);
             _connectionString = $"Data Source={dataPath}/{dbName}.db";
         }
 
@@ -18,9 +18,9 @@ namespace Avalanche.DataSource.Sqlite
             return _connectionString;
         }
 
-        public static string GetDataPath()
+        public static string GetDataPath(IConfiguration config)
         {
-            var path = Environment.GetEnvironmentVariable("DATA_PATH");
+            var path = config["DATA_PATH"];
             if (!string.IsNullOrEmpty(path) && Directory.Exists(path))
             {
                 return path;
