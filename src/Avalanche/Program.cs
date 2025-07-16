@@ -37,7 +37,7 @@ builder.Services.AddSingleton(config);
 
 var eventStoreSource = config.GetValue<string>("AV_EVENT_STORE_DB");
 
-logger.LogInformation(string.IsNullOrEmpty(eventStoreSource) ? "No DB Server defined. Switching to default" : "Using configured Sqlprovider {Provider}", eventStoreSource)
+logger.LogInformation(!string.IsNullOrEmpty(eventStoreSource) ? "Using configured Sqlprovider {Provider}" : "No DB Server defined. Switching to default", eventStoreSource);
 
 if (eventStoreSource == "pgsql")
 {
