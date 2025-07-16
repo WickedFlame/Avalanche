@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS Events (
   Value VARCHAR (2000)
 );
 ";
-            using (var connection = new SQLiteConnection(Constants.EventStoreDatabase))
+            var builder = new ConnectionStringBuilder(Constants.EventStore);
+            using (var connection = new SQLiteConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())
@@ -87,7 +88,8 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Fastest REAL
 );
 ";
-            using (var connection = new SQLiteConnection(Constants.ReadModelDatabase))
+            var builder = new ConnectionStringBuilder(Constants.ReadModel);
+            using (var connection = new SQLiteConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())

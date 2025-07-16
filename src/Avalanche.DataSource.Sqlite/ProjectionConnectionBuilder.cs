@@ -8,7 +8,8 @@ namespace Avalanche.DataSource.Sqlite
     {
         public QueryFactory Build()
         {
-            var connection = new SQLiteConnection(Constants.ReadModelDatabase);
+            var builder = new ConnectionStringBuilder(Constants.ReadModel);
+            var connection = new SQLiteConnection(builder.BuildConnectionString());
             var compiler = new SqliteCompiler();
             return new QueryFactory(connection, compiler);
         }
