@@ -36,7 +36,7 @@ Volumes
 ```
 Scenario:
   Name: name of the scenario (same as filename)
-  Tests: <- refactor to TestCases
+  TestCases: <- refactor to TestCases
     - Name: name of the test
       Users: amount of threads
       Urls:
@@ -55,7 +55,7 @@ Scenario:
 TestRun:
   TestId: unique id for each testrun
   Scenario: name of the scenario
-  Tests:
+  TestCases:
     - TestName: <- refactor to TestCase. name of the test. taken from the scenario config
       TestCase: name of the test. taken from the scenario config
       Id: generated id. not relevant...
@@ -63,17 +63,14 @@ TestRun:
       ThreadNumber: <- refactor to threadid
 ```
 # Docker
-### Tool
+### Runner
+To run the tests pull the runner and run a scenario from a folder
 ```
-docker pull registry.gitlab.com/wickedflame/avalanche/avalanche-tool:latest
-docker run --rm -i -v ./scenarios:/scenarios registry.gitlab.com/wickedflame/avalanche/avalanche-tool:latest run -s local
+docker pull registry.gitlab.com/wickedflame/avalanche/runner:latest
+docker run --rm -i -v ./scenarios:/scenarios registry.gitlab.com/wickedflame/avalanche/runner:latest run -s local -u https://url_to_avalanche_client.com
 ```
 
 ## Docker compose
-Open
-[] Postgers service
-[x] avalanche-web service
-[] avalanche-tool service
 
 ```
 services:
@@ -86,9 +83,9 @@ services:
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
     environment:
-#      POSTGRES_DB: avalanche
       POSTGRES_USER: avl
       POSTGRES_PASSWORD: pGreSsql1
+
   pgadmin:
     image: dpage/pgadmin4
     restart: always
@@ -98,25 +95,24 @@ services:
       PGADMIN_DEFAULT_EMAIL: avalanche@opacc.ch
       PGADMIN_DEFAULT_PASSWORD: pGadm1n
     volumes:
-      - ./data/pgadmin:/var/lib/pgadmin
+      - avalanche_postgres_data:/var/lib/pgadmin
 
   client:
-    container_name: avalanche_pgadmin
     container_name: client
     restart: unless-stopped
-    image: registry.gitlab.com/wickedflame/avalanche/avalanche-web:latest
+    image: registry.gitlab.com/wickedflame/avalanche/client:latest
     volumes:
-      - ./scenarios:/scenarios
+      - avalanche_data:/scenarios
     environment:
-      AV_EVENT_STORE_DB: pgsql
-      AV_READ_MODEL_DB: pgsql
-      AV_DB_SERVER:
-      AV_DB_PORT: 5432
-      AV_DB_USERNAME: avl
-      AV_DB_PASSWORD: pGreSsql1
-      SCENARIO_PATH:./scenarios
-    ports:
-      - 8080:8080
+      - AV_EVENT_STORE_DB=pgsql
+      - AV_READ_MODEL_DB=pgsql
+      - AV_DB_SERVER=postgres
+      - AV_DB_PORT=5432
+      - AV_DB_USERNAME=avl
+      - AV_DB_PASSWORD=pGreSsql1
+      - SCENARIO_PATH=./scenarios # optional parameter
+    # ports:
+    #   - 8080:8080
     depends_on:
       - postgres
     networks:
@@ -131,13 +127,15 @@ services:
 #  avalanche:
 #    container_name: avalanche
 #    restart: unless-stopped
-#    image: registry.gitlab.com/wickedflame/avalanche/avalanche-tool:latest
+#    image: registry.gitlab.com/wickedflame/avalanche/runner:latest
 #    volumes:
 #      - ./scenarios:/scenarios
 
-# volumes:
-#   avalanche_postgres_data:
-#     external: true
+volumes:
+  avalanche_postgres_data:
+    external: true
+  avalanche_data:
+    external: true
 
 networks:
   default:
@@ -148,37 +146,13 @@ networks:
 
 ### Add to local docker registry
 ```
-docker build -f dockerfile-tool -t "avalanche-tmp:latest" . --no-cache --force-rm=true
-docker build -f dockerfile-web -t "avalanche-client:latest" . --no-cache --force-rm=true
+docker build -f dockerfile-runner -t "avalanche_runner_:latest" . --no-cache --force-rm=true
+docker build -f dockerfile-client -t "avalanche_client:latest" . --no-cache --force-rm=true
 ```
 ```
-docker run --rm -i -v ./scenarios:/scenarios avalanche-tmp:latest run -s local
+docker run --rm -i -v ./scenarios:/scenarios avalanche_runner:latest run -s local
 ```
 
-
-
-
-
-
-
-
-```
-docker pull registry.gitlab.com/wickedflame/avalanche/avalanche-tool:latest
-docker run --rm -i -v ./scenarios:/scenarios registry.gitlab.com/wickedflame/avalanche/avalanche-tool run -s local
-```
-
-```
-docker run --rm -i registry.gitlab.com/wickedflame/avalanche/avalanche-tool run -f local
-```
-
-
-
-
-```
-docker run -t -i -v <host_dir>:<container_dir>  ubuntu /bin/bash
-docker export registry.gitlab.com/wickedflame/avalanche/avalanche-tool | tar t > avalanche-tool-files.txt
-docker image save registry.gitlab.com/wickedflame/avalanche/avalanche-tool > avalanche-tool-files.tar
-```
 
 
 ## What is Load Testing
