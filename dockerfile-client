@@ -10,7 +10,7 @@ EXPOSE 8080
 
 # Optional: create a volume for scenarios if your app uses it
 VOLUME /scenarios
-VOLUME /app/data
+VOLUME /data
 
 # Start the web application
 ENTRYPOINT ["dotnet", "Avalanche.dll"]
