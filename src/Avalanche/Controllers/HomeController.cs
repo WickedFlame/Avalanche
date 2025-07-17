@@ -23,7 +23,7 @@ namespace Avalanche.Controllers
 
             var model = new TestsViewModel
             {
-                Tests = facade.GetScenarios()
+                Tests = facade.GetScenarios().OrderByDescending(t => t.LastRun)
             };
 
             return View(model);

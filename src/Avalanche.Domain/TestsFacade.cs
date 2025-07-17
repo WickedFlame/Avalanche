@@ -35,6 +35,7 @@ namespace Avalanche.Domain
             if (test != null)
             {
                 definition.State = new TestRunStatus(test?.Status ?? "New");
+                definition.LastRun = test.StartTime;
             }
 
             return definition;
