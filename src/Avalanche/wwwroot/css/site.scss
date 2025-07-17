@@ -44,7 +44,7 @@ body {
 
     .pt-navigation-container {
         display: grid;
-        grid-template-columns: 300px 1fr;
+        grid-template-columns: auto 1fr;
     }
 
     .pt-main-content {
@@ -136,3 +136,16 @@ body {
 
 }
 
+
+.pt-breadcrumb-panel {
+    padding-left: 80px;
+    padding-bottom: 0.8rem;
+    display: inline-block;
+    align-self: self-end;
+}
+
+.navbar {
+    &.pt-navbar-main {
+        /*background-color: var(--bulma-scheme-main-bis) !important;*/
+    }
+}

@@ -32,11 +32,10 @@
             </div>
             <div class="navbar-menu">
                 <div class="navbar-start">
-                    
+                    @await RenderSectionAsync("breadcrumb", required: false)
                 </div>
                 <div class="navbar-end">
                     @* <div class="navbar-item"><a class="button is-text" asp-area="" asp-controller="Home" asp-action="Index">Home</a></div> *@
-
                     <div class="wa-navbar-item-l navbar-item">
                         <div class="wa-navbar-btn">
                             <a class="wa-navbar-btn-icon">
@@ -46,8 +45,12 @@
                     </div>
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">Admin</a>
-                        <div class="navbar-dropdown">
+                        <div class="navbar-dropdown is-right">
                             <a class="navbar-item" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
+                            <hr class="navbar-divider">
+                            <div class="navbar-item">
+                                Avalanche @typeof(Program).Assembly.GetName().Version
+                            </div>
                         </div>
                     </div>
                 </div>

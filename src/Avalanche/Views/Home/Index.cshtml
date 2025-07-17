@@ -5,14 +5,25 @@
 }
 
 <div class="pt-navigation-container">
-    <div class="pt-padding-side py-5">
-        <aside class="menu px-4 py-4">
-            <p class="menu-label">Edit</p>
-            <ul class="menu-list">
-                <li><a asp-controller="ScenarioEditor" asp-action="Index">Scenario editor</a></li>
-            </ul>
-        </aside>
-    </div>
+    <nav class="navbar pt-navbar-main" role="navigation" aria-label="main navigation">
+        <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="true">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="navbar-menu" id="navMenu">
+            <div class="pt-padding-side">
+                <aside class="menu px-4 py-4">
+                    <p class="menu-label">Edit</p>
+                    <ul class="menu-list">
+                        <li><a asp-controller="ScenarioEditor" asp-action="Index">Scenario editor</a></li>
+                    </ul>
+                </aside>
+            </div>
+        </div>
+    </nav>
+
     <div class="pt-main-content">
         <div class="content px-6 py-4">
             <h1 class="title is-1">Avalanche</h1>

@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitlab-ci - Copy.yml = .gitlab-ci - Copy.yml
 		.gitlab-ci.yml = .gitlab-ci.yml
 		Changelog.md = Changelog.md
-		dockerfile-tool = dockerfile-tool
-		dockerfile-web = dockerfile-web
+		dockerfile-client. = dockerfile-client.
 		readme.md = readme.md
+		dockerfile-runner. = dockerfile-runner.
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{CF91D702-69C9-446F-B75A-82AF31B4C1D5}"

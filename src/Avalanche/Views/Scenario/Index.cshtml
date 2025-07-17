@@ -2,16 +2,20 @@
 @using System.Text.Json
 @model ScenarioModel
 
-
-<div class="pt-main-content">
-    <div class="content px-6 py-4">
+@section breadcrumb {
+    <div class="pt-breadcrumb-panel">
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
                 <li><a asp-controller="Home" asp-action="Index">Scenarios</a></li>
                 <li class="is-active"><a href="#" aria-current="page">@Model.Name</a></li>
             </ul>
         </nav>
+    </div>
+}
 
+<div class="pt-main-content">
+    <div class="content px-6 py-4">
+        
         <h1 class="title is-1">@Model.Name</h1>
         <div>
             <div class="pt-padding-side py-5">
