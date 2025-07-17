@@ -1,0 +1,24 @@
+Config:
+  Iterations: 10
+  Users: 11
+  Duration: 12
+  Interval: 13
+  RampupTime: 14
+  UseCookies: True
+  Delay: 15
+TestCases:
+  - Urls:
+      - 'https://host.docker.internal:32770/'
+    Name: Startpage
+    Init:
+      Url: 'https://host.docker.internal:32770/'
+  - Urls:
+      - 'https://host.docker.internal:32770/Home/Privacy'
+    Name: Privacy
+    Init:
+      Url: 'https://host.docker.internal:32770/Home/Privacy'
+  - Urls:
+      - 'https://host.docker.internal:32770/Home/Error'
+    Name: Error
+    Init:
+      Url: 'https://host.docker.internal:32770/Home/Error'

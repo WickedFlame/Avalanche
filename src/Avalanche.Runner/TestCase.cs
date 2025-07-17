@@ -1,28 +1,20 @@
 ﻿namespace Avalanche.Runner
 {
-    public class TestCase
+    public class TestCase : TestCaseConfig
     {
+        /// <summary>
+        /// The urls that are run in each test
+        /// </summary>
         public List<string> Urls { get; set; }
 
+        /// <summary>
+        /// The name of the testcase
+        /// </summary>
         public string Name { get; set; }
 
-        public int Iterations { get; set; }
-
-        public int Users { get; set; }
-
-        public int Duration { get; set; }
-
-        public int Interval { get; set; }
-
         /// <summary>
-        /// Rampuptime in seconds
+        /// The config that is run for initialization
         /// </summary>
-        public int RampupTime { get; set; }
-
-        public bool UseCookies { get; set; } = true;
-
-        public int Delay { get; set; }
-
         public InitConfig Init { get; set; }
     }
 
