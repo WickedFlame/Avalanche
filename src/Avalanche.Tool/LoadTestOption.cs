@@ -1,15 +1,15 @@
 ﻿using Avalanche.Domain;
+using Avalanche.Runner;
 using Avalanche.WriteModel;
-using Avalanche.WriteModel.CommandHandlers;
-using Avalanche.WriteModel.Commands;
 using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Memory;
 using Avalanche.WriteModel.Memory.EventHandlers;
 using Broadcast;
 using CommandLine;
-using MeasureMap.Diagnostics;
 using Microsoft.Extensions.Logging;
 using RestSharp;
+using System.Diagnostics;
+using System.Text;
 
 namespace Avalanche
 {
@@ -33,14 +33,15 @@ namespace Avalanche
                 Scenario = "LoadTest";
             }
 
-            Console.WriteLine($"SCENARIO: {Scenario}");
-
 #if DEBUG
             // in debug wait until the website is started
-            //Logger.LogInformation($"Wait until the website is started");
-            Console.WriteLine($"Wait until the website is started");
             System.Threading.Tasks.Task.Delay(10000).Wait();
 #endif
+
+            Console.WriteLine($"    AVALANCHE:");
+            Console.WriteLine($"        * v{typeof(Program).Assembly.GetName().Version}");
+            Console.WriteLine($"     SCENARIO:");
+            Console.WriteLine($"        * {Scenario}");
 
             var store = new InMemoryEventStore();
 
@@ -83,6 +84,8 @@ namespace Avalanche
                 var facade = new TestFacade(dispatcher, LoggerFactory);
                 var scenario = facade.GetScenario(path);
 
+                TraceTestCases(scenario);
+
                 eventBus.Send(new InitScenarioEvent
                 {
                     Name = Scenario,
@@ -114,37 +117,69 @@ namespace Avalanche
             eventBus.Dispose();
         }
 
+        private static void TraceTestCases(Scenario scenario)
+        {
+            Console.WriteLine("    TESTCASES:");
+            foreach (var tc in scenario.TestCases)
+            {
+                var sb = new StringBuilder()
+                    .Append($"        * {tc.Name.PadRight(15)} Users: {tc.Users}");
+                
+                if (tc.Iterations > 0)
+                {
+                    sb.Append($", Iterations: {tc.Iterations}");
+                }
+
+                if (tc.Interval > 0)
+                {
+                    sb.Append($", Interval: {tc.Interval}");
+                }
+
+                if (tc.Duration > 0)
+                {
+                    sb.Append($", Duration: {tc.Duration}");
+                }
+
+                if (tc.Delay > 0)
+                {
+                    sb.Append($", Delay: {tc.Delay}");
+                }
+
+                Console.WriteLine(sb.ToString());
+            }
+        }
+
         private static string GetFilePath(string scenario)
         {
             var path = $"{scenario}.yml";
             if(File.Exists(path))
             {
-                Console.WriteLine($"Starting Scenario {scenario} in {path}");
+                Debug.WriteLine($"Starting Scenario {scenario} in {path}");
                 return path;
             }
 
             path = $"../{scenario}.yml";
             if (File.Exists(path))
             {
-                Console.WriteLine($"Starting Scenario {scenario} in {path}");
+                Debug.WriteLine($"Starting Scenario {scenario} in {path}");
                 return path;
             }
 
             path = $"scenarios/{scenario}.yml";
             if (File.Exists(path))
             {
-                Console.WriteLine($"Starting Scenario {scenario} in {path}");
+                Debug.WriteLine($"Starting Scenario {scenario} in {path}");
                 return path;
             }
 
             path = $"../scenarios/{scenario}.yml";
             if (File.Exists(path))
             {
-                Console.WriteLine($"Starting Scenario {scenario} in {path}");
+                Debug.WriteLine($"Starting Scenario {scenario} in {path}");
                 return path;
             }
 
-            Console.WriteLine($"File for Scenario {scenario} was not found");
+            Debug.WriteLine($"File for Scenario {scenario} was not found");
             return $"{scenario}.yml";
         }
     }
