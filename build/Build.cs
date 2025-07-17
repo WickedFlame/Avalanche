@@ -27,14 +27,17 @@ class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = Configuration.Release;
 
-    [Parameter("Version to be injected in the Build")]
-    public string Version { get; set; } = $"0.0.1.{DateTime.Today.Month * 31 + DateTime.Today.Day}1";
-
     [Solution] readonly Solution Solution;
 
-    AbsolutePath SourceDirectory => RootDirectory / "src";
+    [Parameter("Version to be injected in the Build")]
+    public string Version { get; set; } = "0.0.1";
 
-    AbsolutePath PublishDirectory => RootDirectory / "artifacts";
+    [Parameter("The Buildnumber provided by the CI")]
+    public string BuildNo = $"{DateTime.Today.Month * 31 + DateTime.Today.Day}1";
+
+    public AbsolutePath SourceDirectory => RootDirectory / "src";
+
+    public AbsolutePath PublishDirectory => RootDirectory / "artifacts";
 
     Target Clean => _ => _
         .Before(Restore)
@@ -69,9 +72,9 @@ class Build : NukeBuild
             DotNetBuild(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetVersion(Version)
-                .SetAssemblyVersion(Version)
-                .SetFileVersion(Version)
+                .SetVersion($"{Version}.{BuildNo}")
+                .SetAssemblyVersion($"{Version}.{BuildNo}")
+                .SetFileVersion($"{Version}.{BuildNo}")
                 .EnableNoRestore());
         });
 
@@ -97,18 +100,18 @@ class Build : NukeBuild
 
             DotNetPublish(o => o
                 .SetConfiguration(Configuration)
-                .SetVersion(Version)
-                .SetAssemblyVersion(Version)
-                .SetFileVersion(Version)
+                .SetVersion($"{Version}.{BuildNo}")
+                .SetAssemblyVersion($"{Version}.{BuildNo}")
+                .SetFileVersion($"{Version}.{BuildNo}")
                 .SetProject(RootDirectory / "src" / "Avalanche")
                 .SetPublishProfile("FolderProfile")
                 .SetOutput(PublishDirectory / "web"));
 
             DotNetPublish(o => o
                 .SetConfiguration(Configuration)
-                .SetVersion(Version)
-                .SetAssemblyVersion(Version)
-                .SetFileVersion(Version)
+                .SetVersion($"{Version}.{BuildNo}")
+                .SetAssemblyVersion($"{Version}.{BuildNo}")
+                .SetFileVersion($"{Version}.{BuildNo}")
                 .SetProject(RootDirectory / "src" / "Avalanche.Tool")
                 .SetPublishProfile("FolderProfile")
                 .SetOutput(PublishDirectory / "tool"));

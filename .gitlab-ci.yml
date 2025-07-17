@@ -2,7 +2,7 @@
 image: mcr.microsoft.com/dotnet/sdk:8.0
 
 variables:
-  DOCKER_DRIVER: overlay2
+  # DOCKER_DRIVER: overlay2
   IMAGE_TAG_CLIENT: "$CI_REGISTRY/wickedflame/avalanche/client:$CI_COMMIT_SHA"
   IMAGE_TAG_RUNNER: "$CI_REGISTRY/wickedflame/avalanche/runner:$CI_COMMIT_SHA"
   VERSION: 0.0.1
@@ -23,7 +23,7 @@ build_solution:
   script:
   - dotnet restore Avalanche.sln
   - dotnet restore ./build/_build.csproj
-  - nuke deploy -version $VERSION
+  - nuke deploy -version $VERSION -buildno ${CI_PIPELINE_IID}
   artifacts:
     paths:
       - artifacts/**/*.*
@@ -37,7 +37,7 @@ test_solution:
     - dev
     - merge_requests
 
-deploy_web:
+deploy_client:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   stage: deploy
@@ -45,16 +45,16 @@ deploy_web:
   services:
     - docker:dind
   script:
-    - docker build -f dockerfile-client -t "IMAGE_TAG_CLIENT" .
-    - docker tag IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:latest
-    - docker tag IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
+    - docker build -f dockerfile-client -t "$IMAGE_TAG_CLIENT" .
+    - docker tag $IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:latest
+    - docker tag $IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
     - docker push $CI_REGISTRY/wickedflame/avalanche/client:latest
     - docker push $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
   only:
     - main
     - dev
 
-deploy_tool:
+deploy_runner:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   stage: deploy
