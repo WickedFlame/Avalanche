@@ -408,3 +408,5 @@ artifacts/**/*.*
 \!Deploy/
 .idea/.idea.Avalanche
 build/_build.csproj.DotSettings
+src/Avalanche.Tool/scenarios
+src/Avalanche/scenarios
