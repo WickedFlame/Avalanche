@@ -80,6 +80,13 @@ namespace Avalanche
             {
                 // LoadTest
                 var path = GetFilePath(Scenario);
+                if (!System.IO.File.Exists(path))
+                {
+                    Console.WriteLine($"Could not find any configuration file for the Scenario {Scenario}");
+                    var logger = LoggerFactory.CreateLogger<LoadTestOption>();
+                    logger.LogError($"Could not find any configuration file for the Scenario {Scenario}. Test will be aborted.");
+                    return;
+                }
 
                 var facade = new TestFacade(dispatcher, LoggerFactory);
                 var scenario = facade.GetScenario(path);
