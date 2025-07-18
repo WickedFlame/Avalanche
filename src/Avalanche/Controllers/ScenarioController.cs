@@ -6,6 +6,7 @@ using Avalanche.WriteModel;
 using Broadcast;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Xml.Linq;
 
 namespace Avalanche.Controllers
 {
@@ -65,6 +66,25 @@ namespace Avalanche.Controllers
             };
 
             return View(model);
+        }
+
+        public IActionResult DeleteScenario(string scenario)
+        {
+            var path = PathMapper.GetScenarioFile(scenario);
+
+            var trh = new TestRunQueryHandler(_builder);
+            var runs = trh.Get(new ReadModel.Queries.GetTestsQuery { Scenario = scenario });
+
+            var dispatcher = new CommandDispatcher(_eventBus);
+            var facade = new TestFacade(dispatcher, _loggerFactory);
+            foreach (var run in runs)
+            {
+                facade.Delete(run.TestId);
+            }
+
+            System.IO.File.Delete(path);
+
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult DeleteTestRun(string scenario, string testId)

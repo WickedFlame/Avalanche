@@ -38,6 +38,7 @@
                                     <th>Testscenario</th>
                                     <th>State</th>
                                     <th></th>
+                                    <th>Last run</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -63,6 +64,13 @@
                                         {
                                             <td>@test.LastRun.ToString("dd.MM.yyyy hh:mm:ss")</td>
                                         }
+                                        <td>
+                                            <a class="pt-button right" asp-controller="Scenario" asp-action="DeleteScenario" asp-route-scenario="@test.Name">
+                                                <span class="icon">
+                                                    <i class="fa fa-trash"></i>
+                                                </span>
+                                            </a>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -70,6 +78,6 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
 </div>

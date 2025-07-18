@@ -3,6 +3,7 @@ using Avalanche.Domain;
 using Avalanche.Models;
 using System.Diagnostics;
 using Avalanche.DataSource;
+using Avalanche.WriteModel;
 
 namespace Avalanche.Controllers
 {
@@ -27,11 +28,6 @@ namespace Avalanche.Controllers
             };
 
             return View(model);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

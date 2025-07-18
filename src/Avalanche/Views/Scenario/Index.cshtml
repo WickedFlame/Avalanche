@@ -47,7 +47,7 @@
                     <div class="navbar-end">
                         <div class="buttons has-addons" style="margin-bottom:0;">
                             <a asp-controller="ScenarioEditor" asp-action="Index" asp-route-scenario="@Model.Name" class="button">Edit scenario</a>
-                            <a data-name="@Model.Name" class="button" disabled>
+                            <a asp-controller="Scenario" asp-action="DeleteScenario" asp-route-scenario="@Model.Name" class="button">
                                 <span class="icon">
                                     <i class="fa fa-trash"></i>
                                 </span>
