@@ -6,6 +6,10 @@ export class Site {
             sw.addEventListener('click', e => this.lightswitch());
         }
 
+        let tabs = document.querySelectorAll('.tabs');
+        if (tabs) {
+            tabs.forEach(e => this.registerTabs(e));
+        }
 
         // Get all "navbar-burger" elements
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
@@ -38,5 +42,19 @@ export class Site {
             htmlTag.classList.add('theme-light');
             localStorage.setItem('mode', 'light');
         }
+    }
+
+    async registerTabs(tabs) {
+        tabs.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', e => {
+                // deselect all tabs
+                tabs.querySelectorAll('li').forEach(t => t.classList.remove('is-active'));
+                tabs.parentElement.querySelector('.tabs-content').querySelectorAll('li').forEach(t => t.classList.remove('is-active'));
+
+                // select new tab
+                e.target.parentElement.classList.add('is-active');
+                document.querySelector(`#${e.target.dataset.tabid}`).classList.add('is-active');
+            });
+        });
     }
 }

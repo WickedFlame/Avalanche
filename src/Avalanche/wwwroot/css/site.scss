@@ -14,6 +14,15 @@ body {
     margin-bottom: 60px;
 }
 
+.tabs-content li {
+    display: none;
+    list-style: none;
+}
+
+.tabs-content li.is-active {
+    display: block;
+}
+
 .pt-grid {
     width: 100%;
 
@@ -153,4 +162,69 @@ body {
 .right {
     position: relative;
     float: right;
+}
+
+.pt-editor-panel {
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+.pt-collapsible-wrapper {
+    input[type='checkbox'] {
+        display: none;
+    }
+
+    .pt-collapsible-toggle {
+        display: block;
+        font-weight: bold;
+        font-family: monospace;
+        font-size: 1.2rem;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.25s ease-out;
+    }
+
+    .pt-collapsible-toggle::hover {
+        color: #7C5A0B;
+    }
+
+    .pt-collapsible-toggle::before {
+        content: ' ';
+        display: inline-block;
+        vertical-align: middle;
+        transform: translateY(-2px);
+        transition: transform .2s ease-out;
+        margin-top: -3px;
+        border: solid currentColor;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+        transform: rotate(135deg);
+        -webkit-transform: rotate(135deg);
+    }
+
+    .pt-collapsible-content .pt-content-inner {
+        padding: .5rem 1rem;
+    }
+
+    .pt-collapsible-content {
+        padding-top: 15px;
+        overflow: hidden;
+        max-width: 0px;
+        transition: max-width .25s ease-in-out;
+    }
+
+    .pt-toggle:checked + .pt-collapsible-toggle + .pt-collapsible-content {
+        max-width: fit-content;
+    }
+
+    .pt-toggle:checked + .pt-collapsible-toggle::before {
+        transform: rotate(-45deg) translateX(-3px);
+        margin-top: -9px;
+    }
+
+    .pt-toggle:checked + .pt-collapsible-toggle {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
 }

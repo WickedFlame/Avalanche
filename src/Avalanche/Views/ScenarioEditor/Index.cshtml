@@ -44,30 +44,157 @@
 
             <h1 class="title is-1">Edit Scenarios</h1>
 
+            <div class="pt-editor-panel">
+                <div class="pt-editor">
+                    @using (Html.BeginForm("SaveScenario", "ScenarioEditor", FormMethod.Post, new { id = "SaveScenario" }))
+                    {
+                        <div class="content-header content-container" id="sticky-header">
+                            <div class="field">
+                                <label class="label">
+                                    Scenario*<span class="icon px-5">
+                                        <i class="fa fa-info-circle" title="Name of the Scenario. This is the same as the name of the Testfile"></i>
+                                    </span>
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Scenario..." asp-for="@Model.Name" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Configuration*</label>
+                                <div class="control">
+                                    <textarea class="textarea" rows="35" asp-for="@Model.RawContent"></textarea>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" id="save-changes" form="SaveScenario" class="button">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="pt-collapsible-wrapper py-5">
+                    <input id="collapsible" class="pt-toggle" type="checkbox">
+                    @* <label for="collapsible" class="pt-collapsible-toggle">More Info</label> *@
+                    <label for="collapsible" class="pt-collapsible-toggle">
+                        <span class="icon">
+                            <i class="fa fa-info-circle"></i>
+                        </span>
+                    </label>
 
-            <div>
-                @using (Html.BeginForm("SaveScenario", "ScenarioEditor", FormMethod.Post, new { id = "SaveScenario" }))
-                {
-                    <div class="content-header content-container" id="sticky-header">
-                        <div class="field">
-                            <label class="field-label">Scenario*</label>
-                            <div class="control">
-                                <input class="input" type="text" placeholder="Scenario..." asp-for="@Model.Name" />
+                    <div class="pt-collapsible-content">
+                        <div class="pt-content-inner">
+
+                            <div class="tabs">
+                                <ul>
+                                    <li class="is-active"><a data-tabid="example-tab">Example</a></li>
+                                    <li><a data-tabid="description-tab">Description</a></li>
+                                </ul>
                             </div>
-                        </div>
-                        <div class="field">
-                            <label class="field-label">Configuration*</label>
-                            <div class="control">
-                                <textarea class="textarea" rows="35" asp-for="@Model.RawContent"></textarea>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="control">
-                                <button type="submit" id="save-changes" form="SaveScenario" class="button">Save</button>
+                            <div class="tabs-content">
+                                <ul>
+                                    <li class="is-active" id="example-tab">
+                                        <p>The Config section is optional.<br />This is applied to all TestCases that don't define a configuration<br />on their own.</p>
+                                        <pre>
+                                            <code>
+Config:
+  Users: 5
+  Iterations: 10
+  Duration: 0
+  Interval: 0
+  RampupTime: 0
+  UseCookies: True
+  Delay: 1
+TestCases:
+  - Urls:
+      - 'https://testsite.com/'
+    Name: Startpage
+    Init:
+      Url: 'https://testsite.com/'
+  - Urls:
+      - 'https://testsite.com/Home/Privacy'
+    Name: Privacy
+    Init:
+      Url: 'https://testsite.com/Home/Privacy'
+    Users: 5
+    Iterations: 10
+    Duration: 0
+    Interval: 0
+    RampupTime: 0
+    UseCookies: True
+    Delay: 1
+                                            </code>
+                                        </pre>
+                                    </li>
+                                    <li id="description-tab">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Parameter</th>
+                                                    <th>Value</th>
+                                                    <th>Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Users</td>
+                                                    <td>INT</td>
+                                                    <td>Amount of users per testrun.<br />Defaults to 1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Iterations</td>
+                                                    <td>INT</td>
+                                                    <td>Amount of iterations per user</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Duration</td>
+                                                    <td>INT</td>
+                                                    <td>Total duration of the testrun in minutes</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Interval</td>
+                                                    <td>INT</td>
+                                                    <td>Interval of each user call in milliseconds</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Delay</td>
+                                                    <td>INT</td>
+                                                    <td>Delay between each request in seconds</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>RampupTime</td>
+                                                    <td>INT</td>
+                                                    <td>Rampup-time in seconds</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>UseCookies</td>
+                                                    <td>BOOL</td>
+                                                    <td>Use same cookies for all requests per user?<br />Defaults to true</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td></td>
+                                                    <td>Name of the Testrun</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Urls</td>
+                                                    <td></td>
+                                                    <td>List of URL to call per Testrun</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Init</td>
+                                                    <td></td>
+                                                    <td>Properties for the initialization.<br />Currently only the Url has to be provided</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
-                }
+                </div>
             </div>
 
         </div>
