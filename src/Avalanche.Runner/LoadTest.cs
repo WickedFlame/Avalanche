@@ -50,13 +50,15 @@ namespace Avalanche.Runner
                         ctx.Set("httpclient", client);
                         ctx.Set(nameof(IDispatcher<ICommand>), _dispatcher);
 
-                        if (test.Init != null && !string.IsNullOrEmpty(test.Init.Url))
+                        var url = test.Init != null && !string.IsNullOrEmpty(test.Init.Url) ? test.Init.Url : test.Urls.FirstOrDefault();
+
+                        if (!string.IsNullOrEmpty(url))
                         {
                             try
                             {
                                 var time = Stopwatch.StartNew();
 
-                                var request = new RestRequest(test.Init.Url);
+                                var request = new RestRequest(url);
                                 var result = client.GetAsync(request).GetAwaiter().GetResult();
 
                                 time.Stop();
@@ -67,7 +69,7 @@ namespace Avalanche.Runner
                                     Category = "console",
                                     Module = "Init",
                                     TestCase = test.Name,
-                                    Message = $"Init {test.Init.Url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms",
+                                    Message = $"Init {url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms",
                                     StatusCode = result.StatusCode,
                                     ElapsedMilliseconds = time.ElapsedMilliseconds,
                                     IsWarmup = s.IsWarmup

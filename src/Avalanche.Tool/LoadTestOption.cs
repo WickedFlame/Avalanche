@@ -107,10 +107,10 @@ namespace Avalanche
                         RampupTime = t.RampupTime,
                         Users = t.Users,
                         UseCookies = t.UseCookies,
-                        Init = new WriteModel.Events.InitConfig
+                        Init = t.Init != null ? new WriteModel.Events.InitConfig
                         {
                             Url = t.Init.Url
-                        }
+                        } : null
                     })
                 });
 
