@@ -1,0 +1,45 @@
+Config:
+  Iterations: 10
+  Users: 11
+  Duration: 12
+  Interval: 13
+  RampupTime: 14
+  UseCookies: False
+  Delay: 15
+TestCases:
+  - Urls:
+      - 'https://host.docker.internal:32770/'
+    Name: Startpage
+    Iterations: 20
+    Users: 21
+    Duration: 22
+    Interval: 23
+    RampupTime: 24
+    UseCookies: True
+    Delay: 25
+    Init:
+      Url: 'https://host.docker.internal:32770/'
+  - Urls:
+      - 'https://host.docker.internal:32770/Home/Privacy'
+    Name: Privacy
+    Iterations: 20
+    Users: 21
+    Duration: 22
+    Interval: 23
+    RampupTime: 24
+    UseCookies: True
+    Delay: 25
+    Init:
+      Url: 'https://host.docker.internal:32770/Home/Privacy'
+  - Urls:
+      - 'https://host.docker.internal:32770/Home/Error'
+    Name: Error
+    Iterations: 20
+    Users: 21
+    Duration: 22
+    Interval: 23
+    RampupTime: 24
+    UseCookies: True
+    Delay: 25
+    Init:
+      Url: 'https://host.docker.internal:32770/Home/Error'

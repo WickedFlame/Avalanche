@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avalanche @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.min.css" />
+    <link rel="stylesheet" href="~/css/bulma.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+</head>
+<body>
+    <script>
+        let htmlTag = document.getElementsByTagName('html')[0];
+        let modus = localStorage.getItem('mode');
+        if (modus === 'light') {
+            htmlTag.classList.remove('theme-dark');
+            htmlTag.classList.add('theme-light');
+        } else {
+            htmlTag.classList.remove('theme-light');
+        }
+    </script>
+
+
+    <header>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item title" asp-area="" asp-controller="Home" asp-action="Index">Avalanche</a>
+            </div>
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    @await RenderSectionAsync("breadcrumb", required: false)
+                </div>
+                <div class="navbar-end">
+                    @* <div class="navbar-item"><a class="button is-text" asp-area="" asp-controller="Home" asp-action="Index">Home</a></div> *@
+                    <div class="wa-navbar-item-l navbar-item">
+                        <div class="wa-navbar-btn">
+                            <a class="wa-navbar-btn-icon">
+                                <img src="~/img/light-dark.svg" class="" style="width: 20px; height: 20px;" alt="Light/Dark" title="Change light/dark mode" id="lightswitch">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">Admin</a>
+                        <div class="navbar-dropdown is-right">
+                            <a class="navbar-item" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
+                            <hr class="navbar-divider">
+                            <div class="navbar-item">
+                                Avalanche @typeof(Program).Assembly.GetName().Version
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="pt-body">
+        @RenderBody()
+    </div>
+
+    <script type="module" async>
+        import { Site } from '/js/site.js';
+        var site = new Site();
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,72 @@
+# image: docker:latest  # Use the latest Docker image
+image: mcr.microsoft.com/dotnet/sdk:8.0
+
+variables:
+  # DOCKER_DRIVER: overlay2
+  IMAGE_TAG_CLIENT: "$CI_REGISTRY/wickedflame/avalanche/client:$CI_COMMIT_SHA"
+  IMAGE_TAG_RUNNER: "$CI_REGISTRY/wickedflame/avalanche/runner:$CI_COMMIT_SHA"
+  VERSION: 0.0.1
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - test
+  - deploy
+  
+build_solution:
+  stage: build
+  before_script:
+    - dotnet tool install Nuke.GlobalTool --global
+    - export PATH="$PATH:/root/.dotnet/tools"
+  script:
+  - dotnet restore Avalanche.sln
+  - dotnet restore ./build/_build.csproj
+  - nuke deploy -version $VERSION -buildno ${CI_PIPELINE_IID}
+  artifacts:
+    paths:
+      - artifacts/**/*.*
+
+test_solution:
+  stage: test
+  script:
+  - echo "test stage"
+  only:
+    - main
+    - dev
+    - merge_requests
+
+deploy_client:
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -f dockerfile-client -t "$IMAGE_TAG_CLIENT" .
+    - docker tag $IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:latest
+    - docker tag $IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
+    - docker push $CI_REGISTRY/wickedflame/avalanche/client:latest
+    - docker push $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
+  only:
+    - main
+    - dev
+
+deploy_runner:
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -f dockerfile-runner -t "$IMAGE_TAG_RUNNER" .
+    - docker tag $IMAGE_TAG_RUNNER $CI_REGISTRY/wickedflame/avalanche/runner:latest
+    - docker tag $IMAGE_TAG_RUNNER $CI_REGISTRY/wickedflame/avalanche/runner:$VERSION
+    - docker push $CI_REGISTRY/wickedflame/avalanche/runner:latest
+    - docker push $CI_REGISTRY/wickedflame/avalanche/runner:$VERSION
+  only:
+    - main
+    - dev

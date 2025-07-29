@@ -1,0 +1,20 @@
+{
+    "profiles": {
+        "Avalanche.Tool": {
+            "commandName": "Project",
+            "commandLineArgs": "-s lab -u https://localhost:32773"
+        },
+        "Container (Dockerfile)": {
+            "commandName": "Docker",
+            "commandLineArgs": "-s LoadTest -u https://host.docker.internal:32773"
+        },
+        "Container local (Dockerfile)": {
+            "commandName": "Docker",
+            "commandLineArgs": "-s local -u https://host.docker.internal:32773"
+        },
+        "Container performance (Dockerfile)": {
+            "commandName": "Docker",
+            "commandLineArgs": "-s performance -u https://host.docker.internal:32773"
+        }
+    }
+}

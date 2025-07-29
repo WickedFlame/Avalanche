@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+WORKDIR /app
+
+# Copy all published files from artifacts/web/ to /app in the container
+COPY artifacts/web/. /app/
+
+# Optional: expose the default ASP.NET Core port
+EXPOSE 8080
+
+# Optional: create a volume for scenarios if your app uses it
+VOLUME /scenarios
+VOLUME /data
+
+# Start the web application
+ENTRYPOINT ["dotnet", "Avalanche.dll"]

@@ -1,0 +1,126 @@
+﻿using Avalanche.Domain;
+using Avalanche.Runner;
+using Avalanche.WriteModel.Events;
+using Broadcast;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Avalanche.Controllers.Api
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EventController : ControllerBase
+    {
+        private readonly ILogger<EventController> _logger;
+        private readonly ILoggerFactory _factory;
+        private readonly IEventBus _eventBus;
+
+        public EventController(ILoggerFactory factory, IEventBus eventBus)
+        {
+            _logger = factory.CreateLogger<EventController>();
+            _factory = factory;
+            _eventBus = eventBus;
+        }
+
+        [HttpPost]
+        [Route("starttest")]
+        public IActionResult StartTest([FromBody] StartTestEvent evnt)
+        {
+            _eventBus.Publish(Guid.NewGuid().ToString(), evnt.StartTime, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("endtest")]
+        public IActionResult EndTest([FromBody] EndTestEvent evnt)
+        {
+            _eventBus.Publish(Guid.NewGuid().ToString(), evnt.EndTime, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("threadsummary")]
+        public IActionResult ThreadSummary([FromBody] ThreadSummaryEvent evnt)
+        {
+            _eventBus.Publish(Guid.NewGuid().ToString(), DateTime.Now, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("testsummary")]
+        public IActionResult TestSummary([FromBody] TestSummaryEvent evnt)
+        {
+            _eventBus.Publish(Guid.NewGuid().ToString(), DateTime.Now, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("iteration")]
+        public IActionResult Iteration([FromBody] IterationLogEvent evnt)
+        {
+            _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("iterations")]
+        public IActionResult Iterations([FromBody] IEnumerable<IterationLogEvent> evnts)
+        {
+            foreach (var evnt in evnts)
+            {
+                if(evnt == null)
+                {
+                    _logger.LogWarning("Event that is null was passed to iterations endpoint");
+                    continue;
+                }
+
+                _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("iteration/Error")]
+        public IActionResult IterationError([FromBody] IterationErrorEvent evnt)
+        {
+            _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("rampup")]
+        public IActionResult Rampup([FromBody] RampupEvent evnt)
+        {
+            _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("rampdown")]
+        public IActionResult Rampdown([FromBody] RampdownEvent evnt)
+        {
+            _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("initscenario/{name}")]
+        public IActionResult InitScenario(string name, [FromBody] Scenario evnt)
+        {
+            var path = PathMapper.GetScenarioFile(name);
+
+            var tsr = new ScenarioReader(_factory);
+            tsr.SaveScenario(path, evnt);
+
+            return Ok();
+        }
+    }
+}

@@ -1,0 +1,160 @@
+﻿@using System.Linq
+@using System.Text.Json
+@model ScenarioStatsModel
+
+@section breadcrumb {
+    <div class="pt-breadcrumb-panel">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index">Scenarios</a></li>
+                <li><a asp-controller="Scenario" asp-action="Index" asp-route-name="@Model.Name">@Model.Name</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Statistics</a></li>
+            </ul>
+        </nav>
+    </div>    
+}
+
+<div class="pt-main-content">
+    <div class="content px-6 py-4">
+        <h1 class="title is-1">@Model.Name</h1>
+
+        <div>
+            <h2>Statistics</h2>
+        </div>
+
+
+        <div class="tabs is-medium">
+            <ul>
+                @{
+                    var dataActive = string.IsNullOrEmpty(Model.Tab) || Model.Tab == "data" ? "is-active" : "";
+                    var chartsActive = Model.Tab == "charts" ? "is-active" : "";
+                    var detailActive = Model.Tab == "details" ? "is-active" : "";
+                }
+                <li class="@dataActive"><a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name">Data</a></li>
+                <li class="@chartsActive"><a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name" asp-route-tab="charts">Charts</a></li>
+                <li class="@detailActive"><a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name" asp-route-tab="details">Details</a></li>
+            </ul>
+        </div>
+
+        <div>
+            @if (Model.Tab == "charts")
+            {
+                <partial name="./Partials/StatisticsChart" for="@Model" />
+
+                <partial name="./Partials/ThroughputChart" for="@Model" />
+            }
+            else if(Model.Tab == "details")
+            {
+                foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
+                {
+                    <div class="pt-element-container">
+                        <div class="pt-content-panel">
+                            <h3>@grp.Key</h3>
+                            <div>
+                                @{
+                                    var setting = Model.Settings.TestCases.FirstOrDefault(t => t.Name == grp.Key);
+                                    if (setting != null)
+                                    {
+                                        <div>
+                                            <span>URL: </span><span>@setting.Urls.First()</span>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+
+                            <div>
+                                <div class="overflow-x-auto">
+                                    <table class="table is-fullwidth">
+                                        <thead>
+                                            <tr>
+                                                <th>TestId</th>
+                                                <th>Time</th>
+                                                <th>Average (ms)</th>
+                                                <th># Iterations</th>
+                                                <th># Fails</th>
+                                                <th>Throughput / s</th>
+                                                <th>Slowest (ms)</th>
+                                                <th>Fastest (ms)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var stat in grp.OrderByDescending(s => s.StartTime))
+                                            {
+                                                <tr>
+                                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@stat.TestId">@stat.TestId</a></td>
+                                                    <td>@stat.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                                    <td>@stat.AverageMilliseconds</td>
+                                                    <td>@stat.Iterations</td>
+                                                    <td>@stat.Failed</td>
+                                                    <td>@stat.Throughput</td>
+                                                    <td>@stat.Slowest</td>
+                                                    <td>@stat.Fastest</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="pt-element-container">
+                    <div class="pt-content-panel">
+                        <div>
+                            <div class="overflow-x-auto">
+                                <table class="table is-fullwidth">
+                                    <thead>
+                                        <tr>
+                                            <th style="vertical-align: bottom;">Scenario</th>
+                                            @foreach(var run in Model.Stats.GroupBy(s => s.TestCase).First().Take(10).OrderByDescending(d => d.StartTime))
+                                            {
+                                                <th style="writing-mode: tb;text-orientation: sideways;transform: rotate(-180deg);">@run.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
+                                        {
+                                            <tr>
+                                                <td>@grp.Key</td>
+                                                @foreach (var run in grp.Take(10).OrderByDescending(d => d.StartTime))
+                                                {
+                                                    <td>@run.AverageMilliseconds</td>
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <text>
+        <script type="module" async>
+            import { Statistics } from '/js/statistics.js';
+            var stats = new Statistics();
+
+            @{
+                var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.StartTime, Value = v.AverageMilliseconds }) });
+                var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select(v => new { Time = v.StartTime, Value = v.Throughput }) });
+
+                // var data = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select((v, i) => new { Time = i, Value = v.AverageMilliseconds }) });
+                // var throughput = Model.Stats.GroupBy(s => s.TestCase).Select(s => new { TestCase = s.Key, Values = s.Select((v, i) => new { Time = i, Value = v.Throughput }) });
+            }
+
+            stats.initChart('stats-chart', @Html.Raw(JsonSerializer.Serialize(data, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })) );
+            stats.initChart('throughput-chart', @Html.Raw(JsonSerializer.Serialize(throughput, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })) );
+
+        </script>
+    </text>
+}

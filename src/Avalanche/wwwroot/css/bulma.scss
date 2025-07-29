@@ -1,0 +1,48 @@
+/*! @import */
+@use "bulma/bulma";
+
+:root {
+    /* CSS Variables */
+    --panel-background-color: #24292e;
+
+    aside {
+        /*background: var(--panel-background-color);*/
+        height: 100%;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        /* CSS Variables */
+        --panel-background-color: rgb(252, 252, 253);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* CSS Variables */
+        --panel-background-color: #24292e;
+    }
+}
+
+[data-theme=light],
+.theme-light {
+    /* CSS Variables */
+    --panel-background-color: rgb(252, 252, 253);
+}
+
+[data-theme=dark],
+.theme-dark {
+    /* CSS Variables */
+    --panel-background-color: #24292e;
+}
+
+.content {
+    ul {
+        margin-inline-start: 0;
+    }
+
+    li + li {
+        margin-top: 0;
+    }
+}

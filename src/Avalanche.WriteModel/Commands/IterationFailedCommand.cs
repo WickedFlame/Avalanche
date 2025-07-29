@@ -1,0 +1,21 @@
+﻿using System.Net;
+
+namespace Avalanche.WriteModel.Commands
+{
+    public class IterationFailedCommand : ICommand
+    {
+        public DateTime Time { get; set; }
+
+        public string TestId { get; set; }
+
+        public string TestCase { get; set; }
+
+        public int ThreadId { get; set; }
+
+        public string Message { get; set; }
+
+        public HttpStatusCode StatusCode { get; set; }
+
+        public bool IsWarmup { get; set; }
+    }
+}

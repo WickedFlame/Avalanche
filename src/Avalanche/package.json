@@ -1,0 +1,19 @@
+{
+    "name": "Avalanche",
+    "version": "1.0.0",
+    "main": "index.js",
+    "directories": {
+        "test": "tests"
+    },
+    "scripts": {
+        "build-bulma": "sass --load-path=node_modules wwwroot/css/bulma.scss wwwroot/css/bulma.css"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bulma": "^1.0.3",
+        "sass": "^1.83.4"
+    },
+    "description": ""
+}

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Enumerate.It" Version="1.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Avalanche.ReadModel.Sql\Avalanche.ReadModel.Sql.csproj" />
+      <ProjectReference Include="..\Avalanche.ReadModel\Avalanche.ReadModel.csproj" />
+      <ProjectReference Include="..\Avalanche.Runner\Avalanche.Runner.csproj" />
+    </ItemGroup>
+
+</Project>

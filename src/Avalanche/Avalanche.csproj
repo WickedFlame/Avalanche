@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RuntimeIdentifiers>linux-x64;win-x64</RuntimeIdentifiers>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>5bc05071-e805-4077-97b3-87e09c7e7d66</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileRunArguments>-p 32773:8081</DockerfileRunArguments>
+        <DockerfileContext>..\..</DockerfileContext>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <UpToDateCheckBuilt Include="wwwroot/css/site.css" Set="Css" />
+        <UpToDateCheckBuilt Include="postcss.config.js" Set="Css" />
+        <UpToDateCheckBuilt Include="tailwind.config.js" Set="Css" />
+    </ItemGroup>
+
+    <Target Name="bulma" BeforeTargets="Build" Condition="Exists('$(SpaRoot)node_modules')">
+        <Exec Command="npm run build-bulma" />
+    </Target>
+
+    <ItemGroup>
+        <Content Remove="compilerconfig.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="compilerconfig.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.15" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+        <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.12.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Avalanche.DataSource.Pgsql\Avalanche.DataSource.Pgsql.csproj" />
+        <ProjectReference Include="..\Avalanche.DataSource.Sqlite\Avalanche.DataSource.Sqlite.csproj" />
+        <ProjectReference Include="..\Avalanche.DataSource\Avalanche.DataSource.csproj" />
+        <ProjectReference Include="..\Avalanche.Domain\Avalanche.Domain.csproj" />
+        <ProjectReference Include="..\Avalanche.ReadModel\Avalanche.ReadModel.csproj" />
+        <ProjectReference Include="..\Avalanche.WriteModel.Memory\Avalanche.WriteModel.Memory.csproj" />
+        <ProjectReference Include="..\Avalanche.WriteModel.Sql\Avalanche.WriteModel.Sql.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="wwwroot\css\bulma.scss">
+        <Generator>npm run build-bulma</Generator>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="data\" />
+      <Folder Include="scenarios\" />
+    </ItemGroup>
+
+</Project>
