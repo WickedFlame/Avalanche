@@ -2,7 +2,6 @@
 image: mcr.microsoft.com/dotnet/sdk:8.0
 
 variables:
-  # DOCKER_DRIVER: overlay2
   IMAGE_TAG_CLIENT: "$CI_REGISTRY/wickedflame/avalanche/client:$CI_COMMIT_SHA"
   IMAGE_TAG_RUNNER: "$CI_REGISTRY/wickedflame/avalanche/runner:$CI_COMMIT_SHA"
   VERSION: 0.0.1
@@ -37,36 +36,68 @@ test_solution:
     - dev
     - merge_requests
 
-deploy_client:
+
+.deploy_client:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   stage: deploy
   image: docker:latest
   services:
     - docker:dind
+
+deploy_client_dev:
+  only:
+    - dev
+  variables:
+    IMAGE_TAG_CLIENT: "$CI_REGISTRY/wickedflame/avalanche/client:$CI_COMMIT_SHA-beta"
+  when: manual
+  extends: .deploy_client
+  script:
+    - docker build -f dockerfile-client -t "$IMAGE_TAG_CLIENT" .
+    - docker tag $IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
+    - docker push $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
+
+deploy_client:
+  only:
+    - master
+  extends: .deploy_client
   script:
     - docker build -f dockerfile-client -t "$IMAGE_TAG_CLIENT" .
     - docker tag $IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:latest
     - docker tag $IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
     - docker push $CI_REGISTRY/wickedflame/avalanche/client:latest
     - docker push $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
-  only:
-    - main
-    - dev
 
-deploy_runner:
+
+
+
+.deploy_runner:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   stage: deploy
   image: docker:latest
   services:
     - docker:dind
+
+deploy_runner_dev:
+  only:
+    - dev
+  variables:
+    IMAGE_TAG_RUNNER: "$CI_REGISTRY/wickedflame/avalanche/runner:$CI_COMMIT_SHA-beta"
+  when: manual
+  extends: .deploy_runner
+  script:
+    - docker build -f dockerfile-runner -t "$IMAGE_TAG_RUNNER" .
+    - docker tag $IMAGE_TAG_RUNNER $CI_REGISTRY/wickedflame/avalanche/runner:$VERSION
+    - docker push $CI_REGISTRY/wickedflame/avalanche/runner:$VERSION
+
+deploy_runner:
+  only:
+    - master
+  extends: .deploy_runner
   script:
     - docker build -f dockerfile-runner -t "$IMAGE_TAG_RUNNER" .
     - docker tag $IMAGE_TAG_RUNNER $CI_REGISTRY/wickedflame/avalanche/runner:latest
     - docker tag $IMAGE_TAG_RUNNER $CI_REGISTRY/wickedflame/avalanche/runner:$VERSION
     - docker push $CI_REGISTRY/wickedflame/avalanche/runner:latest
     - docker push $CI_REGISTRY/wickedflame/avalanche/runner:$VERSION
-  only:
-    - main
-    - dev
