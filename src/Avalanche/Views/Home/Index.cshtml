@@ -1,8 +1,5 @@
 ﻿@using Avalanche.Domain
 @model TestsViewModel
-@{
-    ViewData["Title"] = "Home Page";
-}
 
 <div class="pt-navigation-container">
     <nav class="navbar pt-navbar-main" role="navigation" aria-label="main navigation">
@@ -27,8 +24,11 @@
     <div class="pt-main-content">
         <div class="content px-6 py-4">
             @* <h1 class="title is-1">Avalanche</h1> *@
-            <a class="navbar-item title" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/avalanche-logo-light.png" alt="avalanche" style="height:80px" /></a>
-            <p>Loadtesting platform</p>
+
+            <div>
+                <img id="avalanche-logo-main" src="~/avalanche-logo-light.png" alt="avalanche" style="height:80px" />
+                <div>Loadtesting for Web Applications</div>
+            </div>
 
             <div class="py-6">
                 <div class="pt-element-container">
@@ -82,3 +82,15 @@
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        let img = document.getElementById('avalanche-logo-main');
+        if (img) {
+            let modus = localStorage.getItem('mode');
+            if (modus === 'light') {
+                img.src = '/avalanche-logo-dark.png';
+            }
+        }
+    </script>
+}

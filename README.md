@@ -1,4 +1,5 @@
 # Avalanche
+![Avalanche](./icons/avalanche-logo-gray.png)
 Loadtesting for Web Applications
 
 ## App

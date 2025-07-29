@@ -34,13 +34,20 @@ export class Site {
 
     async lightswitch() {
         let htmlTag = document.getElementsByTagName('html')[0];
+        let imgSrc = '/avalanche-logo-light.png';
 
         if (htmlTag.classList.contains('theme-light')) {
             htmlTag.classList.remove('theme-light');
-            localStorage.setItem('mode', 'dark');
+            localStorage.setItem('mode', 'dark');    
         } else {
             htmlTag.classList.add('theme-light');
             localStorage.setItem('mode', 'light');
+            imgSrc = '/avalanche-logo-dark.png';
+        }
+
+        let img = document.getElementById('avalanche-logo-main');
+        if (img) {
+            img.src = imgSrc;
         }
     }
 
