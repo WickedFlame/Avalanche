@@ -84,25 +84,11 @@ services:
       - SCENARIO_PATH=./scenarios # optional parameter
     depends_on:
       - postgres
-    networks:
-      - default
-      - traefik_default
-    labels:
-      - "traefik.http.routers.avalanche.tls=true"
-      - "traefik.http.routers.avalanche.rule=Host(`avalanche.was.local`)"
-      - "traefik.http.routers.avalanche.entrypoints=websecure"
-      - "traefik.http.services.avalanche.loadbalancer.server.port=8080"
 
 volumes:
   avalanche_postgres_data:
     external: true
   avalanche_data:
-    external: true
-
-networks:
-  default:
-  traefik_default:
-    name: traefik_default
     external: true
 ```
 
