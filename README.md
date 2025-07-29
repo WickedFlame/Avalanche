@@ -130,6 +130,50 @@ docker pull registry.gitlab.com/wickedflame/avalanche/runner:latest
 docker run --rm -i -v ./scenarios:/scenarios registry.gitlab.com/wickedflame/avalanche/runner:latest run -s scenario_1 -u https://url_to_avalanche_client.com
 ```
 
+# Scenario
+The Config section is optional.  
+This is applied to all TestCases that don't define a configuration on their own.
+  
+```
+Config:
+  Users: 5
+  Iterations: 10
+  Duration: 0
+  Interval: 0
+  RampupTime: 0
+  UseCookies: True
+  Delay: 1
+TestCases:
+  - Urls:
+      - 'https://testsite.com/'
+    Name: Startpage
+  - Urls:
+      - 'https://testsite.com/Home/Privacy'
+    Name: Privacy
+    Init:
+      Url: 'https://testsite.com/Home/Privacy'
+    Users: 5
+    Iterations: 10
+    Duration: 0
+    Interval: 0
+    RampupTime: 0
+    UseCookies: True
+    Delay: 1
+```
+
+| Name       | Value |                                                                              | 
+|------------|-------|------------------------------------------------------------------------------|
+| Users      | INT   | Amount of users per testrun. Defaults to 1                                   |
+| Iterations | INT   | Amount of iterations per user                                                |
+| Duration   | INT   | Total duration of the testrun in minutes                                     |
+| Interval   | INT   | Interval of each user call in milliseconds                                   |
+| Delay      | INT   | Delay between each request in seconds                                        |
+| RampupTime | INT   | Rampup-time in seconds                                                       |
+| UseCookies | BOOL  | Use same cookies for all requests per user? Defaults to true                 |
+| Name       |       | Name of the Testrun                                                          |
+| Urls       |       | List of URL to call per Testrun                                              |
+| Init       |       | Properties for the initialization. Currently only the Url has to be provided |
+
 
 ## Domain
 ```
