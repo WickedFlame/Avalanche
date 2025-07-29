@@ -84,8 +84,8 @@ services:
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: avl
-      POSTGRES_PASSWORD: pGreSsql1
+      POSTGRES_USER: XXX
+      POSTGRES_PASSWORD: XXX
 
   pgadmin:
     image: dpage/pgadmin4
@@ -93,8 +93,8 @@ services:
     ports:
       - "8888:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: avalanche@opacc.ch
-      PGADMIN_DEFAULT_PASSWORD: pGadm1n
+      PGADMIN_DEFAULT_EMAIL: XXX
+      PGADMIN_DEFAULT_PASSWORD: XXX
     volumes:
       - avalanche_postgres_data:/var/lib/pgadmin
 
@@ -109,8 +109,8 @@ services:
       - AV_READ_MODEL_DB=pgsql
       - AV_DB_SERVER=postgres
       - AV_DB_PORT=5432
-      - AV_DB_USERNAME=avl
-      - AV_DB_PASSWORD=pGreSsql1
+      - AV_DB_USERNAME=XXX
+      - AV_DB_PASSWORD=XXX
       - SCENARIO_PATH=./scenarios # optional parameter
     # ports:
     #   - 8080:8080
