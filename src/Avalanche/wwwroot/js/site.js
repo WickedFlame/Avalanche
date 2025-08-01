@@ -40,12 +40,18 @@ export class Site {
             htmlTag.classList.remove('theme-light');
             localStorage.setItem('mode', 'dark');    
         } else {
+            htmlTag.classList.remove('theme-dark');
             htmlTag.classList.add('theme-light');
             localStorage.setItem('mode', 'light');
             imgSrc = '/avalanche-logo-dark.png';
         }
 
-        let img = document.getElementById('avalanche-logo-main');
+        let img = document.getElementById('avalanche-logo');
+        if (img) {
+            img.src = imgSrc;
+        }
+
+        img = document.getElementById('avalanche-logo-main');
         if (img) {
             img.src = imgSrc;
         }

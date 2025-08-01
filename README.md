@@ -94,7 +94,7 @@ volumes:
 
 
 ## Runner
-The runner is used to automate testscenarios in a container outside the Avalanche app.  
+The runner is used to automate testscenarios in a container outside the Avalanche Client App.  
 Parameters for the runner
 
 | Short | long         |                                                                                          |
