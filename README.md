@@ -26,16 +26,14 @@ Volumes
 Volumes
 - /app/scenarios or /scenarios
 
-| Name              | Value       |                                                                                                                 | 
-|-------------------|-------------|-----------------------------------------------------------------------------------------------------------------|
-| AV_EVENT_STORE_DB | pgsql       | Use Postgres as a Datastore for the EventStore                                                                  |
-| AV_READ_MODEL_DB  | pgsql       | Use Postgres as a Datastore for the ReadModel                                                                   |
-| AV_DB             | pgsql       | Use Postgres as a Datastore for the EventStore and ReadModel. This can be overridden by the previous parameters |
-| AV_DB_SERVER      | postgres    | Path to the Postgres DB Server                                                                                  |
-| AV_DB_PORT        | 5432        | Port to the Postgres DB Server                                                                                  |
-| AV_DB_USERNAME    |             | Username for the Postgres DB Server                                                                             |
-| AV_DB_PASSWORD    |             | Password for the Postgres DB Server                                                                             |
-| SCENARIO_PATH     | ./scenarios | Optional path to the scenarios. This has to be same as the volume                                               |
+| Name              | Value       |                                                                   | 
+|-------------------|-------------|-------------------------------------------------------------------|
+| AV_DB             | pgsql       | Use Postgres as a Datastore                                       |
+| AV_DB_SERVER      | postgres    | Path to the Postgres DB Server                                    |
+| AV_DB_PORT        | 5432        | Port to the Postgres DB Server                                    |
+| AV_DB_USERNAME    |             | Username for the Postgres DB Server                               |
+| AV_DB_PASSWORD    |             | Password for the Postgres DB Server                               |
+| SCENARIO_PATH     | ./scenarios | Optional path to the scenarios. This has to be same as the volume |
 
 ### Docker
 
@@ -75,8 +73,7 @@ services:
     volumes:
       - avalanche_data:/scenarios
     environment:
-      - AV_EVENT_STORE_DB=pgsql
-      - AV_READ_MODEL_DB=pgsql
+      - AV_DB=pgsql
       - AV_DB_SERVER=postgres
       - AV_DB_PORT=5432
       - AV_DB_USERNAME=XXX

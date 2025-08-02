@@ -35,27 +35,21 @@ var config = new ConfigurationBuilder()
             .Build();
 builder.Services.AddSingleton(config);
 
-var eventStoreSource = config.GetValue<string>("AV_EVENT_STORE_DB");
+var dbSource = config.GetValue<string>("AV_DB");
 
-logger.LogInformation(!string.IsNullOrEmpty(eventStoreSource) ? "Using configured Sqlprovider {Provider}" : "No DB Server defined. Switching to default", eventStoreSource);
+logger.LogInformation(!string.IsNullOrEmpty(dbSource) ? "Using configured Sqlprovider {Provider}" : "No DB Server defined. Switching to default", dbSource);
 
-if (eventStoreSource == "pgsql")
+if (dbSource == "pgsql")
 {
     builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Pgsql.EventStoreConnectionBuilder>();
+    builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Pgsql.ProjectionConnectionBuilder>();
+    builder.Services.AddSingleton<IDataStoreBuilder, Avalanche.DataSource.Pgsql.EventStoreBuilder>();
 }
 else
 {
     builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
-}
-
-var readModelSource = config.GetValue<string>("AV_READ_MODEL_DB");
-if (readModelSource == "pgsql")
-{
-    builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Pgsql.ProjectionConnectionBuilder>();
-}
-else
-{
     builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Sqlite.ProjectionConnectionBuilder>();
+    builder.Services.AddSingleton<IDataStoreBuilder, Avalanche.DataSource.Sqlite.EventStoreBuilder>();
 }
 
 builder.Services.AddSingleton<IEventStore, SqlEventStore>();
@@ -102,23 +96,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-if (eventStoreSource == "pgsql")
-{
-    app.UsePostgresEventStore(config);
-}
-else
-{
-    app.UseSqliteEventStore(config);
-}
-
-if (readModelSource == "pgsql")
-{
-    app.UsePostgresReadModel(config);
-}
-else
-{
-    app.UseSqliteReadModel(config);
-}
+app.UseEventStore();
+app.UseReadModel();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
