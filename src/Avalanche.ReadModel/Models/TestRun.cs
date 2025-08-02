@@ -13,5 +13,7 @@ namespace Avalanche.ReadModel.Models
         public DateTime EndTime { get; set; }
 
         public string Status { get; set; }
+
+        public string Runner { get; set; }
     }
 }

@@ -86,6 +86,17 @@
                             </div>
                             <div class="pt-stat-footer">Status of the Scenario</div>
                         </div>
+                        <div class="pt-stat-item">
+                            <header class="pt-stat-header">
+                                Run by
+                            </header>
+                            <div class="pt-stat-content">
+                                <div class="content" id="scenario-runner">
+                                    @(Model.Runner?.Name ?? "")
+                                </div>
+                            </div>
+                            <div class="pt-stat-footer">Source of the runner</div>
+                        </div>
                     </div>
                 </div>
             </div>

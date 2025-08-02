@@ -24,8 +24,9 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests
                 File.Delete("data/eventstore.db");
             }
 
-            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateEventStore(Mock.Of<IConfiguration>());
-            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateWriteModel(Mock.Of<IConfiguration>());
+            var builder = new Avalanche.DataSource.Sqlite.EventStoreBuilder(Mock.Of<IConfiguration>());
+            builder.CreateEventStore();
+            builder.CreateWriteModel();
         }
 
         [OneTimeTearDown]

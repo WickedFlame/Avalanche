@@ -35,7 +35,8 @@ namespace Avalanche.Controllers
                 Tab = tab,
                 StartTime = lastRun?.StartTime,
                 Settings = settings,
-                Status = lastRun?.Status == null ? Runner.TestRunStatus.New : new Runner.TestRunStatus(lastRun.Status)
+                Status = lastRun?.Status == null ? Runner.TestRunStatus.New : new Runner.TestRunStatus(lastRun.Status),
+                Runner = lastRun?.Runner == null ? new TestRunnerType("") : new TestRunnerType(lastRun.Runner)
             };
 
             if(tab == "details")

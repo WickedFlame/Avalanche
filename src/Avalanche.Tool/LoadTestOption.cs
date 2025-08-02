@@ -114,7 +114,7 @@ namespace Avalanche
                     })
                 });
 
-                facade.Start(Scenario, scenario);
+                facade.Start(Scenario, scenario, new TestRunSettings { Runner = TestRunnerType.External });
 
                 //
                 // Give the collector some time to finish the work

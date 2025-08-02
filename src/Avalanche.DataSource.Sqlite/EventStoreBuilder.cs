@@ -47,7 +47,8 @@ CREATE TABLE IF NOT EXISTS TestRun (
   Scenario VARCHAR(255),
   StartTime DATETIME,
   EndTime DATETIME,
-  Status VARCHAR(100)
+  Status VARCHAR(100),
+  Runner VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS RampupEvents (
