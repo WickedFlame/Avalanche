@@ -81,6 +81,27 @@ namespace Avalanche.ReadModel.QueryHandlers
                 .Get<IterationItem>();
         }
 
+        public Dictionary<string, IEnumerable<IterationItem>> Get(GetDetailData query)
+        {
+            var db = _builder.Build();
+            var data = db.Query(nameof(DataSource.DTO.IterationEvents))
+                .Select()
+                .Where(new
+                {
+                    TestId = query.TestId
+                })
+                .OrderByDesc("Time")
+                .Get<IterationItem>();
+
+            var di = new Dictionary<string, IEnumerable<IterationItem>>();
+            foreach (var item in data.GroupBy(x => x.TestCase))
+            {
+                di.Add(item.Key, item);
+            }
+
+            return di;
+        }
+
         public IEnumerable<TestSummary> Get(GetSummary query)
         {
             var db = _builder.Build();
