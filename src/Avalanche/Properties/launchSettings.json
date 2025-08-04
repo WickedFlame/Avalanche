@@ -1,52 +1,56 @@
 {
-  "profiles": {
-    "http": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5175"
-    },
-    "https": {
-        "commandName": "Project",
-        "launchBrowser": true,
-        "environmentVariables": {
-            "ASPNETCORE_ENVIRONMENT": "Development",
-            "TESTFILE_PATH": "./testfiles"
+    "profiles": {
+        "http": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "dotnetRunMessages": true,
+            "applicationUrl": "http://localhost:5175"
         },
-        "dotnetRunMessages": true,
-        "applicationUrl": "https://localhost:32773;http://localhost:5175"
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "Container (Dockerfile)": {
-      "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-        "environmentVariables": {
-            "ASPNETCORE_HTTPS_PORTS": "8081",
-            "ASPNETCORE_HTTP_PORTS": "32773",
-            //"ASPNETCORE_HTTP_PORTS": "8080",
-            "TESTFILE_PATH": "./testfiles"
+        "https": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "SCENARIO_PATH": "./scenarios"
+            },
+            "dotnetRunMessages": true,
+            "applicationUrl": "https://localhost:32773;http://localhost:5175"
         },
-      "publishAllPorts": true,
-      "useSSL": true
+        "IIS Express": {
+            "commandName": "IISExpress",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        "Container (Dockerfile)": {
+            "commandName": "Docker",
+            "launchBrowser": true,
+            "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+            "environmentVariables": {
+                "ASPNETCORE_HTTPS_PORTS": "8081",
+                "ASPNETCORE_HTTP_PORTS": "32773",
+                "SCENARIO_PATH": "./scenarios",
+                "AV_DB": "pgsql", 
+                "AV_DB_SERVER": "host.docker.internal",
+                "AV_DB_PORT": "5432",
+                "AV_DB_USERNAME": "avalancheuser",
+                "AV_DB_PASSWORD": "pGadm1n"
+            },
+            "publishAllPorts": true,
+            "useSSL": true
+        }
+    },
+    "$schema": "http://json.schemastore.org/launchsettings.json",
+    "iisSettings": {
+        "windowsAuthentication": false,
+        "anonymousAuthentication": true,
+        "iisExpress": {
+            "applicationUrl": "http://localhost:21802",
+            "sslPort": 32773
+        }
     }
-  },
-  "$schema": "http://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-        "applicationUrl": "http://localhost:21802",
-        "sslPort": 32773
-    }
-  }
 }

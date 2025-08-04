@@ -19,55 +19,58 @@ namespace Avalanche.Domain
             _loggerFactory = loggerFactory;
         }
 
-        public TestSettings StartBackgroundTask(string name, string path)
+        public Scenario StartBackgroundScenario(string name, string path, TestRunSettings settings)
         {
-            var tsr = new TestSettingsReader();
-            var settings = tsr.GetTestSettings(path);
+            var scenario = GetScenario(path);
 
             Task.Factory.StartNew(() =>
                 {
-                    Run(name, settings);
+                    Run(name, scenario, settings);
                 },
                 CancellationToken.None,
                 TaskCreationOptions.LongRunning,
                 TaskScheduler.Default);
 
-            return settings;
+            return scenario;
         }
 
 
-        public TestSettings Start(string name, string path)
+        public Scenario Start(string name, Scenario scenario, TestRunSettings settings)
         {
-            var tsr = new TestSettingsReader();
-            var settings = tsr.GetTestSettings(path);
+            Run(name, scenario, settings);
 
-            Run(name, settings);
-
-            return settings;
+            return scenario;
         }
 
-        private void Run(string name, TestSettings settings)
+        public Scenario GetScenario(string path)
+        {
+            var tsr = new ScenarioReader(_loggerFactory);
+            var scenario = tsr.GetScenario(path);
+
+            return scenario;
+        }
+
+        private void Run(string name, Scenario scenario, TestRunSettings settings)
         {
             var data = new TestRunData
             {
                 TestId = Guid.NewGuid().ToString(),
                 Name = name,
-                Settings = settings
+                Scenario = scenario
             };
 
             var loadtest = new LoadTest(data.TestId, _dispatcher, _loggerFactory);
             data.StartTime = DateTime.Now;
 
-
             _dispatcher.Send(new StartTestCommand
             {
                 TestId = data.TestId,
                 Scenario = name,
-                StartTime = data.StartTime
+                StartTime = data.StartTime,
+                Runner = settings.Runner
             });
 
-
-            data.Results = loadtest.Run(settings);
+            data.Results = loadtest.Run(scenario);
 
             foreach (var testResult in data.Results)
             {
@@ -75,7 +78,7 @@ namespace Avalanche.Domain
                 {
                     TestId = data.TestId,
                     TestCase = testResult.TestCase,
-                    ThreadNumber = testResult.ThreadNumber,
+                    ThreadId = testResult.ThreadId,
                     Iterations = testResult.Iterations.Count(),
                     AverageMilliseconds = (int)testResult.AverageMilliseconds,
                     TotalMilliseconds = testResult.Duration.TotalMilliseconds,
@@ -84,7 +87,7 @@ namespace Avalanche.Domain
                     Fastest = testResult.Fastest.Duration.TotalMilliseconds,
                     Summary = testResult.Select(r => new ThreadSummary
                     {
-                        ThreadNumber = r.ThreadNumber,
+                        ThreadId = r.ThreadId,
                         Iterations = r.Iterations.Count(),
                         AverageMilliseconds = (int)r.AverageTicks.ToMilliseconds(),
                         TotalMilliseconds = r.TotalTime.TotalMilliseconds,

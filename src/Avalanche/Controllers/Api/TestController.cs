@@ -24,16 +24,16 @@ namespace Avalanche.Controllers.Api
         {
 
             // LoadTest
-            var path = $"./testfiles/{name}.yml";
+            var path = PathMapper.GetScenarioFile(name);
 
             var facade = new TestFacade(_dispatcher, _loggerFactory);
-            var settings = facade.StartBackgroundTask(name, path);
+            var settings = facade.StartBackgroundScenario(name, path, new TestRunSettings { Runner = TestRunnerType.Local });
 
             return Ok(new
             {
                 Name = name,
                 State = "started",
-                Tests = settings.Tests
+                Tests = settings.TestCases
             });
         }
 

@@ -7,12 +7,12 @@ namespace Avalanche.Runner
 {
     public class ItterationLogCollectionTaskHandler : TaskHandler
     {
-        private readonly string _testName;
+        private readonly string _testCase;
         private readonly string _testId;
 
-        public ItterationLogCollectionTaskHandler(string name, string testId)
+        public ItterationLogCollectionTaskHandler(string testCase, string testId)
         {
-            _testName = name;
+            _testCase = testCase;
             _testId = testId;
         }
 
@@ -25,15 +25,14 @@ namespace Avalanche.Runner
             var metric = new IterationCommand
             {
                 TestId = _testId,
-                Category = "console",
-                Module = "Measure",
-                TestName = _testName,
-                Message = $"Run number {result.Iteration} on Thread {result.ThreadNumber}",
+                TestCase = _testCase,
+                Message = $"Run number {result.Iteration} on Thread {result.ThreadId}",
                 RunNumber = result.Iteration,
-                Thread = result.ThreadNumber,
+                ThreadId = result.ThreadId,
                 IsWarmup = context.Settings.IsWarmup,
                 TotalMilliseconds = result.Duration.TotalMilliseconds,
-                Time = result.TimeStamp
+                Time = result.TimeStamp,
+                ContentLength = context.Get<long>("ContentLength")
             };
 
             log.SendAsync(metric);

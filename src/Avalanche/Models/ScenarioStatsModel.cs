@@ -7,7 +7,7 @@ namespace Avalanche.Models
     {
         public string Name { get; set; }
 
-        public TestSettings Settings { get; set; }
+        public Scenario Settings { get; set; }
 
         public IEnumerable<TestStatistic> Stats { get; set; }
 

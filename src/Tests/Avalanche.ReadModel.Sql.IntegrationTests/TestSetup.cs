@@ -1,4 +1,7 @@
-﻿namespace Avalanche.ReadModel.Sql.IntegrationTests
+﻿using Microsoft.Extensions.Configuration;
+using Moq;
+
+namespace Avalanche.ReadModel.Sql.IntegrationTests
 {
     [SetUpFixture]
     public class TestSetup
@@ -21,8 +24,9 @@
                 File.Delete("data/eventstore.db");
             }
 
-            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateEventStore();
-            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateWriteModel();
+            var builder = new Avalanche.DataSource.Sqlite.EventStoreBuilder(Mock.Of<IConfiguration>());
+            builder.CreateEventStore();
+            builder.CreateWriteModel();
         }
 
         [OneTimeTearDown]

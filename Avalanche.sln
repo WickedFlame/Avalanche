@@ -5,20 +5,15 @@ VisualStudioVersion = 17.10.35201.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9446EC16-8A58-4F45-AF00-0062B27E2821}"
 	ProjectSection(SolutionItems) = preProject
-		.gitlab-ci - Copy.yml = .gitlab-ci - Copy.yml
+		.gitignore = .gitignore
 		.gitlab-ci.yml = .gitlab-ci.yml
 		Changelog.md = Changelog.md
-		dockerfile-tool = dockerfile-tool
-		dockerfile-web = dockerfile-web
+		dockerfile-client = dockerfile-client
+		dockerfile-runner = dockerfile-runner
 		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{CF91D702-69C9-446F-B75A-82AF31B4C1D5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testfiles", "testfiles", "{2C578269-6DDA-41CB-93D4-DC24F23BEC9C}"
-	ProjectSection(SolutionItems) = preProject
-		testfiles\LoadTest.yml = testfiles\LoadTest.yml
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche", "src\Avalanche\Avalanche.csproj", "{0F261368-EB82-4758-81A9-3693295AA1CF}"
 EndProject
@@ -54,6 +49,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel.Sql.IntegrationTests", "src\Tests\Avalanche.ReadModel.Sql.IntegrationTests\Avalanche.ReadModel.Sql.IntegrationTests.csproj", "{955603E6-60CD-470F-A4C7-84C7C8523D80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.DataSource.Pgsql", "src\Avalanche.DataSource.Pgsql\Avalanche.DataSource.Pgsql.csproj", "{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.IntegrationTests", "src\Tests\Avalanche.IntegrationTests\Avalanche.IntegrationTests.csproj", "{868881FD-B11A-4F09-9A41-11ADE364B19F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +121,14 @@ Global
 		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{955603E6-60CD-470F-A4C7-84C7C8523D80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5ABBB82-5579-4EBD-82D4-CB2EF97BAACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{868881FD-B11A-4F09-9A41-11ADE364B19F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{868881FD-B11A-4F09-9A41-11ADE364B19F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{868881FD-B11A-4F09-9A41-11ADE364B19F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{868881FD-B11A-4F09-9A41-11ADE364B19F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +137,7 @@ Global
 		{CF91D702-69C9-446F-B75A-82AF31B4C1D5} = {F2FA2E45-46AE-4A6A-8245-08D649966825}
 		{8FECB523-8220-4B16-8117-80FF0E52EF2F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{955603E6-60CD-470F-A4C7-84C7C8523D80} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{868881FD-B11A-4F09-9A41-11ADE364B19F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9E111167-6D37-4E6A-A3C2-F292C3F6D5BC}

@@ -1,10 +1,21 @@
-﻿using System.Data.SQLite;
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.Data.SQLite;
+using System.IO;
+using System.Xml.Linq;
 
 namespace Avalanche.DataSource.Sqlite
 {
-    public static class EventStoreBuilder
+    public class EventStoreBuilder : IDataStoreBuilder
     {
-        public static void CreateEventStore()
+        private readonly IConfiguration _config;
+
+        public EventStoreBuilder(IConfiguration config)
+        {
+            _config = config;
+        }
+
+        public void CreateEventStore()
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS Events (
@@ -15,7 +26,8 @@ CREATE TABLE IF NOT EXISTS Events (
   Value VARCHAR (2000)
 );
 ";
-            using (var connection = new SQLiteConnection(Constants.EventStoreDatabase))
+            var builder = new ConnectionStringBuilder(Constants.EventStore, _config);
+            using (var connection = new SQLiteConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())
@@ -27,7 +39,7 @@ CREATE TABLE IF NOT EXISTS Events (
             }
         }
 
-        public static void CreateWriteModel()
+        public void CreateWriteModel()
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS TestRun (
@@ -35,13 +47,14 @@ CREATE TABLE IF NOT EXISTS TestRun (
   Scenario VARCHAR(255),
   StartTime DATETIME,
   EndTime DATETIME,
-  Status VARCHAR(100)
+  Status VARCHAR(100),
+  Runner VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS RampupEvents (
   Id VARCHAR(255),
   TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
-  Name VARCHAR(255),
+  TestCase VARCHAR(255),
   Time DATETIME,
   ThreadId VARCHAR(255),
   Value INT
@@ -52,7 +65,8 @@ CREATE TABLE IF NOT EXISTS TestRunDetail (
   TestCase VARCHAR(255),
   ThreadId VARCHAR(255),
   Throughput REAL,
-  Iterations BIGINT
+  Iterations BIGINT,
+  AverageMilliseconds REAL
 );
 
 CREATE TABLE IF NOT EXISTS IterationEvents (
@@ -60,9 +74,10 @@ CREATE TABLE IF NOT EXISTS IterationEvents (
   TestId VARCHAR(255) REFERENCES TestRun(TestId) ON DELETE CASCADE,
   Time DATETIME,
   ThreadId INT,
-  TestName VARCHAR(255),
+  TestCase VARCHAR(255),
   Throughput REAL,
   AverageMilliseconds REAL,
+  ContentLength BIGINT,
   IsWarmup BOOLEAN,
   Message VARCHAR(500),
   StatusCode VARCHAR(50),
@@ -76,7 +91,7 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Time DATETIME,
   TestCase VARCHAR(255),
   Type VARCHAR(100),
-  ThreadNumber VARCHAR(255),
+  ThreadId INT,
   Iterations INT,
   AverageMilliseconds REAL,
   TotalMilliseconds REAL,
@@ -85,7 +100,8 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Fastest REAL
 );
 ";
-            using (var connection = new SQLiteConnection(Constants.ReadModelDatabase))
+            var builder = new ConnectionStringBuilder(Constants.ReadModel, _config);
+            using (var connection = new SQLiteConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())
@@ -95,6 +111,18 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public void RecreateWriteModel()
+        {
+            var dataPath = ConnectionStringBuilder.GetDataPath(_config);
+            var db = $"Data Source={dataPath}/{Constants.ReadModel}.db";
+            if (File.Exists(db))
+            {
+                File.Delete(db);
+            }
+
+            CreateWriteModel();
         }
     }
 }

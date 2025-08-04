@@ -2,6 +2,8 @@
 using Avalanche.DataSource.Sqlite;
 using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sql.EventHandlers;
+using Microsoft.Extensions.Configuration;
+using Moq;
 using SqlKata.Compilers;
 using SqlKata.Execution;
 using System.Data.SQLite;
@@ -15,7 +17,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [SetUp]
         public void Setup()
         {
-            var connection = new SQLiteConnection(Constants.ReadModelDatabase);
+            var connection = new SQLiteConnection($"Data Source=data/{Constants.ReadModel}.db");
             var compiler = new SqliteCompiler();
             _db = new QueryFactory(connection, compiler);
         }
@@ -29,11 +31,11 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [Test]
         public void RampupEventHandler_RampupEvent()
         {
-            var handler = new RampupEventHandler(new ProjectionConnectionBuilder());
+            var handler = new RampupEventHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
             handler.Handle(new RampupEvent
             {
                 TestId = "1",
-                Name = "test 1",
+                TestCase = "test 1",
                 Time = DateTime.Now
             });
 
@@ -42,7 +44,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 .Where("TestId", "1")
                 .First<RampupEvents>();
 
-            se.Name.Should().Be("test 1");
+            se.TestCase.Should().Be("test 1");
             se.Time.Should().BeAfter(DateTime.Now.AddMinutes(-1));
             se.Value.Should().Be(1);
         }
@@ -50,11 +52,11 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [Test]
         public void RampupEventHandler_RampupEvent_Warmup()
         {
-            var handler = new RampupEventHandler(new ProjectionConnectionBuilder());
+            var handler = new RampupEventHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
             handler.Handle(new RampupEvent
             {
                 TestId = "2",
-                Name = "test 2",
+                TestCase = "test 2",
                 Time = DateTime.Now,
                 IsWarmup = true
             });
@@ -74,13 +76,13 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [Test]
         public void RampupEventHandler_RampdownEvent()
         {
-            var handler = new RampupEventHandler(new ProjectionConnectionBuilder());
+            var handler = new RampupEventHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
             handler.Handle(new RampdownEvent
             {
                 TestId = "3",
-                Name = "test 3",
+                TestCase = "test 3",
                 Time = DateTime.Now,
-                Thread = 1
+                ThreadId = 1
             });
 
             var se = _db.Query(nameof(RampupEvents))
@@ -88,7 +90,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 .Where("TestId", "3")
                 .First<RampupEvents>();
 
-            se.Name.Should().Be("test 3");
+            se.TestCase.Should().Be("test 3");
             se.Time.Should().BeAfter(DateTime.Now.AddMinutes(-1));
             se.ThreadId.Should().Be(1);
             se.Value.Should().Be(-1);
@@ -97,13 +99,13 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [Test]
         public void RampupEventHandler_RampdownEvent_Warmup()
         {
-            var handler = new RampupEventHandler(new ProjectionConnectionBuilder());
+            var handler = new RampupEventHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
             handler.Handle(new RampdownEvent
             {
                 TestId = "4",
-                Name = "test 4",
+                TestCase = "test 4",
                 Time = DateTime.Now,
-                Thread = 1,
+                ThreadId = 1,
                 IsWarmup = true
             });
 

@@ -8,7 +8,7 @@ namespace Avalanche.WriteModel.Events
 
         public string TestCase { get; set; }
 
-        public int ThreadNumber { get; set; }
+        public int ThreadId { get; set; }
 
         public int Iterations { get; set; }
 

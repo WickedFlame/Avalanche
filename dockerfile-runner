@@ -1,0 +1,12 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+WORKDIR /app
+
+# Copy the artifacts to the container
+COPY artifacts/tool/. /app/
+
+# Create volume for scenarios folder
+# VOLUME /scenarios
+
+# Run the Avalanche.Tool.exe application
+ENTRYPOINT ["dotnet", "Avalanche.Tool.dll"]

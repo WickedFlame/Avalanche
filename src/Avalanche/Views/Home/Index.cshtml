@@ -1,47 +1,96 @@
 ﻿@using Avalanche.Domain
 @model TestsViewModel
-@{
-    ViewData["Title"] = "Home Page";
-}
 
+<div class="pt-navigation-container">
+    <nav class="navbar pt-navbar-main" role="navigation" aria-label="main navigation">
+        <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="true">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="navbar-menu" id="navMenu">
+            <div class="pt-padding-side">
+                <aside class="menu px-4 py-4">
+                    <p class="menu-label">Edit</p>
+                    <ul class="menu-list">
+                        <li><a asp-controller="ScenarioEditor" asp-action="Index">Scenario editor</a></li>
+                    </ul>
+                </aside>
+            </div>
+        </div>
+    </nav>
 
-<div class="pt-main-content">
-    <div class="content px-6 py-4">
-        <h1 class="title is-1">Avalanche</h1>
-        <p>Loadtesting platform</p>
-        <div class="py-6">
-            <div class="pt-element-container">
-                <div class="pt-content-panel">
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Testscenario</th>
-                                <th>State</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var test in Model.Tests)
-                            {
-                                var stateCls = test.State.Name switch
-                                {
-                                    "New" => "is-white",
-                                    "Running" => "is-link",
-                                    "Done" => "is-success",
-                                    _ => "is-white"
-                                };
+    <div class="pt-main-content">
+        <div class="content px-6 py-4">
+            @* <h1 class="title is-1">Avalanche</h1> *@
+
+            <div>
+                <img id="avalanche-logo-main" src="~/avalanche-logo-light.png" alt="avalanche" style="height:80px" />
+                <div>Loadtesting for Web Applications</div>
+            </div>
+
+            <div class="py-6">
+                <div class="pt-element-container">
+                    <div class="pt-content-panel">
+                        <table class="table is-fullwidth">
+                            <thead>
                                 <tr>
-                                    <td><a asp-controller="Scenario" asp-action="Index" asp-route-name="@test.Name">@test.Name</a></td>
-                                    <td><div class="tag @stateCls">@test.State</div></td>
-                                    <td></td>
-                                    <td></td>
+                                    <th>Scenario</th>
+                                    <th>State</th>
+                                    <th></th>
+                                    <th>Last run</th>
+                                    <th></th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var test in Model.Tests)
+                                {
+                                    var stateCls = test.State.Name switch
+                                    {
+                                        "New" => "is-white",
+                                        "Running" => "is-link",
+                                        "Done" => "is-success",
+                                        _ => "is-white"
+                                    };
+                                    <tr>
+                                        <td><a asp-controller="Scenario" asp-action="Index" asp-route-name="@test.Name">@test.Name</a></td>
+                                        <td><div class="tag @stateCls">@test.State</div></td>
+                                        <td></td>
+                                        @if(test.LastRun == DateTime.MinValue)
+                                        {
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>@test.LastRun.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                        }
+                                        <td>
+                                            <a class="pt-button right" asp-controller="Scenario" asp-action="DeleteScenario" asp-route-scenario="@test.Name">
+                                                <span class="icon">
+                                                    <i class="fa fa-trash" title="Delete scenario and all testruns"></i>
+                                                </span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>        
+    </div>
 </div>
+
+@section scripts {
+    <script>
+        let img = document.getElementById('avalanche-logo-main');
+        if (img) {
+            let modus = localStorage.getItem('mode');
+            if (modus === 'light') {
+                img.src = '/avalanche-logo-dark.png';
+            }
+        }
+    </script>
+}

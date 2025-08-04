@@ -1,14 +1,13 @@
 using Avalanche.DataSource.DTO;
 using Avalanche.DataSource.Sqlite;
-using Avalanche.ReadModel.Queries;
 using Avalanche.ReadModel.QueryHandlers;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework.Internal;
 using Polaroider;
 using SqlKata.Compilers;
 using SqlKata.Execution;
 using System.Data.SQLite;
-using System.Threading;
 
 namespace Avalanche.ReadModel.Sql.IntegrationTests
 {
@@ -20,13 +19,13 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _handler = new TestRunQueryHandler(new ProjectionConnectionBuilder());
+            _handler = new TestRunQueryHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
         }
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            var connection = new SQLiteConnection(Constants.ReadModelDatabase);
+            var connection = new SQLiteConnection($"Data Source=data/{Constants.ReadModel}.db");
             var compiler = new SqliteCompiler();
             _db = new QueryFactory(connection, compiler);
 
@@ -75,7 +74,7 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
             var test = _handler.Get(new Queries.GetRampupData
             {
                 TestId = "1",
-                TestName = "Test 1"
+                TestCase = "Test 1"
             });
 
             test.Count(t => t.Value > 0).Should().Be(1);
@@ -88,7 +87,7 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
             var test = _handler.Get(new Queries.GetChartData
             {
                 TestId = "1",
-                TestName = "Test 1"
+                TestCase = "Test 1"
             });
             test.Should().HaveCount(1);
         }
@@ -180,8 +179,7 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
                 {
                     Time = DateTime.Now.AddMinutes(-5),
                     TestId = "1",
-                    //Scenario = "Scenario 1",                    
-                    Name = "Test 1",
+                    TestCase = "Test 1",
                     Value = 1
                 });
 
@@ -190,8 +188,7 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
                 {
                     Time = DateTime.Now.AddMinutes(-3),
                     TestId = "1",
-                    //Scenario = "Scenario 1",
-                    Name = "Test 1",
+                    TestCase = "Test 1",
                     ThreadId = 1,
                     Value = -1
                 });
@@ -201,8 +198,7 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
                 {
                     Time = DateTime.Now.AddMinutes(-3),
                     TestId = "2",
-                    //Scenario = "Scenario 1",
-                    Name = "Test 1",
+                    TestCase = "Test 1",
                     ThreadId = 1,
                     Value = 1
                 });
@@ -215,7 +211,7 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
                 {
                     Time = DateTime.Now.AddMinutes(-3),
                     TestId = "1",
-                    TestName = "Test 1",
+                    TestCase = "Test 1",
                     ThreadId = 1
                 });
             _db.Query(nameof(IterationEvents))
@@ -223,7 +219,7 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
                 {
                     Time = DateTime.Now.AddMinutes(-2),
                     TestId = "1",
-                    TestName = "Test 2",
+                    TestCase = "Test 2",
                     ThreadId = 1
                 });
             _db.Query(nameof(IterationEvents))
@@ -231,7 +227,7 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
                 {
                     Time = DateTime.Now.AddMinutes(-3),
                     TestId = "2",
-                    TestName = "Test 1",
+                    TestCase = "Test 1",
                     ThreadId = 1
                 });
             _db.Query(nameof(IterationEvents))
@@ -239,7 +235,7 @@ namespace Avalanche.ReadModel.Sql.IntegrationTests
                 {
                     Time = DateTime.Now.AddMinutes(-2),
                     TestId = "2",
-                    TestName = "Test 1",
+                    TestCase = "Test 1",
                     ThreadId = 1,
                     Error = true
                 });

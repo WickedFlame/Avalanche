@@ -1,18 +1,19 @@
-﻿using Avalanche.WriteModel.Sql;
-using System.Data.SQLite;
+﻿using Avalanche.DataSource;
 
 namespace Avalanche
 {
     public static class EventStoreExtensions
     {
-        public static void UseSqliteEventStore(this IApplicationBuilder app)
+        public static void UseEventStore(this IApplicationBuilder app)
         {
-            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateEventStore();
+            var store = app.ApplicationServices.GetService<IDataStoreBuilder>();
+            store.CreateEventStore();
         }
 
-        public static void UseSqliteReadModel(this IApplicationBuilder app)
+        public static void UseReadModel(this IApplicationBuilder app)
         {
-            Avalanche.DataSource.Sqlite.EventStoreBuilder.CreateWriteModel();
+            var store = app.ApplicationServices.GetService<IDataStoreBuilder>();
+            store.CreateWriteModel();
         }
     }
 }

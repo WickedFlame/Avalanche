@@ -1,7 +1,6 @@
 ﻿using Avalanche.DataSource;
 using Avalanche.ReadModel.Models;
 using Avalanche.ReadModel.Queries;
-using Avalanche.ReadModel.Sql;
 using SqlKata.Execution;
 
 namespace Avalanche.ReadModel.QueryHandlers
@@ -62,7 +61,7 @@ namespace Avalanche.ReadModel.QueryHandlers
                 .Where(new
                 {
                     TestId = query.TestId,
-                    Name = query.TestName
+                    TestCase = query.TestCase
                 })
                 .OrderByDesc("Time")
                 .Get<RampupData>();
@@ -76,10 +75,31 @@ namespace Avalanche.ReadModel.QueryHandlers
                 .Where(new
                 {
                     TestId = query.TestId,
-                    TestName = query.TestName
+                    TestCase = query.TestCase
                 })
                 .OrderByDesc("Time")
                 .Get<IterationItem>();
+        }
+
+        public Dictionary<string, IEnumerable<IterationItem>> Get(GetDetailData query)
+        {
+            var db = _builder.Build();
+            var data = db.Query(nameof(DataSource.DTO.IterationEvents))
+                .Select()
+                .Where(new
+                {
+                    TestId = query.TestId
+                })
+                .OrderByDesc("Time")
+                .Get<IterationItem>();
+
+            var di = new Dictionary<string, IEnumerable<IterationItem>>();
+            foreach (var item in data.GroupBy(x => x.TestCase))
+            {
+                di.Add(item.Key, item);
+            }
+
+            return di;
         }
 
         public IEnumerable<TestSummary> Get(GetSummary query)
@@ -108,7 +128,7 @@ namespace Avalanche.ReadModel.QueryHandlers
             {
                 foreach (var stat in summary)
                 {
-                    stat.Failed = errors.Count(e => !e.IsWarmup && e.TestName == stat.TestCase);
+                    stat.Failed = errors.Count(e => !e.IsWarmup && e.TestCase == stat.TestCase);
                 }
 
                 return summary;
@@ -131,8 +151,9 @@ namespace Avalanche.ReadModel.QueryHandlers
                         TestCase = detail.Key,
                         Throughput = detail.Sum(d => d.Throughput) / detail.Count(),
                         Iterations = detail.Sum(d => d.Iterations),
+                        AverageMilliseconds = detail.Average(d => d.AverageMilliseconds),
                         Type = "TestSummary",
-                        Failed = errors.Count(e => !e.IsWarmup && e.TestName == detail.Key),
+                        Failed = errors.Count(e => !e.IsWarmup && e.TestCase == detail.Key),
                         Slowest = 0,
                         Fastest = 0
                     }));
@@ -167,7 +188,7 @@ namespace Avalanche.ReadModel.QueryHandlers
 
             foreach (var stat in stats)
             {
-                stat.Failed = errors.Count(e => !e.IsWarmup && e.TestId == stat.TestId && e.TestName == stat.TestCase);
+                stat.Failed = errors.Count(e => !e.IsWarmup && e.TestId == stat.TestId && e.TestCase == stat.TestCase);
             }
 
             return stats;

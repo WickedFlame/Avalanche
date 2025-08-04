@@ -4,16 +4,11 @@ using Avalanche.Domain;
 using Avalanche.ReadModel;
 using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.ReadModel.Sql.QueryHandlers;
-using Avalanche.WriteModel;
 using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sql;
 using Avalanche.WriteModel.Sql.EventHandlers;
 using Broadcast;
-using Microsoft.AspNetCore.OpenApi;
 using OpenTelemetry.Logs;
-using SqlKata.Compilers;
-using SqlKata.Execution;
-using System.Data.SQLite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,10 +21,38 @@ builder.Services.AddEndpointsApiExplorer();
 // services.AddTransient<ExampleService>();
 // services.AddScoped<ExampleService>();
 
+// https://www.scottbrady.io/docker/aspnet-core-and-docker-environment-variables
+
+using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+    .SetMinimumLevel(LogLevel.Trace)
+        .AddOpenTelemetry(options =>
+            options.AddConsoleExporter())
+        );
+var logger = loggerFactory.CreateLogger<Program>();
+
+var config = new ConfigurationBuilder()
+            .AddEnvironmentVariables()
+            .Build();
+builder.Services.AddSingleton(config);
+
+var dbSource = config.GetValue<string>("AV_DB");
+
+logger.LogInformation(!string.IsNullOrEmpty(dbSource) ? "Using configured Sqlprovider {Provider}" : "No DB Server defined. Switching to default", dbSource);
+
+if (dbSource == "pgsql")
+{
+    builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Pgsql.EventStoreConnectionBuilder>();
+    builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Pgsql.ProjectionConnectionBuilder>();
+    builder.Services.AddSingleton<IDataStoreBuilder, Avalanche.DataSource.Pgsql.EventStoreBuilder>();
+}
+else
+{
+    builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
+    builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Sqlite.ProjectionConnectionBuilder>();
+    builder.Services.AddSingleton<IDataStoreBuilder, Avalanche.DataSource.Sqlite.EventStoreBuilder>();
+}
 
 builder.Services.AddSingleton<IEventStore, SqlEventStore>();
-builder.Services.AddTransient<IEventStoreConnectionBuilder, Avalanche.DataSource.Sqlite.EventStoreConnectionBuilder>();
-builder.Services.AddSingleton<IProjectionConnectionBuilder, Avalanche.DataSource.Sqlite.ProjectionConnectionBuilder>();
 
 builder.Services.AddTransient<IEventBus>(c =>
 {
@@ -52,15 +75,11 @@ builder.Services.AddSingleton<ISettingsQueryHandler, SettingsQueryHandler>();
 builder.Services.AddTransient<ITestRunQueryHandler, TestRunQueryHandler>();
 builder.Services.AddTransient<ISettingsFacade, SettingsFacade>();
 
-
-
 builder.Services.AddLogging((loggingBuilder) => loggingBuilder
         .SetMinimumLevel(LogLevel.Debug)
         .AddOpenTelemetry(options =>
             options.AddConsoleExporter())
         );
-
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -77,8 +96,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSqliteEventStore();
-app.UseSqliteReadModel();
+app.UseEventStore();
+app.UseReadModel();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

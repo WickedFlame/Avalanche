@@ -17,8 +17,8 @@ namespace Avalanche.WriteModel.CommandHandlers
             var @event = new Events.IterationErrorEvent
             {
                 TestId = cmd.TestId,
-                TestName = cmd.TestName,
-                Thread = cmd.Thread,
+                TestCase = cmd.TestCase,
+                ThreadId = cmd.ThreadId,
                 Time = cmd.Time,
                 StatusCode = $"{(int)cmd.StatusCode}",
                 Message = cmd.Message,

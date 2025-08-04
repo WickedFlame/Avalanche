@@ -1,4 +1,6 @@
-﻿using Avalanche.WriteModel.Events;
+﻿using Avalanche.Domain;
+using Avalanche.Runner;
+using Avalanche.WriteModel.Events;
 using Broadcast;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +11,13 @@ namespace Avalanche.Controllers.Api
     public class EventController : ControllerBase
     {
         private readonly ILogger<EventController> _logger;
+        private readonly ILoggerFactory _factory;
         private readonly IEventBus _eventBus;
 
-        public EventController(ILogger<EventController> logger, IEventBus eventBus)
+        public EventController(ILoggerFactory factory, IEventBus eventBus)
         {
-            _logger = logger;
+            _logger = factory.CreateLogger<EventController>();
+            _factory = factory;
             _eventBus = eventBus;
         }
 
@@ -103,6 +107,18 @@ namespace Avalanche.Controllers.Api
         public IActionResult Rampdown([FromBody] RampdownEvent evnt)
         {
             _eventBus.Publish(Guid.NewGuid().ToString(), evnt.Time, evnt);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("initscenario/{name}")]
+        public IActionResult InitScenario(string name, [FromBody] Scenario evnt)
+        {
+            var path = PathMapper.GetScenarioFile(name);
+
+            var tsr = new ScenarioReader(_factory);
+            tsr.SaveScenario(path, evnt);
 
             return Ok();
         }

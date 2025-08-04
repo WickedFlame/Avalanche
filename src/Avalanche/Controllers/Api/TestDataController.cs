@@ -17,26 +17,26 @@ namespace Avalanche.Controllers.Api
         }
 
         [HttpGet]
-        [Route("{scenario}/{testname}/chartdata/{testId}")]
-        public IActionResult GetChartData(string scenario, string testname, string testId)
+        [Route("{scenario}/{testcase}/chartdata/{testId}")]
+        public IActionResult GetChartData(string scenario, string testcase, string testId)
         {
             var lastRun = _queryHandler.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
 
             var facade = new TestDataFacade(_queryHandler);
-            var data = facade.GetChartData(testId, testname);
+            var data = facade.GetChartData(testId, testcase);
 
             return Ok(new
             {
                 Scenario = scenario,
-                Testname = testname,
+                TestCase = testcase,
                 Status = lastRun?.Status ?? "Open",
                 ChartData = data
             });
         }
 
         [HttpGet]
-        [Route("{scenario}/{testname}/rampupdata/{testId}")]
-        public IActionResult GetRampupData(string scenario, string testname, string testId)
+        [Route("{scenario}/{testcase}/rampupdata/{testId}")]
+        public IActionResult GetRampupData(string scenario, string testcase, string testId)
         {
             var lastRun = _queryHandler.Get(new ReadModel.Queries.GetTestRun { TestId = testId });
 
@@ -46,12 +46,12 @@ namespace Avalanche.Controllers.Api
             }
 
             var facade = new TestDataFacade(_queryHandler);
-            var data = facade.GetRampupData(lastRun.TestId, testname);
+            var data = facade.GetRampupData(lastRun.TestId, testcase);
 
             return Ok(new
             {
                 Scenario = scenario,
-                Testname = testname,
+                TestCase = testcase,
                 Status = lastRun?.Status ?? "New",
                 Data = data
             });
@@ -83,7 +83,7 @@ namespace Avalanche.Controllers.Api
                         s.TestId,
                         s.TestCase,
                         s.Type,
-                        s.ThreadNumber,
+                        s.ThreadId,
                         s.Iterations,
                         AverageMilliseconds = TimeSpan.FromMilliseconds(s.AverageMilliseconds),
                         TotalTime = TimeSpan.FromMilliseconds(s.TotalMilliseconds),

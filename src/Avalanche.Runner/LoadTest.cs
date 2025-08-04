@@ -22,11 +22,11 @@ namespace Avalanche.Runner
             _logger = logger.CreateLogger<LoadTest>();
         }
 
-        public IEnumerable<TestResult> Run(TestSettings settings)
+        public IEnumerable<TestResult> Run(Scenario settings)
         {
             var results = new List<TestResult>();
 
-            foreach (var test in settings.Tests)
+            foreach (var test in settings.TestCases)
             {
                 var session = ProfilerSession.StartSession()
                     .AddMiddleware(new ItterationLogCollectionTaskHandler(test.Name, _testId))
@@ -40,18 +40,25 @@ namespace Avalanche.Runner
                             RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true,
                         };
 
+                        if (test.UseCookies)
+                        {
+                            options.CookieContainer = new CookieContainer();
+                        }
+
                         var client = new RestClient(options);
 
                         ctx.Set("httpclient", client);
                         ctx.Set(nameof(IDispatcher<ICommand>), _dispatcher);
 
-                        if (test.Init != null && !string.IsNullOrEmpty(test.Init.Url))
+                        var url = test.Init != null && !string.IsNullOrEmpty(test.Init.Url) ? test.Init.Url : test.Urls.FirstOrDefault();
+
+                        if (!string.IsNullOrEmpty(url))
                         {
                             try
                             {
                                 var time = Stopwatch.StartNew();
 
-                                var request = new RestRequest(test.Init.Url);
+                                var request = new RestRequest(url);
                                 var result = client.GetAsync(request).GetAwaiter().GetResult();
 
                                 time.Stop();
@@ -61,8 +68,8 @@ namespace Avalanche.Runner
                                     TestId = _testId,
                                     Category = "console",
                                     Module = "Init",
-                                    Name = test.Name,
-                                    Message = $"Init {test.Init.Url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms",
+                                    TestCase = test.Name,
+                                    Message = $"Init {url} ended with status {result.StatusCode} after {time.ElapsedMilliseconds} ms",
                                     StatusCode = result.StatusCode,
                                     ElapsedMilliseconds = time.ElapsedMilliseconds,
                                     IsWarmup = s.IsWarmup
@@ -85,15 +92,17 @@ namespace Avalanche.Runner
                         var metric = new EndThreadCommand
                         {
                             TestId = _testId,
-                            Category = "console",
-                            Module = "End",
-                            Name = test.Name,
-                            Message = $"End Run for Thread {e.Get(ContextKeys.ThreadNumber)}",
-                            Thread = e.Get<int>(ContextKeys.ThreadNumber),
+                            TestCase = test.Name,
+                            Message = $"End Run for Thread {e.Get(ContextKeys.ThreadId)}",
+                            ThreadId = e.Get<int>(ContextKeys.ThreadId),
                             IsWarmup = e.Settings.IsWarmup
                         };
 
                         _dispatcher.SendAsync(metric);
+                    })
+                    .PreExecute(ctx =>
+                    {
+                        ctx.Set("ContentLength", 0L);
                     })
                     .Task(ctx =>
                     {
@@ -111,8 +120,8 @@ namespace Avalanche.Runner
                                     {
                                         Time = DateTime.Now,
                                         TestId = _testId,
-                                        TestName = test.Name,
-                                        Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
+                                        TestCase = test.Name,
+                                        ThreadId = ctx.Get<int>(ContextKeys.ThreadId),
                                         Message = result.ErrorMessage,
                                         StatusCode = result.StatusCode,
                                         IsWarmup = ctx.Settings.IsWarmup
@@ -121,6 +130,8 @@ namespace Avalanche.Runner
 
                                     _logger.LogInformation("Call to {Url} for Test {TestId} resulted in StatusCode {StatusCode}", url, _testId, result.StatusCode);
                                 }
+
+                                ctx.Set("ContentLength", (long)result.RawBytes.Length);
                             }
                             catch(Exception e)
                             {
@@ -128,8 +139,8 @@ namespace Avalanche.Runner
                                 {
                                     Time = DateTime.Now,
                                     TestId = _testId,
-                                    TestName = test.Name,
-                                    Thread = ctx.Get<int>(ContextKeys.ThreadNumber),
+                                    TestCase = test.Name,
+                                    ThreadId = ctx.Get<int>(ContextKeys.ThreadId),
                                     Message = e.Message,
                                     IsWarmup = ctx.Settings.IsWarmup
                                     //StatusCode = result.StatusCode
@@ -146,10 +157,10 @@ namespace Avalanche.Runner
                     session.SetIterations(test.Iterations);
                 }
 
-                if (test.Threads > 0)
+                if (test.Users > 0)
                 {
                     var rampup = test.RampupTime > 0 ? TimeSpan.FromSeconds(test.RampupTime) : TimeSpan.Zero;
-                    session.SetThreads(test.Threads, rampup);
+                    session.SetThreads(test.Users, rampup);
                 }
 
                 if (test.Duration > 0)
@@ -167,13 +178,15 @@ namespace Avalanche.Runner
                     session.AddDelay(TimeSpan.FromSeconds(test.Delay));
                 }
 
+                session.SetMinLogLevel(MeasureMap.Diagnostics.LogLevel.Warning);
+
                 var result = session.RunSession();
 
                 //
                 // Wait for the console to write all results before tracing the summeray
                 System.Threading.Tasks.Task.Delay(5000).Wait();
-
-                result.Trace();
+                
+                //result.Trace();
 
                 results.Add(new TestResult(result)
                 {

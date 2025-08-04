@@ -9,7 +9,7 @@ namespace Broadcast
 
         public DateTime Time { get; set; }
 
-        public Type EventType { get; set; }
+        public string EventType { get; set; }
 
         public string Value { get; set; }
     }

@@ -3,9 +3,8 @@
 @using Avalanche.Runner
 @model TestOverviewModel
 
-
-<div class="pt-main-content">
-    <div class="content px-6 py-4">
+@section breadcrumb {
+    <div class="pt-breadcrumb-panel">
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
                 <li><a asp-controller="Home" asp-action="Index">Scenarios</a></li>
@@ -13,7 +12,11 @@
                 <li class="is-active"><a href="#" aria-current="page">Detail</a></li>
             </ul>
         </nav>
+    </div>
+}
 
+<div class="pt-main-content">
+    <div class="content px-6 py-4">
         <h1 class="title is-1">@Model.Scenario</h1>
         <div>
             <div class="pt-padding-side py-5">
@@ -83,6 +86,17 @@
                             </div>
                             <div class="pt-stat-footer">Status of the Scenario</div>
                         </div>
+                        <div class="pt-stat-item">
+                            <header class="pt-stat-header">
+                                Run by
+                            </header>
+                            <div class="pt-stat-content">
+                                <div class="content" id="scenario-runner">
+                                    @(Model.Runner?.Name ?? "")
+                                </div>
+                            </div>
+                            <div class="pt-stat-footer">Source of the runner</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -92,23 +106,25 @@
         {
             <div class="pt-element-container">
                 <div class="pt-content-panel">
-                    <h2>Settings</h2>
+                    <h2>Scenario</h2>
                     <div class="overflow-x-auto">
                         <table class="table is-fullwidth">
                             <thead>
                                 <tr>
                                     <th>TestCase</th>
-                                    <th>Threads</th>
-                                    <th>RampupTime</th>
-                                    <th>Url</th>
+                                    <th>Users</th>
+                                    <th>Iterations</th>
+                                    <th>Rampup</th>
+                                    <th>URL</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach(var test in Model.Settings.Tests)
+                                @foreach(var test in Model.Settings.TestCases)
                                 {
                                     <tr>
                                         <td>@test.Name</td>
-                                        <td>@test.Threads</td>
+                                        <td>@test.Users</td>
+                                        <td>@test.Iterations</td>
                                         <td>@test.RampupTime</td>
                                         <td>
                                             <ul>
@@ -127,46 +143,102 @@
             </div>
         }
 
-        <div class="pt-element-container" id="testsummary-@Model.TestId" style="display: none;">
-            <div class="pt-content-panel">
-                <h2>Summary</h2>
-                <div class="overflow-x-auto">
-                    <div class="pt-element-container">
-                        <table class="table is-fullwidth">
-                            <thead>
-                                <tr>
-                                    <th>TestCase</th>
-                                    <th>Total Time</th>
-                                    <th>Average (ms)</th>
-                                    <th>Throughput / s</th>
-                                    <th># Iterations</th>
-                                    <th># Fails</th>
-                                    <th>Slowest (ms)</th>
-                                    <th>Fastest (ms)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var test in Model.Settings.Tests)
-                                {
-                                    <partial name="./Partials/SummaryRow" for="@test" />
-                                }
-                            </tbody>
-                        </table>
+        <div class="tabs is-medium">
+            <ul>
+                @{
+                    var summaryActive = Model.Status != TestRunStatus.Done || string.IsNullOrEmpty(Model.Tab) || Model.Tab == "data" ? "is-active" : "";
+                    var chartsActive = Model.Tab == "charts" ? "is-active" : "";
+                    var detailActive = Model.Tab == "details" ? "is-active" : "";
+                }
+                <li class="@summaryActive"><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Scenario" asp-route-testid="@Model.TestId">Summary</a></li>
+                @if (Model.Status == TestRunStatus.Done)
+                {
+                    <li class="@chartsActive"><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Scenario" asp-route-testid="@Model.TestId" asp-route-tab="charts">Charts</a></li>
+                    <li class="@detailActive"><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Scenario" asp-route-testid="@Model.TestId" asp-route-tab="details">Details</a></li>
+                }
+            </ul>
+        </div>
+
+        @if (string.IsNullOrEmpty(Model.Tab))
+        {
+            <div class="pt-element-container" id="testsummary-@Model.TestId" style="display: none;">
+                <div class="pt-content-panel">
+                    <h2>Summary</h2>
+                    <div class="overflow-x-auto">
+                        <div class="pt-element-container">
+                            <table class="table is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>TestCase</th>
+                                        <th>Total Time</th>
+                                        <th>Average (ms)</th>
+                                        <th>Throughput / s</th>
+                                        <th># Iterations</th>
+                                        <th># Fails</th>
+                                        <th>Slowest (ms)</th>
+                                        <th>Fastest (ms)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var test in Model.Settings.TestCases)
+                                    {
+                                        <partial name="./Partials/SummaryRow" for="@test" />
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-
-        @if (Model.Status == TestRunStatus.Done)
+        }
+        else if (Model.Tab == "charts")
         {
-            foreach (var config in Model.Settings.Tests)
+            foreach (var config in Model.Settings.TestCases)
             {
                 <div class="pt-element-container py-6">
                     <h2>@config.Name</h2>
                     <partial name="./Partials/Chart" for="@config" />
                     <partial name="./Partials/Throughput" for="@config" />
                     @* <partial name="./Partials/RampupChart" for="@config" /> *@
+                </div>
+            }
+        }
+        else if (Model.Tab == "details")
+        {
+            <div class="pt-info-panel">
+                <p>To enhance performance not all measured iterations are stored.<br />
+                We only store a summary of iterations per user each second.</p>
+            </div>
+
+            @foreach (var testCase in Model.Details)
+            {
+                <div class="pt-element-container">
+                    <div class="pt-content-panel">
+                        <h2>@testCase.Key</h2>
+                        <div class="overflow-x-auto">
+                            <div class="pt-element-container">
+                                <table class="table is-fullwidth">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>ThreadId</th>
+                                            <th>Throughput / s</th>
+                                            <th>Average (ms)</th>
+                                            <th>IsWarmup</th>
+                                            <th>Error</th>
+                                            <th>StatusCode</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var detailRow in testCase.Value.OrderBy(t => t.Time))
+                                        {
+                                            <partial name="./Partials/DetailRow" for="@detailRow" />
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
         }
@@ -180,9 +252,9 @@
             import { TestOverview } from '/js/testoverview.js';
             var sites = new TestOverview();
 
-            @foreach (var test in Model.Settings.Tests)
+            @foreach (var test in Model.Settings.TestCases)
             {
-                @if (Model.Status == TestRunStatus.Done)
+                @if (Model.Status == TestRunStatus.Done && Model.Tab == "charts")
                 {
                     <text>
                         sites.initChart(@Html.Raw(JsonSerializer.Serialize(test, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })), '@test.Name');

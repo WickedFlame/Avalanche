@@ -4,6 +4,6 @@
     {
         public string TestId { get; set; }
 
-        public object TestName { get; set; }
+        public object TestCase { get; set; }
     }
 }

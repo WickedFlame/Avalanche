@@ -2,16 +2,20 @@
 @using System.Text.Json
 @model ScenarioModel
 
-
-<div class="pt-main-content">
-    <div class="content px-6 py-4">
+@section breadcrumb {
+    <div class="pt-breadcrumb-panel">
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
                 <li><a asp-controller="Home" asp-action="Index">Scenarios</a></li>
                 <li class="is-active"><a href="#" aria-current="page">@Model.Name</a></li>
             </ul>
         </nav>
+    </div>
+}
 
+<div class="pt-main-content">
+    <div class="content px-6 py-4">
+        
         <h1 class="title is-1">@Model.Name</h1>
         <div>
             <div class="pt-padding-side py-5">
@@ -30,7 +34,26 @@
                             <a id="StopTests" data-name="@Model.Name" class="button" disabled>Stop</a>
                         </div>
                     }
-                    <a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name" class="button">Statistics</a>
+
+                    @if(Model.Runs.Any())
+                    {
+                        <a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name" class="button">Statistics</a>
+                    }
+                    else
+                    {
+                        <a class="button" disabled>Statistics</a>
+                    }
+
+                    <div class="navbar-end">
+                        <div class="buttons has-addons" style="margin-bottom:0;">
+                            <a asp-controller="ScenarioEditor" asp-action="Index" asp-route-scenario="@Model.Name" class="button">Edit scenario</a>
+                            <a asp-controller="Scenario" asp-action="DeleteScenario" asp-route-scenario="@Model.Name" class="button">
+                                <span class="icon">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -93,23 +116,25 @@
         {
             <div class="pt-element-container">
                 <div class="pt-content-panel">
-                    <h2>Settings</h2>
+                    <h2>Scenario</h2>
                     <div class="overflow-x-auto">
                         <table class="table is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Threads</th>
+                                    <th>TestCase</th>
+                                    <th>Users</th>
+                                    <th>Iterations</th>
                                     <th>Rampup</th>
                                     <th>URL</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var test in Model.Settings.Tests)
+                                @foreach (var test in Model.Settings.TestCases)
                                 {
                                     <tr>
                                         <td>@test.Name</td>
-                                        <td>@test.Threads</td>
+                                        <td>@test.Users</td>
+                                        <td>@test.Iterations</td>
                                         <td>@test.RampupTime</td>
                                         <td>
                                             <ul>
@@ -136,11 +161,11 @@
                     <table class="table is-fullwidth">
                         <thead>
                             <tr>
-                                <th>Scenario</th>
                                 <th>TestId</th>
                                 <th>StartTime</th>
                                 <th>EndTime</th>
                                 <th>Status</th>
+                                <th>Source</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -148,11 +173,11 @@
                             @foreach (var test in Model.Runs)
                             {
                                 <tr>
-                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId" >@test.Scenario</a></td>
-                                    <td>@test.TestId</td>
+                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId">@test.TestId</a></td>
                                     <td>@test.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
                                     <td>@(test.EndTime > DateTime.MinValue ? test.EndTime.ToString("dd.MM.yyyy hh:mm:ss") : string.Empty)</td>
                                     <td>@test.Status</td>
+                                    <td>@test.Runner</td>
                                     <td>
                                         <a class="pt-button" asp-controller="Scenario" asp-action="DeleteTestRun" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId">
                                             <span class="icon">

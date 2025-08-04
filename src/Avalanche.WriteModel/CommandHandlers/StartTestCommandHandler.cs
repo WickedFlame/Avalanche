@@ -19,7 +19,8 @@ namespace Avalanche.WriteModel.CommandHandlers
                 TestId = cmd.TestId,
                 Scenario = cmd.Scenario,
                 StartTime = cmd.StartTime,
-                Status = TestRunStatus.Running
+                Status = TestRunStatus.Running,
+                Runner = cmd.Runner
             };
 
             _eventBus.Publish(cmd.TestId, cmd.StartTime, @event);

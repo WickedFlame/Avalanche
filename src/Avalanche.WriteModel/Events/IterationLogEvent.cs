@@ -8,7 +8,7 @@ namespace Avalanche.WriteModel.Events
 
         public string TestId { get; set; }
 
-        public string TestName { get; set; }
+        public string TestCase { get; set; }
 
         public int Thread { get; set; }
 
@@ -19,5 +19,7 @@ namespace Avalanche.WriteModel.Events
         public double AverageMilliseconds { get; set; }
 
         public bool IsWarmup { get; set; }
+
+        public int ContentLength { get; set; }
     }
 }

@@ -6,7 +6,7 @@ Iterations: 20
 Slowest: 0
 TestCase: null
 TestId: 1
-ThreadNumber: 0
+ThreadId: 0
 Throughput: 2.1
 TotalMilliseconds: 0
 Type: TestSummary

@@ -2,6 +2,8 @@
 using Avalanche.DataSource.Sqlite;
 using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sql.EventHandlers;
+using Microsoft.Extensions.Configuration;
+using Moq;
 using SqlKata.Compilers;
 using SqlKata.Execution;
 using System.Data.SQLite;
@@ -15,7 +17,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [SetUp]
         public void Setup()
         {
-            var connection = new SQLiteConnection(Constants.ReadModelDatabase);
+            var connection = new SQLiteConnection($"Data Source=data/{Constants.ReadModel}.db");
             var compiler = new SqliteCompiler();
             _db = new QueryFactory(connection, compiler);
         }
@@ -29,12 +31,12 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [Test]
         public void SummaryEventHandler_ThreadSummaryEvent()
         {
-            var handler = new SummaryEventHandler(new ProjectionConnectionBuilder());
+            var handler = new SummaryEventHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
             handler.Handle(new ThreadSummaryEvent
             {
                 TestId = "1",
                 TestCase = "testcase 1",
-                ThreadNumber = 1,
+                ThreadId = 1,
                 Iterations = 1,
                 AverageMilliseconds = 1,
                 TotalMilliseconds = 1,
@@ -53,7 +55,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [Test]
         public void SummaryEventHandler_TestSummaryEvent()
         {
-            var handler = new SummaryEventHandler(new ProjectionConnectionBuilder());
+            var handler = new SummaryEventHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
             handler.Handle(new TestSummaryEvent
             {
                 TestId = "2",

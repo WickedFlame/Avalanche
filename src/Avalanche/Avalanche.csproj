@@ -32,10 +32,10 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.15" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
         <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.12.0" />
-        <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Avalanche.DataSource.Pgsql\Avalanche.DataSource.Pgsql.csproj" />
         <ProjectReference Include="..\Avalanche.DataSource.Sqlite\Avalanche.DataSource.Sqlite.csproj" />
         <ProjectReference Include="..\Avalanche.DataSource\Avalanche.DataSource.csproj" />
         <ProjectReference Include="..\Avalanche.Domain\Avalanche.Domain.csproj" />
@@ -51,19 +51,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="testfiles\LongRunning.yml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="testfiles\PerformanceTest.yml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="testfiles\LoadTest.yml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
       <Folder Include="data\" />
+      <Folder Include="scenarios\" />
     </ItemGroup>
 
 </Project>

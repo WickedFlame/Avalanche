@@ -54,8 +54,24 @@ namespace Avalanche.WriteModel
             }
 
             var time = events[events.Count - 1].Time - events[0].Time;
-            var threads = events.GroupBy(g => g.Thread);
+            var threads = events.GroupBy(g => g.ThreadId);
             return threads.Sum(t => t.Count() / time.TotalSeconds);
+        }
+
+        public int GetContentLength()
+        {
+            var tmp = _events.Where(e => e.ContentLength > 0);
+
+            var events = tmp.Count() > 10 ?
+                tmp.Skip(Math.Max(0, tmp.Count() - 10)).OrderBy(e => e.Time).ToList() :
+                tmp.ToList();
+
+            if(events.Count <= 0)
+            {
+                return 0;
+            }
+
+            return (int)events.Average(e => e.ContentLength);
         }
 
         /// <summary>

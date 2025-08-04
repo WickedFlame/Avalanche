@@ -8,6 +8,6 @@ namespace Avalanche.Domain
 
         public TestRunStatus State { get; set; }
 
-        public DateTime Started { get; set; }
+        public DateTime LastRun { get; set; }
     }
 }

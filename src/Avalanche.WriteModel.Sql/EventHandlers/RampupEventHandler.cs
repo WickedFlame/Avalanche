@@ -30,7 +30,7 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     Id = Guid.NewGuid().ToString(),
                     TestId = @event.TestId,
                     Time = DateTime.Now,
-                    Name = @event.Name,
+                    TestCase = @event.TestCase,
                     Value = 1
                 });
         }
@@ -49,8 +49,8 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     Id = Guid.NewGuid().ToString(),
                     TestId = @event.TestId,
                     Time = DateTime.Now,
-                    Name = @event.Name,
-                    ThreadId = @event.Thread,
+                    TestCase = @event.TestCase,
+                    ThreadId = @event.ThreadId,
                     Value = -1
                 });
         }

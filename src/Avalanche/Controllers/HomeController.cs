@@ -3,6 +3,7 @@ using Avalanche.Domain;
 using Avalanche.Models;
 using System.Diagnostics;
 using Avalanche.DataSource;
+using Avalanche.WriteModel;
 
 namespace Avalanche.Controllers
 {
@@ -23,15 +24,10 @@ namespace Avalanche.Controllers
 
             var model = new TestsViewModel
             {
-                Tests = facade.GetAvailiableTests()
+                Tests = facade.GetScenarios().OrderByDescending(t => t.LastRun)
             };
 
             return View(model);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

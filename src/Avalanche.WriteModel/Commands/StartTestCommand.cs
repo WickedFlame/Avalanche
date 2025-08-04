@@ -7,5 +7,7 @@
         public string Scenario { get; set; }
 
         public DateTime StartTime { get; set; }
+
+        public string Runner { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace Avalanche.WriteModel.CommandHandlers
         public IterationCommandHandler(IEventBus eventBus)
         {
             _eventBus = eventBus;
-            _dispatcher = new(2000, () => DispatcherTask());
+            _dispatcher = new(1000, () => DispatcherTask());
             _dispatcher.StartDispatcher();
         }
 
@@ -21,7 +21,7 @@ namespace Avalanche.WriteModel.CommandHandlers
         {
             //
             // the storage has to be per thread to ensure enough events are sent for the charts
-            var key = $"{cmd.TestId}_{cmd.TestName}_{cmd.Thread}";
+            var key = $"{cmd.TestId}_{cmd.TestCase}_{cmd.ThreadId}";
             lock (_events)
             {
                 if (!_events.ContainsKey(key))
@@ -55,15 +55,16 @@ namespace Avalanche.WriteModel.CommandHandlers
                     var @event = new Events.IterationLogEvent
                     {
                         TestId = cmd.TestId,
-                        TestName = cmd.TestName,
-                        Thread = cmd.Thread,
+                        TestCase = cmd.TestCase,
+                        Thread = cmd.ThreadId,
                         Time = cmd.Time,
                         IsWarmup = cmd.IsWarmup,
                         //
                         // GetThroughput should be on all elementst/threads instead of only the current thread
                         Throughput = cached.GetThroughput(),
                         Iterations = cached.Count(),
-                        AverageMilliseconds = cached.GetAverageMilliseconds()
+                        AverageMilliseconds = cached.GetAverageMilliseconds(),
+                        ContentLength = cached.GetContentLength()
                     };
 
                     _eventBus.Publish(cmd.TestId, cmd.Time, @event);

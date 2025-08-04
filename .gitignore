@@ -404,5 +404,9 @@ src/Avalanche/data/eventstore.db
 src/Avalanche/data/readmodel.db
 src/Avalanche.Tool/data/eventstore.db
 *.db-journal
-\!Build/
+artifacts/**/*.*
 \!Deploy/
+.idea/.idea.Avalanche
+build/_build.csproj.DotSettings
+src/Avalanche.Tool/scenarios
+src/Avalanche/scenarios

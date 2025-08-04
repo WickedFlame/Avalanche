@@ -14,12 +14,12 @@ namespace Avalanche.Domain
             _builder = builder;
         }
 
-        public IEnumerable<TestDefinition> GetAvailiableTests()
+        public IEnumerable<TestDefinition> GetScenarios()
         {
-            var path = Environment.GetEnvironmentVariable("TESTFILE_PATH");
-            var testfiles = Directory.GetFiles(path ?? "./testfiles");
+            var path = PathMapper.GetScenarioPath();
+            var scenarios = Directory.GetFiles(path);
 
-            return testfiles.Select(f => GetDefinition(f));
+            return scenarios.Select(f => GetDefinition(f));
         }
 
         private TestDefinition GetDefinition(string name)
@@ -35,6 +35,7 @@ namespace Avalanche.Domain
             if (test != null)
             {
                 definition.State = new TestRunStatus(test?.Status ?? "New");
+                definition.LastRun = test.StartTime;
             }
 
             return definition;

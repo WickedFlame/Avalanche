@@ -19,7 +19,7 @@ namespace Avalanche.Controllers.Api
         public IActionResult Get()
         {
             var facade = new TestsFacade(_builder);
-            return Ok(facade.GetAvailiableTests());
+            return Ok(facade.GetScenarios());
         }
     }
 }

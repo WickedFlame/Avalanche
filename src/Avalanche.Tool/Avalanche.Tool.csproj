@@ -6,10 +6,6 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>latest</LangVersion>
-
-
-        <!--<SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
-        <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
         <Authors>Christian Walpen</Authors>
         <Company>WickedFlame</Company>
         <Description>LoadTest Component for Avalanche Test</Description>
@@ -21,28 +17,14 @@
         <FileVersion>1.0.0.0</FileVersion>
         <PackageVersion>1.0.0</PackageVersion>
         <InformationalVersion>1.0.0</InformationalVersion>
-        <!--<Title>Avalanche</Title>-->
-        <!--<PublishRepositoryUrl>true</PublishRepositoryUrl>-->
-        <!--<PackageReadmeFile>README.md</PackageReadmeFile>-->
         <AssemblyName>Avalanche.Tool</AssemblyName>
-        
-        <!--<PackAsTool>true</PackAsTool>-->
-        <!--<ToolCommandName>avalanche</ToolCommandName>-->
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..</DockerfileContext>
     </PropertyGroup>
 
-    <!--<PropertyGroup>
-        <DockerfileRunArguments>-v ../../../../Avalanche/data:/data</DockerfileRunArguments>
-    </PropertyGroup>-->
-
-    <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>bin\Release\netstandard2.0\Avalanche.Tool.xml</DocumentationFile>
-    </PropertyGroup>-->
-
     <ItemGroup>
       <PackageReference Include="CommandLineParser" Version="2.9.1" />
-      <PackageReference Include="MeasureMap" Version="2.4.0" />
+      <PackageReference Include="MeasureMap" Version="3.0.0-RC13" />
       <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.6" />
       <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
       <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.12.0" />
@@ -56,16 +38,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="testfiles\" />
+      <None Update="scenarios\*.*">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="testfiles\LoadTest.yml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="testfiles\PerformanceTest.yml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+      <Folder Include="scenarios\" />
     </ItemGroup>
 
 </Project>

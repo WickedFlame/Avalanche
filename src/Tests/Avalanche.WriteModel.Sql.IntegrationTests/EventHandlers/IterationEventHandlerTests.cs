@@ -1,6 +1,8 @@
 ﻿using Avalanche.DataSource.DTO;
 using Avalanche.DataSource.Sqlite;
 using Avalanche.WriteModel.Sql.EventHandlers;
+using Microsoft.Extensions.Configuration;
+using Moq;
 using SqlKata.Compilers;
 using SqlKata.Execution;
 using System.Data.SQLite;
@@ -14,7 +16,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [SetUp]
         public void Setup()
         {
-            var connection = new SQLiteConnection(Constants.ReadModelDatabase);
+            var connection = new SQLiteConnection($"Data Source=data/{Constants.ReadModel}.db");
             var compiler = new SqliteCompiler();
             _db = new QueryFactory(connection, compiler);
         }
@@ -28,13 +30,13 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [Test]
         public void IterationEventHandler_IterationLogEvent()
         {
-            var handler = new IterationEventHandler(new ProjectionConnectionBuilder());
+            var handler = new IterationEventHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
             handler.Handle(new Events.IterationLogEvent
             {
                 TestId = "1",
                 Time = DateTime.Now,
                 Thread = 1,
-                TestName = "First",
+                TestCase = "First",
                 AverageMilliseconds = 123,
                 IsWarmup = false,
                 Throughput = 2.3,
@@ -59,13 +61,13 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [Test]
         public void IterationEventHandler_IterationLogEvent_Update()
         {
-            var handler = new IterationEventHandler(new ProjectionConnectionBuilder());
+            var handler = new IterationEventHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
             handler.Handle(new Events.IterationLogEvent
             {
                 TestId = "2",
                 Time = DateTime.Now,
                 Thread = 1,
-                TestName = "First",
+                TestCase = "First",
                 AverageMilliseconds = 123,
                 IsWarmup = false,
                 Throughput = 2.3,
@@ -76,7 +78,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
                 TestId = "2",
                 Time = DateTime.Now,
                 Thread = 1,
-                TestName = "First",
+                TestCase = "First",
                 AverageMilliseconds = 123,
                 IsWarmup = false,
                 Throughput = 1.2,
@@ -93,13 +95,13 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests.EventHandlers
         [Test]
         public void IterationEventHandler_IterationErrorEvent()
         {
-            var handler = new IterationEventHandler(new ProjectionConnectionBuilder());
+            var handler = new IterationEventHandler(new ProjectionConnectionBuilder(Mock.Of<IConfiguration>()));
             handler.Handle(new Events.IterationErrorEvent
             {
                 TestId = "3",
                 Time = DateTime.Now,
-                Thread = 1,
-                TestName = "First",
+                ThreadId = 1,
+                TestCase = "First",
                 Message = "the message",
                 StatusCode = "503"
             });
