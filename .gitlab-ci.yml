@@ -32,7 +32,7 @@ test_solution:
   script:
   - echo "test stage"
   only:
-    - main
+    - master
     - dev
     - merge_requests
 
