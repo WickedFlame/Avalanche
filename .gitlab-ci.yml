@@ -4,7 +4,7 @@ image: mcr.microsoft.com/dotnet/sdk:8.0
 variables:
   IMAGE_TAG_CLIENT: "$CI_REGISTRY/wickedflame/avalanche/client:$CI_COMMIT_SHA"
   IMAGE_TAG_RUNNER: "$CI_REGISTRY/wickedflame/avalanche/runner:$CI_COMMIT_SHA"
-  VERSION: 0.0.1
+  VERSION: 0.0.2
 
 services:
   - docker:dind
@@ -32,7 +32,7 @@ test_solution:
   script:
   - echo "test stage"
   only:
-    - main
+    - master
     - dev
     - merge_requests
 
@@ -49,13 +49,13 @@ deploy_client_dev:
   only:
     - dev
   variables:
-    IMAGE_TAG_CLIENT: "$CI_REGISTRY/wickedflame/avalanche/client:$CI_COMMIT_SHA-beta"
+    IMAGE_TAG_CLIENT: "$CI_REGISTRY/wickedflame/avalanche/client:$CI_COMMIT_SHA"
   when: manual
   extends: .deploy_client
   script:
     - docker build -f dockerfile-client -t "$IMAGE_TAG_CLIENT" .
-    - docker tag $IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
-    - docker push $CI_REGISTRY/wickedflame/avalanche/client:$VERSION
+    - docker tag $IMAGE_TAG_CLIENT $CI_REGISTRY/wickedflame/avalanche/client:$VERSION-beta${CI_PIPELINE_IID}
+    - docker push $CI_REGISTRY/wickedflame/avalanche/client:$VERSION-beta${CI_PIPELINE_IID}
 
 deploy_client:
   only:

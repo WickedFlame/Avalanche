@@ -27,7 +27,7 @@ namespace Avalanche.Controllers.Api
             var path = PathMapper.GetScenarioFile(name);
 
             var facade = new TestFacade(_dispatcher, _loggerFactory);
-            var settings = facade.StartBackgroundScenario(name, path);
+            var settings = facade.StartBackgroundScenario(name, path, new TestRunSettings { Runner = TestRunnerType.Local });
 
             return Ok(new
             {

@@ -25,7 +25,8 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     TestId = evnt.TestId,
                     Scenario = evnt.Scenario,
                     StartTime = evnt.StartTime,
-                    Status = evnt.Status
+                    Status = evnt.Status,
+                    Runner = evnt.Runner
                 });
         }
 

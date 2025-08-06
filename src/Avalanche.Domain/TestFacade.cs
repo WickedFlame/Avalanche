@@ -19,13 +19,13 @@ namespace Avalanche.Domain
             _loggerFactory = loggerFactory;
         }
 
-        public Scenario StartBackgroundScenario(string name, string path)
+        public Scenario StartBackgroundScenario(string name, string path, TestRunSettings settings)
         {
             var scenario = GetScenario(path);
 
             Task.Factory.StartNew(() =>
                 {
-                    Run(name, scenario);
+                    Run(name, scenario, settings);
                 },
                 CancellationToken.None,
                 TaskCreationOptions.LongRunning,
@@ -35,9 +35,9 @@ namespace Avalanche.Domain
         }
 
 
-        public Scenario Start(string name, Scenario scenario)
+        public Scenario Start(string name, Scenario scenario, TestRunSettings settings)
         {
-            Run(name, scenario);
+            Run(name, scenario, settings);
 
             return scenario;
         }
@@ -50,7 +50,7 @@ namespace Avalanche.Domain
             return scenario;
         }
 
-        private void Run(string name, Scenario scenario)
+        private void Run(string name, Scenario scenario, TestRunSettings settings)
         {
             var data = new TestRunData
             {
@@ -66,7 +66,8 @@ namespace Avalanche.Domain
             {
                 TestId = data.TestId,
                 Scenario = name,
-                StartTime = data.StartTime
+                StartTime = data.StartTime,
+                Runner = settings.Runner
             });
 
             data.Results = loadtest.Run(scenario);

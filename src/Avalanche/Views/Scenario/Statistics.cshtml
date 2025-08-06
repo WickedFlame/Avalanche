@@ -110,7 +110,7 @@
                                     <thead>
                                         <tr>
                                             <th style="vertical-align: bottom;">Scenario</th>
-                                            @foreach(var run in Model.Stats.GroupBy(s => s.TestCase).First().Take(10).OrderByDescending(d => d.StartTime))
+                                            @foreach(var run in Model.Stats.GroupBy(s => s.TestCase).First().Take(50).OrderByDescending(d => d.StartTime))
                                             {
                                                 <th style="writing-mode: tb;text-orientation: sideways;transform: rotate(-180deg);">@run.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</th>
                                             }
@@ -121,7 +121,7 @@
                                         {
                                             <tr>
                                                 <td>@grp.Key</td>
-                                                @foreach (var run in grp.Take(10).OrderByDescending(d => d.StartTime))
+                                                @foreach (var run in grp.Take(50).OrderByDescending(d => d.StartTime))
                                                 {
                                                     <td>@run.AverageMilliseconds</td>
                                                 }

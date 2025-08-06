@@ -1,11 +1,21 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Data.SQLite;
+using System.IO;
+using System.Xml.Linq;
 
 namespace Avalanche.DataSource.Sqlite
 {
-    public static class EventStoreBuilder
+    public class EventStoreBuilder : IDataStoreBuilder
     {
-        public static void CreateEventStore(IConfiguration config)
+        private readonly IConfiguration _config;
+
+        public EventStoreBuilder(IConfiguration config)
+        {
+            _config = config;
+        }
+
+        public void CreateEventStore()
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS Events (
@@ -16,7 +26,7 @@ CREATE TABLE IF NOT EXISTS Events (
   Value VARCHAR (2000)
 );
 ";
-            var builder = new ConnectionStringBuilder(Constants.EventStore, config);
+            var builder = new ConnectionStringBuilder(Constants.EventStore, _config);
             using (var connection = new SQLiteConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
@@ -29,7 +39,7 @@ CREATE TABLE IF NOT EXISTS Events (
             }
         }
 
-        public static void CreateWriteModel(IConfiguration config)
+        public void CreateWriteModel()
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS TestRun (
@@ -37,7 +47,8 @@ CREATE TABLE IF NOT EXISTS TestRun (
   Scenario VARCHAR(255),
   StartTime DATETIME,
   EndTime DATETIME,
-  Status VARCHAR(100)
+  Status VARCHAR(100),
+  Runner VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS RampupEvents (
@@ -89,7 +100,7 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Fastest REAL
 );
 ";
-            var builder = new ConnectionStringBuilder(Constants.ReadModel, config);
+            var builder = new ConnectionStringBuilder(Constants.ReadModel, _config);
             using (var connection = new SQLiteConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
@@ -100,6 +111,18 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public void RecreateWriteModel()
+        {
+            var dataPath = ConnectionStringBuilder.GetDataPath(_config);
+            var db = $"Data Source={dataPath}/{Constants.ReadModel}.db";
+            if (File.Exists(db))
+            {
+                File.Delete(db);
+            }
+
+            CreateWriteModel();
         }
     }
 }

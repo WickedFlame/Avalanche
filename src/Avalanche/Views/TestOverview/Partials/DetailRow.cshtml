@@ -1,0 +1,13 @@
+﻿@using Avalanche.ReadModel.Models
+@model IterationItem
+<tr>
+    <td>@Model.Time.ToString("dd.MM.yyyy hh:mm:ss")</td>
+    <td>@Model.ThreadId</td>
+    <td>@Model.Throughput</td>
+    <td>@Model.AverageMilliseconds</td>
+    <td>@Model.IsWarmup</td>
+    <td>@Model.Error</td>
+    <td>@Model.StatusCode</td>
+</tr>
+
+

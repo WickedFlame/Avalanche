@@ -11,5 +11,7 @@ namespace Avalanche.WriteModel.Events
         public DateTime StartTime { get; set; }
 
         public string Status { get; set; }
+
+        public string Runner { get; set; }
     }
 }

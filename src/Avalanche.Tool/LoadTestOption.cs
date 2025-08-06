@@ -82,9 +82,25 @@ namespace Avalanche
                 var path = GetFilePath(Scenario);
                 if (!System.IO.File.Exists(path))
                 {
-                    Console.WriteLine($"Could not find any configuration file for the Scenario {Scenario}");
+                    var msg = new StringBuilder()
+                        .AppendLine($"Could not find any configuration file for the Scenario {Scenario}");
+
+                    Console.WriteLine(msg.ToString());
+                    
+                    var scenarioPath = GetScenarioFolderPath();
+                    if (System.IO.Directory.Exists(scenarioPath))
+                    {
+                        msg.AppendLine($"Possible scenarios:");
+                        foreach(var file in System.IO.Directory.GetFiles(scenarioPath).Where(f => f.EndsWith(".yml")))
+                        {
+                            msg.AppendLine($"- {file}");
+                        }
+                    }
+
+                    msg.Append("Test will be aborted.");
+
                     var logger = LoggerFactory.CreateLogger<LoadTestOption>();
-                    logger.LogError($"Could not find any configuration file for the Scenario {Scenario}. Test will be aborted.");
+                    logger.LogError(msg.ToString());
                     return;
                 }
 
@@ -114,7 +130,7 @@ namespace Avalanche
                     })
                 });
 
-                facade.Start(Scenario, scenario);
+                facade.Start(Scenario, scenario, new TestRunSettings { Runner = TestRunnerType.External });
 
                 //
                 // Give the collector some time to finish the work
@@ -188,6 +204,23 @@ namespace Avalanche
 
             Debug.WriteLine($"File for Scenario {scenario} was not found");
             return $"{scenario}.yml";
+        }
+
+        private static string GetScenarioFolderPath()
+        {
+            var path = "scenarios";
+            if (Directory.Exists(path))
+            {
+                return path;
+            }
+
+            path = "../scenarios";
+            if (Directory.Exists(path))
+            {
+                return path;
+            }
+
+            return string.Empty;
         }
     }
 }

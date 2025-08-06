@@ -3,9 +3,16 @@ using Npgsql;
 
 namespace Avalanche.DataSource.Pgsql
 {
-    public static class EventStoreBuilder
+    public class EventStoreBuilder : IDataStoreBuilder
     {
-        public static void CreateEventStore(IConfiguration config)
+        private readonly IConfiguration _config;
+
+        public EventStoreBuilder(IConfiguration config)
+        {
+            _config = config;
+        }
+
+        public void CreateEventStore()
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS Events (
@@ -16,9 +23,9 @@ CREATE TABLE IF NOT EXISTS Events (
   Value VARCHAR (2000)
 );
 ";
-            CreateDatabaseIfNotExists("eventstore", config);
+            CreateDatabaseIfNotExists("eventstore", _config);
 
-            var builder = new ConnectionBuilder(Constants.EventStoreDatabase, config);
+            var builder = new ConnectionBuilder(Constants.EventStoreDatabase, _config);
             using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
@@ -60,7 +67,7 @@ CREATE TABLE IF NOT EXISTS Events (
             }
         }
 
-        public static void CreateWriteModel(IConfiguration config)
+        public void CreateWriteModel()
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS TestRun (
@@ -68,7 +75,8 @@ CREATE TABLE IF NOT EXISTS TestRun (
   Scenario VARCHAR(255),
   StartTime TIMESTAMP,
   EndTime TIMESTAMP,
-  Status VARCHAR(100)
+  Status VARCHAR(100),
+  Runner VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS RampupEvents (
@@ -120,9 +128,9 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Fastest REAL
 );
 ";
-            CreateDatabaseIfNotExists("readmodel", config);
+            CreateDatabaseIfNotExists("readmodel", _config);
 
-            var builder = new ConnectionBuilder(Constants.ReadModelDatabase, config);
+            var builder = new ConnectionBuilder(Constants.ReadModelDatabase, _config);
             using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
             {
                 connection.Open();
@@ -133,6 +141,24 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public void RecreateWriteModel()
+        {
+            var builder = new ConnectionBuilder("postgres", _config);
+            using (var connection = new NpgsqlConnection(builder.BuildConnectionString()))
+            {
+                connection.Open();
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = $"DROP DATABASE readmodel WITH (FORCE);";
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            NpgsqlConnection.ClearAllPools();
+
+            CreateWriteModel();
         }
     }
 }

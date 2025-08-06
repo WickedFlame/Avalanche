@@ -1,9 +1,9 @@
 ﻿using Avalanche.DataSource;
 using Avalanche.Domain;
 using Avalanche.Models;
+using Avalanche.ReadModel.Queries;
 using Avalanche.ReadModel.QueryHandlers;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml.Linq;
 
 namespace Avalanche.Controllers
 {
@@ -18,7 +18,7 @@ namespace Avalanche.Controllers
             _factory = factory;
         }
 
-        public IActionResult Index(string scenario, string testid)
+        public IActionResult Index(string scenario, string testid, string tab)
         {
             var trh = new TestRunQueryHandler(_builder);
             var lastRun = trh.Get(new ReadModel.Queries.GetTestRun { TestId = testid });
@@ -32,10 +32,17 @@ namespace Avalanche.Controllers
             {
                 Scenario = scenario,
                 TestId = lastRun?.TestId,
+                Tab = tab,
                 StartTime = lastRun?.StartTime,
                 Settings = settings,
-                Status = lastRun?.Status == null ? Runner.TestRunStatus.New : new Runner.TestRunStatus(lastRun.Status)
+                Status = lastRun?.Status == null ? Runner.TestRunStatus.New : new Runner.TestRunStatus(lastRun.Status),
+                Runner = lastRun?.Runner == null ? new TestRunnerType("") : new TestRunnerType(lastRun.Runner)
             };
+
+            if(tab == "details")
+            {
+                model.Details = trh.Get(new GetDetailData { TestId = testid });
+            }
 
             return View(model);
         }
