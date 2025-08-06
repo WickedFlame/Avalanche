@@ -17,6 +17,17 @@
         });
 
         this.charts = new Map();
+
+        let btn = document.querySelector('#btn_del_scenario')
+        if (btn) {
+            btn.addEventListener('click', e => {
+                document.querySelector('#delScenario').classList.toggle('is-active');
+            });
+        }
+
+        document.querySelectorAll('.pt-cancel-btn').forEach(btn => btn.addEventListener('click', e => {
+            document.querySelector('#delScenario').classList.toggle('is-active');
+        }));
     }
 
     async startTest(name) {

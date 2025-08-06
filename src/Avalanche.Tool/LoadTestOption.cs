@@ -91,7 +91,7 @@ namespace Avalanche
                     if (System.IO.Directory.Exists(scenarioPath))
                     {
                         msg.AppendLine($"Possible scenarios:");
-                        foreach(var file in System.IO.Directory.GetFiles(scenarioPath).Where(f => f.EndsWith(".yml")))
+                        foreach(var file in System.IO.Directory.GetFiles(scenarioPath))
                         {
                             msg.AppendLine($"- {file}");
                         }
