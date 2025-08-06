@@ -9,6 +9,10 @@
         /*background: var(--panel-background-color);*/
         height: 100%;
     }
+
+    .modal-background {
+        background: hsla(221, 14%, 4%, 0.5);
+    }
 }
 
 @media (prefers-color-scheme: light) {
@@ -22,6 +26,10 @@
     :root {
         /* CSS Variables */
         --panel-background-color: #24292e;
+
+        .modal-background {
+            background: hsla(221, 14%, 4%, 0.5);
+        }
     }
 }
 
@@ -35,6 +43,10 @@
 .theme-dark {
     /* CSS Variables */
     --panel-background-color: #24292e;
+
+    .modal-background {
+        background: hsla(221, 14%, 4%, 0.5);
+    }
 }
 
 .content {

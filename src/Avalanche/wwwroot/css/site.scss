@@ -236,3 +236,22 @@ body {
         font-weight: 400;
     }
 }
+
+.pt-messagebox {
+    padding-bottom: 20px;
+
+    .pt-messagebox-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+
+        .modal-close {
+            position: relative;
+            top: auto;
+            left: 10px;
+        }
+    }
+
+    .pt-messagebox-content {
+        padding-bottom: 10px;
+    }
+}

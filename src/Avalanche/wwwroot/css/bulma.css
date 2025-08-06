@@ -21565,6 +21565,9 @@ has-background-danger.is-hoverable:active {
   /*background: var(--panel-background-color);*/
   height: 100%;
 }
+:root .modal-background {
+  background: hsla(221, 14%, 4%, 0.5);
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -21577,6 +21580,9 @@ has-background-danger.is-hoverable:active {
     /* CSS Variables */
     --panel-background-color: #24292e;
   }
+  :root .modal-background {
+    background: hsla(221, 14%, 4%, 0.5);
+  }
 }
 [data-theme=light],
 .theme-light {
@@ -21588,6 +21594,10 @@ has-background-danger.is-hoverable:active {
 .theme-dark {
   /* CSS Variables */
   --panel-background-color: #24292e;
+}
+[data-theme=dark] .modal-background,
+.theme-dark .modal-background {
+  background: hsla(221, 14%, 4%, 0.5);
 }
 
 .content ul {
