@@ -122,7 +122,7 @@ namespace Avalanche.Runner
                                         TestId = _testId,
                                         TestCase = test.Name,
                                         ThreadId = ctx.Get<int>(ContextKeys.ThreadId),
-                                        Message = result.ErrorMessage,
+                                        Message = result.ErrorMessage ?? result.ErrorException?.Message,
                                         StatusCode = result.StatusCode,
                                         IsWarmup = ctx.Settings.IsWarmup
                                     };
