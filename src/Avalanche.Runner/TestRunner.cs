@@ -9,17 +9,17 @@ using System.Net;
 
 namespace Avalanche.Runner
 {
-    public class LoadTest
+    public class TestRunner
     {
         private readonly string _testId;
         private readonly IDispatcher<ICommand> _dispatcher;
-        private readonly ILogger<LoadTest> _logger;
+        private readonly ILogger<TestRunner> _logger;
 
-        public LoadTest(string testId, IDispatcher<ICommand> dispatcher, ILoggerFactory logger)
+        public TestRunner(string testId, IDispatcher<ICommand> dispatcher, ILoggerFactory logger)
         {
             _testId = testId;
             _dispatcher = dispatcher;
-            _logger = logger.CreateLogger<LoadTest>();
+            _logger = logger.CreateLogger<TestRunner>();
         }
 
         public IEnumerable<TestResult> Run(Scenario settings)
