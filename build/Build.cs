@@ -30,7 +30,7 @@ class Build : NukeBuild
     [Solution] readonly Solution Solution;
 
     [Parameter("Version to be injected in the Build")]
-    public string Version { get; set; } = "0.0.1";
+    public string Version { get; set; } = "0.0.3";
 
     [Parameter("The Buildnumber provided by the CI")]
     public string BuildNo = $"{DateTime.Today.Month * 31 + DateTime.Today.Day}1";
