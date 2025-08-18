@@ -4,16 +4,7 @@
 
 
 <div class="pt-main-content pt-has-side-navigation">
-    <aside class="menu px-4 py-4">
-        <p class="menu-label">Settings</p>
-        @* <ul class="menu-list">
-            <li><a asp-controller="Home" asp-action="Index">View all Scenarios</a></li>
-        </ul>
-        <p class="menu-label">Details</p>
-        <ul class="menu-list">
-            <li><a asp-controller="Scenario" asp-action="Statistics" asp-route-name="@Model.Name">Statistics</a></li>
-        </ul> *@
-    </aside>
+    <partial name="./Partials/_Navigation"/>
 
     <div class="content px-6 py-4">
         <h1 class="title is-1">Settings</h1>

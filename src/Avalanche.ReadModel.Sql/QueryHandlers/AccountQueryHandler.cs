@@ -40,5 +40,13 @@ namespace Avalanche.ReadModel.Sql.QueryHandlers
                 .Get<Role>();
 
         }
+
+        public IEnumerable<User> Get(GetUsersQuery query)
+        {
+            var db = _builder.Build();
+            return db.Query(nameof(DataSource.DTO.Users))
+                .Select()
+                .Get<User>();
+        }
     }
 }
