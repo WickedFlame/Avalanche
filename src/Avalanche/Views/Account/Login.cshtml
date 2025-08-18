@@ -60,4 +60,13 @@
 </div>
 
 @section scripts {
+    <script>
+        let img = document.getElementById('avalanche-logo-main');
+        if (img) {
+            let modus = localStorage.getItem('mode');
+            if (modus === 'light') {
+                img.src = '/avalanche-logo-dark.png';
+            }
+        }
+    </script>
 }
