@@ -74,6 +74,7 @@ builder.Services.AddTransient<IEventBus>(c =>
     eventBus.Subscribe<DeleteTestRunEvent>(new DeleteTestRunEventHandler(c.GetService<IProjectionConnectionBuilder>()));
 
     eventBus.Subscribe<CreateUserEvent>(new AccountEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+    eventBus.Subscribe<DeleteUserEvent>(new AccountEventHandler(c.GetService<IProjectionConnectionBuilder>()));
 
     return eventBus;
 });

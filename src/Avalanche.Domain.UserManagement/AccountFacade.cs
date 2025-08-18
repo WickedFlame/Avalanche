@@ -73,5 +73,13 @@ namespace Avalanche.Domain.UserManagement
 
             return users;
         }
+
+        public User GetUser(string username)
+        {
+            var user = _queryHandler.Get(new GetUserQuery { Username = username });
+            user.Roles = _queryHandler.Get(new GetUserRolesQuery { UserId = user.Id }).Select(r => r.Name);
+
+            return user;
+        }
     }
 }

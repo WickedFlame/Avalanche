@@ -1,13 +1,14 @@
 ﻿
 <aside class="menu px-4 py-4">
+    <p class="menu-label">Management</p>
+    <ul class="menu-list">
+        <li><a asp-controller="Settings" asp-action="Profile">Profile</a></li>
+    </ul>
     @if (User.IsInRole("Admin"))
     {
-        <p class="menu-label">Usermanagement</p>
+        <p class="menu-label">Administration</p>
         <ul class="menu-list">
             <li><a asp-controller="Settings" asp-action="Users">Users</a></li>
-        </ul>
-        <p class="menu-label">Database</p>
-        <ul class="menu-list">
             <li><a asp-controller="Settings" asp-action="Database">Database</a></li>
         </ul>
     }

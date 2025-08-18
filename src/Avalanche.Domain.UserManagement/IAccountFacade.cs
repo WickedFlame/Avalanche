@@ -9,5 +9,7 @@ namespace Avalanche.Domain.UserManagement
         bool CreateUser(string username, string password, string name, IEnumerable<string> roles);
 
         IEnumerable<User> GetUsers();
+
+        User GetUser(string username);
     }
 }

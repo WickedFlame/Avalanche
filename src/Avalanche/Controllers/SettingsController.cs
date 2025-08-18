@@ -1,8 +1,11 @@
 ﻿using Avalanche.Domain;
 using Avalanche.Domain.UserManagement;
 using Avalanche.Models;
+using Avalanche.WriteModel.Events;
+using Broadcast;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Avalanche.Controllers
 {
@@ -10,14 +13,38 @@ namespace Avalanche.Controllers
     {
         private readonly ISettingsFacade _facade;
         private readonly IAccountFacade _accountFacade;
+        private readonly IEventBus _eventBus;
 
-        public SettingsController(ISettingsFacade facade, IAccountFacade accountFacade)
+        public SettingsController(ISettingsFacade facade, IAccountFacade accountFacade, IEventBus eventBus)
         {
             _facade = facade;
             _accountFacade = accountFacade;
+            _eventBus = eventBus;
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Profile()
+        {
+            var user = _accountFacade.GetUser(User.Identity.Name);
+
+            var model = new ProfileModel
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Name = user.Name,
+                Roles = user.Roles
+            };
+
+            return View(model);
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Database()
         {
             return View();
         }
@@ -27,7 +54,7 @@ namespace Avalanche.Controllers
         {
             _facade.RecreateDatabase();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Database");
         }
 
         [Authorize(Roles = "Admin")]
@@ -50,6 +77,13 @@ namespace Avalanche.Controllers
             }
 
             _accountFacade.CreateUser(username, password, name, isadmin ? ["Admin"] : Enumerable.Empty<string>());
+            return RedirectToAction("Users");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteUser(string userId)
+        {
+            _eventBus.Publish(new DeleteUserEvent { UserId = userId });
             return RedirectToAction("Users");
         }
     }

@@ -8,20 +8,7 @@
 
     <div class="content px-6 py-4">
         <h1 class="title is-1">Settings</h1>
-        @if (User.IsInRole("Admin"))
-        {
-            <div>
-                <h2>Database</h2>
-                <div class="pt-padding-side py-5">
-                    <div class="py-4">Recreate the Readmodel from the Events</div>
-                    <div>
-                        <div class="buttons has-addons">
-                            <a asp-controller="Settings" asp-action="RecreateDatabase" class="button">Recreate Readmodel</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+        
     </div>
 
 </div>

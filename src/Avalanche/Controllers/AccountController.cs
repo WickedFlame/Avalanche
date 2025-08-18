@@ -34,7 +34,8 @@ namespace Avalanche.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new (ClaimTypes.Name, username)
+                    new (ClaimTypes.Name, username),
+                    new (ClaimTypes.NameIdentifier, user.Id)
                 };
 
                 foreach(var role in user.Roles)

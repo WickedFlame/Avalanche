@@ -6,8 +6,8 @@ using SqlKata.Execution;
 namespace Avalanche.WriteModel.Sql.EventHandlers
 {
     public class AccountEventHandler :
-        IEventHandler<CreateUserEvent>
-        //IEventHandler<RampdownEvent>
+        IEventHandler<CreateUserEvent>,
+        IEventHandler<DeleteUserEvent>
     {
         private readonly IProjectionConnectionBuilder _builder;
 
@@ -51,25 +51,25 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
             }
         }
 
-        //public void Handle(RampdownEvent @event)
-        //{
-        //    if (@event.IsWarmup)
-        //    {
-        //        return;
-        //    }
+        public void Handle(DeleteUserEvent @event)
+        {
+            var db = _builder.Build();
+            db.Query(nameof(UserRoles))
+                .Where(
+                new
+                {
+                    UserId = @event.UserId,
+                })
+                .Delete();
 
-        //    var db = _builder.Build();
-        //    db.Query(nameof(RampupEvents))
-        //        .Insert(new
-        //        {
-        //            Id = Guid.NewGuid().ToString(),
-        //            TestId = @event.TestId,
-        //            Time = DateTime.Now,
-        //            TestCase = @event.TestCase,
-        //            ThreadId = @event.ThreadId,
-        //            Value = -1
-        //        });
-        //}
+            db.Query(nameof(Users))
+                .Where(
+                new
+                {
+                    Id = @event.UserId,
+                })
+                .Delete();
+        }
 
         public void Dispose()
         {

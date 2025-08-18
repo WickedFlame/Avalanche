@@ -78,7 +78,13 @@
                                     <td>@user.Name</td>
                                     <td>@(string.Join(',', user.Roles))</td>
                                     <td></td>
-                                    <td></td>
+                                    <td>
+                                        <a class="pt-button right" asp-controller="Settings" asp-action="DeleteUser" asp-route-userId="@user.Id">
+                                            <span class="icon">
+                                                <i class="fa fa-trash" title="Delete user"></i>
+                                            </span>
+                                        </a>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
