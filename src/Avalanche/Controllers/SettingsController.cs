@@ -5,6 +5,7 @@ using Avalanche.WriteModel.Events;
 using Broadcast;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 namespace Avalanche.Controllers
@@ -39,7 +40,23 @@ namespace Avalanche.Controllers
                 Roles = user.Roles
             };
 
+            if (!string.IsNullOrEmpty(TempData["error"]?.ToString()))
+            {
+                ViewBag.Error = TempData["error"]?.ToString();
+                TempData["error"] = null;
+            }
+
             return View(model);
+        }
+
+        public IActionResult ChangePassword(string userId, string oldpwd, string newpwd, string confirmpwd)
+        {
+            if(!_accountFacade.ChangePassword(userId, oldpwd, newpwd, confirmpwd))
+            {
+                TempData["error"] = "Invalid credentials";
+            }
+
+            return RedirectToAction("Profile");
         }
 
 

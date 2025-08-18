@@ -17,6 +17,18 @@ namespace Avalanche.ReadModel.Sql.QueryHandlers
         public User Get(GetUserQuery query)
         {
             var db = _builder.Build();
+            if (!string.IsNullOrEmpty(query.UserId))
+            {
+                return db.Query(nameof(DataSource.DTO.Users))
+                    .Select()
+                    .Where(new
+                    {
+                        Id = query.UserId,
+                    })
+                    .Get<User>()
+                    .FirstOrDefault();
+            }
+
             return db.Query(nameof(DataSource.DTO.Users))
                 .Select()
                 .Where(new

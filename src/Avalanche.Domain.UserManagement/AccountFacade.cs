@@ -51,7 +51,7 @@ namespace Avalanche.Domain.UserManagement
 
             var hasher = new PasswordHasher<string>();
 
-            _eventBus.Publish(Guid.NewGuid().ToString(), DateTime.Now, new CreateUserEvent
+            _eventBus.Publish(new CreateUserEvent
             {
                 Username = username,
                 Password = hasher.HashPassword(username, password),
@@ -80,6 +80,30 @@ namespace Avalanche.Domain.UserManagement
             user.Roles = _queryHandler.Get(new GetUserRolesQuery { UserId = user.Id }).Select(r => r.Name);
 
             return user;
+        }
+
+        public bool ChangePassword(string userId, string oldpwd, string newpwd, string confirmpwd)
+        {
+            var user = _queryHandler.Get(new GetUserQuery { UserId = userId });
+
+            var hasher = new PasswordHasher<string>();
+            if(hasher.VerifyHashedPassword(user.Username, user.Password, oldpwd) != PasswordVerificationResult.Success)
+            {
+                return false;
+            }
+
+            if (newpwd != confirmpwd)
+            {
+                return false;
+            }
+
+            _eventBus.Publish(new UpdatePasswordEvent
+            {
+                UserId = userId,
+                Password = hasher.HashPassword(user.Username, newpwd)
+            });
+
+            return true;
         }
     }
 }

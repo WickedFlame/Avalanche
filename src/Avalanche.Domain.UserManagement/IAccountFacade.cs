@@ -11,5 +11,7 @@ namespace Avalanche.Domain.UserManagement
         IEnumerable<User> GetUsers();
 
         User GetUser(string username);
+
+        bool ChangePassword(string userId, string oldpwd, string newpwd, string confirmpwd);
     }
 }

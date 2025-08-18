@@ -46,7 +46,7 @@
             <div class="pt-content-panel">
                 <h2>Change password</h2>
                 <div class="pt-padding-side py-5">
-                    @using (Html.BeginForm("AddUser", "Settings", FormMethod.Post, new { id = "assuserform" }))
+                    @using (Html.BeginForm("ChangePassword", "Settings", FormMethod.Post, new { id = "changepwdform" }))
                     {
                         <div class="content-header content-container" id="sticky-header">
                             <input type="hidden" name="userid" value="@Model.Id" />
@@ -55,7 +55,7 @@
                                     Current password*
                                 </label>
                                 <div class="control">
-                                    <input class="input" type="password" placeholder="Password..." name="currentpassword" />
+                                    <input class="input" type="password" placeholder="Password..." name="oldpwd" />
                                 </div>
                             </div>
                             <div class="field">
@@ -63,7 +63,7 @@
                                     New password*
                                 </label>
                                 <div class="control">
-                                    <input class="input" type="password" placeholder="Password..." name="newpassword" />
+                                    <input class="input" type="password" placeholder="Password..." name="newpwd" />
                                 </div>
                             </div>
                             <div class="field">
@@ -71,15 +71,20 @@
                                     Confirm password*
                                 </label>
                                 <div class="control">
-                                    <input class="input" type="password" placeholder="Password..." name="confirmpassword" />
+                                    <input class="input" type="password" placeholder="Password..." name="confirmpwd" />
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="control">
-                                    <button type="submit" id="adduser-btn" form="assuserform" class="button">Change password</button>
+                                    <button type="submit" id="changepwd-btn" form="changepwdform" class="button">Change password</button>
                                 </div>
                             </div>
                         </div>
+                    }
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <p style="color:red">@ViewBag.Error</p>
                     }
                 </div>
             </div>

@@ -7,7 +7,8 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
 {
     public class AccountEventHandler :
         IEventHandler<CreateUserEvent>,
-        IEventHandler<DeleteUserEvent>
+        IEventHandler<DeleteUserEvent>,
+        IEventHandler<UpdatePasswordEvent>
     {
         private readonly IProjectionConnectionBuilder _builder;
 
@@ -69,6 +70,21 @@ namespace Avalanche.WriteModel.Sql.EventHandlers
                     Id = @event.UserId,
                 })
                 .Delete();
+        }
+
+        public void Handle(UpdatePasswordEvent @event)
+        {
+            var db = _builder.Build();
+            db.Query(nameof(Users))
+                .Where(
+                new
+                {
+                    Id = @event.UserId,
+                })
+                .Update(new
+                {
+                    Password = @event.Password
+                });
         }
 
         public void Dispose()
