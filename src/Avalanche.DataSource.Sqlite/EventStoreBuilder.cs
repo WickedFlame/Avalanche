@@ -99,6 +99,26 @@ CREATE TABLE IF NOT EXISTS SummaryEvents (
   Slowest REAL,
   Fastest REAL
 );
+
+
+CREATE TABLE IF NOT EXISTS Users (
+  Id VARCHAR(255) PRIMARY KEY,
+  Username VARCHAR(255),
+  Password VARCHAR(500),
+  Name VARCHAR(255),
+);
+
+CREATE TABLE IF NOT EXISTS Roles (
+  Id VARCHAR(255) PRIMARY KEY,
+  Name VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS UserRoles (
+  UserId VARCHAR(255) REFERENCES Users(Id) ON DELETE CASCADE,
+  RoleId VARCHAR(255) REFERENCES Roles(Id) ON DELETE CASCADE
+);
+
+INSERT OR IGNORE INTO Roles (Id, Name) VALUES ('Admin', 'A42BCC71-20E6-44A5-9F47-45936A1877FE')
 ";
             var builder = new ConnectionStringBuilder(Constants.ReadModel, _config);
             using (var connection = new SQLiteConnection(builder.BuildConnectionString()))

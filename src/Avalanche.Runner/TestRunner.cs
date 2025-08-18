@@ -9,17 +9,17 @@ using System.Net;
 
 namespace Avalanche.Runner
 {
-    public class LoadTest
+    public class TestRunner
     {
         private readonly string _testId;
         private readonly IDispatcher<ICommand> _dispatcher;
-        private readonly ILogger<LoadTest> _logger;
+        private readonly ILogger<TestRunner> _logger;
 
-        public LoadTest(string testId, IDispatcher<ICommand> dispatcher, ILoggerFactory logger)
+        public TestRunner(string testId, IDispatcher<ICommand> dispatcher, ILoggerFactory logger)
         {
             _testId = testId;
             _dispatcher = dispatcher;
-            _logger = logger.CreateLogger<LoadTest>();
+            _logger = logger.CreateLogger<TestRunner>();
         }
 
         public IEnumerable<TestResult> Run(Scenario settings)
@@ -28,13 +28,15 @@ namespace Avalanche.Runner
 
             foreach (var test in settings.TestCases)
             {
+                var requests = test.Urls.Select(u => new RequestUrl(u));
+
                 var session = ProfilerSession.StartSession()
                     .AddMiddleware(new ItterationLogCollectionTaskHandler(test.Name, _testId))
                     .OnStartPipeline(s =>
                     {
                         var ctx = new MeasureMap.ExecutionContext(s);
 
-                        var options = new RestClientOptions()
+                        var options = new RestSharp.RestClientOptions()
                         {
                             FollowRedirects = true,
                             RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true,
@@ -58,8 +60,8 @@ namespace Avalanche.Runner
                             {
                                 var time = Stopwatch.StartNew();
 
-                                var request = new RestRequest(url);
-                                var result = client.GetAsync(request).GetAwaiter().GetResult();
+                                var execution = new RequestExecution(client);
+                                var result = execution.Execute(new RequestUrl(url));
 
                                 time.Stop();
 
@@ -87,7 +89,7 @@ namespace Avalanche.Runner
                     })
                     .OnEndPipeline(e =>
                     {
-                        e.Get<RestClient>("httpclient").Dispose();
+                        e.Get<IRestClient>("httpclient").Dispose();
 
                         var metric = new EndThreadCommand
                         {
@@ -106,14 +108,14 @@ namespace Avalanche.Runner
                     })
                     .Task(ctx =>
                     {
-                        var client = ctx.Get<RestClient>("httpclient");
+                        var client = ctx.Get<IRestClient>("httpclient");
+                        var execution = new RequestExecution(client);
 
-                        foreach (var url in test.Urls)
+                        foreach (var req in requests)
                         {
                             try
                             {
-                                var request = new RestRequest(url);
-                                var result = client.GetAsync(request).GetAwaiter().GetResult();
+                                var result = execution.Execute(req);
                                 if (!result.IsSuccessful)
                                 {
                                     var cmd = new IterationFailedCommand
@@ -128,10 +130,10 @@ namespace Avalanche.Runner
                                     };
                                     _dispatcher.SendAsync(cmd);
 
-                                    _logger.LogInformation("Call to {Url} for Test {TestId} resulted in StatusCode {StatusCode}", url, _testId, result.StatusCode);
+                                    _logger.LogInformation("Call to {Url} for Test {TestId} resulted in StatusCode {StatusCode}", req.Url, _testId, result.StatusCode);
                                 }
 
-                                ctx.Set("ContentLength", (long)result.RawBytes.Length);
+                                ctx.Set("ContentLength", result.ContentLength);
                             }
                             catch(Exception e)
                             {
@@ -147,7 +149,7 @@ namespace Avalanche.Runner
                                 };
                                 _dispatcher.SendAsync(cmd);
 
-                                _logger.LogError(e, "Call to {Url} for Test {TestId} caused an error", url, _testId);
+                                _logger.LogError(e, "Call to {Url} for Test {TestId} caused an error", req.Url, _testId);
                             }
                         }
                     });

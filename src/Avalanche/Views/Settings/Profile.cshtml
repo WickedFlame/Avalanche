@@ -1,0 +1,98 @@
+﻿@using System.Linq
+@model ProfileModel
+
+
+<div class="pt-main-content pt-has-side-navigation">
+    <partial name="./Partials/_Navigation"/>
+
+    <div class="content px-6 py-4">
+        <h1 class="title is-1">Profile</h1>
+        <div class="pt-element-container">
+            <div class="pt-content-panel">
+                <div class="pt-padding-side py-5">
+                    @using (Html.BeginForm("AddUser", "Settings", FormMethod.Post, new { id = "assuserform" }))
+                    {
+                        <div class="content-header content-container" id="sticky-header">
+                            <input type="hidden" name="userid" value="@Model.Id" />
+                            <div class="field">
+                                <label class="label">
+                                    Username*
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Username..." name="username" disabled value="@Model.Username" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">
+                                    Name*
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Name..." name="name" value="@Model.Name" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" id="adduser-btn" form="assuserform" class="button">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        <div class="pt-element-container">
+            <div class="pt-content-panel">
+                <h2>Change password</h2>
+                <div class="pt-padding-side py-5">
+                    @using (Html.BeginForm("ChangePassword", "Settings", FormMethod.Post, new { id = "changepwdform" }))
+                    {
+                        <div class="content-header content-container" id="sticky-header">
+                            <input type="hidden" name="userid" value="@Model.Id" />
+                            <div class="field">
+                                <label class="label">
+                                    Current password*
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="password" placeholder="Password..." name="oldpwd" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">
+                                    New password*
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="password" placeholder="Password..." name="newpwd" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">
+                                    Confirm password*
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="password" placeholder="Password..." name="confirmpwd" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" id="changepwd-btn" form="changepwdform" class="button">Change password</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <p style="color:red">@ViewBag.Error</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+
+}
