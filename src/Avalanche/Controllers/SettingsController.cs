@@ -1,4 +1,5 @@
 ﻿using Avalanche.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers
@@ -17,11 +18,18 @@ namespace Avalanche.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult RecreateDatabase()
         {
             _facade.RecreateDatabase();
 
             return RedirectToAction("Index");
         }
+
+        //[Authorize(Roles = "Admin")]
+        //public IActionResult UserManagement()
+        //{
+        //    return View();
+        //}
     }
 }

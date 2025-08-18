@@ -1,6 +1,7 @@
 using Avalanche;
 using Avalanche.DataSource;
 using Avalanche.Domain;
+using Avalanche.Domain.UserManagement;
 using Avalanche.ReadModel;
 using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.ReadModel.Sql.QueryHandlers;
@@ -8,6 +9,9 @@ using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sql;
 using Avalanche.WriteModel.Sql.EventHandlers;
 using Broadcast;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using OpenTelemetry.Logs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -69,11 +73,16 @@ builder.Services.AddTransient<IEventBus>(c =>
 
     eventBus.Subscribe<DeleteTestRunEvent>(new DeleteTestRunEventHandler(c.GetService<IProjectionConnectionBuilder>()));
 
+    eventBus.Subscribe<CreateUserEvent>(new AccountEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+
     return eventBus;
 });
 builder.Services.AddSingleton<ISettingsQueryHandler, SettingsQueryHandler>();
 builder.Services.AddTransient<ITestRunQueryHandler, TestRunQueryHandler>();
+builder.Services.AddTransient<IAccountQueryHandler, AccountQueryHandler>();
+
 builder.Services.AddTransient<ISettingsFacade, SettingsFacade>();
+builder.Services.AddTransient<IAccountFacade, AccountFacade>();
 
 builder.Services.AddLogging((loggingBuilder) => loggingBuilder
         .SetMinimumLevel(LogLevel.Debug)
@@ -82,7 +91,27 @@ builder.Services.AddLogging((loggingBuilder) => loggingBuilder
         );
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    // Require authentication globally
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
+
+
+
+// Add cookie authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";  // Redirect if not logged in
+        options.LogoutPath = "/Account/Logout";
+    });
+
+
+
 
 var app = builder.Build();
 

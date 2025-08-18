@@ -1,0 +1,63 @@
+﻿@using Avalanche.Domain
+@model TestsViewModel
+
+@{
+    Layout = "_BlankLayout";
+}
+
+<div class="pt-center-container">
+    <div></div>
+    <div class="pt-main-content pt-login-panel">
+        <div class="content px-6 py-4">
+            <div style="text-align:center;">
+                <img id="avalanche-logo-main" src="~/avalanche-logo-light.png" alt="avalanche" style="height:80px" />
+                <div>Loadtesting for Web Applications</div>
+                <h3>Login to your account</h3>
+            </div>
+
+            <div class="py-6">
+                <div class="pt-element-container">
+                    <div class="pt-content-panel">
+
+                        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "LoginForm" }))
+                        {
+                            <div class="content-header content-container" id="sticky-header">
+                                <div class="field">
+                                    <label class="label">
+                                        Username
+                                    </label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Username..." name="username" />
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">
+                                        Password
+                                    </label>
+                                    <div class="control">
+                                        <input class="input" type="password" placeholder="Password..." name="password" />
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <button type="submit" id="login-btn" form="LoginForm" class="button">Login</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @if (ViewBag.Error != null)
+                        {
+                            <p style="color:red">@ViewBag.Error</p>
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+}

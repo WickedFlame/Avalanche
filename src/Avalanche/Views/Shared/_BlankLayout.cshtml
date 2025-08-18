@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avalanche @ViewData["Title"]</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="~/css/site.min.css" />
+    <link rel="stylesheet" href="~/css/bulma.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+</head>
+<body>
+    <script>
+        let htmlTag = document.getElementsByTagName('html')[0];
+        let modus = localStorage.getItem('mode');
+        if (modus === 'light') {
+            htmlTag.classList.remove('theme-dark');
+            htmlTag.classList.add('theme-light');
+        } else {
+            htmlTag.classList.remove('theme-light');
+        }
+    </script>
+
+    <div class="pt-body">
+        @RenderBody()
+    </div>
+
+    <script type="module" async>
+        import { Site } from '/js/site.js';
+        var site = new Site();
+    </script>
+    <script>
+        let logo = document.getElementById('avalanche-logo');
+        if (logo) {
+            let modus = localStorage.getItem('mode');
+            if (modus === 'light') {
+                logo.src = '/avalanche-logo-dark.png';
+            }
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
