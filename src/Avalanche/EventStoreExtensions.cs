@@ -1,4 +1,5 @@
 ﻿using Avalanche.DataSource;
+using Avalanche.Domain.UserManagement;
 
 namespace Avalanche
 {
@@ -14,6 +15,9 @@ namespace Avalanche
         {
             var store = app.ApplicationServices.GetService<IDataStoreBuilder>();
             store.CreateWriteModel();
+
+            var facade = app.ApplicationServices.GetService<IAccountFacade>();
+            facade.CreateUser("admin", "admin", "Admin", ["Admin"]);
         }
     }
 }

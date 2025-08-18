@@ -1,0 +1,101 @@
+﻿@using System.Linq
+@model UsersModel
+
+
+<div class="pt-main-content pt-has-side-navigation">
+    <partial name="./Partials/_Navigation"/>
+
+    <div class="content px-6 py-4">
+        <h1 class="title is-1">Users</h1>
+        <div class="pt-element-container">
+            <div class="pt-content-panel">
+                <h2>Add new user</h2>
+                <div class="pt-padding-side py-5">
+                    @using (Html.BeginForm("AddUser", "Settings", FormMethod.Post, new { id = "assuserform" }))
+                    {
+                        <div class="content-header content-container" id="sticky-header">
+                            <div class="field">
+                                <label class="label">
+                                    Username*
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Username..." name="username" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">
+                                    Password*
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="password" placeholder="Password..." name="password" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">
+                                    Confirm password*
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="password" placeholder="Password..." name="confirmpassword" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">
+                                    Name*
+                                </label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Name..." name="name" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" id="adduser-btn" form="assuserform" class="button">Create user</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="pt-element-container">
+            <div class="pt-content-panel">
+                <h2>Users</h2>
+                <div class="pt-padding-side py-5">
+                    <table class="table is-fullwidth is-hoverable">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Name</th>
+                                <th>Roles</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.Users)
+                            {
+                                <tr>
+                                    <td><a>@user.Username</a></td>
+                                    <td>@user.Name</td>
+                                    <td>@(string.Join(',', user.Roles))</td>
+                                    <td></td>
+                                    <td>
+                                        <a class="pt-button right" asp-controller="Settings" asp-action="DeleteUser" asp-route-userId="@user.Id">
+                                            <span class="icon">
+                                                <i class="fa fa-trash" title="Delete user"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+
+}
