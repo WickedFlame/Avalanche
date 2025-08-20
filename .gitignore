@@ -410,3 +410,4 @@ artifacts/**/*.*
 build/_build.csproj.DotSettings
 src/Avalanche.Tool/scenarios
 src/Avalanche/scenarios
+src/Avalanche/data/keys

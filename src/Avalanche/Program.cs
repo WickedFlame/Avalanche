@@ -11,6 +11,7 @@ using Avalanche.WriteModel.Sql.EventHandlers;
 using Broadcast;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using OpenTelemetry.Logs;
 
@@ -112,8 +113,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LogoutPath = "/Account/Logout";
     });
 
-
-
+builder.Services.AddDataProtection()
+        .PersistKeysToFileSystem(new DirectoryInfo("./data/keys/"));
 
 var app = builder.Build();
 
