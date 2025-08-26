@@ -56,6 +56,11 @@ body {
         grid-template-columns: auto 1fr;
     }
 
+    .pt-center-container {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+    }
+
     .pt-main-content {
         display: grid;
         height: 100%;
@@ -74,7 +79,7 @@ body {
             .pt-content-panel {
                 background: var(--panel-background-color);
                 border: 1px solid var(--bulma-border);
-                border-radius: 10px;
+                /*border-radius: 10px;*/
                 padding: 2em;
             }
         }
@@ -235,4 +240,31 @@ body {
     b {
         font-weight: 400;
     }
+}
+
+.pt-messagebox {
+    padding-bottom: 20px;
+
+    .pt-messagebox-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+
+        .modal-close {
+            position: relative;
+            top: auto;
+            left: 10px;
+        }
+    }
+
+    .pt-messagebox-content {
+        padding-bottom: 10px;
+    }
+}
+
+.pt-info-icon {
+    color: var(--bulma-link-text);
+}
+
+.pt-login-panel {
+    margin-top: 20%;
 }

@@ -4,9 +4,9 @@
             "commandName": "Project",
             "commandLineArgs": "-s lab -u https://localhost:32773"
         },
-        "Container (Dockerfile)": {
+        "Container lab (Dockerfile)": {
             "commandName": "Docker",
-            "commandLineArgs": "-s LoadTest -u https://host.docker.internal:32773"
+            "commandLineArgs": "-s lab -u https://host.docker.internal:32773"
         },
         "Container local (Dockerfile)": {
             "commandName": "Docker",

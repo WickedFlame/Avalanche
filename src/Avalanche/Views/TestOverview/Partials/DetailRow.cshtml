@@ -7,7 +7,19 @@
     <td>@Model.AverageMilliseconds</td>
     <td>@Model.IsWarmup</td>
     <td>@Model.Error</td>
-    <td>@Model.StatusCode</td>
+
+    @if (string.IsNullOrEmpty(Model.StatusCode))
+    {
+        <td></td>
+    }
+    else
+    {
+        <td>
+            @Model.StatusCode <span class="icon pt-info-icon">
+                <i class="fa fa-info-circle" title="@Model.Message"></i>
+            </span>
+        </td>
+    }
 </tr>
 
 

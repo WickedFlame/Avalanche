@@ -65,7 +65,7 @@
 
                             <div>
                                 <div class="overflow-x-auto">
-                                    <table class="table is-fullwidth">
+                                    <table class="table is-fullwidth is-hoverable">
                                         <thead>
                                             <tr>
                                                 <th>TestId</th>
@@ -106,29 +106,32 @@
                     <div class="pt-content-panel">
                         <div>
                             <div class="overflow-x-auto">
-                                <table class="table is-fullwidth">
-                                    <thead>
-                                        <tr>
-                                            <th style="vertical-align: bottom;">Scenario</th>
-                                            @foreach(var run in Model.Stats.GroupBy(s => s.TestCase).First().Take(50).OrderByDescending(d => d.StartTime))
-                                            {
-                                                <th style="writing-mode: tb;text-orientation: sideways;transform: rotate(-180deg);">@run.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</th>
-                                            }
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
-                                        {
+                                @if (Model.Stats.Any())
+                                {
+                                    <table class="table is-fullwidth is-hoverable">
+                                        <thead>
                                             <tr>
-                                                <td>@grp.Key</td>
-                                                @foreach (var run in grp.Take(50).OrderByDescending(d => d.StartTime))
+                                                <th style="vertical-align: bottom;">Scenario</th>
+                                                @foreach (var run in Model.Stats.GroupBy(s => s.TestCase).First().Take(50).OrderByDescending(d => d.StartTime))
                                                 {
-                                                    <td>@run.AverageMilliseconds</td>
+                                                    <th style="writing-mode: tb;text-orientation: sideways;transform: rotate(-180deg);">@run.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</th>
                                                 }
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
+                                            {
+                                                <tr>
+                                                    <td>@grp.Key</td>
+                                                    @foreach (var run in grp.Take(50).OrderByDescending(d => d.StartTime))
+                                                    {
+                                                        <td>@run.AverageMilliseconds</td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
                             </div>
                         </div>
                     </div>

@@ -2,12 +2,14 @@
 using Avalanche.Runner;
 using Avalanche.WriteModel.Events;
 using Broadcast;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Avalanche.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class EventController : ControllerBase
     {
         private readonly ILogger<EventController> _logger;

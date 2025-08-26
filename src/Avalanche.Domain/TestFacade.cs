@@ -59,7 +59,7 @@ namespace Avalanche.Domain
                 Scenario = scenario
             };
 
-            var loadtest = new LoadTest(data.TestId, _dispatcher, _loggerFactory);
+            var runner = new TestRunner(data.TestId, _dispatcher, _loggerFactory);
             data.StartTime = DateTime.Now;
 
             _dispatcher.Send(new StartTestCommand
@@ -70,7 +70,7 @@ namespace Avalanche.Domain
                 Runner = settings.Runner
             });
 
-            data.Results = loadtest.Run(scenario);
+            data.Results = runner.Run(scenario);
 
             foreach (var testResult in data.Results)
             {

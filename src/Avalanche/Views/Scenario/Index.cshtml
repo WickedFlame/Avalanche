@@ -47,7 +47,7 @@
                     <div class="navbar-end">
                         <div class="buttons has-addons" style="margin-bottom:0;">
                             <a asp-controller="ScenarioEditor" asp-action="Index" asp-route-scenario="@Model.Name" class="button">Edit scenario</a>
-                            <a asp-controller="Scenario" asp-action="DeleteScenario" asp-route-scenario="@Model.Name" class="button">
+                            <a class="button" id="btn_del_scenario" title="Delete the Scenario and all Testruns">
                                 <span class="icon">
                                     <i class="fa fa-trash"></i>
                                 </span>
@@ -118,7 +118,7 @@
                 <div class="pt-content-panel">
                     <h2>Scenario</h2>
                     <div class="overflow-x-auto">
-                        <table class="table is-fullwidth">
+                        <table class="table is-fullwidth is-hoverable">
                             <thead>
                                 <tr>
                                     <th>TestCase</th>
@@ -158,7 +158,7 @@
             <div class="pt-content-panel">
                 <h2>Testruns</h2>
                 <div class="overflow-x-auto">
-                    <table class="table is-fullwidth">
+                    <table class="table is-fullwidth is-hoverable">
                         <thead>
                             <tr>
                                 <th>TestId</th>
@@ -190,6 +190,35 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="delScenario" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <div class="pt-messagebox">
+                <div class="pt-messagebox-header">
+                    <div class="title is-4">
+                        Delete Scenario
+                    </div>
+                    <button class="modal-close is-large pt-cancel-btn" aria-label="close"></button>
+                </div>
+                <div class="pt-messagebox-content">
+                    This will delete the whole Scenario and all coresponding Measuremantes.<br />
+                    Are you sure that you want to continue?
+                </div>
+            </div>
+            <div class="buttons">
+                <a class="button pt-cancel-btn">
+                    Cancel
+                </a>
+                <a asp-controller="Scenario" asp-action="DeleteScenario" asp-route-scenario="@Model.Name" class="button">
+                    Delete
+                </a>
             </div>
         </div>
     </div>
