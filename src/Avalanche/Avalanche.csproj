@@ -54,7 +54,6 @@
 
     <ItemGroup>
       <Folder Include="data\" />
-      <Folder Include="scenarios\" />
     </ItemGroup>
 
 </Project>
