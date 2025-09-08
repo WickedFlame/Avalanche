@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS Users (
   Id VARCHAR(255) PRIMARY KEY,
   Username VARCHAR(255),
   Password VARCHAR(500),
-  Name VARCHAR(255),
+  Name VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS Roles (
@@ -118,7 +118,14 @@ CREATE TABLE IF NOT EXISTS UserRoles (
   RoleId VARCHAR(255) REFERENCES Roles(Id) ON DELETE CASCADE
 );
 
-INSERT OR IGNORE INTO Roles (Id, Name) VALUES ('Admin', 'A42BCC71-20E6-44A5-9F47-45936A1877FE')
+INSERT OR IGNORE INTO Roles (Id, Name) VALUES ('Admin', 'A42BCC71-20E6-44A5-9F47-45936A1877FE');
+
+CREATE TABLE IF NOT EXISTS ApiKeys (
+  Name VARCHAR(255) PRIMARY KEY,
+  Value VARCHAR(500),
+  Created DATETIME,
+  Expires DATETIME
+);
 ";
             var builder = new ConnectionStringBuilder(Constants.ReadModel, _config);
             using (var connection = new SQLiteConnection(builder.BuildConnectionString()))

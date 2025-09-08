@@ -5,5 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## vNext
+### Added
+- ApiKeys can be generated and used to start a testrun
+
 ### Changed
-- 
+- Display an error if the scanario can't be saved

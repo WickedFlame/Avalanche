@@ -147,7 +147,9 @@ body {
 }
 
 .pt-button {
-
+    &.pt-gray-link {
+        color: gray;
+    }
 }
 
 

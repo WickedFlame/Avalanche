@@ -5,8 +5,6 @@ using Avalanche.ReadModel.QueryHandlers;
 using Avalanche.WriteModel;
 using Broadcast;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Xml.Linq;
 
 namespace Avalanche.Controllers
 {

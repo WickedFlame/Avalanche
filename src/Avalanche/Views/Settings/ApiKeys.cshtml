@@ -1,0 +1,111 @@
+﻿@using System.Linq
+@model ApiKeyModel
+
+
+<div class="pt-main-content pt-has-side-navigation">
+    <partial name="./Partials/_Navigation"/>
+
+    <div class="content px-6 py-4">
+        <h1 class="title is-1">ApiKeys</h1>
+        <div class="pt-element-container">
+            <div class="pt-content-panel">
+                <h2>Generate new ApiKey</h2>
+                <div class="pt-padding-side py-5">
+                    @using (Html.BeginForm("AddApiKey", "Settings", FormMethod.Post, new { id = "addapikeyform" }))
+                    {
+                        <div class="content-header content-container" id="sticky-header">
+                            <div style="display: grid; grid-template-columns: 4fr 1fr;">
+                                <div class="field">
+                                    <label class="label">
+                                        Name*
+                                    </label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Name..." name="name" autocomplete="off" />
+                                    </div>
+                                </div>
+                                @* <div class="field">
+                                    <label class="label">
+                                        Expires in*
+                                    </label>
+                                    <div class="control">
+                                        <div class="select">
+                                            <select>
+                                                <option>Never</option>
+                                                <option>1 Month</option>
+                                                <option>3 Months</option>
+                                                <option>6 Months</option>
+                                                <option>1 Year</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div> *@
+                            </div>
+
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" id="adduser-btn" form="addapikeyform" class="button">Generate ApiKey</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        @if (Model.NewKey != null)
+        {
+            <div class="pt-element-container">
+                <div class="pt-content-panel">
+                    <div class="pt-padding-side py-5">
+                        <div class="pt-info-panel">
+                            <p><span>New token "</span><span>@Model.NewKey.Name</span><span>" has been created. Make sure you copy it now, you won't be able to see it again!</span></p>
+                        </div>
+                        <div>
+                            <div class="notification">@Model.NewKey.Value</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="pt-element-container">
+            <div class="pt-content-panel">
+                <h2>ApiKeys</h2>
+                <div class="pt-padding-side py-5">
+                    <table class="table is-fullwidth is-hoverable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Created</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var apiKey in Model.ApiKeys)
+                            {
+                                <tr>
+                                    <td>@apiKey.Name</td>
+                                    <td>@apiKey.Created</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <a class="pt-button right" asp-controller="Settings" asp-action="DeleteApiKey" asp-route-name="@apiKey.Name">
+                                            <span class="icon">
+                                                <i class="fa fa-trash" title="Delete ApiKey"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+
+}

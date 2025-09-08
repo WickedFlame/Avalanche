@@ -146,6 +146,13 @@ CREATE TABLE IF NOT EXISTS UserRoles (
 
 INSERT INTO Roles (Id, Name) VALUES ('A42BCC71-20E6-44A5-9F47-45936A1877FE', 'Admin') ON CONFLICT DO NOTHING;
 
+CREATE TABLE IF NOT EXISTS ApiKeys (
+  Name VARCHAR(255) PRIMARY KEY,
+  Value VARCHAR(500),
+  Created TIMESTAMP,
+  Expires TIMESTAMP
+);
+
 ";
             CreateDatabaseIfNotExists("readmodel", _config);
 

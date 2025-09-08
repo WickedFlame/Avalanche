@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.Runner.Tests", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.Domain.UserManagement", "src\Avalanche.Domain.UserManagement\Avalanche.Domain.UserManagement.csproj", "{7F4A4859-F4B7-4B3F-BF3E-C595FEDFA94F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.Domain.Tests", "src\Tests\Avalanche.Domain.Tests\Avalanche.Domain.Tests.csproj", "{CB0C0D0E-47B3-4464-AE48-D295B9A25F3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,10 @@ Global
 		{7F4A4859-F4B7-4B3F-BF3E-C595FEDFA94F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F4A4859-F4B7-4B3F-BF3E-C595FEDFA94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F4A4859-F4B7-4B3F-BF3E-C595FEDFA94F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB0C0D0E-47B3-4464-AE48-D295B9A25F3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB0C0D0E-47B3-4464-AE48-D295B9A25F3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB0C0D0E-47B3-4464-AE48-D295B9A25F3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB0C0D0E-47B3-4464-AE48-D295B9A25F3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -151,6 +157,7 @@ Global
 		{955603E6-60CD-470F-A4C7-84C7C8523D80} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{868881FD-B11A-4F09-9A41-11ADE364B19F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{8F817421-57E8-457F-A63A-F4948A10AFDF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{CB0C0D0E-47B3-4464-AE48-D295B9A25F3F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9E111167-6D37-4E6A-A3C2-F292C3F6D5BC}
