@@ -54,6 +54,38 @@ namespace Avalanche.Runner
 
                         var url = test.Init != null && !string.IsNullOrEmpty(test.Init.Url) ? test.Init.Url : test.Urls.FirstOrDefault();
 
+
+
+                        //var autExec = new RequestExecution(client);
+                        //var tmp = autExec.Execute(new RequestUrl("POST https://fo-performance-eshop.was.local/api/auth/v1/token"), "grant_type=password&username=christianwalpen@opacc.ch&password=1234&scope=gfx%20test&client_secret=postmansecret&client_id=postmanclient");
+
+
+                        var request = new RestRequest("https://fo-wastest-performance.was.local/api/auth/v1/token", Method.Post); // Token endpoint
+                        //var request = new RestRequest("https://host.docker.internal:44301/api/auth/v1/token", Method.Post);
+                        // Set content type for form data
+                        //request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+                        request.AddHeader("Content-Type", "text/plain");
+                        //request.AddBody("grant_type=password&username=christianwalpen@opacc.ch&password=1234&scope=gfx%20test&client_secret=postmansecret&client_id=postmanclient");
+                        request.AddBody("grant_type=password&username=admin&password=Administrator-2&scope=test&client_secret=postmansecret&client_id=postmanclient");
+
+                        // Add form parameters
+                        //request.AddParameter("grant_type", "password");
+                        //request.AddParameter("username", "admin");
+                        //request.AddParameter("password", "Administrator-2");
+                        //request.AddParameter("username", "christianwalpen@opacc.ch");
+                        //request.AddParameter("password", "1234");
+
+                        //request.AddParameter("grant_type", "client_credentials");
+                        //request.AddParameter("client_id", "postmanclient");
+                        //request.AddParameter("client_secret", "postmansecret");
+                        //request.AddParameter("scope", "test"); // Optional
+
+
+                        // Execute the request
+                        var response = client.Execute(request);
+
+
+
                         if (!string.IsNullOrEmpty(url))
                         {
                             try
