@@ -142,6 +142,15 @@ TestCases:
     RampupTime: 0
     UseCookies: True
     Delay: 1
+Authorization:
+  Type: oauth
+  GrantType: password
+  Authority: https://avalanche.io/api/auth/v1/token
+  ClientId: avalancheclient
+  ClientSecret: avalanchesecret
+  Username: 
+  Password: 
+  Scope: test
 ```
 
 | Name       | Value |                                                                              | 

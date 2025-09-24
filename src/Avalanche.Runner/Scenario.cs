@@ -8,6 +8,11 @@
         public TestCaseConfig Config { get; set; }
 
         /// <summary>
+        /// Configuration for the authorization
+        /// </summary>
+        public Authorization Authorization { get; set; }
+
+        /// <summary>
         /// The testcases in the scenario
         /// </summary>
         public List<TestCase> TestCases { get; set; } = new List<TestCase>();
