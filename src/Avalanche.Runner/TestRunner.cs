@@ -1,4 +1,5 @@
-﻿using Avalanche.WriteModel;
+﻿using Avalanche.Runner.Handlers;
+using Avalanche.WriteModel;
 using Avalanche.WriteModel.Commands;
 using Broadcast;
 using MeasureMap;
@@ -14,12 +15,16 @@ namespace Avalanche.Runner
         private readonly string _testId;
         private readonly IDispatcher<ICommand> _dispatcher;
         private readonly ILogger<TestRunner> _logger;
+        private readonly ILoggerFactory _loggerFactory;
 
         public TestRunner(string testId, IDispatcher<ICommand> dispatcher, ILoggerFactory logger)
         {
             _testId = testId;
             _dispatcher = dispatcher;
             _logger = logger.CreateLogger<TestRunner>();
+
+            //TODO: remove after Authorization Handlers are injected properly
+            _loggerFactory = logger;
         }
 
         public IEnumerable<TestResult> Run(Scenario settings)
@@ -54,37 +59,18 @@ namespace Avalanche.Runner
 
                         var url = test.Init != null && !string.IsNullOrEmpty(test.Init.Url) ? test.Init.Url : test.Urls.FirstOrDefault();
 
+                        if (settings.Authorization != null)
+                        {
+                            //TODO: Inject all handlers from outside the TestRunner
+                            IExecutionHandler oauth = settings.Authorization.Type.ToLower() switch
+                            {
+                                "oauth" => new Handlers.OAuthAuthenticationHandler(_loggerFactory),
+                                _ => new Handlers.OAuthAuthenticationHandler(_loggerFactory)
+                            };
 
-
-                        //var autExec = new RequestExecution(client);
-                        //var tmp = autExec.Execute(new RequestUrl("POST https://fo-performance-eshop.was.local/api/auth/v1/token"), "grant_type=password&username=christianwalpen@opacc.ch&password=1234&scope=gfx%20test&client_secret=postmansecret&client_id=postmanclient");
-
-
-                        var request = new RestRequest("https://fo-wastest-performance.was.local/api/auth/v1/token", Method.Post); // Token endpoint
-                        //var request = new RestRequest("https://host.docker.internal:44301/api/auth/v1/token", Method.Post);
-                        // Set content type for form data
-                        //request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-                        request.AddHeader("Content-Type", "text/plain");
-                        //request.AddBody("grant_type=password&username=christianwalpen@opacc.ch&password=1234&scope=gfx%20test&client_secret=postmansecret&client_id=postmanclient");
-                        request.AddBody("grant_type=password&username=admin&password=Administrator-2&scope=test&client_secret=postmansecret&client_id=postmanclient");
-
-                        // Add form parameters
-                        //request.AddParameter("grant_type", "password");
-                        //request.AddParameter("username", "admin");
-                        //request.AddParameter("password", "Administrator-2");
-                        //request.AddParameter("username", "christianwalpen@opacc.ch");
-                        //request.AddParameter("password", "1234");
-
-                        //request.AddParameter("grant_type", "client_credentials");
-                        //request.AddParameter("client_id", "postmanclient");
-                        //request.AddParameter("client_secret", "postmansecret");
-                        //request.AddParameter("scope", "test"); // Optional
-
-
-                        // Execute the request
-                        var response = client.Execute(request);
-
-
+                            oauth.Execute(ctx, settings);
+                        }
+                        
 
                         if (!string.IsNullOrEmpty(url))
                         {
