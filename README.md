@@ -12,6 +12,11 @@ The Runner can be used to run the Scenarios outside of the Client App. The resul
 The Client does not need the Runner to execute the Scenarios.  
   
 ## Client App
+Default user: admin
+Default password: admin
+
+Please change the default password after the first login.
+
 ### Inmemory
 Volumes
 - /app/data
@@ -142,6 +147,15 @@ TestCases:
     RampupTime: 0
     UseCookies: True
     Delay: 1
+Authorization:
+  Type: oauth
+  GrantType: password
+  Authority: https://avalanche.io/api/auth/v1/token
+  ClientId: avalancheclient
+  ClientSecret: avalanchesecret
+  Username: 
+  Password: 
+  Scope: test
 ```
 
 | Name       | Value |                                                                              | 

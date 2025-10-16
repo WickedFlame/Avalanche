@@ -1,6 +1,8 @@
+extern alias UnsignedMarkdig;
 using Avalanche;
+using Avalanche.Authentication;
 using Avalanche.DataSource;
-using Avalanche.Domain;
+using Avalanche.Domain.Settings;
 using Avalanche.Domain.UserManagement;
 using Avalanche.ReadModel;
 using Avalanche.ReadModel.QueryHandlers;
@@ -9,11 +11,14 @@ using Avalanche.WriteModel.Events;
 using Avalanche.WriteModel.Sql;
 using Avalanche.WriteModel.Sql.EventHandlers;
 using Broadcast;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using OpenTelemetry.Logs;
+using UnsignedMarkdig.Markdig;
+using Westwind.AspNetCore.Markdown;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +83,9 @@ builder.Services.AddTransient<IEventBus>(c =>
     eventBus.Subscribe<DeleteUserEvent>(new AccountEventHandler(c.GetService<IProjectionConnectionBuilder>()));
     eventBus.Subscribe<UpdatePasswordEvent>(new AccountEventHandler(c.GetService<IProjectionConnectionBuilder>()));
 
+    eventBus.Subscribe<AddApiKeyEvent>(new SettingsEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+    eventBus.Subscribe<DeleteApiKeyEvent>(new SettingsEventHandler(c.GetService<IProjectionConnectionBuilder>()));
+
     return eventBus;
 });
 builder.Services.AddSingleton<ISettingsQueryHandler, SettingsQueryHandler>();
@@ -103,7 +111,21 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 });
 
+//
+// Authentication
+//
+// Add ApiKey authentication
+builder.Services.AddSingleton<IApiKeyValidator, AppSettingsApiKeyValidator>();
 
+builder.Services.AddAuthentication(ApiKeyAuthenticationHandler.SchemeName)
+    .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(ApiKeyAuthenticationHandler.SchemeName, _ => {  });
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("ApiKeyOrDefault", policy =>
+    {
+        policy.AddAuthenticationSchemes(ApiKeyAuthenticationHandler.SchemeName, CookieAuthenticationDefaults.AuthenticationScheme);
+        policy.RequireAuthenticatedUser();
+    });
 
 // Add cookie authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -112,6 +134,28 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Account/Login";  // Redirect if not logged in
         options.LogoutPath = "/Account/Logout";
     });
+
+builder.Services.AddMarkdown(c =>
+{
+    c.AddMarkdownProcessingFolder("/docs/", "~/Views/Docs/Index.cshtml");
+    c.ConfigureMarkdigPipeline = builder =>
+    {
+        builder.UseEmphasisExtras(UnsignedMarkdig.Markdig.Extensions.EmphasisExtras.EmphasisExtraOptions.Default)
+            .UsePipeTables()
+            .UseGridTables()
+            .UseAutoIdentifiers(UnsignedMarkdig.Markdig.Extensions.AutoIdentifiers.AutoIdentifierOptions.GitHub) // Headers get id="name" 
+            .UseAutoLinks() // URLs are parsed into anchors
+            .UseAbbreviations()
+            .UseYamlFrontMatter()
+            .UseEmojiAndSmiley(true)
+            .UseListExtras()
+            .UseFigures()
+            .UseTaskLists()
+            .UseCustomContainers()
+            //.DisableHtml()   // renders HTML tags as text including script
+            .UseGenericAttributes();
+    };
+});
 
 builder.Services.AddDataProtection()
         .PersistKeysToFileSystem(new DirectoryInfo("./data/keys/"));
@@ -131,6 +175,7 @@ if (!app.Environment.IsDevelopment())
 app.UseEventStore();
 app.UseReadModel();
 
+app.UseMarkdown();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

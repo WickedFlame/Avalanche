@@ -1,6 +1,7 @@
-﻿using Avalanche.Domain;
+﻿using Avalanche.Domain.Settings;
 using Avalanche.Domain.UserManagement;
 using Avalanche.Models;
+using Avalanche.ReadModel.Models;
 using Avalanche.WriteModel.Events;
 using Broadcast;
 using Microsoft.AspNetCore.Authorization;
@@ -73,6 +74,57 @@ namespace Avalanche.Controllers
 
             return RedirectToAction("Database");
         }
+
+
+
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult ApiKeys()
+        {
+            var model = new ApiKeyModel
+            {
+                ApiKeys = _facade.GetApiKeys()
+            };
+
+            var newKey = TempData["apikey"]?.ToString();
+            if (!string.IsNullOrEmpty(newKey))
+            {
+                model.NewKey = _facade.GetApiKey(newKey);
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddApiKey(string name, string expiration)
+        {
+            var expires = expiration switch
+            {
+                "1 Month" => Expiration.OneMonth,
+                "3 Months" => Expiration.ThreeMonths,
+                "6 Months" => Expiration.SixMonths,
+                "12 Months" => Expiration.TwelveMonths,
+                _ => Expiration.Never
+            };
+
+            _facade.AddApiKey(name, expires);
+
+            TempData["apikey"] = name;
+
+            return RedirectToAction("ApiKeys");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteApiKey(string name)
+        {
+            _facade.DeleteApiKey(name);
+            return RedirectToAction("ApiKeys");
+        }
+
+
+
+
+
 
         [Authorize(Roles = "Admin")]
         public IActionResult Users()

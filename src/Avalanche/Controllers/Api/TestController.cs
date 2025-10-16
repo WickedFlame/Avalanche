@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Broadcast;
 using Avalanche.WriteModel;
+using Avalanche.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Avalanche.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "ApiKeyOrDefault")] // or [Authorize(AuthenticationSchemes = "ApiKey")]
     public class TestController : ControllerBase
     {
         private readonly IDispatcher<ICommand> _dispatcher;
