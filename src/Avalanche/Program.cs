@@ -1,3 +1,4 @@
+extern alias UnsignedMarkdig;
 using Avalanche;
 using Avalanche.Authentication;
 using Avalanche.DataSource;
@@ -16,6 +17,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using OpenTelemetry.Logs;
+using UnsignedMarkdig.Markdig;
+using Westwind.AspNetCore.Markdown;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,7 +118,7 @@ builder.Services.AddControllersWithViews(options =>
 builder.Services.AddSingleton<IApiKeyValidator, AppSettingsApiKeyValidator>();
 
 builder.Services.AddAuthentication(ApiKeyAuthenticationHandler.SchemeName)
-    .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(ApiKeyAuthenticationHandler.SchemeName, _ => { });
+    .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(ApiKeyAuthenticationHandler.SchemeName, _ => {  });
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("ApiKeyOrDefault", policy =>
@@ -131,6 +134,28 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Account/Login";  // Redirect if not logged in
         options.LogoutPath = "/Account/Logout";
     });
+
+builder.Services.AddMarkdown(c =>
+{
+    c.AddMarkdownProcessingFolder("/docs/", "~/Views/Docs/Index.cshtml");
+    c.ConfigureMarkdigPipeline = builder =>
+    {
+        builder.UseEmphasisExtras(UnsignedMarkdig.Markdig.Extensions.EmphasisExtras.EmphasisExtraOptions.Default)
+            .UsePipeTables()
+            .UseGridTables()
+            .UseAutoIdentifiers(UnsignedMarkdig.Markdig.Extensions.AutoIdentifiers.AutoIdentifierOptions.GitHub) // Headers get id="name" 
+            .UseAutoLinks() // URLs are parsed into anchors
+            .UseAbbreviations()
+            .UseYamlFrontMatter()
+            .UseEmojiAndSmiley(true)
+            .UseListExtras()
+            .UseFigures()
+            .UseTaskLists()
+            .UseCustomContainers()
+            //.DisableHtml()   // renders HTML tags as text including script
+            .UseGenericAttributes();
+    };
+});
 
 builder.Services.AddDataProtection()
         .PersistKeysToFileSystem(new DirectoryInfo("./data/keys/"));
@@ -150,6 +175,7 @@ if (!app.Environment.IsDevelopment())
 app.UseEventStore();
 app.UseReadModel();
 
+app.UseMarkdown();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

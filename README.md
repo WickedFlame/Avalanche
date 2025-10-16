@@ -12,6 +12,11 @@ The Runner can be used to run the Scenarios outside of the Client App. The resul
 The Client does not need the Runner to execute the Scenarios.  
   
 ## Client App
+Default user: admin
+Default password: admin
+
+Please change the default password after the first login.
+
 ### Inmemory
 Volumes
 - /app/data

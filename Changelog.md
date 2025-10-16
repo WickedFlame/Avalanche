@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - ApiKeys can be generated and used to start a testrun
 - Added OAuth Authentication for testruns
+- Added a basic documentation
 
 ### Changed
 - Display an error if the scanario can't be saved
