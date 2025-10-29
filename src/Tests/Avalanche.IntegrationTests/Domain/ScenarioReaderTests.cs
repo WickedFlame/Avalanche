@@ -17,7 +17,7 @@ namespace Avalanche.IntegrationTests.Domain
         [Test]
         public void ScenarioReader_GlobalConfig()
         {
-            var scenario = _reader.GetScenario("scenarios/globalconfig.yml");
+            var scenario = _reader.GetScenarioFromFile("scenarios/globalconfig.yml");
             scenario.TestCases.Should().AllBeEquivalentTo(new
             {
                 Iterations = 10,
@@ -33,7 +33,7 @@ namespace Avalanche.IntegrationTests.Domain
         [Test]
         public void ScenarioReader_OverrideConfig()
         {
-            var scenario = _reader.GetScenario("scenarios/overrideconfig.yml");
+            var scenario = _reader.GetScenarioFromFile("scenarios/overrideconfig.yml");
             scenario.TestCases.Should().AllBeEquivalentTo(new
             {
                 Iterations = 20,
@@ -49,7 +49,7 @@ namespace Avalanche.IntegrationTests.Domain
         [Test]
         public void ScenarioReader_NoConfig()
         {
-            var scenario = _reader.GetScenario("scenarios/noconfig.yml");
+            var scenario = _reader.GetScenarioFromFile("scenarios/noconfig.yml");
             scenario.TestCases.Should().AllBeEquivalentTo(new
             {
                 Iterations = 20,

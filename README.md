@@ -99,10 +99,11 @@ volumes:
 The runner is used to automate testscenarios in a container outside the Avalanche Client App.  
 Parameters for the runner
 
-| Short | long         |                                                                                          |
-|-------|--------------|------------------------------------------------------------------------------------------|
-| -s    | --scenario   | Name of the Scenario/Scenariofile                                                        |
-| -u    | --url        | URL to the Avalanche App. If not provided, the result will only be logged to the console |
+| Short | long         |                                                                                                                                                  |
+|-------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| -s    | --scenario   | Name of the Scenario/Scenariofile                                                                                                                |
+| -u    | --url        | URL to the Avalanche App. If not provided, the result will only be logged to the console                                                         |
+| -i    | --input      | Read the scenario from STDIN. The Scenario has to be provided with < filename.yml. This option is threadblocking if no data is provided by STDIN |
 
 ### Docker
 Create a folder containing the scenariofile.  
@@ -116,6 +117,14 @@ Provide the folder containing the Scenario as a volume.
 ```
 docker pull registry.gitlab.com/wickedflame/avalanche/runner:latest
 docker run --rm -i -v ./scenarios:/scenarios registry.gitlab.com/wickedflame/avalanche/runner:latest run -s scenario_1 -u https://url_to_avalanche_client.com
+```
+
+Alternatively the input of the scenatio can be read from STDIN.  
+This needs the Argument -i to be set and the file be read to the STDIN with <  
+With this option the Volume is not needed any more because the scenario is read from STDIN
+```
+docker pull registry.gitlab.com/wickedflame/avalanche/runner:latest
+docker run --rm -i registry.gitlab.com/wickedflame/avalanche/runner:latest run -s scenario_1 -u https://url_to_avalanche_client.com -i < scenarios/scenario_1.yml
 ```
 
 # Scenario
