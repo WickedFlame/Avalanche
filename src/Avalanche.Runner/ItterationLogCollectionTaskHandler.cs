@@ -2,10 +2,11 @@
 using Avalanche.WriteModel.Commands;
 using Broadcast;
 using MeasureMap;
+using MeasureMap.IterationStack;
 
 namespace Avalanche.Runner
 {
-    public class ItterationLogCollectionTaskHandler : TaskHandler
+    public class ItterationLogCollectionTaskHandler : IterationHandler
     {
         private readonly string _testCase;
         private readonly string _testId;

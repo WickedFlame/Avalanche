@@ -1,5 +1,9 @@
 ﻿@model ScenarioEditorModel
 
+@section styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+}
+
 @section breadcrumb {
     <div class="pt-breadcrumb-panel">
         <nav class="breadcrumb" aria-label="breadcrumbs">
@@ -124,10 +128,20 @@ TestCases:
     RampupTime: 0
     UseCookies: True
     Delay: 1
+Authorization:
+  Type: oauth
+  GrantType: password
+  Authority: https://avalanche.io/api/auth/v1/token
+  ClientId: avalancheclient
+  ClientSecret: avalanchesecret
+  Username: 
+  Password: 
+  Scope: test
                                             </code>
                                         </pre>
                                     </li>
                                     <li id="description-tab">
+                                        <p>The Scnario needs at least a Node containing the TestCases.<br />The following properties define a TestCase.<br />View the <a class="" href="/docs/home">Documentation</a> for a full description</p>
                                         <table class="table is-hoverable">
                                             <thead>
                                                 <tr>
@@ -203,10 +217,20 @@ TestCases:
 </div>
 
 @section scripts {
-    @* <text>
-        <script type="module" async>
-            import { TestOverview } from '/js/testoverview.js';
-            var sites = new TestOverview();
-        </script>
-    </text> *@
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+@if (ViewBag.Error != null)
+{
+    <script>
+            Toastify({
+                text: `@ViewBag.Error`,
+                duration: 3000,
+                gravity: "bottom",
+                position: "right",
+                style: {
+                    background: "#B80F0A",
+                }
+            }).showToast();
+    </script>
+}
 }

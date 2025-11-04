@@ -1,0 +1,62 @@
+﻿@model Westwind.AspNetCore.Markdown.MarkdownModel
+@{
+    ViewBag.Title = Model.Title;
+    ViewBag.RenderAside = true;
+}
+@section styles {
+    <link href="~/css/docs.css" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+<div class="pt-navigation-container">
+    <nav class="navbar pt-navbar-main" role="navigation" aria-label="main navigation">
+        <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="true">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="navbar-menu" style="width: 300px;" id="navMenu">
+            <div class="pt-padding-side">
+                <aside class="menu px-4 py-4">
+                    <p class="menu-label">DOCUMENTATION</p>
+                    <ul class="menu-list">
+                        <li><a href="Home">Home</a></li>
+                        <li>
+                            <a href="Changelog">Changelog</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">RUNNER</p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="runner-local">Local</a>
+                        </li>
+                        <li>
+                            <a href="runner-external">External</a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">TEST SCENARIOS</p>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="scenarios">Scenario</a>
+                        </li>
+                        <li>
+                            <a href="TestCases">TestCases</a>
+                        </li>
+                        <li>
+                            <a href="Config">Config</a>
+                        </li>
+                        <li>
+                            <a href="Authorization">Authorization</a>
+                        </li>
+                    </ul>
+                </aside>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-main-content">
+        <div class="content px-6 py-4">
+            @Model.RenderedMarkdown
+        </div>
+    </div>
+</div>

@@ -22,6 +22,11 @@ namespace Avalanche.Controllers
 
             var tmp = LoadFile(scenario);
 
+            if (TempData.ContainsKey("Error"))
+            {
+                ViewBag.Error = TempData["Error"];
+            }
+
             var model = new ScenarioEditorModel
             {
                 Scenarios = scenarios.Select(s => Path.GetFileName(s).Replace(".yml", "")),
@@ -38,15 +43,16 @@ namespace Avalanche.Controllers
             try
             {
                 YamlMap.Serializer.Deserialize<Scenario>(model.RawContent);
+
+                var file = $"{PathMapper.GetScenarioPath()}/{model.Name}.yml";
+                System.IO.File.WriteAllText(file, model.RawContent);
             }
             catch(Exception e)
             {
                 _logger.LogError(e, "Scenario {Scenario} has a invalid format and cannot be used for testing", model.Name);
+                TempData["Error"] = $"Scenario {model.Name} has an invalid format and cannot be used for testing";
             }
 
-
-            var file = $"{PathMapper.GetScenarioPath()}/{model.Name}.yml";
-            System.IO.File.WriteAllText(file, model.RawContent);
             return RedirectToAction("Index", new { Scenario = model.Name });
         }
 

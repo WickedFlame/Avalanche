@@ -10,7 +10,7 @@
         },
         "Container local (Dockerfile)": {
             "commandName": "Docker",
-            "commandLineArgs": "-s local -u https://host.docker.internal:32773"
+            "commandLineArgs": "-s local -u https://host.docker.internal:32773 -i < scenarios/local.yml"
         },
         "Container performance (Dockerfile)": {
             "commandName": "Docker",

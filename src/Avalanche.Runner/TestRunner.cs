@@ -1,4 +1,5 @@
-﻿using Avalanche.WriteModel;
+﻿using Avalanche.Runner.Handlers;
+using Avalanche.WriteModel;
 using Avalanche.WriteModel.Commands;
 using Broadcast;
 using MeasureMap;
@@ -14,12 +15,16 @@ namespace Avalanche.Runner
         private readonly string _testId;
         private readonly IDispatcher<ICommand> _dispatcher;
         private readonly ILogger<TestRunner> _logger;
+        private readonly ILoggerFactory _loggerFactory;
 
         public TestRunner(string testId, IDispatcher<ICommand> dispatcher, ILoggerFactory logger)
         {
             _testId = testId;
             _dispatcher = dispatcher;
             _logger = logger.CreateLogger<TestRunner>();
+
+            //TODO: remove after Authorization Handlers are injected properly
+            _loggerFactory = logger;
         }
 
         public IEnumerable<TestResult> Run(Scenario settings)
@@ -53,6 +58,20 @@ namespace Avalanche.Runner
                         ctx.Set(nameof(IDispatcher<ICommand>), _dispatcher);
 
                         var url = test.Init != null && !string.IsNullOrEmpty(test.Init.Url) ? test.Init.Url : test.Urls.FirstOrDefault();
+
+                        if (settings.Authorization != null && !string.IsNullOrEmpty(settings.Authorization.Type))
+                        {
+                            //TODO: Inject all handlers from outside the TestRunner
+                            IExecutionHandler oauth = settings.Authorization.Type.ToLower() switch
+                            {
+                                "oauth" => new Handlers.OAuthAuthenticationHandler(_loggerFactory),
+                                "none" => new Handlers.DefaultAuthenticationHandler(),
+                                _ => new Handlers.DefaultAuthenticationHandler()
+                            };
+
+                            oauth.Execute(ctx, settings);
+                        }
+                        
 
                         if (!string.IsNullOrEmpty(url))
                         {

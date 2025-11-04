@@ -6,7 +6,7 @@ namespace Broadcast
         void Subscribe<Tevent>(IMessageHandler<Tevent> handler);
 
         /// <summary>
-        /// Send the <see cref="IEvent"/> to the <see cref="IMessageHandler{T}"/>
+        /// Send the <see cref="IEvent"/> to the <see cref="IMessageHandler{T}"/> without adding the event to the eventstore
         /// </summary>
         /// <typeparam name="Tevent"></typeparam>
         /// <param name="event"></param>

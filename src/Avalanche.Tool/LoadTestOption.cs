@@ -22,6 +22,9 @@ namespace Avalanche
         [Option('u', "url", HelpText = "Url to the Avalanche server", Required = false)]
         public string Url { get; set; }
 
+        [Option('i', "input", HelpText = "Read the scenario from STDIN input", Required = false)]
+        public bool Input { get; set; }
+
         public ILoggerFactory LoggerFactory { get; set; }
 
         public void Execute()
@@ -78,34 +81,39 @@ namespace Avalanche
 
             using (var dispatcher = new CommandDispatcher(eventBus))
             {
-                // LoadTest
-                var path = GetFilePath(Scenario);
-                if (!System.IO.File.Exists(path))
-                {
-                    var msg = new StringBuilder()
-                        .AppendLine($"Could not find any configuration file for the Scenario {Scenario}");
+                var facade = new TestFacade(dispatcher, LoggerFactory);
 
-                    Console.WriteLine(msg.ToString());
-                    
-                    var scenarioPath = GetScenarioFolderPath();
-                    if (System.IO.Directory.Exists(scenarioPath))
+                var scenario = ReadFromConsole(facade).GetAwaiter().GetResult();
+                if (scenario == null || scenario.TestCases.Count == 0)
+                {
+                    // LoadTest
+                    var path = GetFilePath(Scenario);
+                    if (!System.IO.File.Exists(path))
                     {
-                        msg.AppendLine($"Possible scenarios:");
-                        foreach(var file in System.IO.Directory.GetFiles(scenarioPath))
+                        var msg = new StringBuilder()
+                            .AppendLine($"Could not find any configuration file for the Scenario {Scenario}");
+
+                        Console.WriteLine(msg.ToString());
+
+                        var scenarioPath = GetScenarioFolderPath();
+                        if (System.IO.Directory.Exists(scenarioPath))
                         {
-                            msg.AppendLine($"- {file}");
+                            msg.AppendLine($"Possible scenarios:");
+                            foreach (var file in System.IO.Directory.GetFiles(scenarioPath))
+                            {
+                                msg.AppendLine($"- {file}");
+                            }
                         }
+
+                        msg.Append("Test will be aborted.");
+
+                        var logger = LoggerFactory.CreateLogger<LoadTestOption>();
+                        logger.LogError(msg.ToString());
+                        return;
                     }
 
-                    msg.Append("Test will be aborted.");
-
-                    var logger = LoggerFactory.CreateLogger<LoadTestOption>();
-                    logger.LogError(msg.ToString());
-                    return;
+                    scenario = facade.GetScenario(path);
                 }
-
-                var facade = new TestFacade(dispatcher, LoggerFactory);
-                var scenario = facade.GetScenario(path);
 
                 TraceTestCases(scenario);
 
@@ -138,6 +146,31 @@ namespace Avalanche
             }
 
             eventBus.Dispose();
+        }
+
+        private async Task<Scenario> ReadFromConsole(TestFacade facade)
+        {
+            if (!Input)
+            {
+                return null;
+            }
+
+            Console.WriteLine("Reading the scenario from the STDIN");
+
+            try
+            {
+                var data = await Console.In.ReadToEndAsync();
+                if (!string.IsNullOrEmpty(data))
+                {
+                    return facade.Parse(data);
+                }
+            }
+            catch
+            {
+                // just ignore
+            }
+
+            return null;
         }
 
         private static void TraceTestCases(Scenario scenario)

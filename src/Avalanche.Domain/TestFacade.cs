@@ -45,7 +45,15 @@ namespace Avalanche.Domain
         public Scenario GetScenario(string path)
         {
             var tsr = new ScenarioReader(_loggerFactory);
-            var scenario = tsr.GetScenario(path);
+            var scenario = tsr.GetScenarioFromFile(path);
+
+            return scenario;
+        }
+
+        public Scenario Parse(string yaml)
+        {
+            var tsr = new ScenarioReader(_loggerFactory);
+            var scenario = tsr.GetScenarioFromYml(yaml);
 
             return scenario;
         }
