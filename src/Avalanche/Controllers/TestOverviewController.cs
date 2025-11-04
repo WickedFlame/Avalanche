@@ -26,7 +26,7 @@ namespace Avalanche.Controllers
             var path = PathMapper.GetScenarioFile(scenario);
 
             var tsr = new ScenarioReader(_factory);
-            var settings = tsr.GetScenario(path);
+            var settings = tsr.GetScenarioFromFile(path);
 
             var model = new TestOverviewModel
             {

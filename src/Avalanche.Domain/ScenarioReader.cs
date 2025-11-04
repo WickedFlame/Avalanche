@@ -1,5 +1,6 @@
 ﻿using Avalanche.Runner;
 using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace Avalanche.Domain
 {
@@ -12,39 +13,63 @@ namespace Avalanche.Domain
             _logger = logger.CreateLogger<ScenarioReader>();
         }
 
-        public Scenario GetScenario(string path)
+        public Scenario GetScenarioFromFile(string path)
         {
             try
             {
                 var reader = new YamlMap.YamlFileReader();
-                var settings = reader.Read<Scenario>(path);
+                var scenario = reader.Read<Scenario>(path);
 
-                if(settings.Config != null)
-                {
-                    foreach(var tc in settings.TestCases)
-                    {
-                        if (settings.Config.UseCookies)
-                        {
-                            tc.UseCookies = true;
-                        }
+                MapConfigToTestCases(scenario);
 
-                        SetConfigValue(settings.Config.Iterations, tc.Iterations, i => tc.Iterations = i);
-                        SetConfigValue(settings.Config.Users, tc.Users, i => tc.Users = i);
-                        SetConfigValue(settings.Config.Duration, tc.Duration, i => tc.Duration = i);
-                        SetConfigValue(settings.Config.Interval, tc.Interval, i => tc.Interval = i);
-                        SetConfigValue(settings.Config.RampupTime, tc.RampupTime, i => tc.RampupTime = i);
-                        SetConfigValue(settings.Config.Delay, tc.Delay, i => tc.Delay = i);
-
-                    }
-                }
-
-                return settings;
+                return scenario;
             }
             catch(Exception ex) 
             {
                 _logger.LogError(ex, "Error while reading Scenario located at {Path}", path);
 
                 return new Scenario();
+            }
+        }
+
+        public Scenario GetScenarioFromYml(string yml)
+        {
+            try
+            {
+                var reader = new YamlMap.YamlReader();
+                var scenario = reader.Read<Scenario>(yml);
+
+                MapConfigToTestCases(scenario);
+
+                return scenario;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while reading Scenario from {Yaml}", yml);
+
+                return new Scenario();
+            }
+        }
+
+        private static void MapConfigToTestCases(Scenario scenario)
+        {
+            if (scenario.Config != null)
+            {
+                foreach (var tc in scenario.TestCases)
+                {
+                    if (scenario.Config.UseCookies)
+                    {
+                        tc.UseCookies = true;
+                    }
+
+                    SetConfigValue(scenario.Config.Iterations, tc.Iterations, i => tc.Iterations = i);
+                    SetConfigValue(scenario.Config.Users, tc.Users, i => tc.Users = i);
+                    SetConfigValue(scenario.Config.Duration, tc.Duration, i => tc.Duration = i);
+                    SetConfigValue(scenario.Config.Interval, tc.Interval, i => tc.Interval = i);
+                    SetConfigValue(scenario.Config.RampupTime, tc.RampupTime, i => tc.RampupTime = i);
+                    SetConfigValue(scenario.Config.Delay, tc.Delay, i => tc.Delay = i);
+
+                }
             }
         }
 

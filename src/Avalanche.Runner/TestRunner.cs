@@ -59,13 +59,14 @@ namespace Avalanche.Runner
 
                         var url = test.Init != null && !string.IsNullOrEmpty(test.Init.Url) ? test.Init.Url : test.Urls.FirstOrDefault();
 
-                        if (settings.Authorization != null)
+                        if (settings.Authorization != null && !string.IsNullOrEmpty(settings.Authorization.Type))
                         {
                             //TODO: Inject all handlers from outside the TestRunner
                             IExecutionHandler oauth = settings.Authorization.Type.ToLower() switch
                             {
                                 "oauth" => new Handlers.OAuthAuthenticationHandler(_loggerFactory),
-                                _ => new Handlers.OAuthAuthenticationHandler(_loggerFactory)
+                                "none" => new Handlers.DefaultAuthenticationHandler(),
+                                _ => new Handlers.DefaultAuthenticationHandler()
                             };
 
                             oauth.Execute(ctx, settings);
