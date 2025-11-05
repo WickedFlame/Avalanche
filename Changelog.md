@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## vNext
 ### Fixed
 - Docs did not display when run  in a container
-- 
+
+### Changed
+- Changed orientation of Testruns in the Statistics View
 
 ## v0.0.4
 ### Added

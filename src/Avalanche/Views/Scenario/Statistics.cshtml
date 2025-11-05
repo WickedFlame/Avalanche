@@ -108,7 +108,9 @@
                             <div class="overflow-x-auto">
                                 @if (Model.Stats.Any())
                                 {
-                                    <table class="table is-fullwidth is-hoverable">
+                                    var group = Model.Stats.GroupBy(s => s.TestCase).Select(s => s.Key);
+
+                                    @* <table class="table is-fullwidth is-hoverable">
                                         <thead>
                                             <tr>
                                                 <th style="vertical-align: bottom;">Scenario</th>
@@ -126,6 +128,38 @@
                                                     @foreach (var run in grp.Take(50).OrderByDescending(d => d.StartTime))
                                                     {
                                                         <td>@run.AverageMilliseconds</td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table> *@
+
+                                    <table class="table is-fullwidth is-hoverable">
+                                        <thead>
+                                            <tr>
+                                                <th style="vertical-align: bottom;"></th>
+                                                @foreach (var run in group)
+                                                {
+                                                    <th style="">@run</th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var grp in Model.Stats.OrderByDescending(d => d.StartTime).GroupBy(g => g.StartTime))
+                                            {
+                                                <tr>
+                                                    <td>@grp.Key.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                                    @foreach (var key in group)
+                                                    {
+                                                        var run = grp.FirstOrDefault(g => g.TestCase == key);
+                                                        if(run != null)
+                                                        {
+                                                            <td>@run.AverageMilliseconds ms</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td></td>                                                            
+                                                        }
                                                     }
                                                 </tr>
                                             }
