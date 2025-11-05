@@ -116,7 +116,9 @@ class Build : NukeBuild
                 .SetPublishProfile("FolderProfile")
                 .SetOutput(PublishDirectory / "tool"));
 
-            if((PublishDirectory / "web" / "scenarios").DirectoryExists())
+            (RootDirectory / "Changelog.md").Copy(PublishDirectory / "web" / "wwwroot" / "docs" / "changelog.md");
+
+            if ((PublishDirectory / "web" / "scenarios").DirectoryExists())
             {
                 Serilog.Log.Write(Serilog.Events.LogEventLevel.Information, $"Delete files in {(PublishDirectory / "web" / "scenarios")}");
                 (PublishDirectory / "web" / "scenarios").GetFiles().ForEach(f => f.DeleteFile());

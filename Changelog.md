@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## vNext
+### Fixed
+- Docs did not display when run  in a container
+- 
+
 ## v0.0.4
 ### Added
 - ApiKeys can be generated and used to start a testrun

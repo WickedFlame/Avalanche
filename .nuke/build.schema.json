@@ -102,6 +102,10 @@
   "allOf": [
     {
       "properties": {
+        "BuildNo": {
+          "type": "string",
+          "description": "The Buildnumber provided by the CI"
+        },
         "Configuration": {
           "type": "string",
           "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
