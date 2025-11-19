@@ -68,8 +68,7 @@
                                     <table class="table is-fullwidth is-hoverable">
                                         <thead>
                                             <tr>
-                                                <th>TestId</th>
-                                                <th>Time</th>
+                                                <th>Run at</th>
                                                 <th>Average (ms)</th>
                                                 <th># Iterations</th>
                                                 <th># Fails</th>
@@ -82,8 +81,7 @@
                                             @foreach (var stat in grp.OrderByDescending(s => s.StartTime))
                                             {
                                                 <tr>
-                                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@stat.TestId">@stat.TestId</a></td>
-                                                    <td>@stat.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@stat.TestId">@stat.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</a></td>
                                                     <td>@stat.AverageMilliseconds</td>
                                                     <td>@stat.Iterations</td>
                                                     <td>@stat.Failed</td>
@@ -137,7 +135,7 @@
                                     <table class="table is-fullwidth is-hoverable">
                                         <thead>
                                             <tr>
-                                                <th style="vertical-align: bottom;"></th>
+                                                <th style="vertical-align: bottom;">Run at</th>
                                                 @foreach (var run in group)
                                                 {
                                                     <th style="">@run</th>
@@ -147,8 +145,9 @@
                                         <tbody>
                                             @foreach (var grp in Model.Stats.OrderByDescending(d => d.StartTime).GroupBy(g => g.StartTime))
                                             {
+
                                                 <tr>
-                                                    <td>@grp.Key.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@grp.First().TestId">@grp.Key.ToString("dd.MM.yyyy hh:mm:ss")</a></td>
                                                     @foreach (var key in group)
                                                     {
                                                         var run = grp.FirstOrDefault(g => g.TestCase == key);

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Changed orientation of Testruns in the Statistics View
+- Use starttime as link to details instead of testid
 
 ## v0.0.4
 ### Added
