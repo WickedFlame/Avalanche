@@ -96,7 +96,7 @@ namespace Avalanche.Runner
                                     IsWarmup = s.IsWarmup
                                 };
 
-                                _dispatcher.SendAsync(command);
+                                _dispatcher.Enqueue(command);
                             }
                             catch (Exception e)
                             {
@@ -119,7 +119,7 @@ namespace Avalanche.Runner
                             IsWarmup = e.Settings.IsWarmup
                         };
 
-                        _dispatcher.SendAsync(metric);
+                        _dispatcher.Enqueue(metric);
                     })
                     .PreExecute(ctx =>
                     {
@@ -147,7 +147,7 @@ namespace Avalanche.Runner
                                         StatusCode = result.StatusCode,
                                         IsWarmup = ctx.Settings.IsWarmup
                                     };
-                                    _dispatcher.SendAsync(cmd);
+                                    _dispatcher.Enqueue(cmd);
 
                                     _logger.LogInformation("Call to {Url} for Test {TestId} resulted in StatusCode {StatusCode}", req.Url, _testId, result.StatusCode);
                                 }
@@ -166,7 +166,7 @@ namespace Avalanche.Runner
                                     IsWarmup = ctx.Settings.IsWarmup
                                     //StatusCode = result.StatusCode
                                 };
-                                _dispatcher.SendAsync(cmd);
+                                _dispatcher.Enqueue(cmd);
 
                                 _logger.LogError(e, "Call to {Url} for Test {TestId} caused an error", req.Url, _testId);
                             }

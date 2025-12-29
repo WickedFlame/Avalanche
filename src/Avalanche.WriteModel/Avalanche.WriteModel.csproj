@@ -11,12 +11,9 @@
     </PropertyGroup>-->
 
     <ItemGroup>
+        <PackageReference Include="Broadcast" Version="2.0.0-RC25" />
         <PackageReference Include="System.Text.Json" Version="8.0.5" />
         <PackageReference Include="Enumerate.It" Version="1.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Broadcast\Broadcast.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 ﻿using Avalanche.DataSource;
 using Avalanche.ReadModel.Models;
 using Avalanche.ReadModel.Queries;
-using Broadcast;
 using SqlKata.Execution;
 
 namespace Avalanche.ReadModel.Sql.QueryHandlers

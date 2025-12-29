@@ -36,7 +36,7 @@ namespace Avalanche.Runner
                 ContentLength = context.Get<long>("ContentLength")
             };
 
-            log.SendAsync(metric);
+            log.Enqueue(metric);
 
             return result;
         }

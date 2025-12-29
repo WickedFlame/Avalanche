@@ -13,7 +13,6 @@
 
   <ItemGroup>
       <ProjectReference Include="..\Avalanche.WriteModel\Avalanche.WriteModel.csproj" />
-    <ProjectReference Include="..\Broadcast\Broadcast.csproj" />
   </ItemGroup>
 
 </Project>

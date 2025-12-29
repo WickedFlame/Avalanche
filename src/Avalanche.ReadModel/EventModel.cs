@@ -1,5 +1,4 @@
-﻿
-namespace Broadcast
+﻿namespace Avalanche.ReadModel
 {
     public class EventModel
     {
