@@ -2,7 +2,7 @@
 
 namespace Avalanche.WriteModel.Events
 {
-    public class IterationErrorEvent : IEvent
+    public class IterationErrorEvent
     {
         public DateTime Time { get; set; }
 

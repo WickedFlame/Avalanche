@@ -17,7 +17,7 @@ namespace Avalanche.WriteModel.Sql
             _logger = logger;
         }
 
-        public string Add<T>(string testId, DateTime time, T model) where T : IEvent
+        public string Add<T>(string testId, DateTime time, T model) where T : class
         {
             var id = Guid.NewGuid().ToString();
             var value = JsonSerializer.Serialize(model);

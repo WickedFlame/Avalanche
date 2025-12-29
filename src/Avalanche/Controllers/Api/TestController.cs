@@ -12,7 +12,7 @@ namespace Avalanche.Controllers.Api
     [Authorize(Policy = "ApiKeyOrDefault")] // or [Authorize(AuthenticationSchemes = "ApiKey")]
     public class TestController : ControllerBase
     {
-        private readonly IDispatcher<ICommand> _dispatcher;
+        private readonly IDispatcher _dispatcher;
         private readonly ILoggerFactory _loggerFactory;
 
         public TestController(IEventBus eventBus, ILoggerFactory loggerFactory)

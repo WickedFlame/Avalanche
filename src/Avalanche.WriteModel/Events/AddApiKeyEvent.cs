@@ -2,7 +2,7 @@
 
 namespace Avalanche.WriteModel.Events
 {
-    public class AddApiKeyEvent : IEvent
+    public class AddApiKeyEvent
     {
         public string Name { get; set; }
 

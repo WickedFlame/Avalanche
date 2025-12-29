@@ -19,7 +19,7 @@ namespace Avalanche.Runner
 
         public override IIterationResult Run(IExecutionContext context)
         {
-            var log = context.Get<IDispatcher<ICommand>>(nameof(IDispatcher<ICommand>));
+            var log = context.Get<IDispatcher>(nameof(IDispatcher));
 
             var result = base.Run(context);
 

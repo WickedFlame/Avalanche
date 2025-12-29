@@ -46,7 +46,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests
             events.Single().MatchSnapshot(SnapshotOptions.Create(o => o.MockDateTimes().MockGuids()));
         }
 
-        public class TestEvent : IEvent
+        public class TestEvent
         {
             public int Id { get; set; }
         }

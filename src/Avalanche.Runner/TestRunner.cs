@@ -13,11 +13,11 @@ namespace Avalanche.Runner
     public class TestRunner
     {
         private readonly string _testId;
-        private readonly IDispatcher<ICommand> _dispatcher;
+        private readonly IDispatcher _dispatcher;
         private readonly ILogger<TestRunner> _logger;
         private readonly ILoggerFactory _loggerFactory;
 
-        public TestRunner(string testId, IDispatcher<ICommand> dispatcher, ILoggerFactory logger)
+        public TestRunner(string testId, IDispatcher dispatcher, ILoggerFactory logger)
         {
             _testId = testId;
             _dispatcher = dispatcher;
@@ -55,7 +55,7 @@ namespace Avalanche.Runner
                         var client = new RestClient(options);
 
                         ctx.Set("httpclient", client);
-                        ctx.Set(nameof(IDispatcher<ICommand>), _dispatcher);
+                        ctx.Set(nameof(IDispatcher), _dispatcher);
 
                         var url = test.Init != null && !string.IsNullOrEmpty(test.Init.Url) ? test.Init.Url : test.Urls.FirstOrDefault();
 

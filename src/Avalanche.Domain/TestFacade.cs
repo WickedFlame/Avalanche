@@ -10,10 +10,10 @@ namespace Avalanche.Domain
 {
     public class TestFacade
     {
-        private readonly IDispatcher<ICommand> _dispatcher;
+        private readonly IDispatcher _dispatcher;
         private readonly ILoggerFactory _loggerFactory;
 
-        public TestFacade(IDispatcher<ICommand> dispatcher, ILoggerFactory loggerFactory)
+        public TestFacade(IDispatcher dispatcher, ILoggerFactory loggerFactory)
         {
             _dispatcher = dispatcher;
             _loggerFactory = loggerFactory;
