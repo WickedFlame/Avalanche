@@ -5,7 +5,7 @@
     // This allows the dispatcher to process big amounts of data
     //
 
-    public class Dispatcher<T> : IDispatcher<T>, IDisposable
+    public class Dispatcher<T> : IDispatcher<T>
     {
         private readonly object _lock = new object();
 
