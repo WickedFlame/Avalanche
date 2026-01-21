@@ -2,7 +2,7 @@
     "profiles": {
         "Avalanche.Tool": {
             "commandName": "Project",
-            "commandLineArgs": "-s lab -u https://localhost:32773"
+            "commandLineArgs": "-s shop-local -u https://localhost:32773 -i < scenarios/shop-local.yml"
         },
         "Container lab (Dockerfile)": {
             "commandName": "Docker",

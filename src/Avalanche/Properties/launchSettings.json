@@ -1,6 +1,6 @@
 {
     "profiles": {
-        "IIS Exress": {
+        "Localhost (IIS Exress)": {
             "commandName": "Project",
             "launchBrowser": true,
             "environmentVariables": {
