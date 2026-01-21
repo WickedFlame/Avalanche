@@ -2,6 +2,7 @@
 using Broadcast;
 using Microsoft.Extensions.Logging;
 using SqlKata.Execution;
+using System.Reflection;
 using System.Text.Json;
 
 namespace Avalanche.WriteModel.Sql
@@ -17,15 +18,13 @@ namespace Avalanche.WriteModel.Sql
             _logger = logger;
         }
 
-        public string Add<T>(string testId, DateTime time, T model) where T : class
+        public async Task<AppendResult> AddAsync<T>(string eventId, string streamId, int streamVersion, string type, DateTime time, T data) where T : class
         {
-            var id = Guid.NewGuid().ToString();
-            var value = JsonSerializer.Serialize(model);
-            var type = model.GetType().AssemblyQualifiedName;
+            var value = JsonSerializer.Serialize(data);
 
             try
             {
-                Write(id, testId, time, type, value);
+                await Write(eventId, streamId, streamVersion, type, time, value);
             }
             catch (Exception ex)
             {
@@ -33,24 +32,60 @@ namespace Avalanche.WriteModel.Sql
 
                 //
                 // recreate the connection and try again
-                Write(id, testId, time, type, value);
+                await Write(eventId, streamId, streamVersion, type, time, value);
             }
 
-            return id;
+            return new AppendResult
+            {
+                Success = true,
+                EventId = eventId,
+                StreamId = streamId
+            };
         }
 
-        private void Write(string id, string testId, DateTime time, string type, string value)
+        public Task<IEnumerable<EventEnvelope>> ReadStreamAsync(string streamId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<EventEnvelope>> ReadAllAsync()
         {
             var db = _builder.Build();
-            db.Query(nameof(Avalanche.DataSource.DTO.Events))
-                    .Insert(new
+            var events = await db.Query(nameof(Avalanche.DataSource.DTO.Events))
+                .Select()
+                .GetAsync<EventModel>();
+
+            return events.Select(e => new EventEnvelope
+            {
+                Id = e.Id,
+                StreamId = e.StreamId,
+                StreamVersion = e.StreamVersion,
+                Type = e.EventType,
+                Time = e.Time,
+                Data = CreateInstance(e.EventType, e.Data)
+            });
+        }
+
+        private Task Write(string eventId, string streamId, int streamVersion, string type, DateTime time, string data)
+        {
+            var db = _builder.Build();
+            return db.Query(nameof(Avalanche.DataSource.DTO.Events))
+                    .InsertAsync(new EventModel
                     {
-                        Id = id,
-                        TestId = testId,
-                        Time = time,
+                        Id = eventId,
+                        StreamId = streamId,
+                        StreamVersion = streamVersion,
                         EventType = type,
-                        Value = value
+                        Time = time,
+                        Data = data
                     });
+        }
+
+        private static object CreateInstance(string eventType, string json)
+        {
+            var type = Type.GetType(eventType);
+            var evnt = JsonSerializer.Deserialize(json, type);
+            return evnt;
         }
 
         public void Dispose()

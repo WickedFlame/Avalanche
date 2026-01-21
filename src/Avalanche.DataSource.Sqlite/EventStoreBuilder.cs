@@ -19,11 +19,12 @@ namespace Avalanche.DataSource.Sqlite
         {
             const string _query = @"
 CREATE TABLE IF NOT EXISTS Events (
-  Id VARCHAR(255),
-  TestId VARCHAR(255),
-  Time DATETIME,
-  EventType VARCHAR(500),
-  Value VARCHAR (2000)
+  Id             TEXT    NOT NULL UNIQUE,
+  StreamId       TEXT    NOT NULL,
+  StreamVersion  INTEGER NOT NULL,
+  EventType      TEXT    NOT NULL,
+  Time           DATETIME    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  Data           TEXT    NOT NULL
 );
 ";
             var builder = new ConnectionStringBuilder(Constants.EventStore, _config);
@@ -35,6 +36,56 @@ CREATE TABLE IF NOT EXISTS Events (
                     cmd.CommandText = _query;
 
                     cmd.ExecuteNonQuery();
+                }
+
+                //
+                // migrate db if needed
+
+                //
+                // returns 1 row per column named TestId; if you see a row, migration is needed.
+                const string _checkQuery = @"
+SELECT name, type
+FROM pragma_table_info('Events')
+WHERE lower(name) = 'testid';
+";
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = _checkQuery;
+                    if(cmd.ExecuteScalar() != null)
+                    {
+                        const string _updateQuery = @"
+BEGIN IMMEDIATE;
+
+CREATE TABLE IF NOT EXISTS Events_new (
+  Id            TEXT    NOT NULL UNIQUE,
+  StreamId       TEXT    NOT NULL,
+  StreamVersion  INTEGER NOT NULL,
+  EventType      TEXT    NOT NULL,
+  Time           TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  Data           TEXT    NOT NULL
+);
+
+INSERT INTO Events_new (Id, StreamId, StreamVersion, EventType, Time, Data)
+SELECT
+  CAST(Id AS TEXT)                              AS Id,
+  CAST(TestId AS TEXT)                          AS StreamId,
+  0                                             AS StreamVersion,
+  CAST(EventType AS TEXT)                       AS EventType,
+  COALESCE(datetime(Time), CURRENT_TIMESTAMP)   AS Time,
+  COALESCE(CAST(Value AS TEXT), 'null')         AS Data
+FROM Events;
+
+ALTER TABLE Events RENAME TO Events_legacy_backup;
+ALTER TABLE Events_new RENAME TO Events;
+
+COMMIT;
+";
+                        using (var upe = connection.CreateCommand())
+                        {
+                            upe.CommandText = _updateQuery;
+                            upe.ExecuteNonQuery();
+                        }
+                    }
                 }
             }
         }

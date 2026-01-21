@@ -1,8 +1,7 @@
-﻿using System;
-
-namespace Avalanche.DataSource.DTO
+﻿
+namespace Avalanche.WriteModel.Sql
 {
-    public class Events
+    public class EventModel
     {
         public string Id { get; set; }
 
@@ -10,10 +9,10 @@ namespace Avalanche.DataSource.DTO
 
         public int StreamVersion { get; set; }
 
-        public string EventType { get; set; }
-
         public DateTime Time { get; set; }
 
-        public string Data {  get; set; }
+        public string EventType { get; set; }
+
+        public string Data { get; set; }
     }
 }

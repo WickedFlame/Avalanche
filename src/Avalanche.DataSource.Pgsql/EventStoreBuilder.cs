@@ -15,13 +15,109 @@ namespace Avalanche.DataSource.Pgsql
         public void CreateEventStore()
         {
             const string _query = @"
-CREATE TABLE IF NOT EXISTS Events (
-  Id VARCHAR(255),
-  TestId VARCHAR(255),
-  Time DATE,
-  EventType VARCHAR(500),
-  Value VARCHAR (2000)
+CREATE TABLE IF NOT EXISTS public.events (
+  id             text        NOT NULL UNIQUE,
+  streamid       text        NOT NULL,
+  streamversion  integer     NOT NULL,
+  eventtype      text        NOT NULL,
+  time           timestamptz NOT NULL DEFAULT now(),
+  data           jsonb       NOT NULL
 );
+
+
+-- Migration: Events legacy -> new schema
+-- Legacy schema:
+--   Id varchar(255), TestId varchar(255), Time date, EventType varchar(500), Value varchar(2000)
+-- New schema:
+--   Id text not null unique, StreamId text not null, StreamVersion int not null,
+--   EventType text not null, Time timestamptz not null default now(), Data jsonb not null
+--
+-- Indicator that migration is needed: column ""testid"" exists on public.events
+
+BEGIN;
+
+DO $$
+DECLARE
+  needs_migration boolean;
+BEGIN
+  SELECT EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name   = 'events'
+      AND lower(column_name) = 'testid'
+  )
+  INTO needs_migration;
+
+  IF NOT needs_migration THEN
+    RAISE NOTICE 'Events table already in new schema (no ""TestId"" column). No changes applied.';
+    RETURN;
+  END IF;
+
+  -- Prevent accidental reruns if backup already exists
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.tables
+    WHERE table_schema = 'public'
+      AND table_name   = 'events_legacy_backup'
+  ) THEN
+    RAISE EXCEPTION 'Backup table public.events_legacy_backup already exists. Aborting to avoid overwriting.';
+  END IF;
+
+  -- Create the new table with the desired schema
+  CREATE TABLE IF NOT EXISTS public.events_new (
+    id            text        NOT NULL UNIQUE,
+    streamid       text        NOT NULL,
+    streamversion  integer     NOT NULL,
+    eventtype      text        NOT NULL,
+    time           timestamptz NOT NULL DEFAULT now(),
+    data           jsonb       NOT NULL
+  );
+
+  -- Helper: convert ""Value"" to jsonb if possible, else store as JSON string.
+  -- Also: convert DATE -> timestamptz (midnight UTC). If Time is NULL, use now().
+  INSERT INTO public.events_new (id, streamid, streamversion, eventtype, time, data)
+  SELECT
+    e.id::text                                        AS id,
+    e.testid::text                                    AS streamid,
+    0                                                 AS streamversion,
+    e.eventtype::text                                 AS eventtype,
+    COALESCE((e.time::timestamp AT TIME ZONE 'UTC'), now()) AS time,
+    CASE
+      WHEN e.value IS NULL THEN 'null'::jsonb
+      ELSE
+        CASE
+          WHEN e.value ~ '^\s*[\{\[]' THEN
+            -- Try parse as jsonb; on failure, fall back to string
+            COALESCE(
+              (SELECT e.value::jsonb),
+              to_jsonb(e.value)
+            )
+          ELSE
+            to_jsonb(e.value)
+        END
+    END                                               AS data
+  FROM public.events e;
+
+  -- Optional: ensure row counts match (simple sanity check)
+  IF (SELECT count(*) FROM public.events_new) <> (SELECT count(*) FROM public.events) THEN
+    RAISE EXCEPTION 'Row count mismatch after copy (events_new vs events). Aborting.';
+  END IF;
+
+  -- Keep old table as backup
+  ALTER TABLE public.events RENAME TO events_legacy_backup;
+
+  -- Swap in the new table
+  ALTER TABLE public.events_new RENAME TO events;
+
+  RAISE NOTICE 'Migration completed. Old table kept as public.events_legacy_backup.';
+END $$;
+
+COMMIT;
+
+-- If you are satisfied, you can later drop the backup:
+-- DROP TABLE public.events_legacy_backup;
+
 ";
             CreateDatabaseIfNotExists("eventstore", _config);
 
