@@ -57,7 +57,7 @@ WHERE lower(name) = 'testid';
 BEGIN IMMEDIATE;
 
 CREATE TABLE IF NOT EXISTS Events_new (
-  Id            TEXT    NOT NULL UNIQUE,
+  Id             TEXT    NOT NULL UNIQUE,
   StreamId       TEXT    NOT NULL,
   StreamVersion  INTEGER NOT NULL,
   EventType      TEXT    NOT NULL,

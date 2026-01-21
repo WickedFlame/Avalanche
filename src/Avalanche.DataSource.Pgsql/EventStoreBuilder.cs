@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS public.events (
   streamversion  integer     NOT NULL,
   eventtype      text        NOT NULL,
   time           timestamptz NOT NULL DEFAULT now(),
-  data           jsonb       NOT NULL
+  data           text        NOT NULL
 );
 
 
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS public.events (
 --   Id varchar(255), TestId varchar(255), Time date, EventType varchar(500), Value varchar(2000)
 -- New schema:
 --   Id text not null unique, StreamId text not null, StreamVersion int not null,
---   EventType text not null, Time timestamptz not null default now(), Data jsonb not null
+--   EventType text not null, Time timestamptz not null default now(), Data text not null
 --
 -- Indicator that migration is needed: column ""testid"" exists on public.events
 
@@ -66,15 +66,15 @@ BEGIN
 
   -- Create the new table with the desired schema
   CREATE TABLE IF NOT EXISTS public.events_new (
-    id            text        NOT NULL UNIQUE,
+    id             text        NOT NULL UNIQUE,
     streamid       text        NOT NULL,
     streamversion  integer     NOT NULL,
     eventtype      text        NOT NULL,
     time           timestamptz NOT NULL DEFAULT now(),
-    data           jsonb       NOT NULL
+    data           text        NOT NULL
   );
 
-  -- Helper: convert ""Value"" to jsonb if possible, else store as JSON string.
+  -- Helper: convert ""Value"" to text; if legacy column appears to be JSON, keep as-is, otherwise store as plain text.
   -- Also: convert DATE -> timestamptz (midnight UTC). If Time is NULL, use now().
   INSERT INTO public.events_new (id, streamid, streamversion, eventtype, time, data)
   SELECT
@@ -83,20 +83,7 @@ BEGIN
     0                                                 AS streamversion,
     e.eventtype::text                                 AS eventtype,
     COALESCE((e.time::timestamp AT TIME ZONE 'UTC'), now()) AS time,
-    CASE
-      WHEN e.value IS NULL THEN 'null'::jsonb
-      ELSE
-        CASE
-          WHEN e.value ~ '^\s*[\{\[]' THEN
-            -- Try parse as jsonb; on failure, fall back to string
-            COALESCE(
-              (SELECT e.value::jsonb),
-              to_jsonb(e.value)
-            )
-          ELSE
-            to_jsonb(e.value)
-        END
-    END                                               AS data
+    COALESCE(e.value::text, 'null')                  AS data
   FROM public.events e;
 
   -- Optional: ensure row counts match (simple sanity check)
