@@ -28,19 +28,10 @@ namespace Avalanche.Domain.Settings
         {
             _dataStoreBuilder.RecreateWriteModel();
 
-            //var events = _queryHandler.Get(new GetEventStoreEvents());
-            //var total = events.Count();
-            //var i = 1;
-            //foreach (var model in events.OrderBy(e => e.Time))
-            //{
-            //    var type = Type.GetType(model.EventType);
-            //    var evnt = JsonSerializer.Deserialize(model.Value, type);
-
-            //    _eventBus.Send(evnt);
-
-            //    Console.WriteLine($"Processed: {i}/{total}, Event: {type.Name}");
-            //    i++;
-            //}
+            _projectionManager.Progress = new Progress<ProjectionProgress>(p =>
+            {
+                Console.WriteLine($"Replaying events: {p.Processed}/{p.Total}");
+            });
 
             _projectionManager.ReplayAllEventsAsync().GetAwaiter().GetResult();
         }

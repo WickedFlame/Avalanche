@@ -127,10 +127,10 @@
                                         <td>@test.Iterations</td>
                                         <td>@test.RampupTime</td>
                                         <td>
-                                            <ul>
+                                            <ul style="list-style-type: none;">
                                                 @foreach(var url in test.Urls)
                                                 {
-                                                    <li>@url</li>
+                                                    <li><a href="@url" target="_blank">@url</a></li>
                                                 }
                                             </ul>
                                         </td>
