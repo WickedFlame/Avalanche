@@ -19,7 +19,7 @@ namespace Avalanche.Runner
 
         public override IIterationResult Run(IExecutionContext context)
         {
-            var log = context.Get<IDispatcher<ICommand>>(nameof(IDispatcher<ICommand>));
+            var log = context.Get<IDispatcher>(nameof(IDispatcher));
 
             var result = base.Run(context);
 
@@ -36,7 +36,7 @@ namespace Avalanche.Runner
                 ContentLength = context.Get<long>("ContentLength")
             };
 
-            log.SendAsync(metric);
+            log.Enqueue(metric);
 
             return result;
         }

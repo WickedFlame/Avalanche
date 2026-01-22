@@ -2,7 +2,7 @@
 
 namespace Avalanche.WriteModel.Events
 {
-    public class StartTestEvent : IEvent
+    public class StartTestEvent
     {
         public string TestId { get; set; }
 

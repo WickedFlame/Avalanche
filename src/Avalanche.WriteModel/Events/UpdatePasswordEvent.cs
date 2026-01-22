@@ -2,7 +2,7 @@
 
 namespace Avalanche.WriteModel.Events
 {
-    public class UpdatePasswordEvent : IEvent
+    public class UpdatePasswordEvent
     {
         public string UserId { get; set; }
 

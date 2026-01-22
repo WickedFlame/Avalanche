@@ -4,7 +4,7 @@ using Broadcast;
 
 namespace Avalanche.WriteModel
 {
-    public class CommandDispatcher : Dispatcher<ICommand>
+    public class CommandDispatcher : Dispatcher
     {
         public CommandDispatcher(IEventBus eventBus)
         {

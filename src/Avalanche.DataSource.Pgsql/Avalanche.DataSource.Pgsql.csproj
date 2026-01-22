@@ -15,7 +15,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Avalanche.DataSource\Avalanche.DataSource.csproj" />
-        <ProjectReference Include="..\Broadcast\Broadcast.csproj" />
     </ItemGroup>
     
 </Project>

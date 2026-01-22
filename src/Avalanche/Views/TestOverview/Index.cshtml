@@ -127,10 +127,10 @@
                                         <td>@test.Iterations</td>
                                         <td>@test.RampupTime</td>
                                         <td>
-                                            <ul>
+                                            <ul style="list-style-type: none;">
                                                 @foreach(var url in test.Urls)
                                                 {
-                                                    <li>@url</li>
+                                                    <li><a href="@url" target="_blank">@url</a></li>
                                                 }
                                             </ul>
                                         </td>
@@ -199,7 +199,10 @@
                     <h2>@config.Name</h2>
                     <partial name="./Partials/Chart" for="@config" />
                     <partial name="./Partials/Throughput" for="@config" />
-                    <partial name="./Partials/RampupChart" for="@config" />
+                    @if (config.RampupTime > 0)
+                    {
+                        <partial name="./Partials/RampupChart" for="@config" />
+                    }
                 </div>
             }
         }

@@ -13,11 +13,11 @@ namespace Avalanche.Runner
     public class TestRunner
     {
         private readonly string _testId;
-        private readonly IDispatcher<ICommand> _dispatcher;
+        private readonly IDispatcher _dispatcher;
         private readonly ILogger<TestRunner> _logger;
         private readonly ILoggerFactory _loggerFactory;
 
-        public TestRunner(string testId, IDispatcher<ICommand> dispatcher, ILoggerFactory logger)
+        public TestRunner(string testId, IDispatcher dispatcher, ILoggerFactory logger)
         {
             _testId = testId;
             _dispatcher = dispatcher;
@@ -55,7 +55,7 @@ namespace Avalanche.Runner
                         var client = new RestClient(options);
 
                         ctx.Set("httpclient", client);
-                        ctx.Set(nameof(IDispatcher<ICommand>), _dispatcher);
+                        ctx.Set(nameof(IDispatcher), _dispatcher);
 
                         var url = test.Init != null && !string.IsNullOrEmpty(test.Init.Url) ? test.Init.Url : test.Urls.FirstOrDefault();
 
@@ -96,7 +96,7 @@ namespace Avalanche.Runner
                                     IsWarmup = s.IsWarmup
                                 };
 
-                                _dispatcher.SendAsync(command);
+                                _dispatcher.Enqueue(command);
                             }
                             catch (Exception e)
                             {
@@ -119,7 +119,7 @@ namespace Avalanche.Runner
                             IsWarmup = e.Settings.IsWarmup
                         };
 
-                        _dispatcher.SendAsync(metric);
+                        _dispatcher.Enqueue(metric);
                     })
                     .PreExecute(ctx =>
                     {
@@ -147,7 +147,7 @@ namespace Avalanche.Runner
                                         StatusCode = result.StatusCode,
                                         IsWarmup = ctx.Settings.IsWarmup
                                     };
-                                    _dispatcher.SendAsync(cmd);
+                                    _dispatcher.Enqueue(cmd);
 
                                     _logger.LogInformation("Call to {Url} for Test {TestId} resulted in StatusCode {StatusCode}", req.Url, _testId, result.StatusCode);
                                 }
@@ -166,7 +166,7 @@ namespace Avalanche.Runner
                                     IsWarmup = ctx.Settings.IsWarmup
                                     //StatusCode = result.StatusCode
                                 };
-                                _dispatcher.SendAsync(cmd);
+                                _dispatcher.Enqueue(cmd);
 
                                 _logger.LogError(e, "Call to {Url} for Test {TestId} caused an error", req.Url, _testId);
                             }

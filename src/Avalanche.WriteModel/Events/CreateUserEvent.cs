@@ -2,7 +2,7 @@
 
 namespace Avalanche.WriteModel.Events
 {
-    public class CreateUserEvent : IEvent
+    public class CreateUserEvent
     {
         public string Id { get; set; }
 

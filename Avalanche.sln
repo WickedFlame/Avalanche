@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.10.35201.131
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11217.181 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9446EC16-8A58-4F45-AF00-0062B27E2821}"
 	ProjectSection(SolutionItems) = preProject
@@ -26,8 +26,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.Tool", "src\Avalanche.Tool\Avalanche.Tool.csproj", "{45B74873-FF11-4D33-AD48-567299DFE9D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.WriteModel", "src\Avalanche.WriteModel\Avalanche.WriteModel.csproj", "{FB78458E-1A79-430D-A2A5-3BB5993BD614}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Broadcast", "src\Broadcast\Broadcast.csproj", "{F22A0899-5F55-4861-B077-5CF57C353A42}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalanche.ReadModel", "src\Avalanche.ReadModel\Avalanche.ReadModel.csproj", "{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}"
 EndProject
@@ -95,10 +93,6 @@ Global
 		{FB78458E-1A79-430D-A2A5-3BB5993BD614}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB78458E-1A79-430D-A2A5-3BB5993BD614}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB78458E-1A79-430D-A2A5-3BB5993BD614}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F22A0899-5F55-4861-B077-5CF57C353A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F22A0899-5F55-4861-B077-5CF57C353A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F22A0899-5F55-4861-B077-5CF57C353A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F22A0899-5F55-4861-B077-5CF57C353A42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F71DA32-0CBA-4702-98D9-CED861CB0E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
