@@ -6,12 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## vNext
 ### Fixed
-- Docs did not display when run  in a container
+- Docs did not display when run in a container
+- Minor Bugfixes
 
 ### Changed
 - Changed orientation of Testruns in the Statistics View
 - Use starttime as link to details instead of testid
 - Use Broadcast as EventStore
+- Improvements in the UI
 
 ## v0.0.4
 ### Added
