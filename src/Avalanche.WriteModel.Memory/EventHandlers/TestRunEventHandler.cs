@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using Broadcast;
 using System;
 
 namespace Avalanche.WriteModel.Memory.EventHandlers

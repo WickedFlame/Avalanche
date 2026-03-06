@@ -10,10 +10,10 @@ namespace Avalanche.Domain
 {
     public class TestFacade
     {
-        private readonly IDispatcher<ICommand> _dispatcher;
+        private readonly IDispatcher _dispatcher;
         private readonly ILoggerFactory _loggerFactory;
 
-        public TestFacade(IDispatcher<ICommand> dispatcher, ILoggerFactory loggerFactory)
+        public TestFacade(IDispatcher dispatcher, ILoggerFactory loggerFactory)
         {
             _dispatcher = dispatcher;
             _loggerFactory = loggerFactory;
@@ -70,7 +70,7 @@ namespace Avalanche.Domain
             var runner = new TestRunner(data.TestId, _dispatcher, _loggerFactory);
             data.StartTime = DateTime.Now;
 
-            _dispatcher.Send(new StartTestCommand
+            _dispatcher.SendAsync(new StartTestCommand
             {
                 TestId = data.TestId,
                 Scenario = name,
@@ -82,7 +82,7 @@ namespace Avalanche.Domain
 
             foreach (var testResult in data.Results)
             {
-                _dispatcher.SendAsync(new TestResultCommand
+                _dispatcher.Enqueue(new TestResultCommand
                 {
                     TestId = data.TestId,
                     TestCase = testResult.TestCase,
@@ -104,7 +104,7 @@ namespace Avalanche.Domain
                 });
             }
 
-            _dispatcher.Send(new EndTestCommand
+            _dispatcher.SendAsync(new EndTestCommand
             {
                 TestId = data.TestId,
                 EndTime = DateTime.Now
@@ -118,7 +118,7 @@ namespace Avalanche.Domain
 
         public void Stop(string testId)
         {
-            _dispatcher.Send(new EndTestCommand
+            _dispatcher.SendAsync(new EndTestCommand
             {
                 TestId = testId,
                 EndTime = DateTime.Now
@@ -127,7 +127,7 @@ namespace Avalanche.Domain
 
         public void Delete(string testId)
         {
-            _dispatcher.Send(new DeleteTestRunCommand
+            _dispatcher.SendAsync(new DeleteTestRunCommand
             {
                 TestId = testId
             });

@@ -2,7 +2,7 @@
 
 namespace Avalanche.WriteModel.Events
 {
-    public class InitScenarioEvent : IEvent
+    public class InitScenarioEvent
     {
         public string Name { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿using Avalanche.ReadModel.Models;
 using Avalanche.ReadModel.Queries;
-using Broadcast;
 
 namespace Avalanche.ReadModel
 {

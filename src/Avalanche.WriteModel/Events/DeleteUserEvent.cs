@@ -2,7 +2,7 @@
 
 namespace Avalanche.WriteModel.Events
 {
-    public class DeleteUserEvent : IEvent
+    public class DeleteUserEvent
     {
         public string UserId { get; set; }
     }

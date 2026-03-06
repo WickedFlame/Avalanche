@@ -1,4 +1,5 @@
 ﻿using Avalanche.WriteModel.Events;
+using Broadcast;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using System;

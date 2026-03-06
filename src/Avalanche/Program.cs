@@ -63,6 +63,10 @@ else
 }
 
 builder.Services.AddSingleton<IEventStore, SqlEventStore>();
+builder.Services.AddSingleton<EventStoreOptions>(new EventStoreOptions
+{
+    StreamVersion = 1,
+});
 
 builder.Services.AddTransient<IEventBus>(c =>
 {
@@ -92,6 +96,7 @@ builder.Services.AddSingleton<ISettingsQueryHandler, SettingsQueryHandler>();
 builder.Services.AddTransient<ITestRunQueryHandler, TestRunQueryHandler>();
 builder.Services.AddTransient<IAccountQueryHandler, AccountQueryHandler>();
 
+builder.Services.AddTransient<ProjectionManager>();
 builder.Services.AddTransient<ISettingsFacade, SettingsFacade>();
 builder.Services.AddTransient<IAccountFacade, AccountFacade>();
 

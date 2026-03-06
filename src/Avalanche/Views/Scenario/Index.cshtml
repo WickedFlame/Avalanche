@@ -137,10 +137,10 @@
                                         <td>@test.Iterations</td>
                                         <td>@test.RampupTime</td>
                                         <td>
-                                            <ul>
+                                            <ul style="list-style-type: none;">
                                                 @foreach (var url in test.Urls)
                                                 {
-                                                    <li>@url</li>
+                                                    <li><a href="@url" target="_blank">@url</a></li>
                                                 }
                                             </ul>
                                         </td>
@@ -161,23 +161,23 @@
                     <table class="table is-fullwidth is-hoverable">
                         <thead>
                             <tr>
-                                <th>TestId</th>
-                                <th>StartTime</th>
-                                <th>EndTime</th>
-                                <th>Status</th>
+                                <th style="width: 300px;">Run at</th>
+                                <th style="width: 300px;">End Time</th>
+                                <th style="width: 200px;">Status</th>
                                 <th>Source</th>
-                                <th></th>
+                                <th style="width: 20%;"></th>
+                                <th style="width: 1px;"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var test in Model.Runs)
                             {
                                 <tr>
-                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId">@test.TestId</a></td>
-                                    <td>@test.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId">@test.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</a></td>
                                     <td>@(test.EndTime > DateTime.MinValue ? test.EndTime.ToString("dd.MM.yyyy hh:mm:ss") : string.Empty)</td>
                                     <td>@test.Status</td>
                                     <td>@test.Runner</td>
+                                    <td></td>
                                     <td>
                                         <a class="pt-button" asp-controller="Scenario" asp-action="DeleteTestRun" asp-route-scenario="@test.Scenario" asp-route-testid="@test.TestId">
                                             <span class="icon">

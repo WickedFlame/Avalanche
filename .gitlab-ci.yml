@@ -1,10 +1,10 @@
 # image: docker:latest  # Use the latest Docker image
-image: mcr.microsoft.com/dotnet/sdk:8.0
+image: mcr.microsoft.com/dotnet/sdk:10.0
 
 variables:
   IMAGE_TAG_CLIENT: "$CI_REGISTRY/wickedflame/avalanche/client:$CI_COMMIT_SHA"
   IMAGE_TAG_RUNNER: "$CI_REGISTRY/wickedflame/avalanche/runner:$CI_COMMIT_SHA"
-  VERSION: 0.0.4
+  VERSION: 0.0.5
 
 services:
   - docker:dind
@@ -17,7 +17,7 @@ stages:
 build_solution:
   stage: build
   before_script:
-    - dotnet tool install Nuke.GlobalTool --global
+    - dotnet tool install Nuke.GlobalTool --global --version 9.0.4
     - export PATH="$PATH:/root/.dotnet/tools"
   script:
   - dotnet restore Avalanche.sln
