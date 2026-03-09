@@ -4,7 +4,7 @@ image: mcr.microsoft.com/dotnet/sdk:10.0
 variables:
   IMAGE_TAG_CLIENT: "$CI_REGISTRY/wickedflame/avalanche/client:$CI_COMMIT_SHA"
   IMAGE_TAG_RUNNER: "$CI_REGISTRY/wickedflame/avalanche/runner:$CI_COMMIT_SHA"
-  VERSION: 0.0.5
+  VERSION: 0.0.6
 
 services:
   - docker:dind
