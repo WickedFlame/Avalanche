@@ -18,6 +18,7 @@
 <div class="pt-main-content">
     <div class="content px-6 py-4">
         <h1 class="title is-1">@Model.Scenario</h1>
+        <p>@Model.Settings.Description</p>
         <div>
             <div class="pt-padding-side py-5">
                 @if (Model.Status == Avalanche.Runner.TestRunStatus.Running)
@@ -208,13 +209,16 @@
         }
         else if (Model.Tab == "details")
         {
+            var tests = Model.Settings.TestCases.Select(t => t.Name).Union(Model.Details.Select(s => s.Key)).Distinct();
+
             <div class="pt-info-panel">
                 <p>To enhance performance not all measured iterations are stored.<br />
                 We only store a summary of iterations per user each second.</p>
             </div>
 
-            @foreach (var testCase in Model.Details)
+            @foreach (var test in tests)
             {
+                var testCase = Model.Details.FirstOrDefault(k => k.Key == test);
                 <div class="pt-element-container">
                     <div class="pt-content-panel">
                         <h2>@testCase.Key</h2>

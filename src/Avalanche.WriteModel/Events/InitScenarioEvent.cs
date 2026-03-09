@@ -6,6 +6,8 @@ namespace Avalanche.WriteModel.Events
     {
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public IEnumerable<TestCase> TestCases { get; set; }
     }
 

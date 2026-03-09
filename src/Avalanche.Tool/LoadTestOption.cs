@@ -120,6 +120,7 @@ namespace Avalanche
                 eventBus.Send(new InitScenarioEvent
                 {
                     Name = Scenario,
+                    Description = scenario.Description,
                     TestCases = scenario.TestCases.Select(t => new WriteModel.Events.TestCase
                     {
                         Name = t.Name,

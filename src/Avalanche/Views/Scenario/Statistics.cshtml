@@ -17,7 +17,7 @@
 <div class="pt-main-content">
     <div class="content px-6 py-4">
         <h1 class="title is-1">@Model.Name</h1>
-
+        <p>@Model.Settings.Description</p>
         <div>
             <h2>Statistics</h2>
         </div>
@@ -45,8 +45,16 @@
             }
             else if(Model.Tab == "details")
             {
-                foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
+                var groups = Model.Stats.GroupBy(s => s.TestCase);
+                var headers = Model.Settings.TestCases.Select(t => t.Name).Union(Model.Stats.Select(s => s.TestCase)).Distinct();
+                foreach (var header in headers)
                 {
+                    var grp = groups.FirstOrDefault(g => g.Key == header);
+                    if(grp == null)
+                    {
+                        continue;
+                    }
+
                     <div class="pt-element-container">
                         <div class="pt-content-panel">
                             <h3>@grp.Key</h3>
@@ -106,32 +114,7 @@
                             <div class="overflow-x-auto">
                                 @if (Model.Stats.Any())
                                 {
-                                    var group = Model.Stats.GroupBy(s => s.TestCase).Select(s => s.Key);
-
-                                    @* <table class="table is-fullwidth is-hoverable">
-                                        <thead>
-                                            <tr>
-                                                <th style="vertical-align: bottom;">Scenario</th>
-                                                @foreach (var run in Model.Stats.GroupBy(s => s.TestCase).First().Take(50).OrderByDescending(d => d.StartTime))
-                                                {
-                                                    <th style="writing-mode: tb;text-orientation: sideways;transform: rotate(-180deg);">@run.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</th>
-                                                }
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
-                                            {
-                                                <tr>
-                                                    <td>@grp.Key</td>
-                                                    @foreach (var run in grp.Take(50).OrderByDescending(d => d.StartTime))
-                                                    {
-                                                        <td>@run.AverageMilliseconds</td>
-                                                    }
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table> *@
-
+                                    var group = Model.Settings.TestCases.Select(t => t.Name).Union(Model.Stats.Select(s => s.TestCase)).Distinct();
                                     <table class="table is-fullwidth is-hoverable">
                                         <thead>
                                             <tr>

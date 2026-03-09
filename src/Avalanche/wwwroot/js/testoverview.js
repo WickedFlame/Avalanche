@@ -92,7 +92,7 @@
                 ts.style.display = 'block';
 
                 summary.forEach(s => {
-                    let row = ts.querySelector(`#${s.testCase.replaceAll(' ', '_')}`);
+                    let row = ts.querySelector(`[id="${s.testCase.replaceAll(' ', '_')}"]`);
                     row.querySelector('.TestCase').innerHTML = s.testCase;
                     row.querySelector('.TotalTime').innerHTML = s.totalTime;
                     row.querySelector('.AverageMs').innerHTML = s.averageMilliseconds;
