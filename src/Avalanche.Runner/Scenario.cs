@@ -2,6 +2,10 @@
 {
     public class Scenario
     {
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
         /// <summary>
         /// The configuration that is used for each testcase if not overwritten in the testcase
         /// </summary>

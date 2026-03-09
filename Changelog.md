@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Order statistics based on the scenario
 - Order details based on the scenario
 
+### Added
+- Added a Description Property to the test scenarios
+
 ## v0.0.5
 ### Fixed
 - Docs did not display when run in a container
