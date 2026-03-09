@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Order statistics based on the scenario
+- Order details based on the scenario
 
 ## v0.0.5
 ### Fixed
