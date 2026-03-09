@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## vNext
 ### Fixed
+- Testsummary of tests that started with a number were not displayed
+
+## v0.0.5
+### Fixed
 - Docs did not display when run in a container
 - Minor Bugfixes
 
