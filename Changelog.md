@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Testsummary of tests that started with a number were not displayed
 
+### Changed
+- Order statistics based on the scenario
+
 ## v0.0.5
 ### Fixed
 - Docs did not display when run in a container
