@@ -1,6 +1,6 @@
 {
     "profiles": {
-        "IIS Exress": {
+        "Localhost (IIS Exress)": {
             "commandName": "Project",
             "launchBrowser": true,
             "environmentVariables": {
@@ -28,6 +28,18 @@
                 "AV_DB_PORT": "5432",
                 "AV_DB_USERNAME": "avalancheuser",
                 "AV_DB_PASSWORD": "pGadm1n"
+            },
+            "publishAllPorts": true,
+            "useSSL": true
+        },
+        "Container (SQLite)": {
+            "commandName": "Docker",
+            "launchBrowser": true,
+            "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+            "environmentVariables": {
+                "ASPNETCORE_HTTPS_PORTS": "8081",
+                "ASPNETCORE_HTTP_PORTS": "32773",
+                "SCENARIO_PATH": "./scenarios"
             },
             "publishAllPorts": true,
             "useSSL": true

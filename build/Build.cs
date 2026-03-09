@@ -30,7 +30,7 @@ class Build : NukeBuild
     [Solution] readonly Solution Solution;
 
     [Parameter("Version to be injected in the Build")]
-    public string Version { get; set; } = "0.0.3";
+    public string Version { get; set; } = "0.0.6";
 
     [Parameter("The Buildnumber provided by the CI")]
     public string BuildNo = $"{DateTime.Today.Month * 31 + DateTime.Today.Day}1";
@@ -116,7 +116,9 @@ class Build : NukeBuild
                 .SetPublishProfile("FolderProfile")
                 .SetOutput(PublishDirectory / "tool"));
 
-            if((PublishDirectory / "web" / "scenarios").DirectoryExists())
+            (RootDirectory / "Changelog.md").Copy(PublishDirectory / "web" / "wwwroot" / "docs" / "changelog.md");
+
+            if ((PublishDirectory / "web" / "scenarios").DirectoryExists())
             {
                 Serilog.Log.Write(Serilog.Events.LogEventLevel.Information, $"Delete files in {(PublishDirectory / "web" / "scenarios")}");
                 (PublishDirectory / "web" / "scenarios").GetFiles().ForEach(f => f.DeleteFile());

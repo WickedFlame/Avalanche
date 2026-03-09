@@ -6,12 +6,14 @@ namespace Avalanche.DataSource.DTO
     {
         public string Id { get; set; }
 
-        public string TestId { get; set; }
+        public string StreamId { get; set; }
 
-        public DateTime Time { get; set; }
+        public int StreamVersion { get; set; }
 
         public string EventType { get; set; }
 
-        public string Value {  get; set; }
+        public DateTime Time { get; set; }
+
+        public string Data {  get; set; }
     }
 }

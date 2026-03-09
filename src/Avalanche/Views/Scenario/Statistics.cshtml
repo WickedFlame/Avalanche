@@ -17,7 +17,7 @@
 <div class="pt-main-content">
     <div class="content px-6 py-4">
         <h1 class="title is-1">@Model.Name</h1>
-
+        <p>@Model.Settings.Description</p>
         <div>
             <h2>Statistics</h2>
         </div>
@@ -45,8 +45,16 @@
             }
             else if(Model.Tab == "details")
             {
-                foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
+                var groups = Model.Stats.GroupBy(s => s.TestCase);
+                var headers = Model.Settings.TestCases.Select(t => t.Name).Union(Model.Stats.Select(s => s.TestCase)).Distinct();
+                foreach (var header in headers)
                 {
+                    var grp = groups.FirstOrDefault(g => g.Key == header);
+                    if(grp == null)
+                    {
+                        continue;
+                    }
+
                     <div class="pt-element-container">
                         <div class="pt-content-panel">
                             <h3>@grp.Key</h3>
@@ -68,8 +76,7 @@
                                     <table class="table is-fullwidth is-hoverable">
                                         <thead>
                                             <tr>
-                                                <th>TestId</th>
-                                                <th>Time</th>
+                                                <th>Run at</th>
                                                 <th>Average (ms)</th>
                                                 <th># Iterations</th>
                                                 <th># Fails</th>
@@ -82,8 +89,7 @@
                                             @foreach (var stat in grp.OrderByDescending(s => s.StartTime))
                                             {
                                                 <tr>
-                                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@stat.TestId">@stat.TestId</a></td>
-                                                    <td>@stat.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</td>
+                                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@stat.TestId">@stat.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</a></td>
                                                     <td>@stat.AverageMilliseconds</td>
                                                     <td>@stat.Iterations</td>
                                                     <td>@stat.Failed</td>
@@ -108,24 +114,34 @@
                             <div class="overflow-x-auto">
                                 @if (Model.Stats.Any())
                                 {
+                                    var group = Model.Settings.TestCases.Select(t => t.Name).Union(Model.Stats.Select(s => s.TestCase)).Distinct();
                                     <table class="table is-fullwidth is-hoverable">
                                         <thead>
                                             <tr>
-                                                <th style="vertical-align: bottom;">Scenario</th>
-                                                @foreach (var run in Model.Stats.GroupBy(s => s.TestCase).First().Take(50).OrderByDescending(d => d.StartTime))
+                                                <th style="vertical-align: bottom;">Run at</th>
+                                                @foreach (var run in group)
                                                 {
-                                                    <th style="writing-mode: tb;text-orientation: sideways;transform: rotate(-180deg);">@run.StartTime.ToString("dd.MM.yyyy hh:mm:ss")</th>
+                                                    <th style="">@run</th>
                                                 }
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var grp in Model.Stats.GroupBy(s => s.TestCase))
+                                            @foreach (var grp in Model.Stats.OrderByDescending(d => d.StartTime).GroupBy(g => g.StartTime))
                                             {
+
                                                 <tr>
-                                                    <td>@grp.Key</td>
-                                                    @foreach (var run in grp.Take(50).OrderByDescending(d => d.StartTime))
+                                                    <td><a asp-controller="TestOverview" asp-action="Index" asp-route-scenario="@Model.Name" asp-route-testid="@grp.First().TestId">@grp.Key.ToString("dd.MM.yyyy hh:mm:ss")</a></td>
+                                                    @foreach (var key in group)
                                                     {
-                                                        <td>@run.AverageMilliseconds</td>
+                                                        var run = grp.FirstOrDefault(g => g.TestCase == key);
+                                                        if(run != null)
+                                                        {
+                                                            <td>@run.AverageMilliseconds ms</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td></td>                                                            
+                                                        }
                                                     }
                                                 </tr>
                                             }

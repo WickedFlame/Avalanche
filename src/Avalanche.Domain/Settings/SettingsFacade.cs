@@ -14,31 +14,26 @@ namespace Avalanche.Domain.Settings
         private readonly ISettingsQueryHandler _queryHandler;
         private readonly IEventBus _eventBus;
         private readonly IDataStoreBuilder _dataStoreBuilder;
+        private readonly ProjectionManager _projectionManager;
 
-        public SettingsFacade(ISettingsQueryHandler queryHandler, IEventBus eventBus, IDataStoreBuilder dataStoreBuilder)
+        public SettingsFacade(ISettingsQueryHandler queryHandler, IEventBus eventBus, IDataStoreBuilder dataStoreBuilder, ProjectionManager projectionManager)
         {
             _queryHandler = queryHandler;
             _eventBus = eventBus;
             _dataStoreBuilder = dataStoreBuilder;
+            _projectionManager = projectionManager;
         }
 
         public void RecreateDatabase()
         {
             _dataStoreBuilder.RecreateWriteModel();
 
-            var events = _queryHandler.Get(new GetEventStoreEvents());
-            var total = events.Count();
-            var i = 1;
-            foreach (var model in events.OrderBy(e => e.Time))
+            _projectionManager.Progress = new Progress<ProjectionProgress>(p =>
             {
-                var type = Type.GetType(model.EventType);
-                var evnt = JsonSerializer.Deserialize(model.Value, type);
+                Console.WriteLine($"Replaying events: {p.Processed}/{p.Total}");
+            });
 
-                _eventBus.Send(evnt);
-
-                Console.WriteLine($"Processed: {i}/{total}, Event: {type.Name}");
-                i++;
-            }
+            _projectionManager.ReplayAllEventsAsync().GetAwaiter().GetResult();
         }
 
         public string AddApiKey(string name, Expiration expiration)

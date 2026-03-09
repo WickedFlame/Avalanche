@@ -1,7 +1,6 @@
 ﻿using Avalanche.WriteModel.Events;
+using Broadcast;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Avalanche.WriteModel.Memory.EventHandlers
 {

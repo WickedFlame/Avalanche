@@ -1,6 +1,7 @@
 ﻿using Avalanche.DataSource;
 using Avalanche.DataSource.DTO;
 using Avalanche.WriteModel.Events;
+using Broadcast;
 using SqlKata.Execution;
 
 namespace Avalanche.WriteModel.Sql.EventHandlers

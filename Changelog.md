@@ -5,6 +5,28 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## vNext
+### Fixed
+- Testsummary of tests that started with a number were not displayed
+
+### Changed
+- Order statistics based on the scenario
+- Order details based on the scenario
+
+### Added
+- Added a Description Property to the test scenarios
+
+## v0.0.5
+### Fixed
+- Docs did not display when run in a container
+- Minor Bugfixes
+
+### Changed
+- Changed orientation of Testruns in the Statistics View
+- Use starttime as link to details instead of testid
+- Use Broadcast as EventStore
+- Improvements in the UI
+
+## v0.0.4
 ### Added
 - ApiKeys can be generated and used to start a testrun
 - Added OAuth Authentication for testruns

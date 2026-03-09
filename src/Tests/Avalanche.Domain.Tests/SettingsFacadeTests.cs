@@ -22,7 +22,7 @@ namespace Avalanche.Domain.Tests
             _eventBus = new Mock<IEventBus>();
             _dsb = new Mock<IDataStoreBuilder>();
 
-            _facade = new SettingsFacade(_settingsQueryHandler.Object, _eventBus.Object, _dsb.Object);
+            _facade = new SettingsFacade(_settingsQueryHandler.Object, _eventBus.Object, _dsb.Object, new ProjectionManager(Mock.Of<IEventStore>(), _eventBus.Object));
         }
 
         [Test]

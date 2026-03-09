@@ -20,6 +20,8 @@ When a Scenario is created within the application interface, it is automatically
 Below is an example of a typical Scenario configuration:
 
 ```yaml
+Name: Name
+Description: Description
 Config:
   Users: 5
   Iterations: 10
@@ -44,6 +46,8 @@ Authorization:
   Type: none
 ```
 ### Explanation
+**Name**: Optional name of the Scenario
+**Description**: Optional description of the scenario
 **Config**: Defines execution parameters such as user count, iteration limits, delays, and session behavior.  
 **TestCases**: Specifies one or more test steps, each containing URLs and optional initialization logic.  
 **Authorization**: Defines authentication type or credentials to be used during execution (e.g., `none`, `basic`, `bearer`).  

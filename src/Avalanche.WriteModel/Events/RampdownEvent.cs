@@ -2,7 +2,7 @@
 
 namespace Avalanche.WriteModel.Events
 {
-    public class RampdownEvent : IEvent
+    public class RampdownEvent
     {
         public RampdownEvent()
         {

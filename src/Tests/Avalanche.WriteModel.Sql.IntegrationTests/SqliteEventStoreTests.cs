@@ -33,12 +33,12 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests
         {
             var store = new SqlEventStore(new EventStoreConnectionBuilder(Mock.Of<IConfiguration>()), Mock.Of<ILogger<SqlEventStore>>());
 
-            store.Add("1", DateTime.Now, new TestEvent { Id = 1 });
+            var res = store.AddAsync("one", "1", 1, "TestEvent", DateTime.Now, new TestEvent { Id = 1 }).Result;
 
             var events = _db.Query(nameof(Avalanche.DataSource.DTO.Events))
                 .Where(new
                 {
-                    TestId = "1"
+                    StreamId = "1"
                 })
                 .Select()
                 .Get<Avalanche.DataSource.DTO.Events>();
@@ -46,7 +46,7 @@ namespace Avalanche.WriteModel.Sql.IntegrationTests
             events.Single().MatchSnapshot(SnapshotOptions.Create(o => o.MockDateTimes().MockGuids()));
         }
 
-        public class TestEvent : IEvent
+        public class TestEvent
         {
             public int Id { get; set; }
         }
